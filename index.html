@@ -185,7 +185,30 @@ tbody tr { cursor: pointer; }
 .rv-item .nm { min-width: 110px; font-weight: 600; }
 .rv-item .vl { color: var(--tx2); min-width: 170px; }
 .rv-item .ds { color: var(--tx3); font-size: 11px; }
+/* ---------- 左侧三大导航 + 页面骨架 ---------- */
 .rv-stage { font-size: 22px; font-weight: 700; }
+.layout { display: flex; gap: 22px; align-items: flex-start; }
+#sideNav { position: sticky; top: 20px; flex: 0 0 176px; display: flex; flex-direction: column; gap: 10px; }
+#sideNav button { text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 16px; color: var(--tx2); font: inherit; cursor: pointer; transition: all .2s var(--ease); }
+#sideNav button .no { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--tx3); margin-bottom: 4px; }
+#sideNav button .t { display: block; font-size: 14.5px; font-weight: 650; }
+#sideNav button .d { display: block; font-size: 11px; color: var(--tx3); margin-top: 4px; line-height: 1.5; }
+#sideNav button:hover { border-color: var(--line2); color: var(--tx); transform: translateX(2px); }
+#sideNav button.on { background: linear-gradient(160deg, rgba(91,147,255,.18), rgba(91,147,255,.05));
+  border-color: rgba(91,147,255,.45); color: var(--tx); box-shadow: 0 4px 18px rgba(77,132,242,.18); }
+#sideNav button.on .no { color: var(--accent); }
+#sideNav button.on[data-pg="advice"] { background: linear-gradient(160deg, rgba(224,171,74,.18), rgba(224,171,74,.05));
+  border-color: rgba(224,171,74,.5); box-shadow: 0 4px 18px rgba(224,171,74,.15); }
+#sideNav button.on[data-pg="advice"] .no { color: var(--gold); }
+main { flex: 1; min-width: 0; }
+.page[hidden] { display: none; }
+.page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+@media (max-width: 860px) {
+  .layout { flex-direction: column; }
+  #sideNav { position: static; flex-direction: row; flex: none; overflow-x: auto; }
+  #sideNav button { flex: 1 0 150px; }
+}
 </style>
 </head>
 <body>
@@ -194,7 +217,22 @@ tbody tr { cursor: pointer; }
   <span class="meta" id="meta">数据加载中…</span>
 </header>
 
+<div class="layout">
+<nav id="sideNav">
+  <button data-pg="pano" class="on"><span class="no">① PANORAMA</span><span class="t">市场全景</span><span class="d">全量行情总览 · 资产热力图 · 资产重估状态</span></button>
+  <button data-pg="research"><span class="no">② RESEARCH</span><span class="t">多维研究分析</span><span class="d">策略 · 周期耦合 · 赛道 · 相关性 · 个券 · 信号</span></button>
+  <button data-pg="advice"><span class="no">③ STRATEGY</span><span class="t">配置建议与风险</span><span class="d">周期判断 · 长期方向 · 交叉验证 · 触发/退出</span></button>
+</nav>
+<main>
+<div class="page" id="pg-pano">
+
 <div class="kpis" id="kpis"></div>
+
+<div class="card" style="margin-bottom:14px">
+  <h2>资产重估状态仪（高善文框架 · 每日自动验证）</h2>
+  <p class="note">假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估 · 四项排他性条件实时验证 · 详见"多维研究分析 → 周期耦合分析"</p>
+  <div id="revalStrip"></div>
+</div>
 
 <div class="sec-head"><span class="no">①</span><span class="t">市场全景</span><span class="d">全量行情总览 · 资产类别热力图</span></div>
 
@@ -212,7 +250,9 @@ tbody tr { cursor: pointer; }
     <div id="treemap" style="position:relative;width:100%;height:440px"></div>
   </div>
 </section>
+</div><!-- /pg-pano -->
 
+<div class="page" id="pg-research" hidden>
 <div class="sec-head"><span class="no">②</span><span class="t">多维研究分析</span><span class="d">策略分类 · 周期耦合 · 赛道透视 · 相关性 · 个券透视 · 板块轮动 · 信号追踪</span></div>
 
 <div class="tabs" id="tabs">
@@ -394,6 +434,11 @@ tbody tr { cursor: pointer; }
     <p class="note">六因子加权信号分（-12 ~ +12）：流动性 / 市场情绪 / 资金面 / 业绩达成 / 利差 / 股债联动</p>
     <div id="stratSignalBars"></div>
   </div>
+  <div class="card">
+    <h2>资产重估因子（高善文框架 → 信号体系）</h2>
+    <p class="note">重估状态仪的四项排他性条件与六因子信号的映射：利率下行 → <b>利差因子</b>；资金中枢 → <b>资金面因子</b>；市场宽度 → <b>市场情绪因子</b>；估值分位 → 个券历史分位。重估假说的验证状态直接调节三策略信号解读——重估进行中时债性防御型信号权重上升，暂停时更依赖个券业绩与流动性因子</p>
+    <div id="revalSignalMap"></div>
+  </div>
   <div class="grid">
     <div class="card">
       <h2>信号事件流（近 120 日）</h2>
@@ -435,6 +480,9 @@ tbody tr { cursor: pointer; }
   </div>
 </section>
 
+</div><!-- /pg-research -->
+
+<div class="page" id="pg-advice" hidden>
 <!-- ============ 配置建议 ============ -->
 <div class="sec-head"><span class="no">③</span><span class="t">配置建议与风险提示</span><span class="d">周期判断 · 长期方向 · 数据交叉验证 · 触发/退出条件</span></div>
 
@@ -487,6 +535,9 @@ tbody tr { cursor: pointer; }
     </div>
   </div>
 </section>
+</div><!-- /pg-advice -->
+</main>
+</div><!-- /layout -->
 
 <footer id="foot">
   数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：中金 REITs 周报/二季报点评 + 《公募REITs投资策略分享-2026》（防御/周期/成长分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
@@ -963,6 +1014,31 @@ tbody tr { cursor: pointer; }
     }).join("");
   })();
 
+  // ---- 左侧三大导航 ----
+  $("sideNav").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    document.querySelectorAll("#sideNav button").forEach(function (x) { x.classList.toggle("on", x === b); });
+    document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + b.dataset.pg; });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // ---- 资产重估状态条（全景页） ----
+  (function () {
+    var RV = D.revaluation;
+    if (!RV) { $("revalStrip").innerHTML = '<div class="empty">数据未生成</div>'; return; }
+    var stageColor = RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)";
+    $("revalStrip").innerHTML =
+      '<div style="display:flex;align-items:baseline;gap:14px;margin-bottom:8px">' +
+      '<span class="rv-stage" style="color:' + stageColor + '">' + RV.stage + "</span>" +
+      '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项排他性条件成立 · 结论：重估的利率驱动力在，但资金与价格验证未跟上，仍处初期反复阶段</span></div>" +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">' +
+      RV.items.map(function (it) {
+        return '<div style="background:var(--panel2);border-radius:8px;padding:8px 12px;border:1px solid var(--line)">' +
+          '<div style="font-size:12px;font-weight:600">' + it.name + ' <span class="' + (it.ok ? "rv-ok" : "rv-no") + '" style="font-size:11px">' + (it.ok ? "✓" : "✗") + "</span></div>" +
+          '<div class="num" style="font-size:11.5px;color:var(--tx2);margin-top:2px">' + it.value + "</div></div>";
+      }).join("") + "</div>";
+  })();
+
   // ---- 周期耦合分析 ----
   (function () {
     // 资产重估状态仪
@@ -1124,6 +1200,22 @@ tbody tr { cursor: pointer; }
 
   // ---- 策略信号中心 ----
   (function () {
+    // 重估因子映射
+    var RV = D.revaluation;
+    if (RV) {
+      var MAP = ["利差因子（spread）", "资金面因子（moneyflow）", "市场情绪因子（sentiment）", "个券历史分位（pctRank）"];
+      $("revalSignalMap").innerHTML =
+        '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px">' +
+        '<span style="font-size:16px;font-weight:700;color:' + (RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)") + '">' + RV.stage + "</span>" +
+        '<span class="num" style="color:var(--tx3);font-size:11.5px">' + RV.score + "/4 · 详见周期耦合分析 Tab</span></div>" +
+        RV.items.map(function (it, i) {
+          return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
+            '<span class="vl num">' + it.value + "</span>" +
+            '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓" : "✗") + "</span>" +
+            '<span class="ds">→ ' + MAP[i] + "</span></div>";
+        }).join("");
+    }
+
     // 三策略信号条
     var FACTORS = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"], ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
     $("stratSignalBars").innerHTML = D.strategies.map(function (st) {
