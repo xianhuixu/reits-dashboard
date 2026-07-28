@@ -2,3 +2,6 @@ hist_cache/
 raw_cache/
 _*.py
 __pycache__/
+.DS_Store
+candidates*.txt
+universe_validated*.json
