@@ -1,0 +1,27 @@
+{
+  "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
+  "updated": "2026-07-28",
+  "bond10y": 1.73,
+  "pm": { "pmi": 50.3, "cpi": 1.0, "note": "PMI重回扩张但结构分化，温和通胀，利率历史低位" },
+  "cycles": [
+    { "key": "kitchin", "name": "基钦周期（库存·3-5年）", "stage": "被动补库初期", "progress": 0.25,
+      "evidence": "PMI 产成品库存低位回升，工业企业利润降幅收窄，主动去库尾声" },
+    { "key": "juglar", "name": "朱格拉周期（设备投资·7-11年）", "stage": "启动初期", "progress": 0.15,
+      "evidence": "2024年大规模设备更新政策为起点，制造业技改投资回升" },
+    { "key": "kuznets", "name": "库兹涅茨周期（地产建筑·15-25年）", "stage": "下行筑底", "progress": 0.7,
+      "evidence": "地产销售与新开工仍在低位，压制 REITs 估值的长周期背景" },
+    { "key": "kondratiev", "name": "康波周期（技术革命·45-60年）", "stage": "萧条期末段/新康波导入期", "progress": 0.85,
+      "evidence": "AI/算力基础设施投资加速，数据中心 REITs 的长期逻辑" }
+  ],
+  "clock": { "quadrant": "复苏", "growth": "回升", "inflation": "低位",
+             "note": "弱复苏：增长回升+通胀低位，类债高股息资产仍占优，逐步关注顺周期弹性" },
+  "mapping": {
+    "conclusion": "当前周期组合（基钦补库+朱格拉启动+库兹涅茨筑底+康波导入）下，海外经验指向工业物流、数据中心、住宅类 REITs 占优",
+    "directions": [
+      { "sector": "数据中心", "view": "长期超配", "reason": "康波导入期算力需求刚性，长租约现金流确定", "confidence": "高" },
+      { "sector": "保租房", "view": "长期标配偏超配", "reason": "海外住宅类在复苏期表现稳健，政策支持+利率低位", "confidence": "中高" },
+      { "sector": "仓储物流", "view": "左侧分批布局", "reason": "朱格拉周期启动利好工业物流，但国内供给出清未完成", "confidence": "中" },
+      { "sector": "消费", "view": "标配", "reason": "弱复苏期消费弹性有限，精选头部运营", "confidence": "中" }
+    ]
+  }
+}

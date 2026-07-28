@@ -1,0 +1,13 @@
+{
+  "_comment": "季报业绩与运营指标（季度手动更新）。achieveRate=EBITDA/可供分派金额达成率(%)，distYield=近12个月分派率(%)，metrics 为该券关键运营指标当前值（用于赛道透视标色）",
+  "updated": "2026-07-28",
+  "items": [
+    {
+      "code": "508018.SH",
+      "achieveRate": null,
+      "distYield": null,
+      "metrics": { "出租率": null },
+      "note": ""
+    }
+  ]
+}

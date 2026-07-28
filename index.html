@@ -138,6 +138,37 @@ footer { color: var(--tx3); font-size: 11.5px; margin-top: 20px; line-height: 1.
 .signal h3 { font-size: 13px; margin-bottom: 8px; letter-spacing: .02em; }
 .signal p { color: var(--tx2); font-size: 12px; line-height: 1.7; }
 svg text { font-family: inherit; }
+
+/* ---------- v2 组件 ---------- */
+.sig-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; }
+.sig-pos { background: var(--up); } .sig-neg { background: var(--down); } .sig-zero { background: var(--tx3); opacity: .4; }
+.sig-label { font-size: 10.5px; padding: 2px 8px; border-radius: 999px; }
+.sig-偏强 { background: rgba(240,79,79,.15); color: var(--up); }
+.sig-中性 { background: rgba(148,163,184,.12); color: var(--tx2); }
+.sig-偏弱 { background: rgba(43,181,163,.15); color: var(--down); }
+.ev-item { display: flex; gap: 10px; align-items: baseline; padding: 7px 4px; border-bottom: 1px solid var(--line); font-size: 12px; }
+.ev-item .d { color: var(--tx3); font-size: 11px; min-width: 74px; }
+.ev-type { font-size: 10.5px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.ev-MACD金叉 { background: rgba(240,79,79,.15); color: var(--up); }
+.ev-RSI超买 { background: rgba(224,171,74,.15); color: var(--gold); }
+.ev-成交异动 { background: rgba(91,147,255,.15); color: var(--accent); }
+.ev-突破250日线 { background: rgba(166,126,224,.15); color: var(--gro); }
+.ev-MACD死叉, .ev-RSI超卖 { background: rgba(43,181,163,.15); color: var(--down); }
+.cycle-badge { background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 11.5px; color: var(--tx2); }
+.cycle-badge b { color: var(--tx); }
+.prog { height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+.prog i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), #8fb3ff); }
+.metric-pill { display: inline-flex; gap: 6px; align-items: center; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: 11.5px; margin: 3px 4px 3px 0; }
+.metric-pill.red { border-color: rgba(240,79,79,.5); color: var(--up); }
+.metric-pill.yellow { border-color: rgba(224,171,74,.5); color: var(--gold); }
+.metric-pill.green { border-color: rgba(43,181,163,.4); color: var(--down); }
+.metric-pill.gray { color: var(--tx3); }
+#detailPanel .card { margin-top: 14px; }
+.radar-wrap { display: flex; justify-content: center; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
+.kv .k { color: var(--tx3); }
+tr.sel td { background: rgba(91,147,255,.1); }
+tbody tr { cursor: pointer; }
 </style>
 </head>
 <body>
@@ -165,11 +196,59 @@ svg text { font-family: inherit; }
 
 <div class="tabs" id="tabs">
   <button data-v="strategy" class="on">策略分类研究</button>
+  <button data-v="cycle">周期耦合分析</button>
+  <button data-v="track">赛道透视</button>
   <button data-v="corr">大类资产相关性</button>
+  <button data-v="detail">个券透视</button>
   <button data-v="sector">板块轮动</button>
-  <button data-v="table">个券全表</button>
   <button data-v="signal">策略信号</button>
 </div>
+
+<!-- ============ 周期耦合分析 ============ -->
+<section class="view" id="v-cycle" hidden>
+  <div class="card">
+    <h2>四大经典周期定位 <span class="note" style="display:inline" id="cycleUpdated"></span></h2>
+    <p class="note">手动月度判定 + 数据佐证 · 进度条为该周期当前阶段的相对位置</p>
+    <div id="cycleGrid"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>美林时钟</h2>
+      <p class="note">增长 × 通胀四象限 · 标记为当前位置（<span id="clockNote"></span>）</p>
+      <div id="clockChart"></div>
+    </div>
+    <div class="card">
+      <h2>海外 REITs 代表标的走势（近 250 日，起点=100）</h2>
+      <p class="note">iFinD 自动每日更新 · 点击图例切换</p>
+      <div class="legend" id="legendOverseas"></div>
+      <div id="chartOverseas"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>海外 REITs 周期-资产类型耦合矩阵（历史平均年化超额收益 %）</h2>
+    <p class="note" id="osMatrixNote"></p>
+    <div id="osMatrix" style="overflow-x:auto"></div>
+  </div>
+  <div class="card">
+    <h2>对中国 REITs 的映射结论（3-5 年维度）</h2>
+    <p class="note" id="mappingConclusion"></p>
+    <div id="mappingCards" class="grid3" style="margin-bottom:0"></div>
+  </div>
+</section>
+
+<!-- ============ 赛道透视 ============ -->
+<section class="view" id="v-track" hidden>
+  <div class="card">
+    <h2>宏观 → 行业 → 个股：各赛道关注指标与红线</h2>
+    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span style="color:var(--up)">红</span>=触发红线 / <span style="color:var(--gold)">黄</span>=接近 / <span style="color:var(--down)">绿</span>=正常，灰=待更新</p>
+    <div id="trackGrid"></div>
+  </div>
+  <div class="card">
+    <h2>分派达成与分红监测</h2>
+    <p class="note">达成率 &lt;95% 触发减持警戒，连续两期 &lt;90% 系统性减持（框架红线）</p>
+    <div id="fundTable"></div>
+  </div>
+</section>
 
 
 <!-- ============ 大类资产相关性 ============ -->
@@ -235,35 +314,64 @@ svg text { font-family: inherit; }
   </div>
 </section>
 
-<!-- ============ 个券全表 ============ -->
-<section class="view" id="v-table" hidden>
+<!-- ============ 个券透视 ============ -->
+<section class="view" id="v-detail" hidden>
   <div class="card">
-    <h2>全部上市公募 REITs 行情</h2>
-    <p class="note">点击表头排序 · 走势为近 60 交易日收盘价</p>
+    <h2>个券透视 · 信号总表</h2>
+    <p class="note">搜索或筛选定位个券 · 点击行展开三视角详情（历史 / 当前 / 前瞻）· 点击表头排序</p>
     <div class="filters">
+      <input id="fSearch" placeholder="搜索名称 / 代码">
       <select id="fStrategy"><option value="">全部策略</option></select>
       <select id="fSector"><option value="">全部板块</option></select>
       <select id="fRight"><option value="">产权/经营权</option><option>产权</option><option>经营权</option></select>
-      <input id="fSearch" placeholder="搜索名称 / 代码">
+      <select id="fSignal"><option value="">信号标签</option><option>偏强</option><option>中性</option><option>偏弱</option></select>
       <span class="note" id="fCount"></span>
     </div>
     <div class="tbl-wrap">
       <table id="tbl">
         <thead><tr>
           <th class="l" data-k="name">名称</th><th class="l" data-k="strategy">策略</th>
-          <th class="l" data-k="sector">板块</th><th class="l" data-k="right">类型</th>
           <th data-k="close">收盘</th><th data-k="pct">日涨跌</th>
-          <th data-k="ret5">5日</th><th data-k="ret20">20日</th><th data-k="ret60">60日</th>
-          <th data-k="volume">成交量</th><th>走势</th>
+          <th data-k="ret20">20日</th><th data-k="sinceIPO">上市以来</th>
+          <th data-k="rsi14">RSI14</th><th data-k="pctRank">历史分位</th>
+          <th data-k="amtRatio">量比</th>
+          <th data-k="sigTotal">信号分</th><th>标签</th>
         </tr></thead>
         <tbody></tbody>
       </table>
     </div>
   </div>
+  <div id="detailPanel"></div>
 </section>
 
-<!-- ============ 策略信号 ============ -->
+<!-- ============ 策略信号（动态信号追踪中心） ============ -->
 <section class="view" id="v-signal" hidden>
+  <div class="card">
+    <h2>三策略信号总览</h2>
+    <p class="note">六因子加权信号分（-12 ~ +12）：流动性 / 市场情绪 / 资金面 / 业绩达成 / 利差 / 股债联动</p>
+    <div id="stratSignalBars"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>信号事件流（近 120 日）</h2>
+      <p class="note">MACD 交叉 · RSI 超买超卖 · 成交异动 · 突破250日线</p>
+      <div class="filters" id="evFilter">
+        <button class="range-btn on" data-t="">全部</button>
+        <button class="range-btn" data-t="MACD金叉">金叉</button>
+        <button class="range-btn" data-t="MACD死叉">死叉</button>
+        <button class="range-btn" data-t="RSI超买">超买</button>
+        <button class="range-btn" data-t="RSI超卖">超卖</button>
+        <button class="range-btn" data-t="成交异动">异动</button>
+        <button class="range-btn" data-t="突破250日线">破线</button>
+      </div>
+      <div id="eventFlow" style="max-height:420px;overflow:auto"></div>
+    </div>
+    <div class="card">
+      <h2>信号历史回测（全历史样本）</h2>
+      <p class="note">信号出现后 5/20 交易日的平均收益与胜率——信号有效性的可验证依据</p>
+      <div id="backtestTable"></div>
+    </div>
+  </div>
   <div class="grid3">
     <div class="card signal">
       <h3>📅 分红交易策略（季节性）</h3>
@@ -282,17 +390,14 @@ svg text { font-family: inherit; }
     <h3>🧭 顺周期动态配置框架（防御型 / 周期型 / 成长型）</h3>
     <p>经济下行或衰退期：超配<b>防御型</b>（保租房、能源、市政环保），获取稳定股息与防御价值；经济上行周期：增配<b>周期型</b>（仓储物流、产业园、高速公路）与<b>成长型</b>（消费、数据中心）博取弹性。当前中金建议：优先现金流稳定的保租房、头部消费及长租约数据中心；其次关注路网引流受益的高速；逢低精选出租率修复、租约结构确定的仓储物流及产业园。</p>
   </div>
-  <div class="card signal">
-    <h3>⚠️ 风险提示</h3>
-    <p>行业重大政策调整（如收费标准市场化、补贴取消）可能影响底层现金流；超预期经营事件或致估值下行；宏观环境变化影响风险偏好与增量资金；区域或行业税务、会计政策调整亦可能影响收益预期。本面板不构成投资建议。</p>
-  </div>
 </section>
 
 <!-- ============ 配置建议 ============ -->
 <section id="v-advice">
   <div class="card">
-    <h2>① 当前经济周期判断（宏观输入，手动月度更新）</h2>
-    <p class="note">来源：国家统计局、中债、中金 REITs 周报 · 截至 2026-07-27</p>
+    <h2>① 当前经济周期判断（宏观输入 + 四大周期定位）</h2>
+    <p class="note">来源：国家统计局、中债、中金 REITs 周报 · 周期判定见"周期耦合分析"Tab</p>
+    <div id="adviceCycleBadges" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
     <div class="grid3" style="margin-bottom:0">
       <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI（6月）</div>
         <div class="big num" style="font-size:24px;font-weight:600">50.3 <span style="font-size:12px;color:var(--up)">重回扩张</span></div>
@@ -308,24 +413,31 @@ svg text { font-family: inherit; }
   </div>
 
   <div class="card">
-    <h2>② 三种策略分类二级市场表现（面板实时数据交叉验证）</h2>
+    <h2>② 长期配置方向（周期耦合结论，3-5 年维度）</h2>
+    <p class="note" id="adviceMappingNote"></p>
+    <div id="adviceMapping" class="grid3" style="margin-bottom:0"></div>
+  </div>
+
+  <div class="card">
+    <h2>③ 三种策略分类二级市场表现（面板实时数据交叉验证）</h2>
     <p class="note">等权平均涨跌幅 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性</p>
     <div id="advicePerf"></div>
   </div>
 
   <div class="grid">
     <div class="card">
-      <h2>③ 配置建议（数据交叉验证后）</h2>
+      <h2>④ 配置建议（数据交叉验证后）</h2>
       <div id="adviceList"></div>
     </div>
     <div class="card">
-      <h2>④ 风险提示</h2>
+      <h2>⑤ 风险提示</h2>
       <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
         <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
         <li><b>基本面修复不及预期</b>：产业园供需未出清、仓储租金下行压力仍存，周期型左侧布局需以出租率连续 2 个季度修复为确认信号，避免过早加仓。</li>
         <li><b>解禁与供给压力</b>：数据中心等板块临近解禁，短期卖压可能独立于基本面（参考 7 月数据中心领跌 -6.32%）。</li>
         <li><b>政策变化</b>：收费/补贴/税收政策调整可能直接影响经营权类底层现金流。</li>
         <li><b>数据口径局限</b>：本面板为行情量价 + 相关性口径，不含分派率、P/NAV 等估值指标；建议结合估值数据交叉确认，本内容不构成投资建议。</li>
+        <li><b>周期判定错误风险</b>：顺周期配置框架的有效性依赖周期阶段的正确判定；若基钦/朱格拉周期阶段误判（如补库未能延续），向周期型切换的节奏将失效，需以月度数据复核修正。</li>
       </ul>
     </div>
   </div>
@@ -499,46 +611,50 @@ svg text { font-family: inherit; }
       '<span class="val num ' + cls(x.v) + '">' + fmt(x.v) + "</span></div>";
   }).join("");
 
-  // ---- 个券表 ----
+  // ---- 个券透视：信号总表 ----
   $("fStrategy").innerHTML = '<option value="">全部策略</option>' +
     D.strategies.map(function (s) { return "<option>" + s + "</option>"; }).join("");
   $("fSector").innerHTML = '<option value="">全部板块</option>' +
     D.sectors.map(function (s) { return "<option>" + s + "</option>"; }).join("");
-  var sortKey = "pct", sortDir = -1;
-  function sparkSVG(vals, up) {
-    var w = 90, h = 24, lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), rg = hi - lo || 1;
-    var d = vals.map(function (v, i) {
-      return (i ? "L" : "M") + (i * w / (vals.length - 1)).toFixed(1) + " " + (h - 2 - (v - lo) / rg * (h - 4)).toFixed(1);
-    }).join(" ");
-    return '<svg width="' + w + '" height="' + h + '"><path d="' + d + '" fill="none" stroke="' + (up ? "var(--up)" : "var(--down)") + '" stroke-width="1.3"/></svg>';
-  }
+  var sortKey = "pct", sortDir = -1, selCode = null;
+  function sigLabel(l) { return '<span class="sig-label sig-' + l + '">' + l + '</span>'; }
   function renderTbl() {
-    var fs = $("fStrategy").value, fc = $("fSector").value, fr = $("fRight").value;
+    var fs = $("fStrategy").value, fc = $("fSector").value, fr = $("fRight").value, fl = $("fSignal").value;
     var q = $("fSearch").value.trim().toLowerCase();
     var list = D.reits.filter(function (r) {
       return (!fs || r.strategy === fs) && (!fc || r.sector === fc) && (!fr || r.right === fr) &&
+        (!fl || r.signals.label === fl) &&
         (!q || r.name.toLowerCase().includes(q) || r.code.includes(q));
     }).sort(function (a, b) {
-      var x = a[sortKey], y = b[sortKey];
+      var k = sortKey === "sigTotal" ? "signals" : null;
+      var x = k ? a.signals.total : a[sortKey], y = k ? b.signals.total : b[sortKey];
       if (x == null) return 1; if (y == null) return -1;
       return (x > y ? 1 : x < y ? -1 : 0) * sortDir;
     });
     $("fCount").textContent = "共 " + list.length + " 只";
     document.querySelector("#tbl tbody").innerHTML = list.map(function (r) {
-      return '<tr><td class="l">' + r.name + '</td>' +
+      return '<tr data-code="' + r.code + '" class="' + (r.code === selCode ? "sel" : "") + '">' +
+        '<td class="l">' + r.name + '</td>' +
         '<td class="l"><span class="st-tag st-' + r.strategy + '">' + r.strategy + "</span></td>" +
-        '<td class="l"><span class="sec-tag">' + r.sector + "</span></td>" +
-        '<td class="l" style="color:var(--tx2);font-size:11.5px">' + r.right + "</td>" +
         '<td class="num">' + r.close.toFixed(3) + "</td>" +
         '<td class="num ' + cls(r.pct) + '">' + fmt(r.pct) + "</td>" +
-        '<td class="num ' + cls(r.ret5) + '">' + fmt(r.ret5) + "</td>" +
         '<td class="num ' + cls(r.ret20) + '">' + fmt(r.ret20) + "</td>" +
-        '<td class="num ' + cls(r.ret60) + '">' + fmt(r.ret60) + "</td>" +
-        '<td class="num">' + fmtVol(r.volume) + "</td>" +
-        "<td>" + sparkSVG(r.spark, r.spark[r.spark.length - 1] >= r.spark[0]) + "</td></tr>";
+        '<td class="num ' + cls(r.sinceIPO) + '">' + fmt(r.sinceIPO) + "</td>" +
+        '<td class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</td>" +
+        '<td class="num">' + (r.pctRank == null ? "—" : r.pctRank + "%") + "</td>" +
+        '<td class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</td>" +
+        '<td class="num" style="font-weight:600">' + (r.signals.total > 0 ? "+" : "") + r.signals.total + "</td>" +
+        "<td>" + sigLabel(r.signals.label) + "</td></tr>";
     }).join("");
   }
-  ["fStrategy", "fSector", "fRight"].forEach(function (id) { $(id).addEventListener("change", renderTbl); });
+  document.querySelector("#tbl tbody").addEventListener("click", function (e) {
+    var tr = e.target.closest("tr"); if (!tr) return;
+    selCode = tr.dataset.code;
+    renderTbl();
+    renderDetail(selCode);
+    $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).addEventListener("change", renderTbl); });
   $("fSearch").addEventListener("input", renderTbl);
   document.querySelectorAll("#tbl th[data-k]").forEach(function (th) {
     th.addEventListener("click", function () {
@@ -548,6 +664,81 @@ svg text { font-family: inherit; }
     });
   });
   renderTbl();
+
+  // ---- 个券详情（历史 / 当前 / 前瞻） ----
+  function radarSVG(signals) {
+    var F = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"],
+             ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
+    var cx = 110, cy = 100, R = 70, pts = [];
+    function pt(i, v) {
+      var ang = -Math.PI / 2 + i * Math.PI / 3, r = R * (v + 2) / 4;
+      return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+    }
+    var s = '<svg viewBox="0 0 220 200" width="220">';
+    [0.25, 0.5, 0.75, 1].forEach(function (f) {
+      var ring = F.map(function (_, i) { return pt(i, f * 4 - 2); });
+      s += '<polygon points="' + ring.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") +
+        '" fill="none" stroke="var(--line)"/>';
+    });
+    F.forEach(function (_, i) {
+      var p = pt(i, 2);
+      s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p[0] + '" y2="' + p[1] + '" stroke="var(--line)"/>';
+    });
+    var poly = F.map(function (f, i) { return pt(i, signals[f[0]]); });
+    s += '<polygon points="' + poly.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") +
+      '" fill="rgba(91,147,255,.25)" stroke="var(--accent)" stroke-width="1.6"/>';
+    F.forEach(function (f, i) {
+      var p = pt(i, 2.55);
+      s += '<text x="' + p[0] + '" y="' + p[1] + '" text-anchor="middle" fill="var(--tx2)" font-size="10">' + f[1] + "</text>";
+      var pv = pt(i, signals[f[0]]);
+      s += '<circle cx="' + pv[0] + '" cy="' + pv[1] + '" r="2.5" fill="var(--accent)"/>';
+    });
+    return s + "</svg>";
+  }
+  function renderDetail(code) {
+    var r = D.reits.find(function (x) { return x.code === code; });
+    if (!r) return;
+    var evs = (D.events || []).filter(function (e) { return e.code === code; }).slice(0, 8);
+    var histChartId = "detailChart";
+    $("detailPanel").innerHTML =
+      '<div class="card"><h2>' + r.name + ' <span style="color:var(--tx3);font-size:12px">' + r.code + " · " +
+      r.sector + " · " + r.right + '</span> ' + sigLabel(r.signals.label) + "</h2>" +
+      '<div class="grid3" style="margin-top:10px">' +
+      // 历史
+      '<div><h3 style="font-size:12.5px;margin-bottom:8px">📈 历史表现（上市以来）</h3><div class="kv">' +
+      '<span class="k">累计涨跌幅</span><span class="num ' + cls(r.sinceIPO) + '">' + fmt(r.sinceIPO) + "</span>" +
+      '<span class="k">年化波动率</span><span class="num">' + (r.volAnn == null ? "—" : r.volAnn + "%") + "</span>" +
+      '<span class="k">上市天数</span><span class="num">' + r.histClose.length + " 交易日</span>" +
+      '<span class="k">20日均成交额</span><span class="num">' + fmtVol(r.amt20) + "</span></div>" +
+      '<div id="' + histChartId + '" style="margin-top:8px"></div></div>' +
+      // 当前
+      '<div><h3 style="font-size:12.5px;margin-bottom:8px">🎯 当前点位</h3><div class="kv">' +
+      '<span class="k">MACD</span><span class="num">' + r.macd.dif + " / " + r.macd.dea +
+      (r.macd.cross === "golden" ? ' <span class="up">金叉</span>' : r.macd.cross === "death" ? ' <span class="down">死叉</span>' : "") + "</span>" +
+      '<span class="k">RSI14</span><span class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</span>" +
+      '<span class="k">历史分位</span><span class="num">' + (r.pctRank == null ? "—" : r.pctRank + "%") + "</span>" +
+      '<span class="k">250日线乖离</span><span class="num ' + cls(r.devMA250) + '">' + fmt(r.devMA250) + "</span>" +
+      '<span class="k">量比(20/60)</span><span class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</span></div>" +
+      '<div class="radar-wrap" style="margin-top:6px">' + radarSVG(r.signals) + "</div></div>" +
+      // 前瞻
+      '<div><h3 style="font-size:12.5px;margin-bottom:8px">🔮 信号与前瞻</h3>' +
+      '<div style="font-size:12px;margin-bottom:8px">信号总分 <b class="num" style="font-size:18px">' +
+      (r.signals.total > 0 ? "+" : "") + r.signals.total + "</b> / ±12</div>" +
+      '<div class="kv">' +
+      ["liquidity|流动性", "sentiment|市场情绪", "moneyflow|资金面", "performance|业绩达成", "spread|利差", "stockbond|股债联动"]
+        .map(function (x) {
+          var k = x.split("|"), v = r.signals[k[0]];
+          return '<span class="k">' + k[1] + '</span><span class="num ' + (v > 0 ? "up" : v < 0 ? "down" : "") + '">' +
+            (v > 0 ? "+" : "") + v + "</span>";
+        }).join("") + "</div>" +
+      (evs.length ? '<div style="margin-top:8px;font-size:11.5px;color:var(--tx2)">近期事件：</div>' +
+        evs.map(function (e) {
+          return '<div class="ev-item"><span class="d">' + e.date + '</span><span class="ev-type ev-' + e.type + '">' + e.type + "</span></div>";
+        }).join("") : '<div style="margin-top:8px;font-size:11.5px;color:var(--tx3)">近 120 日无信号事件</div>') +
+      "</div></div></div>";
+    drawChart($(histChartId), r.histDates, [{ label: "收盘", color: "#5b93ff", data: r.histClose }]);
+  }
+
 
   // ---- 全景热力图（squarified treemap，成交额加权） ----
   var hmRange = "pct";
@@ -695,15 +886,17 @@ svg text { font-family: inherit; }
       return vs.length ? avgOf(vs) : null;
     }
     // 表现表
-    var html = '<table class="matrix"><thead><tr><th class="l">策略</th><th>日涨跌</th><th>5日</th><th>20日</th><th>60日</th><th>与国债相关性</th><th>与红利相关性</th><th>与沪深300</th></tr></thead><tbody>';
+    var html = '<table class="matrix"><thead><tr><th class="l">策略</th><th>日涨跌</th><th>5日</th><th>20日</th><th>60日</th><th>信号分</th><th>与国债相关性</th><th>与红利相关性</th><th>与沪深300</th></tr></thead><tbody>';
     D.strategies.forEach(function (st) {
       var m = (D.correlation && D.correlation.matrix[st]) || {};
+      var ss = (D.stratSignals || {})[st] || {};
       function c(v) { return v == null ? "—" : v.toFixed(2); }
       html += "<tr><td class='l'><span class='st-tag st-" + st + "'>" + st + "</span></td>" +
         '<td class="num ' + cls(stAvg(st, "pct")) + '">' + fmt(stAvg(st, "pct")) + "</td>" +
         '<td class="num ' + cls(stAvg(st, "ret5")) + '">' + fmt(stAvg(st, "ret5")) + "</td>" +
         '<td class="num ' + cls(stAvg(st, "ret20")) + '">' + fmt(stAvg(st, "ret20")) + "</td>" +
         '<td class="num ' + cls(stAvg(st, "ret60")) + '">' + fmt(stAvg(st, "ret60")) + "</td>" +
+        '<td class="num" style="font-weight:600">' + (ss.avg != null ? (ss.avg > 0 ? "+" : "") + ss.avg : "—") + "（" + (ss.label || "—") + "）</td>" +
         '<td class="num">' + c(m["000012.SH"]) + "</td><td class='num'>" + c(m["399324.SZ"]) + "</td><td class='num'>" + c(m["000300.SH"]) + "</td></tr>";
     });
     $("advicePerf").innerHTML = html + "</tbody></table>";
@@ -723,6 +916,216 @@ svg text { font-family: inherit; }
         '<b>' + it.st + ' · <span style="color:' + it.color + '">' + it.pos + "</span></b>" +
         '<p style="color:var(--tx2);font-size:12px;margin-top:4px;line-height:1.7">' + it.text + "</p></div>";
     }).join("");
+  })();
+
+  // ---- 周期耦合分析 ----
+  (function () {
+    var CY = D.cycle;
+    if (!CY) { $("cycleGrid").innerHTML = '<div class="empty">cycle_judgment.json 未配置</div>'; return; }
+    $("cycleUpdated").textContent = "· 更新 " + (CY.updated || "");
+    $("cycleGrid").innerHTML = '<div class="grid3" style="margin-bottom:0">' + (CY.cycles || []).map(function (c) {
+      return '<div class="card" style="background:var(--panel2)"><div style="font-size:12.5px;font-weight:600">' + c.name + "</div>" +
+        '<div style="font-size:15px;font-weight:650;margin:6px 0;color:var(--accent)">' + c.stage + "</div>" +
+        '<div style="font-size:11.5px;color:var(--tx2);line-height:1.6">' + c.evidence + "</div>" +
+        '<div class="prog"><i style="width:' + Math.round((c.progress || 0) * 100) + '%"></i></div></div>';
+    }).join("") + "</div>";
+
+    // 美林时钟
+    var q = (CY.clock || {}).quadrant || "复苏";
+    $("clockNote").textContent = (CY.clock || {}).note || "";
+    var quads = [["复苏", "增长↑ 通胀↓"], ["过热", "增长↑ 通胀↑"], ["滞胀", "增长↓ 通胀↑"], ["衰退", "增长↓ 通胀↓"]];
+    var W = 340, H = 300, m = 30;
+    var pos = { "复苏": [1, 1], "过热": [1, 0], "滞胀": [0, 0], "衰退": [0, 1] };
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%">';
+    quads.forEach(function (qd) {
+      var p = pos[qd[0]], x = m + p[0] * (W - 2 * m) / 2, y = m + p[1] * (H - 2 * m) / 2;
+      var on = qd[0] === q;
+      s += '<rect x="' + x + '" y="' + y + '" width="' + (W - 2 * m) / 2 + '" height="' + (H - 2 * m) / 2 +
+        '" fill="' + (on ? "rgba(91,147,255,.2)" : "var(--panel2)") + '" stroke="var(--line)" rx="8"/>' +
+        '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 - 4) + '" text-anchor="middle" fill="' +
+        (on ? "var(--accent)" : "var(--tx2)") + '" font-size="14" font-weight="600">' + qd[0] + "</text>" +
+        '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 + 14) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + qd[1] + "</text>";
+      if (on) s += '<circle cx="' + (x + (W - 2 * m) / 4) + '" cy="' + (y + (H - 2 * m) / 4 + 30) + '" r="5" fill="var(--accent)"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/></circle>';
+    });
+    s += '<text x="' + W / 2 + '" y="' + (H - 4) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">增长 →</text>' +
+         '<text x="12" y="' + H / 2 + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + H / 2 + ')">通胀 →</text>';
+    $("clockChart").innerHTML = s + "</svg>";
+
+    // 海外走势
+    if (D.overseas && D.overseas.length) {
+      var osSeries = D.overseas.map(function (o, i) {
+        return { label: o.type + "·" + o.name, color: SEC_PALETTE[i % SEC_PALETTE.length], data: o.norm, dates: o.dates };
+      });
+      // 统一以第一个的日期轴展示（各市场交易日略有差异，近似对齐）
+      var osDates = D.overseas[0].dates;
+      var osActive = osSeries.map(function () { return true; });
+      buildLegend($("legendOverseas"), osSeries, osActive, function () {
+        drawChart($("chartOverseas"), osDates, osSeries.filter(function (s2, i) { return osActive[i]; }));
+      });
+      drawChart($("chartOverseas"), osDates, osSeries);
+    } else {
+      $("chartOverseas").innerHTML = '<div class="empty">海外数据未取到</div>';
+    }
+
+    // 耦合矩阵
+    var OS = D.overseasStatic;
+    if (OS && OS.matrix) {
+      $("osMatrixNote").textContent = (OS.placeholder ? "⚠️ 占位示例值，待 Nareit/NBER 研究数据核实替换 · " : "") + (OS.source || "") + " · 更新 " + (OS.updated || "");
+      var M = OS.matrix;
+      var all = M.ret.flat();
+      var mx = Math.max.apply(null, all.map(Math.abs));
+      $("osMatrix").innerHTML = '<table class="matrix"><thead><tr><th class="l">资产类型 \\ 周期阶段</th>' +
+        M.stages.map(function (s2) { return "<th>" + s2 + "</th>"; }).join("") + "</tr></thead><tbody>" +
+        M.types.map(function (t, i) {
+          return "<tr><td class='l'>" + t + "</td>" + M.ret[i].map(function (v) {
+            var a = Math.min(Math.abs(v) / mx, 1);
+            var bg = v >= 0 ? "rgba(240,79,79," + (0.08 + 0.55 * a) + ")" : "rgba(43,181,163," + (0.08 + 0.55 * a) + ")";
+            return '<td class="num" style="background:' + bg + '">' + (v > 0 ? "+" : "") + v.toFixed(1) + "</td>";
+          }).join("") + "</tr>";
+        }).join("") + "</tbody></table>";
+    } else {
+      $("osMatrix").innerHTML = '<div class="empty">overseas_static.json 未配置</div>';
+    }
+
+    // 映射结论
+    if (CY.mapping) {
+      $("mappingConclusion").textContent = CY.mapping.conclusion || "";
+      $("mappingCards").innerHTML = (CY.mapping.directions || []).map(function (d2) {
+        return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
+          '<b style="font-size:13px">' + d2.sector + '</b><span class="tag" style="font-size:11px;padding:2px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line)">' + d2.view + "</span></div>" +
+          '<p style="font-size:11.5px;color:var(--tx2);margin-top:6px;line-height:1.6">' + d2.reason + "</p>" +
+          '<div style="font-size:11px;color:var(--tx3);margin-top:4px">置信度：' + d2.confidence + "</div></div>";
+      }).join("");
+    }
+  })();
+
+  // ---- 赛道透视 ----
+  (function () {
+    var TRACKS = [
+      { sector: "高速公路", metrics: ["车流量", "通行费收入", "路网分流"], redline: "流量低于预测 >10% 预警" },
+      { sector: "能源", metrics: ["电价", "发电量/出力率", "补贴回款"], redline: "出力率低于预测 >10% 预警" },
+      { sector: "保租房", metrics: ["出租率", "租金水平", "租户续租率"], redline: "出租率 <90% 预警" },
+      { sector: "产业园", metrics: ["出租率", "租金偏离", "空置率", "租户行业分散度"], redline: "空置率 >12% 或租金偏离 >15% 预警" },
+      { sector: "仓储物流", metrics: ["出租率", "WALE", "新增供给"], redline: "出租率 <90% 或租金下行 >10%" },
+      { sector: "消费", metrics: ["客流量", "销售额", "租售比"], redline: "空置率 >15% 预警" },
+      { sector: "数据中心", metrics: ["上架率", "电力成本", "算力需求", "解禁节奏"], redline: "上架率显著低于预测预警" },
+      { sector: "市政环保", metrics: ["处理量", "政府付费回款", "特许剩余年限"], redline: "剩余年限不足覆盖本金回收" },
+    ];
+    var fundMap = {};
+    (D.fundamentals || []).forEach(function (f) { fundMap[f.code] = f; });
+    $("trackGrid").innerHTML = '<div class="grid3" style="margin-bottom:0">' + TRACKS.map(function (t) {
+      var members = D.reits.filter(function (r) { return r.sector === t.sector; });
+      var pills = [];
+      members.forEach(function (r) {
+        var f = fundMap[r.code];
+        if (f && f.metrics) {
+          Object.keys(f.metrics).forEach(function (mk) {
+            var v = f.metrics[mk];
+            if (v == null) return;
+            var level = "green";
+            if (mk === "出租率" && v < 90) level = "red"; else if (mk === "出租率" && v < 92) level = "yellow";
+            if (mk === "空置率" && v > 12) level = "red"; else if (mk === "空置率" && v > 10) level = "yellow";
+            pills.push({ n: r.name.replace(/REIT.*$/, ""), m: mk, v: v, level: level });
+          });
+        }
+      });
+      var pillHtml = pills.length
+        ? pills.slice(0, 6).map(function (p) {
+            return '<span class="metric-pill ' + p.level + '">' + p.n + " " + p.m + " " + p.v + (typeof p.v === "number" ? "%" : "") + "</span>";
+          }).join("")
+        : '<span class="metric-pill gray">运营数据待季度更新</span>';
+      return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<b style="font-size:13px">' + t.sector + '</b><span style="font-size:11px;color:var(--tx3)">' + members.length + " 只</span></div>" +
+        '<div style="margin:6px 0">' + t.metrics.map(function (m2) { return '<span class="metric-pill gray">' + m2 + "</span>"; }).join("") + "</div>" +
+        '<div style="font-size:11px;color:var(--up);margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
+    }).join("") + "</div>";
+
+    // 分派达成监测
+    var funds = D.fundamentals || [];
+    if (!funds.length) {
+      $("fundTable").innerHTML = '<div class="empty">fundamentals.json 待维护：填入各券 achieveRate（达成率）与 distYield（分派率）后自动标色</div>';
+    } else {
+      $("fundTable").innerHTML = '<table class="matrix"><thead><tr><th class="l">名称</th><th>达成率</th><th>分派率</th><th>状态</th><th class="l">备注</th></tr></thead><tbody>' +
+        funds.map(function (f) {
+          var r = D.reits.find(function (x) { return x.code === f.code; });
+          var a = f.achieveRate;
+          var st = a == null ? ["待更新", "var(--tx3)"] : a >= 95 ? ["正常", "var(--down)"] : a >= 90 ? ["警戒", "var(--gold)"] : ["减持红线", "var(--up)"];
+          return "<tr><td class='l'>" + (r ? r.name : f.code) + "</td>" +
+            '<td class="num">' + (a == null ? "—" : a + "%") + "</td>" +
+            '<td class="num">' + (f.distYield == null ? "—" : f.distYield + "%") + "</td>" +
+            '<td style="color:' + st[1] + '">' + st[0] + "</td>" +
+            "<td class='l' style='color:var(--tx3);font-size:11px'>" + (f.note || "") + "</td></tr>";
+        }).join("") + "</tbody></table>";
+    }
+  })();
+
+  // ---- 策略信号中心 ----
+  (function () {
+    // 三策略信号条
+    var FACTORS = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"], ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
+    $("stratSignalBars").innerHTML = D.strategies.map(function (st) {
+      var ss = (D.stratSignals || {})[st] || { avg: 0, label: "中性" };
+      var members = D.reits.filter(function (r) { return r.strategy === st; });
+      var dots = FACTORS.map(function (f) {
+        var avg = members.length ? members.reduce(function (a2, r) { return a2 + r.signals[f[0]]; }, 0) / members.length : 0;
+        var c = avg > 0.5 ? "sig-pos" : avg < -0.5 ? "sig-neg" : "sig-zero";
+        return '<span title="' + f[1] + " " + avg.toFixed(1) + '" class="sig-dot ' + c + '"></span>';
+      }).join(" ");
+      var w = Math.min(Math.abs(ss.avg) / 12 * 100, 100);
+      return '<div class="sbar" style="grid-template-columns:90px 1fr 120px">' +
+        '<span class="n"><span class="st-tag st-' + st + '">' + st + "</span></span>" +
+        '<div class="track"><div class="fill" style="left:0;width:' + w + '%;background:' + ST_COLOR[st] + '"></div></div>' +
+        '<span class="val num">' + (ss.avg > 0 ? "+" : "") + ss.avg + " " + sigLabel(ss.label) + " " + dots + "</span></div>";
+    }).join("");
+
+    // 事件流
+    var evType = "";
+    function renderEvents() {
+      var list = (D.events || []).filter(function (e) { return !evType || e.type === evType; });
+      $("eventFlow").innerHTML = list.length ? list.slice(0, 80).map(function (e) {
+        return '<div class="ev-item"><span class="d">' + e.date + '</span><span class="ev-type ev-' + e.type + '">' + e.type + "</span>" +
+          "<span>" + e.name + (e.value != null ? ' <span class="num" style="color:var(--tx3)">' + e.value + "</span>" : "") + "</span></div>";
+      }).join("") : '<div class="empty">近 120 日无该类信号事件</div>';
+    }
+    $("evFilter").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      evType = b.dataset.t;
+      document.querySelectorAll("#evFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      renderEvents();
+    });
+    renderEvents();
+
+    // 回测
+    var BT = D.backtest || {};
+    $("backtestTable").innerHTML = '<table class="matrix"><thead><tr><th class="l">信号类型</th><th>样本</th><th>5日均值</th><th>5日胜率</th><th>20日均值</th><th>20日胜率</th></tr></thead><tbody>' +
+      Object.keys(BT).map(function (t) {
+        var b = BT[t];
+        function cell(x, k, suf) { return x && x[k] != null ? (k === "avg" ? fmt(x[k]) : x[k] + "%") : "—"; }
+        function cl(x) { return x && x.avg != null ? cls(x.avg) : ""; }
+        return "<tr><td class='l'><span class='ev-type ev-" + t + "'>" + t + "</span></td>" +
+          '<td class="num">' + ((b.d20 && b.d20.n) || "—") + "</td>" +
+          '<td class="num ' + cl(b.d5) + '">' + cell(b.d5, "avg") + "</td>" +
+          '<td class="num">' + cell(b.d5, "win") + "</td>" +
+          '<td class="num ' + cl(b.d20) + '">' + cell(b.d20, "avg") + "</td>" +
+          '<td class="num">' + cell(b.d20, "win") + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  })();
+
+  // ---- 配置建议升级：周期徽标 + 长期方向 ----
+  (function () {
+    if (D.cycle) {
+      $("adviceCycleBadges").innerHTML = (D.cycle.cycles || []).map(function (c) {
+        return '<span class="cycle-badge">' + c.name.split("（")[0] + "：<b>" + c.stage + "</b></span>";
+      }).join("") + '<span class="cycle-badge">美林时钟：<b>' + ((D.cycle.clock || {}).quadrant || "—") + "</b></span>";
+      if (D.cycle.mapping) {
+        $("adviceMappingNote").textContent = D.cycle.mapping.conclusion || "";
+        $("adviceMapping").innerHTML = (D.cycle.mapping.directions || []).map(function (d2) {
+          return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
+            '<b>' + d2.sector + '</b><span style="font-size:11px;color:var(--accent)">' + d2.view + "</span></div>" +
+            '<p style="font-size:11.5px;color:var(--tx2);margin-top:6px;line-height:1.6">' + d2.reason + "</p></div>";
+        }).join("");
+      }
+    }
   })();
 
   // ---- Tab 切换 ----

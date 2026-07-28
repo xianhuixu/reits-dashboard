@@ -1,0 +1,17 @@
+import json, os, random
+os.chdir("/Users/lion/Desktop/Vibe Coding/reits-dashboard")
+data = json.load(open("data.json", "r", encoding="utf-8"))
+updated = data.get("updated", "N/A")
+lastTradeDate = data.get("lastTradeDate", "N/A")
+reits = data.get("reits", [])
+print(f"updated: {updated}")
+print(f"lastTradeDate: {lastTradeDate}")
+print(f"total REITs: {len(reits)}")
+up = sum(1 for r in reits if r.get("pct", 0) > 0)
+down = sum(1 for r in reits if r.get("pct", 0) < 0)
+flat = sum(1 for r in reits if r.get("pct", 0) == 0)
+print(f"上涨: {up} 只, 下跌: {down} 只, 平盘: {flat} 只")
+samples = random.sample(reits, 2)
+print("抽查样本:")
+for s in samples:
+    print(f"  {s['code']} {s['name']}: close={s['close']:.3f}, pct={s['pct']:.2f}%")
