@@ -154,6 +154,24 @@ svg text { font-family: inherit; }
 .ev-成交异动 { background: rgba(91,147,255,.15); color: var(--accent); }
 .ev-突破250日线 { background: rgba(166,126,224,.15); color: var(--gro); }
 .ev-MACD死叉, .ev-RSI超卖 { background: rgba(43,181,163,.15); color: var(--down); }
+/* ---------- 事件信息流（问财范式） ---------- */
+.news-item { display: flex; gap: 12px; padding: 11px 6px; border-bottom: 1px solid var(--line); transition: background .15s; }
+.news-item:hover { background: rgba(148,163,184,.06); }
+.news-item .nt { flex: 0 0 62px; }
+.news-item .nt span { font-size: 10.5px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.nt-政策监管 { background: rgba(240,79,79,.14); color: var(--up); }
+.nt-拟上市 { background: rgba(91,147,255,.14); color: var(--accent); }
+.nt-申报动态 { background: rgba(166,126,224,.14); color: var(--gro); }
+.nt-上市公告 { background: rgba(43,181,163,.14); color: var(--down); }
+.nt-扩募动态 { background: rgba(224,171,74,.14); color: var(--gold); }
+.nt-市场观点 { background: rgba(148,163,184,.12); color: var(--tx2); }
+.news-item .nb { flex: 1; min-width: 0; }
+.news-item .nh { font-size: 13px; font-weight: 600; line-height: 1.5; }
+.news-item .nh a { color: var(--tx); text-decoration: none; }
+.news-item .nh a:hover { color: var(--accent); }
+.news-item .ns { font-size: 11.5px; color: var(--tx2); margin-top: 3px; line-height: 1.6; }
+.news-item .nm { font-size: 10.5px; color: var(--tx3); margin-top: 4px; }
+.news-item .nd { flex: 0 0 74px; text-align: right; font-size: 11px; color: var(--tx3); padding-top: 2px; }
 .cycle-badge { background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 11.5px; color: var(--tx2); }
 .cycle-badge b { color: var(--tx); }
 .prog { height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; margin-top: 8px; }
@@ -253,6 +271,13 @@ main { flex: 1; min-width: 0; }
     <div id="treemap" style="position:relative;width:100%;height:440px"></div>
   </div>
 </section>
+
+<div class="card" style="margin-top:14px">
+  <h2>近期重点事件信息流</h2>
+  <p class="note">政策监管 · 拟上市与申报 · 上市项目公告 · 扩募动态 · 市场观点 · 来源：东方财富新闻检索，每日更新 · 近 30 日</p>
+  <div class="filters" id="newsFilter"></div>
+  <div id="newsFeed" style="max-height:460px;overflow:auto"></div>
+</div>
 </div><!-- /pg-pano -->
 
 <div class="page" id="pg-research" hidden>
@@ -547,6 +572,7 @@ main { flex: 1; min-width: 0; }
 </footer>
 
 <script src="data.js"></script>
+<script src="news.js"></script>
 <script>
 (function () {
   var D = window.REITS_DATA;
@@ -1015,6 +1041,36 @@ main { flex: 1; min-width: 0; }
         '<b>' + it.st + ' · <span style="color:' + it.color + '">' + it.pos + "</span></b>" +
         '<p style="color:var(--tx2);font-size:12px;margin-top:4px;line-height:1.7">' + it.text + "</p></div>";
     }).join("");
+  })();
+
+  // ---- 重点事件信息流（问财范式） ----
+  (function () {
+    var N = window.REITS_NEWS;
+    if (!N || !N.items || !N.items.length) {
+      $("newsFeed").innerHTML = '<div class="empty">暂无事件数据 — 请先运行 fetch_news.py</div>';
+      return;
+    }
+    var tag = "全部";
+    $("newsFilter").innerHTML = N.tags.map(function (t) {
+      return '<button class="range-btn' + (t === "全部" ? " on" : "") + '" data-t="' + t + '">' + t + "</button>";
+    }).join("");
+    function render() {
+      var list = N.items.filter(function (x) { return tag === "全部" || x.tag === tag; });
+      $("newsFeed").innerHTML = list.length ? list.map(function (x) {
+        return '<div class="news-item"><div class="nt"><span class="nt-' + x.tag + '">' + x.tag + "</span></div>" +
+          '<div class="nb"><div class="nh"><a href="' + x.url + '" target="_blank" rel="noopener">' + x.title + "</a></div>" +
+          '<div class="ns">' + x.summary + "</div>" +
+          '<div class="nm">' + x.media + "</div></div>" +
+          '<div class="nd num">' + x.date.slice(5) + "</div></div>";
+      }).join("") : '<div class="empty">该分类下暂无事件</div>';
+    }
+    $("newsFilter").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      tag = b.dataset.t;
+      document.querySelectorAll("#newsFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      render();
+    });
+    render();
   })();
 
   // ---- 左侧三大导航（滑动指示块） ----
