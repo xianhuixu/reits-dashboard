@@ -1,0 +1,555 @@
+[
+ {
+  "code": "508056.SH",
+  "name": "中金普洛斯仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180301.SZ",
+  "name": "红土创新盐田港仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508098.SH",
+  "name": "嘉实京东仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180302.SZ",
+  "name": "华夏深国际仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180303.SZ",
+  "name": "华泰宝湾物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508086.SH",
+  "name": "工银瑞信河北高速集团高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508000.SH",
+  "name": "华安张江产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180101.SZ",
+  "name": "博时招商蛇口产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508027.SH",
+  "name": "东吴苏州工业园区产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508099.SH",
+  "name": "建信中关村产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180102.SZ",
+  "name": "华夏合肥高新创新产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508021.SH",
+  "name": "国泰海通临港创新智造产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508088.SH",
+  "name": "国泰海通东久新经济产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180103.SZ",
+  "name": "华夏杭州和达高科产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508019.SH",
+  "name": "中金湖北科投光谷产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180105.SZ",
+  "name": "易方达广州开发区高新产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508069.SH",
+  "name": "华夏南京交通高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508068.SH",
+  "name": "华夏北京保障房中心租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508058.SH",
+  "name": "中金厦门安居保障性租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180501.SZ",
+  "name": "红土创新深圳安居保障性租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508077.SH",
+  "name": "华夏基金华润有巢租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180502.SZ",
+  "name": "招商蛇口租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508055.SH",
+  "name": "汇添富上海地产租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508031.SH",
+  "name": "国泰海通城投宽庭保障性租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508085.SH",
+  "name": "华泰紫金苏州恒泰租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180503.SZ",
+  "name": "中航北京昌保租赁住房REIT",
+  "sector": "保租房",
+  "right": "产权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180601.SZ",
+  "name": "华夏华润消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "180602.SZ",
+  "name": "中金印力消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508011.SH",
+  "name": "嘉实物美消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "180603.SZ",
+  "name": "华夏大悦城购物中心REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "180606.SZ",
+  "name": "中金中国绿发消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "180605.SZ",
+  "name": "易方达华威农贸市场REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508066.SH",
+  "name": "华泰紫金江苏交控高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180201.SZ",
+  "name": "平安广州交投广河高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508001.SH",
+  "name": "浙商证券沪杭甬杭徽高速REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508018.SH",
+  "name": "华夏中国交建高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508008.SH",
+  "name": "国金铁建重庆渝遂高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180202.SZ",
+  "name": "华夏越秀高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180203.SZ",
+  "name": "招商高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508007.SH",
+  "name": "中金山高集团高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508009.SH",
+  "name": "中金安徽交控高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508017.SH",
+  "name": "华夏金茂消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508096.SH",
+  "name": "中航京能国际能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180402.SZ",
+  "name": "工银瑞信蒙能清洁能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508026.SH",
+  "name": "嘉实中国电建清洁能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508015.SH",
+  "name": "中信建投明阳智能新能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508089.SH",
+  "name": "华夏特变电工新能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180401.SZ",
+  "name": "鹏华深圳能源清洁能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180901.SZ",
+  "name": "南方润泽科技数据中心REIT",
+  "sector": "数据中心",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "180305.SZ",
+  "name": "南方顺丰仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180306.SZ",
+  "name": "华夏安博仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508033.SH",
+  "name": "易方达深高速高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508010.SH",
+  "name": "中金重庆两江产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508036.SH",
+  "name": "平安宁波交投杭州湾跨海大桥REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508080.SH",
+  "name": "中金亦庄产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508029.SH",
+  "name": "中信建投沈阳国际软件园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508016.SH",
+  "name": "华夏华电清洁能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508002.SH",
+  "name": "华安百联消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508005.SH",
+  "name": "华夏首创奥特莱斯REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508028.SH",
+  "name": "中信建投国家电投新能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508039.SH",
+  "name": "创金合信首农产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508050.SH",
+  "name": "华夏中核清洁能源REIT",
+  "sector": "能源",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508006.SH",
+  "name": "富国首创水务REIT",
+  "sector": "市政环保",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "180801.SZ",
+  "name": "中航首钢生物质REIT",
+  "sector": "市政环保",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508060.SH",
+  "name": "南方万国数据中心REIT",
+  "sector": "数据中心",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508003.SH",
+  "name": "中金联东科技创新产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508022.SH",
+  "name": "博时津开科工产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508020.SH",
+  "name": "东方红隧道股份高速公路REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508048.SH",
+  "name": "华安外高桥仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508078.SH",
+  "name": "中航易商仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508082.SH",
+  "name": "中金唯品会奥莱REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508087.SH",
+  "name": "国泰海通济南能源供热REIT",
+  "sector": "市政环保",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508090.SH",
+  "name": "中银中外运仓储物流REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508091.SH",
+  "name": "华夏凯德消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508092.SH",
+  "name": "华夏金隅智造工场REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508093.SH",
+  "name": "易方达广西北投高速REIT",
+  "sector": "高速公路",
+  "right": "经营权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "508097.SH",
+  "name": "华泰南京建邺REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180607.SZ",
+  "name": "华夏中海消费REIT",
+  "sector": "消费",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508012.SH",
+  "name": "招商科创孵化器REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ }
+]

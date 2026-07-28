@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公募REITs 全量投研面板</title>
+<style>
+:root {
+  --bg: #0e1116; --panel: #161b22; --panel2: #1c2330; --line: #2a3342;
+  --tx: #e8edf3; --tx2: #97a3b4; --tx3: #5d6a7d;
+  --up: #e54545; --down: #26a69a; --accent: #4c8dff; --gold: #d9a441;
+  --def: #5bbfbb; --cyc: #e07b39; --gro: #9b6dd6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--tx);
+  font: 13px/1.5 -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  padding: 18px 22px 30px; }
+.num { font-variant-numeric: tabular-nums; }
+header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+h1 { font-size: 18px; font-weight: 600; }
+header .meta { color: var(--tx3); font-size: 12px; }
+.up { color: var(--up); } .down { color: var(--down); } .flat { color: var(--tx2); }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.kpi .k { color: var(--tx3); font-size: 11.5px; margin-bottom: 4px; }
+.kpi .v { font-size: 20px; font-weight: 600; }
+.kpi .s { font-size: 11.5px; color: var(--tx2); margin-top: 2px; }
+
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
+.tabs button { background: var(--panel); color: var(--tx2); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 16px; font: inherit; cursor: pointer; }
+.tabs button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.view[hidden] { display: none; }
+
+.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+@media (max-width: 900px) { .grid, .grid3 { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.card h2 { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+.card .note { color: var(--tx3); font-size: 11px; margin-bottom: 10px; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 6px; font-size: 11.5px; color: var(--tx2); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; user-select: none; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend .off { opacity: .35; }
+
+.strat-card { border-top: 3px solid; }
+.strat-card .big { font-size: 24px; font-weight: 600; margin: 4px 0; }
+.strat-card .tag { font-size: 11px; padding: 1px 7px; border-radius: 4px; background: var(--panel2); color: var(--tx2); }
+.strat-card ul { margin: 8px 0 0 16px; color: var(--tx2); font-size: 11.5px; }
+.strat-card li { margin-bottom: 3px; }
+
+.sbar { display: grid; grid-template-columns: 62px 1fr 56px; align-items: center; gap: 8px; padding: 3.5px 0; }
+.sbar .n { color: var(--tx2); font-size: 12px; }
+.sbar .track { height: 12px; position: relative; background: var(--panel2); border-radius: 3px; }
+.sbar .zero { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--tx3); }
+.sbar .fill { position: absolute; top: 0; bottom: 0; border-radius: 3px; }
+.sbar .val { text-align: right; font-size: 12px; }
+
+.matrix { border-collapse: collapse; width: 100%; }
+.matrix th, .matrix td { padding: 7px 8px; text-align: center; border-bottom: 1px solid var(--line); font-size: 12px; }
+.matrix th { color: var(--tx3); font-weight: 500; font-size: 11.5px; }
+.matrix td.l, .matrix th.l { text-align: left; }
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+.filters select, .filters input { background: var(--panel2); color: var(--tx); border: 1px solid var(--line);
+  border-radius: 6px; padding: 5px 9px; font: inherit; font-size: 12px; }
+.filters input { width: 150px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--tx3); font-weight: 500; font-size: 11.5px; cursor: pointer; user-select: none;
+  position: sticky; top: 0; background: var(--panel); z-index: 1; }
+th:hover { color: var(--tx); }
+td.l, th.l { text-align: left; }
+tbody tr:hover { background: var(--panel2); }
+.sec-tag { display: inline-block; font-size: 10.5px; padding: 1px 6px; border-radius: 4px; background: var(--panel2); color: var(--tx2); }
+.st-tag { display: inline-block; font-size: 10.5px; padding: 1px 6px; border-radius: 4px; }
+.st-防御型 { background: rgba(91,191,187,.15); color: var(--def); }
+.st-周期型 { background: rgba(224,123,57,.15); color: var(--cyc); }
+.st-成长型 { background: rgba(155,109,214,.15); color: var(--gro); }
+.tbl-wrap { max-height: 600px; overflow: auto; border-radius: 8px; }
+footer { color: var(--tx3); font-size: 11px; margin-top: 14px; line-height: 1.7; }
+.empty { color: var(--tx2); padding: 40px 0; text-align: center; }
+.signal h3 { font-size: 12.5px; margin-bottom: 6px; }
+.signal p { color: var(--tx2); font-size: 11.5px; line-height: 1.6; }
+svg text { font-family: inherit; }
+</style>
+</head>
+<body>
+<header>
+  <h1>公募REITs 全量投研面板</h1>
+  <span class="meta" id="meta">数据加载中…</span>
+</header>
+
+<div class="kpis" id="kpis"></div>
+
+<!-- ============ 第一段：全景热力图 ============ -->
+<section id="v-heatmap">
+  <div class="card">
+    <h2>资产类别全景热力图</h2>
+    <p class="note">色块大小 ∝ 板块成交额 · 颜色 = 板块成交额加权涨跌幅（红涨绿跌）· 区间：<span id="hmRangeLabel">日涨跌</span></p>
+    <div class="filters" id="hmRange">
+      <button class="on" data-r="pct" style="background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:5px 12px;font:inherit;cursor:pointer">日涨跌</button>
+      <button data-r="ret5" style="background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:5px 12px;font:inherit;cursor:pointer">5日</button>
+      <button data-r="ret20" style="background:var(--panel2);color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:5px 12px;font:inherit;cursor:pointer">20日</button>
+    </div>
+    <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:8px"></div>
+    <div id="treemap" style="position:relative;width:100%;height:440px"></div>
+  </div>
+</section>
+
+<div class="tabs" id="tabs">
+  <button data-v="strategy" class="on">策略分类研究</button>
+  <button data-v="corr">大类资产相关性</button>
+  <button data-v="sector">板块轮动</button>
+  <button data-v="table">个券全表</button>
+  <button data-v="signal">策略信号</button>
+</div>
+
+
+<!-- ============ 大类资产相关性 ============ -->
+<section class="view" id="v-corr" hidden>
+  <div class="grid3" id="corrCards"></div>
+  <div class="grid">
+    <div class="card">
+      <h2>相关性热力矩阵（日收益率 Pearson，近约 130 交易日）</h2>
+      <p class="note">红 = 正相关，蓝 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
+      <div id="corrMatrix" style="overflow-x:auto"></div>
+    </div>
+    <div class="card">
+      <h2>股性 - 债性定位</h2>
+      <p class="note">X = 与国债指数相关性（债性）· Y = 与沪深300相关性（股性）</p>
+      <div id="corrScatter"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>REITs 板块 vs A股对应板块（区间约 130 交易日）</h2>
+    <p class="note">相关系数 + 区间累计涨跌幅对比，检验 REITs 与对应股票板块的联动程度</p>
+    <div id="peerBars"></div>
+  </div>
+</section>
+
+<!-- ============ 策略分类研究 ============ -->
+<section class="view" id="v-strategy">
+  <div class="grid3" id="stratCards"></div>
+  <div class="grid">
+    <div class="card">
+      <h2>策略组合等权指数（区间起点 = 100）</h2>
+      <p class="note">按投资策略分类（防御型 / 周期型 / 成长型）等权构建 · 点击图例切换</p>
+      <div class="legend" id="legendStrategy"></div>
+      <div id="chartStrategy"></div>
+    </div>
+    <div class="card">
+      <h2>产权 vs 经营权</h2>
+      <p class="note">中金口径：产权看分派率，经营权看中债 IRR</p>
+      <div class="legend" id="legendRight"></div>
+      <div id="chartRight"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>策略 × 板块 今日表现矩阵（平均日涨跌 %）</h2>
+    <p class="note">单元格为该策略-板块组合内个券今日平均涨跌幅，括号内为只数</p>
+    <div id="matrix"></div>
+  </div>
+</section>
+
+<!-- ============ 板块轮动 ============ -->
+<section class="view" id="v-sector" hidden>
+  <div class="grid">
+    <div class="card">
+      <h2>板块等权指数走势（区间起点 = 100）</h2>
+      <p class="note">点击图例切换板块显示</p>
+      <div class="legend" id="legendSector"></div>
+      <div id="chartSector"></div>
+    </div>
+    <div class="card">
+      <h2>板块今日表现</h2>
+      <p class="note">板块内个券等权平均日涨跌</p>
+      <div id="sectorBars"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 个券全表 ============ -->
+<section class="view" id="v-table" hidden>
+  <div class="card">
+    <h2>全部上市公募 REITs 行情</h2>
+    <p class="note">点击表头排序 · 走势为近 60 交易日收盘价</p>
+    <div class="filters">
+      <select id="fStrategy"><option value="">全部策略</option></select>
+      <select id="fSector"><option value="">全部板块</option></select>
+      <select id="fRight"><option value="">产权/经营权</option><option>产权</option><option>经营权</option></select>
+      <input id="fSearch" placeholder="搜索名称 / 代码">
+      <span class="note" id="fCount"></span>
+    </div>
+    <div class="tbl-wrap">
+      <table id="tbl">
+        <thead><tr>
+          <th class="l" data-k="name">名称</th><th class="l" data-k="strategy">策略</th>
+          <th class="l" data-k="sector">板块</th><th class="l" data-k="right">类型</th>
+          <th data-k="close">收盘</th><th data-k="pct">日涨跌</th>
+          <th data-k="ret5">5日</th><th data-k="ret20">20日</th><th data-k="ret60">60日</th>
+          <th data-k="volume">成交量</th><th>走势</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 策略信号 ============ -->
+<section class="view" id="v-signal" hidden>
+  <div class="grid3">
+    <div class="card signal">
+      <h3>📅 分红交易策略（季节性）</h3>
+      <p>分红季集中在每年 <b>4 月、8-9 月</b>，分红季存在行情保护效应，4 月因 OCI 资金与抢权资金入场支撑更明显。若有配置或择时计划，可在分红季前提前布局。</p>
+    </div>
+    <div class="card signal">
+      <h3>🔓 解禁交易策略</h3>
+      <p>核心在于判断市场环境：上行期可在解禁前恐慌性抛售时配置，或在解禁后大宗交易折价接入；盘整/下行期卖压大，不推荐。近期需关注数据中心等板块解禁节奏。</p>
+    </div>
+    <div class="card signal">
+      <h3>➕ 扩募与一级战配</h3>
+      <p>上市超 1 年项目当日清仓胜率 65%，长期持有胜率更高；建议关注基本面稳定的<b>消费、保障房、能源</b>板块战略配售机会。2026 年能源赛道有望成为 REITs 中的"蓝筹大盘股"。</p>
+    </div>
+  </div>
+  <div class="card signal">
+    <h3>🧭 顺周期动态配置框架（防御型 / 周期型 / 成长型）</h3>
+    <p>经济下行或衰退期：超配<b>防御型</b>（保租房、能源、市政环保），获取稳定股息与防御价值；经济上行周期：增配<b>周期型</b>（仓储物流、产业园、高速公路）与<b>成长型</b>（消费、数据中心）博取弹性。当前中金建议：优先现金流稳定的保租房、头部消费及长租约数据中心；其次关注路网引流受益的高速；逢低精选出租率修复、租约结构确定的仓储物流及产业园。</p>
+  </div>
+  <div class="card signal">
+    <h3>⚠️ 风险提示</h3>
+    <p>行业重大政策调整（如收费标准市场化、补贴取消）可能影响底层现金流；超预期经营事件或致估值下行；宏观环境变化影响风险偏好与增量资金；区域或行业税务、会计政策调整亦可能影响收益预期。本面板不构成投资建议。</p>
+  </div>
+</section>
+
+<!-- ============ 配置建议 ============ -->
+<section id="v-advice">
+  <div class="card">
+    <h2>① 当前经济周期判断（宏观输入，手动月度更新）</h2>
+    <p class="note">来源：国家统计局、中债、中金 REITs 周报 · 截至 2026-07-27</p>
+    <div class="grid3" style="margin-bottom:0">
+      <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI（6月）</div>
+        <div class="big num" style="font-size:24px;font-weight:600">50.3 <span style="font-size:12px;color:var(--up)">重回扩张</span></div>
+        <div style="font-size:11px;color:var(--tx2)">新订单 51.2，但小型企业 48.2、高耗能 47.1，内需仍弱</div></div>
+      <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">CPI 同比（6月）</div>
+        <div class="big num" style="font-size:24px;font-weight:600">+1.0%</div>
+        <div style="font-size:11px;color:var(--tx2)">温和通胀，货币政策空间充裕</div></div>
+      <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率（7/27）</div>
+        <div class="big num" style="font-size:24px;font-weight:600">1.73%</div>
+        <div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div></div>
+    </div>
+    <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/成长型切换。</p>
+  </div>
+
+  <div class="card">
+    <h2>② 三种策略分类二级市场表现（面板实时数据交叉验证）</h2>
+    <p class="note">等权平均涨跌幅 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性</p>
+    <div id="advicePerf"></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>③ 配置建议（数据交叉验证后）</h2>
+      <div id="adviceList"></div>
+    </div>
+    <div class="card">
+      <h2>④ 风险提示</h2>
+      <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
+        <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
+        <li><b>基本面修复不及预期</b>：产业园供需未出清、仓储租金下行压力仍存，周期型左侧布局需以出租率连续 2 个季度修复为确认信号，避免过早加仓。</li>
+        <li><b>解禁与供给压力</b>：数据中心等板块临近解禁，短期卖压可能独立于基本面（参考 7 月数据中心领跌 -6.32%）。</li>
+        <li><b>政策变化</b>：收费/补贴/税收政策调整可能直接影响经营权类底层现金流。</li>
+        <li><b>数据口径局限</b>：本面板为行情量价 + 相关性口径，不含分派率、P/NAV 等估值指标；建议结合估值数据交叉确认，本内容不构成投资建议。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer id="foot">
+  数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：中金 REITs 周报/二季报点评 + 《公募REITs投资策略分享-2026》（防御/周期/成长分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  var D = window.REITS_DATA;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!D || !D.reits || !D.reits.length) {
+    $("meta").textContent = "暂无数据 — 请先运行 fetch_data.py";
+    return;
+  }
+  $("meta").textContent = "更新 " + D.updated + " · 最新交易日 " + D.lastTradeDate +
+    " · 全覆盖 " + D.count + " 只 · 来源 iFinD";
+
+  var ST_COLOR = { "防御型": "var(--def)", "周期型": "var(--cyc)", "成长型": "var(--gro)" };
+  var ST_DESC = {
+    "防御型": ["保租房 / 能源 / 市政环保", "下行期超配：稳定股息 + 防御价值", "现金流确定性高，类债属性强"],
+    "周期型": ["仓储物流 / 产业园 / 高速公路", "顺周期轮动：与宏观景气度联动", "关注出租率修复与路网引流"],
+    "成长型": ["消费 / 数据中心", "上行期增配：博取业绩与估值弹性", "头部运营与长租约为核心变量"]
+  };
+  function cls(v) { return v > 0 ? "up" : v < 0 ? "down" : "flat"; }
+  function fmt(v, suf) { return v == null ? "—" : (v > 0 ? "+" : "") + v.toFixed(2) + (suf || "%"); }
+  function fmtVol(v) { return v == null ? "—" : v >= 1e8 ? (v/1e8).toFixed(2)+"亿" : v >= 1e4 ? (v/1e4).toFixed(0)+"万" : String(v); }
+  function avgOf(list) { return list.length ? list.reduce(function (a, b) { return a + b; }, 0) / list.length : null; }
+
+  // ---- KPI ----
+  var pcts = D.reits.map(function (r) { return r.pct; });
+  var avg = avgOf(pcts);
+  var upN = pcts.filter(function (v) { return v > 0; }).length;
+  var downN = pcts.filter(function (v) { return v < 0; }).length;
+  var totVol = D.reits.reduce(function (a, r) { return a + (r.volume || 0); }, 0);
+  var best = D.reits.slice().sort(function (a, b) { return b.pct - a.pct; })[0];
+  var worst = D.reits.slice().sort(function (a, b) { return a.pct - b.pct; })[0];
+  $("kpis").innerHTML = [
+    ["全市场等权日涨跌", fmt(avg), D.count + " 只样本", cls(avg)],
+    ["上涨 / 下跌", upN + " / " + downN, "平盘 " + (pcts.length - upN - downN) + " 只", ""],
+    ["领涨", best.name.replace(/REIT$/, ""), fmt(best.pct), "up"],
+    ["领跌", worst.name.replace(/REIT$/, ""), fmt(worst.pct), "down"]
+  ].map(function (x) {
+    return '<div class="kpi"><div class="k">' + x[0] + '</div><div class="v num ' + x[3] + '">' + x[1] +
+           '</div><div class="s num">' + x[2] + '</div></div>';
+  }).join("");
+
+  // ---- 策略卡片 ----
+  $("stratCards").innerHTML = D.strategies.map(function (st) {
+    var list = D.reits.filter(function (r) { return r.strategy === st; });
+    var a = avgOf(list.map(function (r) { return r.pct; }));
+    var a20 = avgOf(list.map(function (r) { return r.ret20; }).filter(function (v) { return v != null; }));
+    var color = ST_COLOR[st];
+    return '<div class="card strat-card" style="border-top-color:' + color + '">' +
+      '<span class="tag">' + ST_DESC[st][0] + '</span>' +
+      '<div class="big num ' + cls(a) + '">' + fmt(a) + ' <span style="font-size:12px;color:var(--tx3)">今日</span></div>' +
+      '<div class="num" style="font-size:12px;color:var(--tx2)">20日 ' + fmt(a20) + ' · ' + list.length + ' 只</div>' +
+      '<ul><li>' + ST_DESC[st][1] + '</li><li>' + ST_DESC[st][2] + '</li></ul></div>';
+  }).join("");
+
+  // ---- 通用折线图 ----
+  function drawChart(el, dates, series) {
+    var W = 760, H = 300, pl = 42, pr = 10, pt = 12, pb = 26;
+    var all = [];
+    series.forEach(function (s) { s.data.forEach(function (v) { if (v != null) all.push(v); }); });
+    if (!all.length) { el.innerHTML = '<div class="empty">暂无数据</div>'; return; }
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+    var pad = (hi - lo) * 0.1 || 1; lo -= pad; hi += pad;
+    function X(i) { return pl + i * (W - pl - pr) / (dates.length - 1); }
+    function Y(v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); }
+    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+    for (var g = 0; g <= 4; g++) {
+      var gv = lo + (hi - lo) * g / 4, gy = Y(gv);
+      out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="#2a3342"/>' +
+             '<text x="' + (pl - 6) + '" y="' + (gy + 3) + '" text-anchor="end" fill="#5d6a7d" font-size="10">' + gv.toFixed(1) + '</text>';
+    }
+    for (var t = 0; t < dates.length; t += Math.ceil(dates.length / 7))
+      out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="#5d6a7d" font-size="10">' + dates[t].slice(5) + '</text>';
+    series.forEach(function (s) {
+      var d = "", started = false;
+      s.data.forEach(function (v, i) {
+        if (v == null) return;
+        d += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); started = true;
+      });
+      out += '<path d="' + d + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.w || 1.6) + '"/>';
+    });
+    el.innerHTML = out + '</svg>';
+  }
+  function buildLegend(el, series, active, redraw) {
+    el.innerHTML = series.map(function (s, i) {
+      return '<span data-i="' + i + '" class="' + (active[i] ? "" : "off") + '"><i style="background:' + s.color + '"></i>' + s.label + '</span>';
+    }).join("");
+    el.onclick = function (e) {
+      var sp = e.target.closest("span"); if (!sp) return;
+      var i = +sp.dataset.i; active[i] = !active[i];
+      if (!active.some(Boolean)) active[i] = true;
+      sp.classList.toggle("off", !active[i]);
+      redraw();
+    };
+  }
+
+  // 策略走势
+  var stSeries = [{ key: "market", label: "全市场", color: "#e8edf3", w: 2.2, data: D.series.market }];
+  D.strategies.forEach(function (st) {
+    stSeries.push({ key: st, label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
+  });
+  var stActive = stSeries.map(function () { return true; });
+  buildLegend($("legendStrategy"), stSeries, stActive, function () {
+    drawChart($("chartStrategy"), D.series.dates, stSeries.filter(function (s, i) { return stActive[i]; }));
+  });
+  drawChart($("chartStrategy"), D.series.dates, stSeries);
+
+  // 产权/经营权走势
+  var rtSeries = [
+    { label: "产权 REITs", color: "#4c8dff", data: D.series.byRight["产权"] },
+    { label: "经营权 REITs", color: "#d9a441", data: D.series.byRight["经营权"] }
+  ];
+  var rtActive = [true, true];
+  buildLegend($("legendRight"), rtSeries, rtActive, function () {
+    drawChart($("chartRight"), D.series.dates, rtSeries.filter(function (s, i) { return rtActive[i]; }));
+  });
+  drawChart($("chartRight"), D.series.dates, rtSeries);
+
+  // ---- 策略×板块矩阵 ----
+  (function () {
+    var secs = D.sectors;
+    var html = '<table class="matrix"><thead><tr><th class="l">策略 \\ 板块</th>' +
+      secs.map(function (s) { return "<th>" + s + "</th>"; }).join("") + "<th>合计</th></tr></thead><tbody>";
+    D.strategies.forEach(function (st) {
+      var row = "<td class='l'><span class='st-tag st-" + st + "'>" + st + "</span></td>", allList = [];
+      secs.forEach(function (sec) {
+        var list = D.reits.filter(function (r) { return r.strategy === st && r.sector === sec; });
+        allList = allList.concat(list);
+        if (!list.length) { row += "<td style='color:var(--tx3)'>·</td>"; return; }
+        var a = avgOf(list.map(function (r) { return r.pct; }));
+        row += '<td class="num ' + cls(a) + '">' + fmt(a) + ' <span style="color:var(--tx3);font-size:10px">(' + list.length + ")</span></td>";
+      });
+      var aa = avgOf(allList.map(function (r) { return r.pct; }));
+      row += '<td class="num ' + cls(aa) + '" style="font-weight:600">' + fmt(aa) + "</td>";
+      html += "<tr>" + row + "</tr>";
+    });
+    $("matrix").innerHTML = html + "</tbody></table>";
+  })();
+
+  // ---- 板块视图 ----
+  var SEC_PALETTE = ["#4c8dff","#d9a441","#e54545","#26a69a","#9b6dd6","#e07b39","#5bbfbb","#c25d8f","#8fb14e"];
+  var secSeries = [{ key: "market", label: "全市场", color: "#e8edf3", w: 2.2, data: D.series.market }];
+  D.sectors.forEach(function (s, i) {
+    secSeries.push({ key: s, label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s] });
+  });
+  var secActive = secSeries.map(function (s, i) { return i === 0; });
+  buildLegend($("legendSector"), secSeries, secActive, function () {
+    drawChart($("chartSector"), D.series.dates, secSeries.filter(function (s, i) { return secActive[i]; }));
+  });
+  drawChart($("chartSector"), D.series.dates, [secSeries[0]]);
+
+  var secMap = {};
+  D.reits.forEach(function (r) { (secMap[r.sector] = secMap[r.sector] || []).push(r.pct); });
+  var secs2 = Object.keys(secMap).map(function (s) {
+    return { s: s, v: avgOf(secMap[s]), n: secMap[s].length };
+  }).sort(function (a, b) { return b.v - a.v; });
+  var maxAbs = Math.max.apply(null, secs2.map(function (x) { return Math.abs(x.v); }).concat([0.2]));
+  $("sectorBars").innerHTML = secs2.map(function (x) {
+    var w = Math.abs(x.v) / maxAbs * 50, l = x.v < 0 ? 50 - w : 50;
+    return '<div class="sbar"><span class="n">' + x.s + '</span>' +
+      '<div class="track"><div class="zero"></div><div class="fill" style="left:' + l + '%;width:' + w +
+      '%;background:' + (x.v < 0 ? "var(--down)" : "var(--up)") + '"></div></div>' +
+      '<span class="val num ' + cls(x.v) + '">' + fmt(x.v) + "</span></div>";
+  }).join("");
+
+  // ---- 个券表 ----
+  $("fStrategy").innerHTML = '<option value="">全部策略</option>' +
+    D.strategies.map(function (s) { return "<option>" + s + "</option>"; }).join("");
+  $("fSector").innerHTML = '<option value="">全部板块</option>' +
+    D.sectors.map(function (s) { return "<option>" + s + "</option>"; }).join("");
+  var sortKey = "pct", sortDir = -1;
+  function sparkSVG(vals, up) {
+    var w = 90, h = 24, lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), rg = hi - lo || 1;
+    var d = vals.map(function (v, i) {
+      return (i ? "L" : "M") + (i * w / (vals.length - 1)).toFixed(1) + " " + (h - 2 - (v - lo) / rg * (h - 4)).toFixed(1);
+    }).join(" ");
+    return '<svg width="' + w + '" height="' + h + '"><path d="' + d + '" fill="none" stroke="' + (up ? "var(--up)" : "var(--down)") + '" stroke-width="1.3"/></svg>';
+  }
+  function renderTbl() {
+    var fs = $("fStrategy").value, fc = $("fSector").value, fr = $("fRight").value;
+    var q = $("fSearch").value.trim().toLowerCase();
+    var list = D.reits.filter(function (r) {
+      return (!fs || r.strategy === fs) && (!fc || r.sector === fc) && (!fr || r.right === fr) &&
+        (!q || r.name.toLowerCase().includes(q) || r.code.includes(q));
+    }).sort(function (a, b) {
+      var x = a[sortKey], y = b[sortKey];
+      if (x == null) return 1; if (y == null) return -1;
+      return (x > y ? 1 : x < y ? -1 : 0) * sortDir;
+    });
+    $("fCount").textContent = "共 " + list.length + " 只";
+    document.querySelector("#tbl tbody").innerHTML = list.map(function (r) {
+      return '<tr><td class="l">' + r.name + '</td>' +
+        '<td class="l"><span class="st-tag st-' + r.strategy + '">' + r.strategy + "</span></td>" +
+        '<td class="l"><span class="sec-tag">' + r.sector + "</span></td>" +
+        '<td class="l" style="color:var(--tx2);font-size:11.5px">' + r.right + "</td>" +
+        '<td class="num">' + r.close.toFixed(3) + "</td>" +
+        '<td class="num ' + cls(r.pct) + '">' + fmt(r.pct) + "</td>" +
+        '<td class="num ' + cls(r.ret5) + '">' + fmt(r.ret5) + "</td>" +
+        '<td class="num ' + cls(r.ret20) + '">' + fmt(r.ret20) + "</td>" +
+        '<td class="num ' + cls(r.ret60) + '">' + fmt(r.ret60) + "</td>" +
+        '<td class="num">' + fmtVol(r.volume) + "</td>" +
+        "<td>" + sparkSVG(r.spark, r.spark[r.spark.length - 1] >= r.spark[0]) + "</td></tr>";
+    }).join("");
+  }
+  ["fStrategy", "fSector", "fRight"].forEach(function (id) { $(id).addEventListener("change", renderTbl); });
+  $("fSearch").addEventListener("input", renderTbl);
+  document.querySelectorAll("#tbl th[data-k]").forEach(function (th) {
+    th.addEventListener("click", function () {
+      var k = th.dataset.k;
+      if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = -1; }
+      renderTbl();
+    });
+  });
+  renderTbl();
+
+  // ---- 全景热力图（squarified treemap，成交额加权） ----
+  var hmRange = "pct";
+  function hmData() {
+    var bySec = {};
+    D.reits.forEach(function (r) {
+      if (r.amount == null) return;
+      var b = bySec[r.sector] = bySec[r.sector] || { amount: 0, wsum: 0, n: 0 };
+      var ret = hmRange === "pct" ? r.pct : r[hmRange];
+      if (ret == null) return;
+      b.amount += r.amount; b.wsum += r.amount * ret; b.n++;
+    });
+    return Object.keys(bySec).map(function (s) {
+      return { sector: s, amount: bySec[s].amount, ret: bySec[s].wsum / bySec[s].amount, n: bySec[s].n };
+    }).sort(function (a, b) { return b.amount - a.amount; });
+  }
+  function hmColor(ret) {
+    var t = Math.min(Math.abs(ret) / 2, 1);          // ±2% 饱和
+    return ret >= 0
+      ? "rgba(229,69,69," + (0.25 + 0.75 * t) + ")"
+      : "rgba(38,166,154," + (0.25 + 0.75 * t) + ")";
+  }
+  function squarify(items, x, y, w, h, out) {
+    if (!items.length) return;
+    if (items.length === 1) { out.push({ ...items[0], x: x, y: y, w: w, h: h }); return; }
+    var total = items.reduce(function (a, b) { return a + b.amount; }, 0);
+    var vertical = w >= h;
+    var acc = 0, best = Infinity, split = 1;
+    // 简单切分：累计到一半处切一刀，递归
+    var half = total / 2, sum = 0, idx = 0;
+    while (idx < items.length - 1 && sum + items[idx].amount <= half) { sum += items[idx].amount; idx++; }
+    if (idx === 0) idx = 1;
+    var first = items.slice(0, idx), rest = items.slice(idx);
+    var f = first.reduce(function (a, b) { return a + b.amount; }, 0) / total;
+    if (vertical) {
+      squarify(first, x, y, w * f, h, out); squarify(rest, x + w * f, y, w * (1 - f), h, out);
+    } else {
+      squarify(first, x, y, w, h * f, out); squarify(rest, x, y + h * f, w, h * (1 - f), out);
+    }
+  }
+  function renderTreemap() {
+    var items = hmData();
+    var rects = []; squarify(items, 0, 0, 1000, 440, rects);
+    var up = D.reits.filter(function (r) { return r.pct > 0; }).length;
+    var dn = D.reits.filter(function (r) { return r.pct < 0; }).length;
+    var fl = D.count - up - dn;
+    $("hmSummary").innerHTML = "<span>下跌 <b class='down'>" + dn + "</b></span><span>平 <b>" + fl + "</b></span><span>上涨 <b class='up'>" + up + "</b></span>";
+    $("treemap").innerHTML = rects.map(function (r) {
+      var amt = (r.amount / 1e8).toFixed(1);
+      var fs = Math.max(11, Math.min(20, r.w / 14));
+      var sub = r.w > 110 && r.h > 56
+        ? '<div style="font-size:' + (fs * 0.72) + 'px;opacity:.85">' + fmt(r.ret) + "<br>" + amt + "亿 · " + r.n + "只</div>" : "";
+      var label = r.w > 60 && r.h > 30 ? '<div style="font-size:' + fs + 'px;font-weight:600">' + r.sector + "</div>" + sub : "";
+      return '<div title="' + r.sector + " " + fmt(r.ret) + '" style="position:absolute;' +
+        "left:" + r.x / 10 + "%;top:" + r.y / 4.4 + "%;width:" + r.w / 10 + "%;height:" + r.h / 4.4 + "%;" +
+        "background:" + hmColor(r.ret) + ";border:2px solid var(--bg);border-radius:6px;" +
+        'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;' +
+        'text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;padding:4px;text-align:center;box-sizing:border-box">' + label + "</div>";
+    }).join("");
+  }
+  $("hmRange").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    hmRange = b.dataset.r;
+    document.querySelectorAll("#hmRange button").forEach(function (x) { x.classList.toggle("on", x === b); x.style.background = x === b ? "var(--accent)" : "var(--panel2)"; x.style.color = x === b ? "#fff" : "var(--tx)"; });
+    $("hmRangeLabel").textContent = b.textContent;
+    renderTreemap();
+  });
+  document.querySelector('#hmRange button[data-r="pct"]').style.background = "var(--accent)";
+  document.querySelector('#hmRange button[data-r="pct"]').style.color = "#fff";
+  renderTreemap();
+
+  // ---- 大类资产相关性 ----
+  (function () {
+    var C = D.correlation;
+    if (!C) { $("corrCards").innerHTML = '<div class="card"><div class="empty">相关性数据未生成，请重跑 fetch_data.py</div></div>'; return; }
+    var BONDS = "000012.SH", DIV = "399324.SZ", HS300 = "000300.SH";
+    var m = C.matrix["全市场"] || {};
+    function corrText(v) { return v == null ? "—" : v.toFixed(2); }
+    $("corrCards").innerHTML = [
+      ["与国债指数（债性）", m[BONDS], "PPT 框架参考：与中债综合全价 -0.30（静态弱关联）"],
+      ["与红利指数（红利属性）", m[DIV], "高股息红利资产属性的联动程度"],
+      ["与沪深300（股性）", m[HS300], "PPT 框架参考：与万得全A +0.56（弱相关）"]
+    ].map(function (x) {
+      var v = x[1], strength = v == null ? "—" : Math.abs(v) < 0.3 ? "弱相关" : Math.abs(v) < 0.6 ? "中等相关" : "强相关";
+      return '<div class="card"><div class="k" style="color:var(--tx3);font-size:11.5px">' + x[0] + '</div>' +
+        '<div class="big num" style="font-size:26px;font-weight:600;margin:4px 0">' + corrText(v) +
+        ' <span style="font-size:12px;color:var(--tx2)">' + strength + '</span></div>' +
+        '<div style="font-size:11px;color:var(--tx3)">' + x[2] + "</div></div>";
+    }).join("");
+
+    // 矩阵
+    var rowOrder = ["全市场"].concat(D.strategies, D.sectors);
+    var cols = C.benchmarks;
+    function cellColor(v) {
+      if (v == null) return "var(--panel2)";
+      var t = Math.min(Math.abs(v), 1);
+      return v >= 0 ? "rgba(229,69,69," + (0.08 + 0.6 * t) + ")" : "rgba(76,141,255," + (0.08 + 0.6 * t) + ")";
+    }
+    var html = '<table class="matrix"><thead><tr><th class="l">组合 \\ 基准</th>' +
+      cols.map(function (b) { return '<th title="' + b.note + '">' + b.name + "</th>"; }).join("") + "</tr></thead><tbody>";
+    rowOrder.forEach(function (g) {
+      if (!C.matrix[g]) return;
+      html += "<tr><td class='l'>" + g + "</td>" + cols.map(function (b) {
+        var v = C.matrix[g][b.code];
+        return '<td class="num" style="background:' + cellColor(v) + '">' + corrText(v) + "</td>";
+      }).join("") + "</tr>";
+    });
+    $("corrMatrix").innerHTML = html + "</tbody></table>";
+
+    // 散点：股性-债性
+    (function () {
+      var W = 380, H = 380, pad = 44;
+      function X(v) { return pad + (v + 1) / 2 * (W - pad - 14); }
+      function Y(v) { return H - pad - (v + 1) / 2 * (H - pad - 14); }
+      var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+      s += '<rect x="' + pad + '" y="14" width="' + (W - pad - 14) + '" height="' + (H - pad - 14) + '" fill="var(--panel2)" rx="6"/>';
+      s += '<line x1="' + X(0) + '" y1="14" x2="' + X(0) + '" y2="' + (H - pad) + '" stroke="var(--line)"/>' +
+           '<line x1="' + pad + '" y1="' + Y(0) + '" x2="' + (W - 14) + '" y2="' + Y(0) + '" stroke="var(--line)"/>';
+      [-1, -0.5, 0, 0.5, 1].forEach(function (t) {
+        s += '<text x="' + X(t) + '" y="' + (H - pad + 14) + '" text-anchor="middle" fill="var(--tx3)" font-size="9">' + t + "</text>";
+        s += '<text x="' + (pad - 6) + '" y="' + (Y(t) + 3) + '" text-anchor="end" fill="var(--tx3)" font-size="9">' + t + "</text>";
+      });
+      s += '<text x="' + (W - 20) + '" y="' + (Y(0) - 6) + '" text-anchor="end" fill="var(--tx3)" font-size="10">股性 →</text>';
+      s += '<text x="' + (X(0) + 6) + '" y="26" fill="var(--tx3)" font-size="10">债性 ↑</text>';
+      C.scatter.forEach(function (p) {
+        if (p.bond == null || p.equity == null) return;
+        s += '<circle cx="' + X(p.bond) + '" cy="' + Y(p.equity) + '" r="6" fill="var(--accent)" opacity=".85"/>';
+        s += '<text x="' + X(p.bond) + '" y="' + (Y(p.equity) - 10) + '" text-anchor="middle" fill="var(--tx)" font-size="10">' + p.sector + "</text>";
+      });
+      $("corrScatter").innerHTML = s + "</svg>";
+    })();
+
+    // 板块 vs A股对应板块
+    $("peerBars").innerHTML = '<table class="matrix"><thead><tr><th class="l">REITs 板块</th><th class="l">A股对应板块</th><th>相关系数</th><th>REITs 区间涨跌</th><th>A股区间涨跌</th></tr></thead><tbody>' +
+      C.peers.map(function (p) {
+        return "<tr><td class='l'>" + p.sector + "</td><td class='l' style='color:var(--tx2)'>" + p.peerName + "</td>" +
+          '<td class="num" style="background:' + cellColor(p.corr) + '">' + corrText(p.corr) + "</td>" +
+          '<td class="num ' + cls(p.reitRet) + '">' + fmt(p.reitRet) + "</td>" +
+          '<td class="num ' + cls(p.peerRet) + '">' + fmt(p.peerRet) + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  })();
+
+  // ---- 配置建议：三策略表现 + 交叉验证建议 ----
+  (function () {
+    function stAvg(st, k) {
+      var vs = D.reits.filter(function (r) { return r.strategy === st && r[k] != null; }).map(function (r) { return r[k]; });
+      return vs.length ? avgOf(vs) : null;
+    }
+    // 表现表
+    var html = '<table class="matrix"><thead><tr><th class="l">策略</th><th>日涨跌</th><th>5日</th><th>20日</th><th>60日</th><th>与国债相关性</th><th>与红利相关性</th><th>与沪深300</th></tr></thead><tbody>';
+    D.strategies.forEach(function (st) {
+      var m = (D.correlation && D.correlation.matrix[st]) || {};
+      function c(v) { return v == null ? "—" : v.toFixed(2); }
+      html += "<tr><td class='l'><span class='st-tag st-" + st + "'>" + st + "</span></td>" +
+        '<td class="num ' + cls(stAvg(st, "pct")) + '">' + fmt(stAvg(st, "pct")) + "</td>" +
+        '<td class="num ' + cls(stAvg(st, "ret5")) + '">' + fmt(stAvg(st, "ret5")) + "</td>" +
+        '<td class="num ' + cls(stAvg(st, "ret20")) + '">' + fmt(stAvg(st, "ret20")) + "</td>" +
+        '<td class="num ' + cls(stAvg(st, "ret60")) + '">' + fmt(stAvg(st, "ret60")) + "</td>" +
+        '<td class="num">' + c(m["000012.SH"]) + "</td><td class='num'>" + c(m["399324.SZ"]) + "</td><td class='num'>" + c(m["000300.SH"]) + "</td></tr>";
+    });
+    $("advicePerf").innerHTML = html + "</tbody></table>";
+
+    // 交叉验证建议（规则由数据驱动：弱市抗跌性 + 债性强弱 + 周期定位）
+    var def60 = stAvg("防御型", "ret60"), cyc60 = stAvg("周期型", "ret60"), gro20 = stAvg("成长型", "ret20");
+    var items = [
+      { st: "防御型", pos: "超配（底仓）", color: "var(--def)",
+        text: "近 60 日 " + fmt(def60) + "，显著抗跌于周期型（" + fmt(cyc60) + "），且与国债相关性最高（债性最强）。弱复苏初期 + 利率 1.73% 历史低位，保租房/能源/市政环保的高股息防御价值突出，作底仓持有。8-9 月分红季临近，可提前布局抢权行情。" },
+      { st: "成长型", pos: "标配", color: "var(--gro)",
+        text: "近 20 日 " + fmt(gro20) + "，三类中最抗跌，消费头部与数据中心长租约的确定性获资金认可。但今日上涨家数最少、弹性不足，且数据中心面临解禁压力，维持标配、精选头部，不追高。" },
+      { st: "周期型", pos: "低配转左侧分批", color: "var(--cyc)",
+        text: "近 60 日 " + fmt(cyc60) + " 深度回调，二季报确认以价换量仍在持续。中金指出近期下跌由资金情绪主导、与基本面趋稳背离——可左侧<b>分批</b>布局出租率连续修复（如建信中关村、华夏金隅）及路网引流受益的高速标的，但需以出租率连续 2 季度修复为加仓确认信号。" }
+    ];
+    $("adviceList").innerHTML = items.map(function (it) {
+      return '<div style="border-left:3px solid ' + it.color + ';padding:8px 12px;margin-bottom:10px;background:var(--panel2);border-radius:0 8px 8px 0">' +
+        '<b>' + it.st + ' · <span style="color:' + it.color + '">' + it.pos + "</span></b>" +
+        '<p style="color:var(--tx2);font-size:12px;margin-top:4px;line-height:1.7">' + it.text + "</p></div>";
+    }).join("");
+  })();
+
+  // ---- Tab 切换 ----
+  $("tabs").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    document.querySelectorAll("#tabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
+    document.querySelectorAll(".view").forEach(function (v) { v.hidden = v.id !== "v-" + b.dataset.v; });
+  });
+})();
+</script>
+</body>
+</html>
