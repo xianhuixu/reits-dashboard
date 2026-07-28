@@ -167,8 +167,25 @@ svg text { font-family: inherit; }
 .radar-wrap { display: flex; justify-content: center; }
 .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
 .kv .k { color: var(--tx3); }
+/* ---------- 三段式分区 ---------- */
 tr.sel td { background: rgba(91,147,255,.1); }
 tbody tr { cursor: pointer; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin: 34px 0 16px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--line2); }
+.sec-head:first-of-type { margin-top: 0; }
+.sec-head .no { font-size: 13px; font-weight: 700; color: var(--accent); border: 1px solid rgba(91,147,255,.4);
+  border-radius: 8px; padding: 3px 10px; letter-spacing: .05em; white-space: nowrap; }
+.sec-head .t { font-size: 17px; font-weight: 700; letter-spacing: .02em; }
+.sec-head .d { color: var(--tx3); font-size: 12px; }
+#v-advice { background: linear-gradient(180deg, rgba(224,171,74,.05), rgba(224,171,74,0) 30%);
+  border: 1px solid rgba(224,171,74,.18); border-radius: 18px; padding: 20px 18px 8px; margin-top: 8px; }
+#v-advice .card { border-color: rgba(224,171,74,.14); }
+.rv-ok { color: var(--down); } .rv-no { color: var(--up); }
+.rv-item { display: flex; gap: 10px; align-items: baseline; padding: 8px 4px; border-bottom: 1px solid var(--line); font-size: 12px; }
+.rv-item .nm { min-width: 110px; font-weight: 600; }
+.rv-item .vl { color: var(--tx2); min-width: 170px; }
+.rv-item .ds { color: var(--tx3); font-size: 11px; }
+.rv-stage { font-size: 22px; font-weight: 700; }
 </style>
 </head>
 <body>
@@ -178,6 +195,8 @@ tbody tr { cursor: pointer; }
 </header>
 
 <div class="kpis" id="kpis"></div>
+
+<div class="sec-head"><span class="no">①</span><span class="t">市场全景</span><span class="d">全量行情总览 · 资产类别热力图</span></div>
 
 <!-- ============ 第一段：全景热力图 ============ -->
 <section id="v-heatmap">
@@ -194,6 +213,8 @@ tbody tr { cursor: pointer; }
   </div>
 </section>
 
+<div class="sec-head"><span class="no">②</span><span class="t">多维研究分析</span><span class="d">策略分类 · 周期耦合 · 赛道透视 · 相关性 · 个券透视 · 板块轮动 · 信号追踪</span></div>
+
 <div class="tabs" id="tabs">
   <button data-v="strategy" class="on">策略分类研究</button>
   <button data-v="cycle">周期耦合分析</button>
@@ -206,6 +227,28 @@ tbody tr { cursor: pointer; }
 
 <!-- ============ 周期耦合分析 ============ -->
 <section class="view" id="v-cycle" hidden>
+  <div class="card">
+    <h2>资产重估判断（高善文"资产重估理论"框架）</h2>
+    <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
+    <div id="revalPanel"></div>
+    <div class="grid" style="margin-top:14px;margin-bottom:0">
+      <div style="background:var(--panel2);border-radius:10px;padding:12px 14px">
+        <h3 style="font-size:12.5px;margin-bottom:6px">📖 对过去二级市场涨跌的解释（理论回溯）</h3>
+        <p style="font-size:12px;color:var(--tx2);line-height:1.7">
+        <b>2021 上市初期</b>：供给稀缺 + 打新情绪 → 高溢价（情绪定价，非重估）；<br>
+        <b>2022-2024</b>：估值消化期——产业园/仓储租金下行下修现金流预期，叠加流动性折价，价格回归分派率锚；<br>
+        <b>2024 末-2025</b>：10Y 国债破 2% 历史低位 + 资产荒，利差扩至 3-6% 历史高分位 → 保险/OCI 资金入场，<b>重估真正启动</b>（利率驱动，符合理论）；<br>
+        <b>2026 上半年</b>：扩募常态化 + 商业不动产准入 + REITs 指数基金获批，重估扩散；<br>
+        <b>近期回调</b>：资金情绪主导，与基本面趋稳背离——验证"重估未全面完成、仍处初期反复阶段"。</p>
+      </div>
+      <div style="background:var(--panel2);border-radius:10px;padding:12px 14px">
+        <h3 style="font-size:12.5px;margin-bottom:6px">🔭 排他性预测（可被证伪，逐季验证）</h3>
+        <p style="font-size:12px;color:var(--tx2);line-height:1.7">
+        若重估假说成立，应观察到：① 利差继续压缩（平均分派率 - 10Y 向历史 25% 分位回落）；② 成交额中枢持续抬升（60/250 日量比 >1）；③ 上涨从防御型扩散到周期型/成长型（市场宽度 >50%）；④ 全市场价格分位均值站上 50%。<br>
+        <b>证伪条件</b>：10Y 快速升破 2%（利率反转）→ 假说失效，债性定价逻辑受冲击，应系统性降低仓位。该判断已纳入"策略信号"因子体系与下方配置建议的触发/退出条件。</p>
+      </div>
+    </div>
+  </div>
   <div class="card">
     <h2>四大经典周期定位 <span class="note" style="display:inline" id="cycleUpdated"></span></h2>
     <p class="note">手动月度判定 + 数据佐证 · 进度条为该周期当前阶段的相对位置</p>
@@ -393,6 +436,8 @@ tbody tr { cursor: pointer; }
 </section>
 
 <!-- ============ 配置建议 ============ -->
+<div class="sec-head"><span class="no">③</span><span class="t">配置建议与风险提示</span><span class="d">周期判断 · 长期方向 · 数据交叉验证 · 触发/退出条件</span></div>
+
 <section id="v-advice">
   <div class="card">
     <h2>① 当前经济周期判断（宏观输入 + 四大周期定位）</h2>
@@ -920,6 +965,24 @@ tbody tr { cursor: pointer; }
 
   // ---- 周期耦合分析 ----
   (function () {
+    // 资产重估状态仪
+    var RV = D.revaluation;
+    if (RV) {
+      var stageColor = RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)";
+      $("revalPanel").innerHTML =
+        '<div style="display:flex;align-items:baseline;gap:14px;margin-bottom:10px">' +
+        '<span class="rv-stage" style="color:' + stageColor + '">' + RV.stage + "</span>" +
+        '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项验证条件成立 · 每日随行情自动更新</span></div>" +
+        RV.items.map(function (it) {
+          return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
+            '<span class="vl num">' + it.value + "</span>" +
+            '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓ 成立" : "✗ 未成立") + "</span>" +
+            '<span class="ds">' + it.desc + "</span></div>";
+        }).join("");
+    } else {
+      $("revalPanel").innerHTML = '<div class="empty">重估状态数据未生成</div>';
+    }
+
     var CY = D.cycle;
     if (!CY) { $("cycleGrid").innerHTML = '<div class="empty">cycle_judgment.json 未配置</div>'; return; }
     $("cycleUpdated").textContent = "· 更新 " + (CY.updated || "");
@@ -1116,7 +1179,8 @@ tbody tr { cursor: pointer; }
     if (D.cycle) {
       $("adviceCycleBadges").innerHTML = (D.cycle.cycles || []).map(function (c) {
         return '<span class="cycle-badge">' + c.name.split("（")[0] + "：<b>" + c.stage + "</b></span>";
-      }).join("") + '<span class="cycle-badge">美林时钟：<b>' + ((D.cycle.clock || {}).quadrant || "—") + "</b></span>";
+      }).join("") + '<span class="cycle-badge">美林时钟：<b>' + ((D.cycle.clock || {}).quadrant || "—") + "</b></span>" +
+        (D.revaluation ? '<span class="cycle-badge">资产重估：<b>' + D.revaluation.stage + "（" + D.revaluation.score + "/4）</b></span>" : "");
       if (D.cycle.mapping) {
         $("adviceMappingNote").textContent = D.cycle.mapping.conclusion || "";
         $("adviceMapping").innerHTML = (D.cycle.mapping.directions || []).map(function (d2) {

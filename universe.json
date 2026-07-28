@@ -551,5 +551,54 @@
   "sector": "产业园",
   "right": "产权",
   "strategy": "周期型"
+ },
+ {
+  "code": "508084.SH",
+  "name": "汇添富九州通医药REIT",
+  "sector": "仓储物流",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180106.SZ",
+  "name": "广发成都高投产业园REIT",
+  "sector": "产业园",
+  "right": "产权",
+  "strategy": "周期型"
+ },
+ {
+  "code": "180701.SZ",
+  "name": "银华绍兴原水水利REIT",
+  "sector": "市政环保",
+  "right": "经营权",
+  "strategy": "防御型"
+ },
+ {
+  "code": "508600.SH",
+  "name": "汇添富上海地产商业REIT",
+  "sector": "商业不动产",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508601.SH",
+  "name": "中信建投首农商业REIT",
+  "sector": "商业不动产",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508602.SH",
+  "name": "国泰海通砂之船商业REIT",
+  "sector": "商业不动产",
+  "right": "产权",
+  "strategy": "成长型"
+ },
+ {
+  "code": "508603.SH",
+  "name": "中金唯品会商业REIT",
+  "sector": "商业不动产",
+  "right": "产权",
+  "strategy": "成长型"
  }
 ]

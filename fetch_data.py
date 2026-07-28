@@ -474,6 +474,49 @@ def main():
             strat_signals[st] = {"avg": round(avg_total, 1),
                                  "label": "偏强" if avg_total / 6 >= 1 else "偏弱" if avg_total / 6 <= -1 else "中性"}
 
+    # ---------- 6.5 资产重估状态（高善文"资产重估理论"框架） ----------
+    # 理论：实体经济回报下降 + 流动性过剩 → 资金溢出追逐资产 → 类债资产系统性重估
+    # 排他性可验证预测：① 利率下行（国债指数上涨）② 成交额中枢抬升（60日均 > 250日均）
+    # ③ 市场宽度扩张（20日上涨家数占比 >50%）④ 估值分位抬升（全市场历史分位均值 >50%）
+    revaluation = None
+    try:
+        rv_items = []
+        score = 0
+        if bclose is not None and "000012.SH" in bclose.columns:
+            bs = bclose["000012.SH"].dropna()
+            if len(bs) > 60:
+                b60 = round(float((bs.iloc[-1] / bs.iloc[-61] - 1) * 100), 2)
+                ok = b60 > 0
+                score += ok
+                rv_items.append({"name": "利率下行趋势", "value": f"国债指数60日 {b60:+.2f}%",
+                                 "ok": bool(ok), "desc": "无风险利率下行是重估的核心驱动力"})
+        mkt_amt = amt[[c for c in amt.columns]].mean(axis=1)
+        if len(mkt_amt) >= 250:
+            a60, a250 = float(mkt_amt.tail(60).mean()), float(mkt_amt.tail(250).mean())
+            ratio = a60 / a250 if a250 else 0
+            ok = ratio > 1
+            score += ok
+            rv_items.append({"name": "资金中枢抬升", "value": f"60/250日成交额比 {ratio:.2f}",
+                             "ok": bool(ok), "desc": "流动性过剩溢出至 REITs 市场的直接证据"})
+        cret20 = close.pct_change().tail(20)
+        breadth = float((cret20 > 0).mean(axis=1).mean() * 100)
+        ok = breadth > 50
+        score += ok
+        rv_items.append({"name": "市场宽度扩张", "value": f"20日上涨占比 {breadth:.0f}%",
+                         "ok": bool(ok), "desc": "重估应从防御型扩散至全市场"})
+        ranks = [r["pctRank"] for r in reits if r.get("pctRank") is not None]
+        if ranks:
+            avg_rank = sum(ranks) / len(ranks)
+            ok = avg_rank > 50
+            score += ok
+            rv_items.append({"name": "估值分位抬升", "value": f"全市场历史分位均值 {avg_rank:.0f}%",
+                             "ok": bool(ok), "desc": "价格系统性站上历史中枢是重估的结果验证"})
+        stage = {4: "重估进行中", 3: "重估初期", 2: "重估酝酿", 1: "重估暂停", 0: "重估缺席"}[score]
+        revaluation = {"score": score, "stage": stage, "items": rv_items}
+        print(f"[reval] {stage} ({score}/4)", flush=True)
+    except Exception as e:
+        print(f"[reval] 计算失败: {e}", flush=True)
+
     # ---------- 7. 信号事件与回测 ----------
     all_events = []
     for u in universe:
@@ -509,6 +552,7 @@ def main():
         "correlation": corr_payload,
         "overseas": overseas,
         "stratSignals": strat_signals,
+        "revaluation": revaluation,
         "events": recent_events,
         "backtest": backtest,
         "cycle": cycle or None,
