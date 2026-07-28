@@ -1,5 +1,4 @@
+hist_cache/
 raw_cache/
-candidates*.txt
-validate_universe.py
-universe_validated*.json
+_*.py
 __pycache__/
