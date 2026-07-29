@@ -380,6 +380,7 @@ main { flex: 1; min-width: 0; }
       <button class="range-btn" data-r="ret20">20日</button>
     </div>
     <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:8px"></div>
+    <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:8px"></div>
     <div id="treemap" style="position:relative;width:100%;height:440px"></div>
   </div>
 </section>
@@ -970,7 +971,16 @@ main { flex: 1; min-width: 0; }
   // ---- 全景热力图（squarified treemap，成交额加权） ----
   var hmRange = "pct";
   var hmSector = "";
+  var hmDrill = "";
   function hmData() {
+    if (hmDrill) {   // 下钻：该板块全部个券
+      return D.reits.filter(function (r) { return r.sector === hmDrill && r.amount != null; })
+        .map(function (r) {
+          var ret = hmRange === "pct" ? r.pct : r[hmRange];
+          return { sector: r.name, amount: r.amount, ret: ret, n: 0, code: r.code };
+        }).filter(function (x) { return x.ret != null; })
+        .sort(function (a, b) { return b.amount - a.amount; });
+    }
     var bySec = {};
     D.reits.forEach(function (r) {
       if (r.amount == null) return;
@@ -994,14 +1004,15 @@ main { flex: 1; min-width: 0; }
   $("hmSectorChips").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     hmSector = b.dataset.s;
+    hmDrill = "";
     document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) { x.classList.toggle("on", x === b); });
     renderTreemap();
   });
   function hmColor(ret) {
-    var t = Math.min(Math.abs(ret) / 2, 1);          // ±2% 饱和
-    return ret >= 0
-      ? "rgba(245,63,63," + (0.35 + 0.6 * t) + ")"
-      : "rgba(0,180,42," + (0.35 + 0.6 * t) + ")";
+    if (ret == null) return "#8a93a0";
+    if (ret > 0.0001) return "#a83c3c";      // 涨：砖红
+    if (ret < -0.0001) return "#2b6b40";     // 跌：墨绿
+    return "#7a8494";                        // 平
   }
   function squarify(items, x, y, w, h, out) {
     if (!items.length) return;
@@ -1024,24 +1035,40 @@ main { flex: 1; min-width: 0; }
   function renderTreemap() {
     var items = hmData();
     var rects = []; squarify(items, 0, 0, 1000, 440, rects);
-    var pool = D.reits.filter(function (r) { return !hmSector || r.sector === hmSector; });
+    var pool = hmDrill
+      ? D.reits.filter(function (r) { return r.sector === hmDrill; })
+      : D.reits.filter(function (r) { return !hmSector || r.sector === hmSector; });
     var up = pool.filter(function (r) { return r.pct > 0; }).length;
     var dn = pool.filter(function (r) { return r.pct < 0; }).length;
     var fl = pool.length - up - dn;
     $("hmSummary").innerHTML = "<span>下跌 <b class='down'>" + dn + "</b></span><span>平 <b>" + fl + "</b></span><span>上涨 <b class='up'>" + up + "</b></span>";
+    $("hmCrumb").innerHTML = hmDrill
+      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）</span>'
+      : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
     $("treemap").innerHTML = rects.map(function (r, i) {
       var amt = (r.amount / 1e8).toFixed(1);
       var fs = Math.max(11, Math.min(20, r.w / 14));
-      var sub = r.w > 110 && r.h > 56
-        ? '<div style="font-size:' + (fs * 0.72) + 'px;opacity:.85">' + fmt(r.ret) + "<br>" + amt + "亿 · " + r.n + "只</div>" : "";
-      var label = r.w > 60 && r.h > 30 ? '<div style="font-size:' + fs + 'px;font-weight:600">' + r.sector + "</div>" + sub : "";
-      return '<div title="' + r.sector + " " + fmt(r.ret) + '" style="position:absolute;--d:' + (i * 55) + 'ms;' +
+      var subTxt = fmt(r.ret) + "<br>" + amt + "亿" + (r.n ? " · " + r.n + "只" : "");
+      var sub = r.w > 96 && r.h > 56
+        ? '<div style="font-size:' + (fs * 0.72) + 'px;opacity:.88">' + subTxt + "</div>" : "";
+      var label = r.w > 56 && r.h > 30 ? '<div style="font-size:' + fs + 'px;font-weight:600">' + r.sector + "</div>" + sub : "";
+      return '<div data-sec="' + (hmDrill ? "" : r.sector) + '" title="' + r.sector + " " + fmt(r.ret) + '" style="position:absolute;--d:' + (i * 55) + 'ms;' +
         "left:" + r.x / 10 + "%;top:" + r.y / 4.4 + "%;width:" + r.w / 10 + "%;height:" + r.h / 4.4 + "%;" +
-        "background:" + hmColor(r.ret) + ";border:2px solid var(--bg);border-radius:6px;" +
-        'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;' +
-        'text-shadow:0 1px 2px rgba(0,0,0,.4);overflow:hidden;padding:4px;text-align:center;box-sizing:border-box">' + label + "</div>";
+        "background:" + hmColor(r.ret) + ";border:2px solid var(--panel);border-radius:4px;" +
+        'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:' + (hmDrill ? "default" : "pointer") + ";" +
+        'text-shadow:0 1px 2px rgba(0,0,0,.35);overflow:hidden;padding:4px;text-align:center;box-sizing:border-box">' + label + "</div>";
     }).join("");
   }
+  $("treemap").addEventListener("click", function (e) {
+    var d = e.target.closest("div[data-sec]"); if (!d || !d.dataset.sec) return;
+    hmDrill = d.dataset.sec;
+    renderTreemap();
+  });
+  $("hmCrumb").addEventListener("click", function (e) {
+    if (!e.target.closest("#hmBack")) return;
+    hmDrill = "";
+    renderTreemap();
+  });
   $("hmRange").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     hmRange = b.dataset.r;
