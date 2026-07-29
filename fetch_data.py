@@ -401,7 +401,18 @@ def main():
         except Exception as e:
             print(f"[usLong] {oc} 读取缓存失败: {e}", flush=True)
     if us_series:
-        udf = pd.DataFrame(us_series).sort_index().ffill()
+        udf_raw = pd.DataFrame(us_series).sort_index()
+        udf = udf_raw.ffill()
+        # 长缺口（>45天无真实行情）不做前向填充，置 NaN 让前端断线呈现
+        for c in udf.columns:
+            obs_idx = udf_raw[c].dropna().index
+            pos = obs_idx.searchsorted(udf.index, side="right") - 1
+            stale = pd.Series(False, index=udf.index)
+            valid = pos >= 0
+            if valid.any():
+                last_dates = obs_idx[pos[valid]]
+                stale.loc[valid] = (udf.index[valid] - last_dates) > pd.Timedelta(days=45)
+            udf.loc[stale, c] = float("nan")
         weekly = udf.iloc[::5]
         if len(udf) and weekly.index[-1] != udf.index[-1]:
             weekly = pd.concat([weekly, udf.iloc[[-1]]])
