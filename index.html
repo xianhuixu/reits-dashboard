@@ -14,15 +14,16 @@
 </script>
 <style>
 :root {
-  --bg: #f5f7fa; --panel: #ffffff; --panel2: #f2f5f9; --line: #e5e8ef;
+  --bg: #f4f6f9; --panel: #ffffff; --panel2: #f2f5f9; --line: #e5e8ef;
   --line2: #c9cdd4;
   --tx: #1d2129; --tx2: #4e5969; --tx3: #86909c;
   --up: #f53f3f; --down: #10b981; --accent: #3b82f6; --gold: #ff7d00;
-  --def: #0fc6c2; --cyc: #ff7d00; --gro: #722ed1;
+  --def: #0fc6c2; --cyc: #ff7d00; --gro: #8b5cf6;
   --radius: 10px;
   --th-bg: #f8fafc; --grid: #e2e8f0;
-  --shadow: 0 1px 3px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.05);
-  --shadow-h: 0 2px 6px rgba(15,23,42,.06), 0 14px 34px rgba(15,23,42,.1);
+  --shadow: 0 1px 3px rgba(15,23,42,.03), 0 8px 24px rgba(15,23,42,.04);
+  --shadow-h: 0 2px 6px rgba(15,23,42,.05), 0 14px 34px rgba(15,23,42,.08);
+  --prog-track: #f1f5f9; --prog-fill: #10b981;
   --ease: cubic-bezier(.22,.9,.28,1);
 }
 /* ---------- 护眼模式 ---------- */
@@ -35,6 +36,7 @@
   --th-bg: #eff5e8; --grid: #d3dfca;
   --shadow: 0 1px 2px rgba(47,61,43,.05), 0 4px 16px rgba(47,61,43,.06);
   --shadow-h: 0 2px 4px rgba(47,61,43,.07), 0 10px 28px rgba(47,61,43,.11);
+  --prog-track: #dde7d4; --prog-fill: #4c9a6c;
 }
 /* ---------- 夜晚模式 ---------- */
 [data-theme="dark"] {
@@ -46,6 +48,7 @@
   --th-bg: #1a2130; --grid: #2a3342;
   --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.25);
   --shadow-h: 0 2px 4px rgba(0,0,0,.4), 0 14px 36px rgba(0,0,0,.4);
+  --prog-track: #1f2733; --prog-fill: #2bb5a3;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -94,7 +97,7 @@ header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
 .kpi .k { color: var(--tx3); font-size: 11.5px; letter-spacing: .04em; margin-bottom: 6px; }
 .kpi .v { font-size: 26px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; }
 .kpi .s { font-size: 11.5px; color: var(--tx2); margin-top: 4px; }
-.kpi .s .up-b { display: inline-block; background: #e6f4ea; color: #16a34a; border-radius: 6px; padding: 1px 8px; font-weight: 600; }
+.kpi .s .up-b { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 999px; padding: 1px 8px; font-weight: 600; }
 [data-theme="dark"] .kpi .s .up-b { background: rgba(43,181,163,.14); color: var(--down); }
 
 .tabs { position: relative; display: flex; gap: 2px; margin: 22px 0 16px; flex-wrap: wrap;
@@ -222,8 +225,8 @@ svg text { font-family: inherit; }
 .news-item .nd { flex: 0 0 74px; text-align: right; font-size: 11px; color: var(--tx3); padding-top: 2px; }
 .cycle-badge { background: var(--panel2); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 11.5px; color: var(--tx2); }
 .cycle-badge b { color: var(--tx); }
-.prog { height: 6px; background: var(--panel2); border-radius: 3px; overflow: hidden; margin-top: 8px; }
-.prog i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), #5b8cff); }
+.prog { height: 7px; background: var(--prog-track); border-radius: 999px; overflow: hidden; margin-top: 8px; }
+.prog i { display: block; height: 100%; border-radius: 999px; background: var(--prog-fill); transition: width .6s var(--ease); }
 .metric-pill { display: inline-flex; gap: 6px; align-items: center; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; font-size: 11.5px; margin: 3px 4px 3px 0; }
 .metric-pill.red { border-color: rgba(245,63,63,.45); color: var(--up); }
 .metric-pill.yellow { border-color: rgba(255,125,0,.45); color: var(--gold); }
@@ -478,7 +481,8 @@ main { flex: 1; min-width: 0; }
   <div class="grid">
     <div class="card">
       <h2>相关性热力矩阵（日收益率 Pearson，近约 130 交易日）</h2>
-      <p class="note">红 = 正相关，蓝 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
+      <p class="note">森绿 = 正相关，陶红 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
+      <div id="allocDonut" style="margin-bottom:10px"></div>
       <div id="corrMatrix" style="overflow-x:auto"></div>
     </div>
     <div class="card">
@@ -762,6 +766,7 @@ main { flex: 1; min-width: 0; }
     function X(i) { return pl + i * (W - pl - pr) / (dates.length - 1); }
     function Y(v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); }
     var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+    drawChart._n = (drawChart._n || 0) + 1; var cid = drawChart._n;
     for (var g = 0; g <= 4; g++) {
       var gv = lo + (hi - lo) * g / 4, gy = Y(gv);
       out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="var(--grid)"/>' +
@@ -769,12 +774,21 @@ main { flex: 1; min-width: 0; }
     }
     for (var t = 0; t < dates.length; t += Math.ceil(dates.length / 7))
       out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + dates[t].slice(5) + '</text>';
-    series.forEach(function (s) {
-      var d = "", started = false;
+    series.forEach(function (s, si) {
+      var d = "", firstX = null, lastX = null;
       s.data.forEach(function (v, i) {
         if (v == null) return;
-        d += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1); started = true;
+        if (firstX == null) firstX = X(i);
+        lastX = X(i);
+        d += (d ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1);
       });
+      var gid = "ag" + cid + "_" + si;
+      out += '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="' + s.color + '" stop-opacity=".12"/>' +
+        '<stop offset="100%" stop-color="' + s.color + '" stop-opacity=".01"/></linearGradient></defs>';
+      if (firstX != null)
+        out += '<path d="' + d + "L" + lastX.toFixed(1) + " " + (H - pb) + "L" + firstX.toFixed(1) + " " + (H - pb) +
+          'Z" fill="url(#' + gid + ')" stroke="none"/>';
       out += '<path class="line" d="' + d + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.w || 1.6) + '" stroke-linejoin="round" stroke-linecap="round"/>';
     });
     el.innerHTML = out + '</svg>';
@@ -1125,7 +1139,7 @@ main { flex: 1; min-width: 0; }
     function cellColor(v) {
       if (v == null) return "var(--panel2)";
       var t = Math.min(Math.abs(v), 1);
-      return v >= 0 ? "rgba(229,69,69," + (0.08 + 0.6 * t) + ")" : "rgba(76,141,255," + (0.08 + 0.6 * t) + ")";
+      return v >= 0 ? "rgba(25,115,51," + (0.06 + 0.55 * t) + ")" : "rgba(168,34,31," + (0.06 + 0.55 * t) + ")";
     }
     var html = '<table class="matrix"><thead><tr><th class="l">组合 \\ 基准</th>' +
       cols.map(function (b) { return '<th title="' + b.note + '">' + b.name + "</th>"; }).join("") + "</tr></thead><tbody>";
@@ -1137,6 +1151,41 @@ main { flex: 1; min-width: 0; }
       }).join("") + "</tr>";
     });
     $("corrMatrix").innerHTML = html + "</tbody></table>";
+
+    // 板块成交额分布环形图
+    (function () {
+      var bySec = {};
+      D.reits.forEach(function (r) {
+        if (r.amount == null) return;
+        bySec[r.sector] = (bySec[r.sector] || 0) + r.amount;
+      });
+      var arr = Object.keys(bySec).map(function (k) { return { s: k, v: bySec[k] }; })
+        .sort(function (a, b) { return b.v - a.v; });
+      var total = arr.reduce(function (a, b) { return a + b.v; }, 0);
+      if (!total) { $("allocDonut").innerHTML = ""; return; }
+      var R = 44, CIRC = 2 * Math.PI * R, off = 0;
+      var svg = '<svg viewBox="0 0 120 120" width="104" height="104" style="flex:0 0 auto">';
+      svg += '<circle cx="60" cy="60" r="' + R + '" fill="none" stroke="var(--prog-track)" stroke-width="13"/>';
+      arr.forEach(function (a, i) {
+        var frac = a.v / total, len = frac * CIRC;
+        a.color = SEC_PALETTE[i % SEC_PALETTE.length]; a.frac = frac;
+        svg += '<circle cx="60" cy="60" r="' + R + '" fill="none" stroke="' + a.color + '" stroke-width="13"' +
+          ' stroke-dasharray="' + len.toFixed(2) + " " + (CIRC - len).toFixed(2) + '"' +
+          ' stroke-dashoffset="' + (-off).toFixed(2) + '" transform="rotate(-90 60 60)"/>';
+        off += len;
+      });
+      svg += '<text x="60" y="57" text-anchor="middle" fill="var(--tx)" font-size="13" font-weight="700">' +
+        (total / 1e4 >= 10000 ? (total / 1e8).toFixed(1) + "亿" : Math.round(total / 1e4).toLocaleString() + "万") + "</text>" +
+        '<text x="60" y="72" text-anchor="middle" fill="var(--tx3)" font-size="8.5">今日总成交额</text></svg>';
+      var legend = '<div style="flex:1;min-width:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:3px 10px;font-size:11px;color:var(--tx2)">' +
+        arr.map(function (a) {
+          return '<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:' +
+            a.color + ';margin-right:5px"></i>' + a.s + ' <b class="num">' + (a.frac * 100).toFixed(1) + "%</b></span>";
+        }).join("") + "</div>";
+      $("allocDonut").innerHTML =
+        '<div style="font-size:11.5px;color:var(--tx3);margin-bottom:6px">板块成交额分布（今日）</div>' +
+        '<div style="display:flex;align-items:center;gap:16px">' + svg + legend + "</div>";
+    })();
 
     // 散点：股性-债性
     (function () {
@@ -1424,22 +1473,29 @@ main { flex: 1; min-width: 0; }
         '<div class="prog"><i style="width:' + Math.round((c.progress || 0) * 100) + '%"></i></div></div>';
     }).join("") + "</div>";
 
-    // 美林时钟
+    // 美林时钟（四象限淡彩 + 脉冲定位点）
     var q = (CY.clock || {}).quadrant || "复苏";
     $("clockNote").textContent = (CY.clock || {}).note || "";
-    var quads = [["复苏", "增长↑ 通胀↓"], ["过热", "增长↑ 通胀↑"], ["滞胀", "增长↓ 通胀↑"], ["衰退", "增长↓ 通胀↓"]];
+    var quads = [["复苏", "增长↑ 通胀↓", "#10b981"], ["过热", "增长↑ 通胀↑", "#ef4444"],
+                 ["滞胀", "增长↓ 通胀↑", "#f59e0b"], ["衰退", "增长↓ 通胀↓", "#3b82f6"]];
     var W = 340, H = 300, m = 30;
     var pos = { "复苏": [1, 1], "过热": [1, 0], "滞胀": [0, 0], "衰退": [0, 1] };
     var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%">';
     quads.forEach(function (qd) {
       var p = pos[qd[0]], x = m + p[0] * (W - 2 * m) / 2, y = m + p[1] * (H - 2 * m) / 2;
-      var on = qd[0] === q;
+      var on = qd[0] === q, col = qd[2];
       s += '<rect x="' + x + '" y="' + y + '" width="' + (W - 2 * m) / 2 + '" height="' + (H - 2 * m) / 2 +
-        '" fill="' + (on ? "rgba(59,130,246,.12)" : "var(--panel2)") + '" stroke="var(--line)" rx="8"/>' +
+        '" fill="' + col + '" fill-opacity="' + (on ? ".1" : ".04") + '" stroke="#e2e8f0" stroke-width="1" rx="8"/>' +
         '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 - 4) + '" text-anchor="middle" fill="' +
-        (on ? "var(--accent)" : "var(--tx2)") + '" font-size="14" font-weight="600">' + qd[0] + "</text>" +
+        (on ? col : "var(--tx2)") + '" font-size="14" font-weight="600">' + qd[0] + "</text>" +
         '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 + 14) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + qd[1] + "</text>";
-      if (on) s += '<circle cx="' + (x + (W - 2 * m) / 4) + '" cy="' + (y + (H - 2 * m) / 4 + 30) + '" r="5" fill="var(--accent)"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/></circle>';
+      if (on) {
+        var cx = x + (W - 2 * m) / 4, cy = y + (H - 2 * m) / 4 + 30;
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="none" stroke="' + col + '" stroke-width="1.2">' +
+          '<animate attributeName="r" values="5;16" dur="1.8s" repeatCount="indefinite"/>' +
+          '<animate attributeName="stroke-opacity" values=".7;0" dur="1.8s" repeatCount="indefinite"/></circle>' +
+          '<circle cx="' + cx + '" cy="' + cy + '" r="4.5" fill="' + col + '"/>';
+      }
     });
     s += '<text x="' + W / 2 + '" y="' + (H - 4) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">增长 →</text>' +
          '<text x="12" y="' + H / 2 + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + H / 2 + ')">通胀 →</text>';
