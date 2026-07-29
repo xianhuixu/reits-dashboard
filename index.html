@@ -217,8 +217,15 @@ tbody tr { cursor: pointer; }
   background: var(--accent); color: #fff; font-size: 12px; font-style: normal; }
 #sideNav .ink { position: absolute; left: 6px; right: 6px; top: 53px; height: 58px; border-radius: 9px;
   background: rgba(22,93,255,.08);
-  transition: transform .38s var(--ease), background .3s; pointer-events: none; }
+  transition: top .38s var(--ease), background .3s; pointer-events: none; }
 #sideNav.adv .ink { background: rgba(255,125,0,.1); }
+#sideNav .sub { position: relative; z-index: 1; display: flex; flex-direction: column;
+  margin: 0 0 4px; padding: 0 4px 0 38px; }
+#sideNav .sub button { height: auto; padding: 6px 8px; font-size: 12px; border-radius: 7px;
+  color: var(--tx3); display: block; text-align: left; }
+#sideNav .sub button + button { margin-top: 0; }
+#sideNav .sub button:hover { color: var(--accent); }
+#sideNav .sub button.on { color: var(--accent); background: rgba(22,93,255,.09); font-weight: 600; }
 #sideNav button { position: relative; z-index: 1; text-align: left; background: transparent; border: 0;
   border-radius: 9px; padding: 9px 10px; height: 58px; color: var(--tx2); font: inherit; cursor: pointer;
   transition: color .2s; display: flex; align-items: center; gap: 10px; }
@@ -242,6 +249,7 @@ main { flex: 1; min-width: 0; }
   .layout { flex-direction: column; }
   #sideNav { position: static; flex-direction: row; flex: none; overflow-x: auto; }
   #sideNav button { flex: 1 0 150px; height: auto; }
+  #sideNav .sub, #sideNav .brand { display: none; }
   #sideNav .ink { display: none; }
 }
 </style>
@@ -258,6 +266,15 @@ main { flex: 1; min-width: 0; }
   <div class="ink"></div>
   <button data-pg="pano" class="on"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></svg></span><span class="tx"><span class="t">市场全景</span><span class="d">行情总览 · 热力图 · 事件流</span></span></button>
   <button data-pg="research"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 16v-5"/><path d="M11 16V7"/><path d="M16 16v-8"/><path d="M21 16V5"/></svg></span><span class="tx"><span class="t">多维研究分析</span><span class="d">策略 · 周期 · 相关性 · 信号</span></span></button>
+  <div class="sub" id="researchSub">
+    <button data-v="strategy" class="on">策略分类研究</button>
+    <button data-v="cycle">周期耦合分析</button>
+    <button data-v="track">赛道透视</button>
+    <button data-v="corr">大类资产相关性</button>
+    <button data-v="detail">个券透视</button>
+    <button data-v="sector">板块轮动</button>
+    <button data-v="signal">策略信号</button>
+  </div>
   <button data-pg="advice"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><span class="tx"><span class="t">配置建议与风险</span><span class="d">周期判断 · 交叉验证 · 退出</span></span></button>
 </nav>
 <main>
@@ -292,17 +309,7 @@ main { flex: 1; min-width: 0; }
 </div><!-- /pg-pano -->
 
 <div class="page" id="pg-research" hidden>
-<div class="sec-head"><span class="no">②</span><span class="t">多维研究分析</span><span class="d">策略分类 · 周期耦合 · 赛道透视 · 相关性 · 个券透视 · 板块轮动 · 信号追踪</span></div>
-
-<div class="tabs" id="tabs">
-  <button data-v="strategy" class="on">策略分类研究</button>
-  <button data-v="cycle">周期耦合分析</button>
-  <button data-v="track">赛道透视</button>
-  <button data-v="corr">大类资产相关性</button>
-  <button data-v="detail">个券透视</button>
-  <button data-v="sector">板块轮动</button>
-  <button data-v="signal">策略信号</button>
-</div>
+<div class="sec-head"><span class="no">②</span><span class="t">多维研究分析</span><span class="d">在左侧二级菜单中切换研究视角</span></div>
 
 <!-- ============ 周期耦合分析 ============ -->
 <section class="view" id="v-cycle" hidden>
@@ -1100,16 +1107,24 @@ main { flex: 1; min-width: 0; }
     render();
   })();
 
-  // ---- 左侧三大导航（滑动指示块） ----
+  // ---- 左侧导航：三大板块 + 研究二级菜单 ----
+  function switchView(v) {
+    document.querySelectorAll(".view").forEach(function (x) { x.hidden = x.id !== "v-" + v; });
+    document.querySelectorAll("#researchSub button").forEach(function (x) { x.classList.toggle("on", x.dataset.v === v); });
+    stagger($("v-" + v));
+  }
+  function showPage(pg) {
+    var btn = document.querySelector('#sideNav > button[data-pg="' + pg + '"]');
+    document.querySelectorAll("#sideNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
+    document.querySelector("#sideNav .ink").style.top = btn.offsetTop + "px";
+    $("sideNav").classList.toggle("adv", pg === "advice");
+    document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
   $("sideNav").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
-    var btns = Array.prototype.slice.call(document.querySelectorAll("#sideNav button"));
-    var idx = btns.indexOf(b);
-    document.querySelectorAll("#sideNav button").forEach(function (x) { x.classList.toggle("on", x === b); });
-    document.querySelector("#sideNav .ink").style.transform = "translateY(" + idx * 60 + "px)";
-    $("sideNav").classList.toggle("adv", b.dataset.pg === "advice");
-    document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + b.dataset.pg; });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
+    showPage(b.dataset.pg);
   });
 
   // ---- 周期耦合分析 ----
@@ -1358,12 +1373,7 @@ main { flex: 1; min-width: 0; }
   })();
 
   // ---- Tab 切换 ----
-  $("tabs").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    document.querySelectorAll("#tabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
-    document.querySelectorAll(".view").forEach(function (v) { v.hidden = v.id !== "v-" + b.dataset.v; });
-    stagger($("v-" + b.dataset.v));
-  });
+  // ---- 研究二级菜单切换已并入左侧导航 ----
 
   // ---- 入场动画：卡片错峰 + KPI 数字滚动 ----
   function stagger(scope) {
