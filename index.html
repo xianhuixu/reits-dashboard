@@ -401,7 +401,7 @@ main { min-width: 0; }
 <section class="view" id="v-cycle" hidden>
   <div class="card">
     <h2>美国 REITs 代表标的长期走势（对数轴 · 起点=100）</h2>
-    <p class="note">防御型（净租赁/基础设施/医疗/住宅）· 周期型（工业物流/购物中心）· 成长型（数据中心）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新 · 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：成长型 2010 年前为 Equinix 单标的，科网泡沫期曾深度回撤（对数轴下端），2008 年逆势上涨</p>
+    <p class="note">防御型（净租赁/基础设施/医疗/住宅）· 周期型（工业物流/购物中心）· 成长型（数据中心）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新（美股收盘数据次一交易日同步，<span id="usLongAsOf"></span>）· 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：成长型 2010 年前为 Equinix 单标的，科网泡沫期曾深度回撤（对数轴下端），2008 年逆势上涨</p>
     <div class="legend" id="legendUsLong"></div>
     <div id="chartUsLong"></div>
     <div id="usCoupleStats" style="margin-top:14px"></div>
@@ -1529,6 +1529,7 @@ main { min-width: 0; }
         return;
       }
       var W = 760, H = 400, pl = 46, pr = 10, pt = 14, pb = 26;
+      $("usLongAsOf").textContent = "当前截至 " + U.dates[U.dates.length - 1] + " 美股收盘";
       var cats = ["防御型", "周期型", "成长型"];
       var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "成长型": "#8b5cf6" };
       var vals = [];
