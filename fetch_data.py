@@ -95,7 +95,7 @@ def fetch_history(code, end):
     start = HIST_START
     if cache.exists():
         try:
-            old = pd.read_csv(cache)
+            old = pd.read_csv(cache, dtype={"time": str})
             if len(old) and "time" in old.columns:
                 start = (pd.to_datetime(old["time"]).max() + timedelta(days=1)).date().isoformat()
         except Exception:
@@ -114,6 +114,9 @@ def fetch_history(code, end):
         if parts:
             new = pd.concat(parts, ignore_index=True)
             df = pd.concat([old, new], ignore_index=True) if old is not None else new
+            df["time"] = df["time"].astype(str).apply(
+                lambda t: f"{t[:4]}-{t[4:6]}-{t[6:]}" if len(t.strip()) == 8 and t.strip().isdigit() else t.strip()
+            )
             df = df.drop_duplicates(subset=["thscode", "time"]).sort_values("time")
             df.to_csv(cache, index=False)
             return df
