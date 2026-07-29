@@ -50,15 +50,23 @@ SECTOR_PEER = {
 }
 # 海外 REITs 代表标的（已验证 iFinD 美股 .N/.O 可取；取不到自动跳过）
 OVERSEAS = {
-    "PLD.N": {"name": "Prologis", "market": "美国", "type": "工业物流"},
-    "O.N": {"name": "Realty Income", "market": "美国", "type": "零售/净租赁"},
-    "AMT.N": {"name": "American Tower", "market": "美国", "type": "基础设施"},
-    "EQIX.O": {"name": "Equinix", "market": "美国", "type": "数据中心"},
-    "AVB.N": {"name": "AvalonBay", "market": "美国", "type": "住宅"},
-    "WELL.N": {"name": "Welltower", "market": "美国", "type": "医疗"},
-    "SPG.N": {"name": "Simon Property", "market": "美国", "type": "购物中心"},
-    "0823.HK": {"name": "领展房产基金", "market": "中国香港", "type": "综合"},
+    "PLD.N": {"name": "Prologis", "market": "美国", "type": "工业物流", "cat": "周期型"},
+    "O.N": {"name": "Realty Income", "market": "美国", "type": "零售/净租赁", "cat": "防御型"},
+    "AMT.N": {"name": "American Tower", "market": "美国", "type": "基础设施", "cat": "防御型"},
+    "EQIX.O": {"name": "Equinix", "market": "美国", "type": "数据中心", "cat": "成长型"},
+    "AVB.N": {"name": "AvalonBay", "market": "美国", "type": "住宅", "cat": "防御型"},
+    "WELL.N": {"name": "Welltower", "market": "美国", "type": "医疗", "cat": "防御型"},
+    "SPG.N": {"name": "Simon Property", "market": "美国", "type": "购物中心", "cat": "周期型"},
+    "0823.HK": {"name": "领展房产基金", "market": "中国香港", "type": "综合", "cat": "防御型"},
 }
+# 美国 REITs 长期序列起点（验证防御/周期/成长分类与经济周期的长周期耦合）
+US_HIST_START = "1990-01-01"
+# NBER 美国经济衰退区间（1980 年以后，公开事实口径）
+US_RECESSIONS = [
+    ["1980-01-01", "1980-07-01"], ["1981-07-01", "1982-11-01"],
+    ["1990-07-01", "1991-03-01"], ["2001-03-01", "2001-11-01"],
+    ["2007-12-01", "2009-06-01"], ["2020-02-01", "2020-04-01"],
+]
 
 
 # ---------------- iFinD 基础取数 ----------------
@@ -87,12 +95,12 @@ def ifind_price(codes, start, end, retries=2):
     return None
 
 
-def fetch_history(code, end):
+def fetch_history(code, end, start0=None):
     """逐代码全历史，hist_cache 增量更新；iFinD 单次查询有约 2-3 年区间上限，分段抓取。"""
     HIST_DIR.mkdir(exist_ok=True)
     cache = HIST_DIR / (code.replace(".", "_") + ".csv")
     old = None
-    start = HIST_START
+    start = start0 or HIST_START
     if cache.exists():
         try:
             old = pd.read_csv(cache, dtype={"time": str})
@@ -356,7 +364,7 @@ def main():
     # ---------- 3. 海外 REITs（取不到自动跳过） ----------
     overseas = []
     for oc, meta in OVERSEAS.items():
-        odf = fetch_history(oc, end)
+        odf = fetch_history(oc, end, US_HIST_START if meta["market"] == "美国" else None)
         time.sleep(FETCH_PAUSE)
         if odf is None or "thscode" not in odf.columns or not len(odf):
             print(f"[overseas] {oc} 无数据，跳过", flush=True)
@@ -374,6 +382,71 @@ def main():
             "sinceStart": round(float((os_.iloc[-1] / os_.iloc[0] - 1) * 100), 2),
         })
         print(f"[overseas] {oc} ok", flush=True)
+
+    # ---------- 3b. 美国 REITs 长期序列：防御/周期/成长三类合成指数 + 周期耦合统计 ----------
+    us_long = None
+    us_series = {}
+    for oc, meta in OVERSEAS.items():
+        if meta["market"] != "美国":
+            continue
+        cache = HIST_DIR / (oc.replace(".", "_") + ".csv")
+        if not cache.exists():
+            continue
+        try:
+            hdf = pd.read_csv(cache, dtype={"time": str})
+            hdf["time"] = pd.to_datetime(hdf["time"])
+            s = hdf.set_index("time")["close"].dropna().sort_index()
+            if len(s) >= 120:
+                us_series[oc] = s
+        except Exception as e:
+            print(f"[usLong] {oc} 读取缓存失败: {e}", flush=True)
+    if us_series:
+        udf = pd.DataFrame(us_series).sort_index().ffill()
+        weekly = udf.iloc[::5]
+        if len(udf) and weekly.index[-1] != udf.index[-1]:
+            weekly = pd.concat([weekly, udf.iloc[[-1]]])
+        cats = {}
+        for cat in ("防御型", "周期型", "成长型"):
+            cols = [oc for oc, m in OVERSEAS.items() if m.get("cat") == cat and oc in weekly.columns]
+            if not cols:
+                continue
+            sub = weekly[cols]
+            base = {}
+            for c in cols:
+                v = sub[c].dropna()
+                base[c] = v.iloc[0] if len(v) else float("nan")
+            norm = sub.copy()
+            for c in cols:
+                norm[c] = norm[c] / base[c] * 100.0
+            cats[cat] = norm[cols].mean(axis=1, skipna=True)
+        stats = {}
+        for cat, idx in cats.items():
+            s = idx.dropna()
+            if len(s) < 60:
+                continue
+            years = (s.index[-1] - s.index[0]).days / 365.25
+            cagr = ((s.iloc[-1] / s.iloc[0]) ** (1 / years) - 1) * 100 if years > 0 else None
+            def maxdd(a, b, _s=s):
+                w = _s[(_s.index >= a) & (_s.index <= b)]
+                return round(float((w / w.cummax() - 1).min() * 100), 1) if len(w) > 5 else None
+            s10 = s[s.index >= s.index[-1] - pd.Timedelta(days=3652)]
+            y10 = (s10.index[-1] - s10.index[0]).days / 365.25
+            cagr10 = ((s10.iloc[-1] / s10.iloc[0]) ** (1 / y10) - 1) * 100 if len(s10) > 60 and y10 > 0 else None
+            stats[cat] = {
+                "start": s.index[0].strftime("%Y-%m-%d"),
+                "cagr": round(cagr, 1) if cagr is not None else None,
+                "dd0809": maxdd("2007-12-01", "2009-06-30"),
+                "dd2020": maxdd("2020-02-01", "2020-04-30"),
+                "cagr10": round(cagr10, 1) if cagr10 is not None else None,
+            }
+        us_long = {
+            "dates": [d.strftime("%Y-%m-%d") for d in weekly.index],
+            "cats": {c: [round(float(v), 2) if pd.notna(v) else None for v in idx] for c, idx in cats.items()},
+            "recessions": US_RECESSIONS,
+            "stats": stats,
+            "members": {oc: {"name": m["name"], "type": m["type"], "cat": m["cat"]}
+                        for oc, m in OVERSEAS.items() if oc in us_series},
+        }
 
     # ---------- 4. 个券指标 ----------
     fund_raw = load_json("fundamentals.json") or {}
@@ -562,6 +635,7 @@ def main():
         "reits": reits,
         "correlation": corr_payload,
         "overseas": overseas,
+        "usLong": us_long,
         "stratSignals": strat_signals,
         "revaluation": revaluation,
         "events": recent_events,

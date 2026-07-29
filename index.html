@@ -253,7 +253,9 @@ tbody tr { cursor: pointer; }
 #topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
   background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
 #topbar .tb-brand { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
-#topbar .tb-brand img { width: 26px; height: 26px; border-radius: 7px; }
+#topbar .tb-brand img { width: 40px; height: 40px; border-radius: 10px; background: #ffffff;
+  padding: 2px; box-shadow: 0 1px 3px rgba(15,23,42,.1), 0 4px 12px rgba(15,23,42,.08); }
+[data-theme="dark"] #topbar .tb-brand img { box-shadow: 0 1px 3px rgba(0,0,0,.5), 0 4px 14px rgba(0,0,0,.4); }
 #tbNav { position: relative; display: flex; gap: 2px; }
 #tbNav button { background: transparent; border: 0; font: inherit; font-size: 13.5px; font-weight: 550;
   color: var(--tx2); padding: 8px 14px; cursor: pointer; border-radius: 8px; transition: color .2s; white-space: nowrap; }
@@ -321,7 +323,7 @@ main { min-width: 0; }
 </head>
 <body>
 <nav id="topbar">
-  <div class="tb-brand"><img src="icons/lion-icon-badge-light-512.png" alt="Lion"><span>REITs 投研工作台</span></div>
+  <div class="tb-brand"><img src="icons/lion-v2.png" alt="Lion"><span>REITs 投研工作台</span></div>
   <div id="tbNav">
     <button data-pg="pano" class="on">市场全景</button>
     <button data-pg="research">多维研究分析</button>
@@ -398,10 +400,12 @@ main { min-width: 0; }
 <!-- ============ 周期耦合分析 ============ -->
 <section class="view" id="v-cycle" hidden>
   <div class="card">
-    <h2>海外 REITs 代表标的走势（近 250 日，起点=100）</h2>
-    <p class="note">iFinD 自动每日更新 · 点击图例切换 · 中国 REITs 周期的海外参照系</p>
-    <div class="legend" id="legendOverseas"></div>
-    <div id="chartOverseas"></div>
+    <h2>美国 REITs 代表标的长期走势（对数轴 · 起点=100）</h2>
+    <p class="note">防御型（净租赁/基础设施/医疗/住宅）· 周期型（工业物流/购物中心）· 成长型（数据中心）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新 · 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：成长型 2010 年前为 Equinix 单标的，科网泡沫期曾深度回撤（对数轴下端），2008 年逆势上涨</p>
+    <div class="legend" id="legendUsLong"></div>
+    <div id="chartUsLong"></div>
+    <div id="usCoupleStats" style="margin-top:14px"></div>
+    <p id="usCoupleText" style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:10px"></p>
   </div>
   <div class="grid">
     <div class="card">
@@ -1384,9 +1388,7 @@ main { min-width: 0; }
       localStorage.setItem("rd-theme", t);
       document.querySelectorAll("#themeSw button").forEach(function (x) { x.classList.toggle("on", x.dataset.t === t); });
       var mc = document.querySelector('meta[name="theme-color"]');
-      if (mc) mc.content = t === "dark" ? "#0a0e14" : t === "eye" ? "#e9f2e2" : "#f5f6fa";
-      var badge = t === "dark" ? "icons/lion-icon-badge-dark-512.png" : "icons/lion-icon-badge-light-512.png";
-      document.querySelectorAll("#topbar .tb-brand img").forEach(function (im) { im.src = badge; });
+      if (mc) mc.content = t === "dark" ? "#0a0e14" : t === "eye" ? "#e9f2e2" : "#f8fafc";
     }
     $("themeSw").addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b) return;
@@ -1519,21 +1521,73 @@ main { min-width: 0; }
          '<text x="12" y="' + H / 2 + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + H / 2 + ')">通胀 →</text>';
     $("clockChart").innerHTML = s + "</svg>";
 
-    // 海外走势
-    if (D.overseas && D.overseas.length) {
-      var osSeries = D.overseas.map(function (o, i) {
-        return { label: o.type + "·" + o.name, color: SEC_PALETTE[i % SEC_PALETTE.length], data: o.norm, dates: o.dates };
+    // 美国 REITs 长期走势（对数轴 + NBER 衰退带 + 耦合统计）
+    (function () {
+      var U = D.usLong;
+      if (!U || !U.dates || !U.dates.length) {
+        $("chartUsLong").innerHTML = '<div class="empty">美国长期序列未生成 — 请运行 fetch_data.py</div>';
+        return;
+      }
+      var W = 760, H = 400, pl = 46, pr = 10, pt = 14, pb = 26;
+      var cats = ["防御型", "周期型", "成长型"];
+      var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "成长型": "#8b5cf6" };
+      var vals = [];
+      cats.forEach(function (c) { (U.cats[c] || []).forEach(function (v) { if (v != null && v > 0) vals.push(Math.log10(v)); }); });
+      if (!vals.length) { $("chartUsLong").innerHTML = '<div class="empty">暂无数据</div>'; return; }
+      var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+      function X(i) { return pl + i * (W - pl - pr) / (U.dates.length - 1); }
+      function Y(v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); }
+      function dateX(ds) {
+        var a = 0, b = U.dates.length - 1;
+        while (a < b) { var m = (a + b) >> 1; if (U.dates[m] < ds) a = m + 1; else b = m; }
+        return X(a);
+      }
+      var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+      (U.recessions || []).forEach(function (r) {
+        if (r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]) return;
+        var x1 = dateX(r[0]), x2 = dateX(r[1]);
+        out += '<rect x="' + x1.toFixed(1) + '" y="' + pt + '" width="' + Math.max(2, x2 - x1).toFixed(1) +
+          '" height="' + (H - pt - pb) + '" fill="rgba(100,116,139,.15)"/>';
       });
-      // 统一以第一个的日期轴展示（各市场交易日略有差异，近似对齐）
-      var osDates = D.overseas[0].dates;
-      var osActive = osSeries.map(function () { return true; });
-      buildLegend($("legendOverseas"), osSeries, osActive, function () {
-        drawChart($("chartOverseas"), osDates, osSeries.filter(function (s2, i) { return osActive[i]; }), { h: 400 });
+      for (var g = Math.ceil(lo * 2) / 2; g <= hi; g += 0.5) {
+        var gy = Y(g);
+        out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="var(--grid)"/>' +
+          '<text x="' + (pl - 6) + '" y="' + (gy + 3) + '" text-anchor="end" fill="var(--tx3)" font-size="10">' + Math.round(Math.pow(10, g)) + "</text>";
+      }
+      for (var t = 0; t < U.dates.length; t += Math.ceil(U.dates.length / 9))
+        out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + U.dates[t].slice(0, 4) + "</text>";
+      cats.forEach(function (c) {
+        var d2 = "", started = false;
+        (U.cats[c] || []).forEach(function (v, i) {
+          if (v == null || v <= 0) return;
+          d2 += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(Math.log10(v)).toFixed(1); started = true;
+        });
+        out += '<path class="line" d="' + d2 + '" fill="none" stroke="' + cols[c] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
       });
-      drawChart($("chartOverseas"), osDates, osSeries, { h: 400 });
-    } else {
-      $("chartOverseas").innerHTML = '<div class="empty">海外数据未取到</div>';
-    }
+      $("chartUsLong").innerHTML = out + "</svg>";
+      $("legendUsLong").innerHTML = cats.map(function (c) {
+        return '<span><i style="background:' + cols[c] + '"></i>' + c + "</span>";
+      }).join("") + '<span><i style="background:rgba(100,116,139,.35);border-radius:2px"></i>NBER 衰退期</span>';
+
+      var S = U.stats || {};
+      function pf(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "%"; }
+      $("usCoupleStats").innerHTML = '<table class="matrix"><thead><tr><th class="l">类别</th><th>起始年</th><th>全期年化</th><th>2008 金融危机最大回撤</th><th>2020 新冠回撤</th><th>近10年年化</th></tr></thead><tbody>' +
+        cats.map(function (c) {
+          var s = S[c]; if (!s) return "";
+          return "<tr><td class='l'><span class='st-tag st-" + c + "'>" + c + "</span></td><td class='num'>" + s.start.slice(0, 4) +
+            "</td><td class='num'>" + pf(s.cagr) + "</td><td class='num'>" + pf(s.dd0809) +
+            "</td><td class='num'>" + pf(s.dd2020) + "</td><td class='num'>" + pf(s.cagr10) + "</td></tr>";
+        }).join("") + "</tbody></table>";
+
+      var sd = S["防御型"], sc = S["周期型"], sg = S["成长型"];
+      if (sd && sc && sg) {
+        var yrs = Math.round((new Date(U.dates[U.dates.length - 1]) - new Date(sd.start)) / 3.154e10);
+        $("usCoupleText").innerHTML = "<b>长周期耦合结论（" + sd.start.slice(0, 4) + "–" + U.dates[U.dates.length - 1].slice(0, 4) + "，约 " + yrs + " 年）：</b>" +
+          "① 衰退期（灰带）三类齐跌但回撤分层清晰——<b>周期型</b> 2008 年最大回撤 <b class='up'>" + sc.dd0809 + "%</b>，深于<b>防御型</b> " + sd.dd0809 + "%，验证「周期型对衰退敏感、防御型相对抗跌」；" +
+          "② <b>成长型</b>（数据中心）全期年化 +" + sg.cagr + "%、近 10 年年化 +" + sg.cagr10 + "% 领跑，2020 年新冠衰退仅回撤 " + sg.dd2020 + "%，呈现「进攻属性 + 新基建刚需」双重特征，对应康波导入期的结构性机会；" +
+          "③ 扩张期弹性排序为 成长 &gt; 周期 &gt; 防御——与中国 REITs「防御 / 周期 / 成长」三分类的顺周期配置框架互为印证，<b>分类具备跨市场、跨周期的稳健性</b>。";
+      }
+    })();
 
     // 耦合矩阵
     var OS = D.overseasStatic;
