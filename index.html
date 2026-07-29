@@ -363,8 +363,9 @@ main { flex: 1; min-width: 0; }
     <button data-pg="advice" data-scroll="advCycle">① 当前经济周期判断</button>
     <button data-pg="advice" data-scroll="advMapping">② 长期配置方向</button>
     <button data-pg="advice" data-scroll="advPerf">③ 策略表现验证</button>
-    <button data-pg="advice" data-scroll="advList">④ 配置建议</button>
-    <button data-pg="advice" data-scroll="advRisk">⑤ 风险提示</button>
+    <button data-pg="advice" data-scroll="advTactic">④ 短期交易战术</button>
+    <button data-pg="advice" data-scroll="advList">⑤ 配置建议</button>
+    <button data-pg="advice" data-scroll="advRisk">⑥ 风险提示</button>
   </div>
 </nav>
 <main>
@@ -576,12 +577,6 @@ main { flex: 1; min-width: 0; }
     <p class="note">假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估 · 四项排他性条件与六因子映射：利率下行 → <b>利差因子</b>；资金中枢 → <b>资金面因子</b>；市场宽度 → <b>情绪因子</b>；估值分位 → <b>个券历史分位</b> · 完整理论回溯与预测见"周期耦合分析"</p>
     <div id="revalSignalMap"></div>
   </div>
-  <div class="card">
-    <h2>分红 / 解禁 / 扩募战配公告监测（近 30 日 · 逐券官方公告）</h2>
-    <p class="note">数据源：基金管理人官方公告（每日更新）· 分红季布局、解禁抛压、扩募战配机会的个券级决策参考 · 点击标题查看公告原文</p>
-    <div class="filters" id="corpActionFilter"></div>
-    <div id="corpActions" style="max-height:460px;overflow:auto"></div>
-  </div>
   <div class="grid">
     <div class="card">
       <h2>信号事件流（近 120 日）</h2>
@@ -616,6 +611,12 @@ main { flex: 1; min-width: 0; }
       <h3>➕ 扩募与一级战配</h3>
       <p>上市超 1 年项目当日清仓胜率 65%，长期持有胜率更高；建议关注基本面稳定的<b>消费、保障房、能源</b>板块战略配售机会。2026 年能源赛道有望成为 REITs 中的"蓝筹大盘股"。</p>
     </div>
+  </div>
+  <div class="card">
+    <h2>分红 / 解禁 / 扩募战配公告监测（近 30 日 · 逐券官方公告）</h2>
+    <p class="note">数据源：基金管理人官方公告（每日更新）· 分红季布局、解禁抛压、扩募战配机会的个券级决策参考 · 点击标题查看公告原文</p>
+    <div class="filters" id="corpActionFilter"></div>
+    <div id="corpActions" style="max-height:460px;overflow:auto"></div>
   </div>
   <div class="card signal">
     <h3>🧭 顺周期动态配置框架（防御型 / 周期型 / 成长型）</h3>
@@ -660,13 +661,19 @@ main { flex: 1; min-width: 0; }
     <div id="advicePerf"></div>
   </div>
 
+  <div class="card" id="advTactic">
+    <h2>④ 短期交易战术（月 / 季 / 年三档 · 每日随行情自动重算）</h2>
+    <p class="note">信号因子：六因子信号分（流动性/情绪/资金面/业绩/利差/股债联动）· RSI14 超买超卖 · MACD 柱线方向 · 量比 · 历史价格分位 · 偏离250日线幅度 · 均给出建议理由与止损点位，不构成投资建议</p>
+    <div id="tacticGrid" class="grid3" style="margin-bottom:0"></div>
+  </div>
+
   <div class="grid">
     <div class="card" id="advList">
-      <h2>④ 配置建议（数据交叉验证后）</h2>
+      <h2>⑤ 配置建议（数据交叉验证后）</h2>
       <div id="adviceList"></div>
     </div>
     <div class="card" id="advRisk">
-      <h2>⑤ 风险提示</h2>
+      <h2>⑥ 风险提示</h2>
       <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
         <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
         <li><b>基本面修复不及预期</b>：产业园供需未出清、仓储租金下行压力仍存，周期型左侧布局需以出租率连续 2 个季度修复为确认信号，避免过早加仓。</li>
@@ -683,7 +690,7 @@ main { flex: 1; min-width: 0; }
 </div><!-- /layout -->
 
 <footer id="foot">
-  数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：中金 REITs 周报/二季报点评 + 《公募REITs投资策略分享-2026》（防御/周期/成长分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
+  数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：《公募REITs投资策略分享-2026》（防御/周期/成长分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
 </footer>
 
 <script src="data.js"></script>
@@ -1061,9 +1068,9 @@ main { flex: 1; min-width: 0; }
       ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）</span>'
       : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
     $("treemap").innerHTML = rects.map(function (r, i) {
-      var amt = (r.amount / 1e8).toFixed(1);
+      var amt = Math.round(r.amount / 1e4).toLocaleString();
       var fs = Math.max(11, Math.min(20, r.w / 14));
-      var subTxt = fmt(r.ret) + "<br>" + amt + "亿" + (r.n ? " · " + r.n + "只" : "");
+      var subTxt = fmt(r.ret) + "<br>" + amt + "万" + (r.n ? " · " + r.n + "只" : "");
       var sub = r.w > 96 && r.h > 56
         ? '<div style="font-size:' + (fs * 0.72) + 'px;opacity:.88">' + subTxt + "</div>" : "";
       var label = r.w > 56 && r.h > 30 ? '<div style="font-size:' + fs + 'px;font-weight:600">' + r.sector + "</div>" + sub : "";
@@ -1203,6 +1210,82 @@ main { flex: 1; min-width: 0; }
     }).join("");
   })();
 
+  // ---- 短期交易战术（月/季/年 · 数据驱动自动生成） ----
+  (function () {
+    function avgSec(sec, k) {
+      var vs = D.reits.filter(function (r) { return r.sector === sec && r[k] != null; }).map(function (r) { return r[k]; });
+      return vs.length ? avgOf(vs) : null;
+    }
+    function stopLine(v) { return '<div style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--line2);font-size:11.5px;color:var(--up)"><b>止损位：</b>' + v + "</div>"; }
+
+    // ===== 月度战术：个券级择时（信号分 + RSI + MACD + 量比） =====
+    var cands = D.reits.filter(function (r) {
+      return r.rsi14 != null && r.rsi14 >= 32 && r.rsi14 <= 62 && r.ret20 != null && r.ret20 > 0 &&
+             r.amtRatio != null && r.amtRatio >= 1 && r.signals && r.signals.total >= 2;
+    }).sort(function (a, b) { return b.signals.total - a.signals.total || b.ret20 - a.ret20; }).slice(0, 3);
+    var avoids = D.reits.filter(function (r) {
+      return (r.rsi14 != null && r.rsi14 > 72) || (r.macd && r.macd.hist < 0 && r.ret20 != null && r.ret20 < -5);
+    }).sort(function (a, b) { return a.ret20 - b.ret20; }).slice(0, 3);
+    var monthHtml = '<div class="card" style="background:var(--panel2)">' +
+      '<div style="font-size:12.5px;font-weight:650">📅 月度战术 · 个券择时</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：信号分≥2 + RSI 32-62 + 20日动量为正 + 量比≥1</div>' +
+      (cands.length ? cands.map(function (r) {
+        return '<div style="margin-bottom:9px"><span class="act-name">' + r.name + " · " + r.code + "</span>" +
+          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">信号分 <b>' + (r.signals.total > 0 ? "+" : "") + r.signals.total + "</b>（" + r.signals.label + "）· RSI " + r.rsi14.toFixed(0) +
+          " · 20日 " + fmt(r.ret20) + " · 量比 " + (r.amtRatio == null ? "—" : r.amtRatio) +
+          '<br>理由：' + (r.sector) + "板块，量价与信号因子共振，可<b>逢低分批</b>介入。" +
+          stopLine("收盘价跌破 20 日成本线约 <b class='num'>" + (r.close * 0.95).toFixed(3) + "</b>（-5%）或 MACD 红柱翻绿即离场") +
+          "</div></div>";
+      }).join("") : '<div class="empty">当前无满足全部条件的个券，建议观望</div>') +
+      (avoids.length ? '<div style="font-size:11.5px;color:var(--tx2);margin-top:6px"><b style="color:var(--down)">回避：</b>' +
+        avoids.map(function (r) { return r.name + "（" + (r.rsi14 > 72 ? "RSI " + r.rsi14.toFixed(0) + " 超买" : "20日 " + fmt(r.ret20) + " 且 MACD 走弱") + "）"; }).join("、") + "</div>" : "") +
+      "</div>";
+
+    // ===== 季度战术：行业轮动（板块动量修复 + 拥挤度） =====
+    var secStats = D.sectors.map(function (s) {
+      return { s: s, r20: avgSec(s, "ret20"), r60: avgSec(s, "ret60"),
+               rank: avgSec(s, "pctRank"), amtR: avgSec(s, "amtRatio") };
+    }).filter(function (x) { return x.r20 != null; });
+    var picks = secStats.filter(function (x) { return x.r20 > 0; }).sort(function (a, b) { return b.r20 - a.r20; }).slice(0, 3);
+    if (!picks.length) picks = secStats.sort(function (a, b) { return b.r20 - a.r20; }).slice(0, 2);
+    var weak = secStats.slice().sort(function (a, b) { return a.r20 - b.r20; })[0];
+    var quarterHtml = '<div class="card" style="background:var(--panel2)">' +
+      '<div style="font-size:12.5px;font-weight:650">📆 季度战术 · 行业轮动</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：板块 20 日动量为正且量能配合，避开拥挤（分位>85%）与动量垫底板块</div>' +
+      picks.map(function (x) {
+        var crowd = x.rank != null && x.rank > 0.85;
+        return '<div style="margin-bottom:9px"><span class="act-name">' + x.s + "</span>" +
+          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">20日 <b class="' + cls(x.r20) + '">' + fmt(x.r20) + "</b> · 60日 " + fmt(x.r60) +
+          " · 历史分位 " + (x.rank == null ? "—" : Math.round(x.rank * 100) + "%") + " · 量比 " + (x.amtR == null ? "—" : x.amtR.toFixed(1)) +
+          "<br>理由：" + (x.r60 != null && x.r60 < 0 ? "板块自 60 日回调中修复，动量反转初期，赔率较优。" : "板块趋势延续，动量与量能共振。") +
+          (crowd ? " <b style='color:var(--gold)'>注意分位偏高，只低吸不追高。</b>" : "") +
+          stopLine("板块等权 20 日涨幅回吐并转负，或板块指数自介入点回撤 <b>-8%</b>") +
+          "</div></div>";
+      }).join("") +
+      (weak ? '<div style="font-size:11.5px;color:var(--tx2)"><b style="color:var(--down)">季度回避：</b>' + weak.s + "（20日 " + fmt(weak.r20) + "，动量垫底，等待企稳信号）</div>" : "") +
+      "</div>";
+
+    // ===== 年度战术：战略底仓（周期定位 + 信号分 + 分位） =====
+    var ss = D.stratSignals || {};
+    var mktRank = avgOf(D.reits.map(function (r) { return r.pctRank; }).filter(function (v) { return v != null; }));
+    var rvScore = D.revaluation ? D.revaluation.score : null;
+    var defS = ss["防御型"] || {}, cycS = ss["周期型"] || {}, groS = ss["成长型"] || {};
+    function stLine(st, o) {
+      return '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65;margin-bottom:5px"><span class="st-tag st-' + st + '">' + st + "</span> " + o + "</div>";
+    }
+    var yearHtml = '<div class="card" style="background:var(--panel2)">' +
+      '<div style="font-size:12.5px;font-weight:650">🗓️ 年度战术 · 战略底仓</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：周期定位 + 三策略信号分 + 全市场价格分位（当前 ' + (mktRank == null ? "—" : Math.round(mktRank * 100) + "%") + "）" +
+      (rvScore != null ? " · 重估条件 " + rvScore + "/4" : "") + "</div>" +
+      stLine("防御型", "底仓超配 40-50%：信号分 " + (defS.avg != null ? defS.avg : "—") + "（" + (defS.label || "—") + "）。弱复苏初期 + 低利率资产荒，保租房/能源/市政环保股息确定性最强，叠加 8-9 月分红季抢权。") +
+      stLine("成长型", "标配 25-35%：信号分 " + (groS.avg != null ? groS.avg : "—") + "（" + (groS.label || "—") + "）。消费头部与长租约数据中心做确定性，注意数据中心解禁节奏，逢低布局。") +
+      stLine("周期型", "左侧分批 20-30%：信号分 " + (cycS.avg != null ? cycS.avg : "—") + "（" + (cycS.label || "—") + "）。基钦周期补库启动期左侧埋伏仓储/产业园/高速，以出租率连续 2 季修复为加仓确认。") +
+      stopLine("全市场等权价格分位升破 90% 时系统性减仓；重估条件跌破 2/4 或 10Y 国债收益率快速升破 2% 时降总仓位至 50% 以下") +
+      "</div>";
+
+    $("tacticGrid").innerHTML = monthHtml + quarterHtml + yearHtml;
+  })();
+
   // ---- 重点事件信息流（问财范式） ----
   (function () {
     var N = window.REITS_NEWS;
@@ -1288,27 +1371,26 @@ main { flex: 1; min-width: 0; }
     document.querySelectorAll("#researchSub button").forEach(function (x) { x.classList.toggle("on", x.dataset.v === v); });
     stagger($("v-" + v));
   }
-  function showPage(pg) {
+  function showPage(pg, keepScroll) {
     var btn = document.querySelector('#sideNav > button[data-pg="' + pg + '"]');
     $("sideNav").dataset.cur = pg;
     document.querySelectorAll("#sideNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
     document.querySelector("#sideNav .ink").style.top = btn.offsetTop + "px";
     $("sideNav").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
-    window.scrollTo({ top: 0, behavior: "instant" });
+    if (!keepScroll) window.scrollTo({ top: 0, behavior: "instant" });
   }
   $("sideNav").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     if (b.dataset.scroll) {
-      showPage(b.dataset.pg);
+      showPage(b.dataset.pg, true);
       document.querySelectorAll("#sideNav .sub button").forEach(function (x) { x.classList.toggle("on", x === b); });
-      setTimeout(function () {
-        var t = document.getElementById(b.dataset.scroll);
-        if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 12, behavior: "instant" });
-      }, 60);
+      var t = document.getElementById(b.dataset.scroll);
+      if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 12, behavior: "instant" });
       return;
     }
     if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
+    document.querySelectorAll("#sideNav .sub button.on").forEach(function (x) { x.classList.remove("on"); });
     showPage(b.dataset.pg);
   });
 
