@@ -89,5 +89,73 @@ def main():
     print(f"[news] {len(items)} 条，截至 {items[0]['date'] if items else '—'}", flush=True)
 
 
+ACTION_RULES = [
+    ("分红公告", ["分红", "收益分配", "派息", "现金分红"]),
+    ("解禁", ["解禁", "限售"]),
+    ("扩募/战配", ["扩募", "新购入资产", "战略配售", "定增"]),
+]
+
+
+def action_classify(title):
+    # 按公告标题严格匹配
+    for tag, kws in ACTION_RULES:
+        if any(k in title for k in kws):
+            return tag
+    return None
+
+
+FUND_GG_API = "https://api.fund.eastmoney.com/f10/JJGG?fundcode={code}&pageIndex=1&pageSize=30&type=0"
+
+
+def fund_announcements(code):
+    """拉取单只 REIT 的基金公告列表（天天基金 f10 接口）"""
+    req = urllib.request.Request(FUND_GG_API.format(code=code),
+                                 headers={"User-Agent": "Mozilla/5.0",
+                                          "Referer": "https://fundf10.eastmoney.com/"})
+    try:
+        d = json.loads(urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore"))
+        return d.get("Data") or []
+    except Exception as e:
+        print(f"[actions] {code} 公告拉取失败: {e}", flush=True)
+        return []
+
+
+def fetch_actions():
+    universe = json.loads((ROOT / "universe.json").read_text(encoding="utf-8"))
+    cutoff = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+    items = []
+    for u in universe:
+        code = u["code"].split(".")[0]
+        for a in fund_announcements(code):
+            date = (a.get("PUBLISHDATEDesc") or a.get("PUBLISHDATE", ""))[:10]
+            if not date or date < cutoff:
+                continue
+            title = re.sub(r"<[^>]+>", "", a.get("TITLE", "")).strip()
+            tag = action_classify(title)
+            if tag is None:
+                continue
+            ann_id = a.get("ID", "")
+            items.append({
+                "date": date,
+                "code": u["code"],
+                "name": u["name"],
+                "sector": u.get("sector", ""),
+                "title": title,
+                "url": f"https://fund.eastmoney.com/gonggao/{code},{ann_id}.html" if ann_id else "",
+                "tag": tag,
+            })
+        time.sleep(0.3)
+    items = sorted(items, key=lambda x: x["date"], reverse=True)[:60]
+    payload = {
+        "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "groups": ["分红公告", "解禁", "扩募/战配"],
+        "items": items,
+    }
+    (ROOT / "corp_actions.js").write_text("window.REITS_ACTIONS = " + json.dumps(payload, ensure_ascii=False) + ";\n", encoding="utf-8")
+    (ROOT / "corp_actions.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[actions] {len(items)} 条个券公告（近30日），截至 {items[0]['date'] if items else '—'}", flush=True)
+
+
 if __name__ == "__main__":
     main()
+    fetch_actions()

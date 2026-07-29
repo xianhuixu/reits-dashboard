@@ -14,15 +14,15 @@
 </script>
 <style>
 :root {
-  --bg: #f5f6fa; --panel: #ffffff; --panel2: #f2f3f7; --line: #e5e6eb;
+  --bg: #f5f7fa; --panel: #ffffff; --panel2: #f2f5f9; --line: #e5e8ef;
   --line2: #c9cdd4;
   --tx: #1d2129; --tx2: #4e5969; --tx3: #86909c;
-  --up: #f53f3f; --down: #00b42a; --accent: #165dff; --gold: #ff7d00;
+  --up: #f53f3f; --down: #10b981; --accent: #3b82f6; --gold: #ff7d00;
   --def: #0fc6c2; --cyc: #ff7d00; --gro: #722ed1;
-  --radius: 8px;
-  --th-bg: #f7f8fa; --grid: #e5e6eb;
-  --shadow: 0 1px 2px rgba(29,33,41,.04), 0 4px 16px rgba(29,33,41,.05);
-  --shadow-h: 0 2px 4px rgba(29,33,41,.06), 0 10px 28px rgba(29,33,41,.1);
+  --radius: 10px;
+  --th-bg: #f8fafc; --grid: #e2e8f0;
+  --shadow: 0 1px 3px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.05);
+  --shadow-h: 0 2px 6px rgba(15,23,42,.06), 0 14px 34px rgba(15,23,42,.1);
   --ease: cubic-bezier(.22,.9,.28,1);
 }
 /* ---------- 护眼模式 ---------- */
@@ -52,11 +52,11 @@ html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--tx);
-  font: 13px/1.6 -apple-system, BlinkMacSystemFont, "PingFangSC-Regular", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 13px/1.6 "Inter", "DIN Alternate", -apple-system, BlinkMacSystemFont, "PingFangSC-Regular", "PingFang SC", "Microsoft YaHei", sans-serif;
   -webkit-font-smoothing: antialiased;
   padding: 26px 28px 44px; max-width: 1480px; margin: 0 auto; }
 .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
-::selection { background: rgba(22,93,255,.2); }
+::selection { background: rgba(59,130,246,.2); }
 
 /* ---------- 入场动画 ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -88,12 +88,14 @@ header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
 
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .kpi { position: relative; background: var(--panel);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; overflow: hidden;
-  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s; }
-.kpi:hover { transform: translateY(-3px); box-shadow: var(--shadow-h); border-color: var(--line2); }
+  border: none; border-radius: var(--radius); padding: 14px 16px; overflow: hidden; box-shadow: var(--shadow);
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
+.kpi:hover { transform: translateY(-3px); box-shadow: var(--shadow-h); }
 .kpi .k { color: var(--tx3); font-size: 11.5px; letter-spacing: .04em; margin-bottom: 6px; }
 .kpi .v { font-size: 26px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; }
 .kpi .s { font-size: 11.5px; color: var(--tx2); margin-top: 4px; }
+.kpi .s .up-b { display: inline-block; background: #e6f4ea; color: #16a34a; border-radius: 6px; padding: 1px 8px; font-weight: 600; }
+[data-theme="dark"] .kpi .s .up-b { background: rgba(43,181,163,.14); color: var(--down); }
 
 .tabs { position: relative; display: flex; gap: 2px; margin: 22px 0 16px; flex-wrap: wrap;
   border-bottom: 1px solid var(--line); width: 100%; }
@@ -112,9 +114,9 @@ header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
 @media (max-width: 900px) { .grid, .grid3 { grid-template-columns: 1fr; } }
 .card { background: var(--panel);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow);
-  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s; }
-.card:hover { border-color: var(--line2); box-shadow: var(--shadow-h); }
+  border: none; border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow);
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
+.card:hover { box-shadow: var(--shadow-h); }
 .card h2 { font-size: 14px; font-weight: 650; letter-spacing: .02em; margin-bottom: 4px; }
 .card .note { color: var(--tx3); font-size: 11.5px; margin-bottom: 12px; }
 
@@ -149,16 +151,16 @@ header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
   font: inherit; font-size: 12px; color: var(--tx2); cursor: pointer; transition: all .18s; }
 .chip b { color: var(--up); font-weight: 600; margin-left: 4px; }
 .chip:hover { border-color: var(--accent); color: var(--accent); }
-.chip.on { border-color: var(--accent); color: var(--accent); background: rgba(22,93,255,.06); font-weight: 500; }
+.chip.on { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,.06); font-weight: 500; }
 .filters select, .filters input { background: var(--panel2); color: var(--tx); border: 1px solid var(--line);
   border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px; transition: border-color .15s, box-shadow .15s; }
-.filters select:focus, .filters input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(22,93,255,.14); }
+.filters select:focus, .filters input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,.14); }
 .filters input { width: 160px; }
 .range-btn { background: var(--panel); color: var(--tx2); border: 1px solid var(--line); border-radius: 8px;
   padding: 5px 14px; font: inherit; font-size: 12px; cursor: pointer; transition: all .18s; }
 .range-btn:hover { color: var(--accent); border-color: var(--accent); }
 .range-btn.on { background: var(--accent); color: #fff; border-color: transparent;
-  box-shadow: 0 2px 8px rgba(22,93,255,.25); }
+  box-shadow: 0 2px 8px rgba(59,130,246,.25); }
 
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 7px 9px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
@@ -193,20 +195,24 @@ svg text { font-family: inherit; }
 .ev-type { font-size: 10.5px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
 .ev-MACD金叉 { background: rgba(245,63,63,.1); color: var(--up); }
 .ev-RSI超买 { background: rgba(255,125,0,.12); color: var(--gold); }
-.ev-成交异动 { background: rgba(22,93,255,.1); color: var(--accent); }
+.ev-成交异动 { background: rgba(59,130,246,.1); color: var(--accent); }
 .ev-突破250日线 { background: rgba(114,46,209,.12); color: var(--gro); }
 .ev-MACD死叉, .ev-RSI超卖 { background: rgba(0,180,42,.1); color: var(--down); }
 /* ---------- 事件信息流（问财范式） ---------- */
 .news-item { display: flex; gap: 12px; padding: 11px 6px; border-bottom: 1px solid var(--line); transition: background .15s; }
-.news-item:hover { background: rgba(22,93,255,.04); }
+.news-item:hover { background: rgba(59,130,246,.04); }
 .news-item .nt { flex: 0 0 62px; }
 .news-item .nt span { font-size: 10.5px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
 .nt-政策监管 { background: rgba(245,63,63,.1); color: var(--up); }
-.nt-拟上市 { background: rgba(22,93,255,.1); color: var(--accent); }
+.nt-拟上市 { background: rgba(59,130,246,.1); color: var(--accent); }
 .nt-申报动态 { background: rgba(114,46,209,.12); color: var(--gro); }
 .nt-上市公告 { background: rgba(0,180,42,.1); color: var(--down); }
 .nt-扩募动态 { background: rgba(255,125,0,.12); color: var(--gold); }
 .nt-市场观点 { background: rgba(134,144,156,.14); color: var(--tx2); }
+.nt-分红公告 { background: rgba(245,63,63,.1); color: var(--up); }
+.nt-解禁 { background: rgba(255,125,0,.12); color: var(--gold); }
+.nt-扩募\/战配 { background: rgba(114,46,209,.12); color: var(--gro); }
+.act-name { display: inline-block; font-size: 10.5px; padding: 2px 8px; border-radius: 6px; background: rgba(59,130,246,.08); color: var(--accent); margin-bottom: 4px; font-weight: 600; }
 .news-item .nb { flex: 1; min-width: 0; }
 .news-item .nh { font-size: 13px; font-weight: 600; line-height: 1.5; }
 .news-item .nh a { color: var(--tx); text-decoration: none; }
@@ -228,7 +234,7 @@ svg text { font-family: inherit; }
 .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
 .kv .k { color: var(--tx3); }
 /* ---------- 三段式分区 ---------- */
-tr.sel td { background: rgba(22,93,255,.06); }
+tr.sel td { background: rgba(59,130,246,.06); }
 tbody tr { cursor: pointer; }
 .sec-head { display: flex; align-items: baseline; gap: 14px; margin: 34px 0 16px; padding-bottom: 12px;
   border-bottom: 1px solid var(--line2); }
@@ -253,7 +259,7 @@ tbody tr { cursor: pointer; }
   border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 700; color: var(--tx); }
 #sideNav .brand img { width: 24px; height: 24px; border-radius: 6px; }
 #sideNav .ink { position: absolute; left: 6px; right: 6px; top: 53px; height: 58px; border-radius: 9px;
-  background: rgba(22,93,255,.08);
+  background: rgba(59,130,246,.08);
   transition: top .38s var(--ease), background .3s; pointer-events: none; }
 #sideNav.adv .ink { background: rgba(255,125,0,.1); }
 #sideNav .sub { position: relative; z-index: 1; display: flex; flex-direction: column;
@@ -262,7 +268,7 @@ tbody tr { cursor: pointer; }
   color: var(--tx3); display: block; text-align: left; }
 #sideNav .sub button + button { margin-top: 0; }
 #sideNav .sub button:hover { color: var(--accent); }
-#sideNav .sub button.on { color: var(--accent); background: rgba(22,93,255,.09); font-weight: 600; }
+#sideNav .sub button.on { color: var(--accent); background: rgba(59,130,246,.09); font-weight: 600; }
 #sideNav button { position: relative; z-index: 1; text-align: left; background: transparent; border: 0;
   border-radius: 9px; padding: 9px 10px; height: 58px; color: var(--tx2); font: inherit; cursor: pointer;
   transition: color .2s; display: flex; align-items: center; gap: 10px; }
@@ -297,7 +303,7 @@ main { flex: 1; min-width: 0; }
   #sideNav > button .d { display: none; }
   #sideNav > button .t { font-size: 12px; white-space: nowrap; }
   #sideNav .ink { display: none; }
-  #sideNav > button.on { background: rgba(22,93,255,.08); border-radius: 7px; }
+  #sideNav > button.on { background: rgba(59,130,246,.08); border-radius: 7px; }
   #sideNav.adv > button.on { background: rgba(255,125,0,.1); }
   [data-theme="dark"] #sideNav > button.on { background: rgba(91,147,255,.16); }
   [data-theme="dark"] #sideNav.adv > button.on { background: rgba(224,171,74,.16); }
@@ -570,6 +576,12 @@ main { flex: 1; min-width: 0; }
     <p class="note">假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估 · 四项排他性条件与六因子映射：利率下行 → <b>利差因子</b>；资金中枢 → <b>资金面因子</b>；市场宽度 → <b>情绪因子</b>；估值分位 → <b>个券历史分位</b> · 完整理论回溯与预测见"周期耦合分析"</p>
     <div id="revalSignalMap"></div>
   </div>
+  <div class="card">
+    <h2>分红 / 解禁 / 扩募战配公告监测（近 30 日 · 逐券官方公告）</h2>
+    <p class="note">数据源：基金管理人官方公告（每日更新）· 分红季布局、解禁抛压、扩募战配机会的个券级决策参考 · 点击标题查看公告原文</p>
+    <div class="filters" id="corpActionFilter"></div>
+    <div id="corpActions" style="max-height:460px;overflow:auto"></div>
+  </div>
   <div class="grid">
     <div class="card">
       <h2>信号事件流（近 120 日）</h2>
@@ -676,6 +688,7 @@ main { flex: 1; min-width: 0; }
 
 <script src="data.js"></script>
 <script src="news.js"></script>
+<script src="corp_actions.js"></script>
 <script>
 (function () {
   var D = window.REITS_DATA;
@@ -712,8 +725,10 @@ main { flex: 1; min-width: 0; }
     ["领涨", best.name.replace(/REIT$/, ""), fmt(best.pct), "up"],
     ["领跌", worst.name.replace(/REIT$/, ""), fmt(worst.pct), "down"]
   ].map(function (x) {
+    var sub = x[2];
+    if (typeof sub === "string" && sub.indexOf("+") === 0) sub = '<span class="up-b">' + sub + "</span>";
     return '<div class="kpi"><div class="k">' + x[0] + '</div><div class="v num ' + x[3] + '">' + x[1] +
-           '</div><div class="s num">' + x[2] + '</div></div>';
+           '</div><div class="s num">' + sub + '</div></div>';
   }).join("");
 
   // ---- 策略卡片 ----
@@ -783,8 +798,8 @@ main { flex: 1; min-width: 0; }
 
   // 产权/经营权走势
   var rtSeries = [
-    { label: "产权 REITs", color: "#4c8dff", data: D.series.byRight["产权"] },
-    { label: "经营权 REITs", color: "#d9a441", data: D.series.byRight["经营权"] }
+    { label: "产权 REITs", color: "#3b82f6", data: D.series.byRight["产权"] },
+    { label: "经营权 REITs", color: "#10b981", data: D.series.byRight["经营权"] }
   ];
   var rtActive = [true, true];
   buildLegend($("legendRight"), rtSeries, rtActive, function () {
@@ -814,7 +829,7 @@ main { flex: 1; min-width: 0; }
   })();
 
   // ---- 板块视图 ----
-  var SEC_PALETTE = ["#4c8dff","#d9a441","#e54545","#26a69a","#9b6dd6","#e07b39","#5bbfbb","#c25d8f","#8fb14e"];
+  var SEC_PALETTE = ["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316"];
   var secSeries = [{ key: "market", label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.sectors.forEach(function (s, i) {
     secSeries.push({ key: s, label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s] });
@@ -914,7 +929,7 @@ main { flex: 1; min-width: 0; }
     });
     var poly = F.map(function (f, i) { return pt(i, signals[f[0]]); });
     s += '<polygon points="' + poly.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") +
-      '" fill="rgba(22,93,255,.15)" stroke="var(--accent)" stroke-width="1.6"/>';
+      '" fill="rgba(59,130,246,.15)" stroke="var(--accent)" stroke-width="1.6"/>';
     F.forEach(function (f, i) {
       var p = pt(i, 2.55);
       s += '<text x="' + p[0] + '" y="' + p[1] + '" text-anchor="middle" fill="var(--tx2)" font-size="10">' + f[1] + "</text>";
@@ -1218,6 +1233,37 @@ main { flex: 1; min-width: 0; }
     render();
   })();
 
+  // ---- 分红/解禁/扩募战配公告监测 ----
+  (function () {
+    var A = window.REITS_ACTIONS;
+    if (!A || !A.items || !A.items.length) {
+      $("corpActions").innerHTML = '<div class="empty">暂无公告数据 — 请先运行 fetch_news.py</div>';
+      return;
+    }
+    var tag = "全部";
+    var tags = ["全部"].concat(A.groups);
+    $("corpActionFilter").innerHTML = tags.map(function (t) {
+      var n = t === "全部" ? A.items.length : A.items.filter(function (x) { return x.tag === t; }).length;
+      return '<button class="range-btn' + (t === "全部" ? " on" : "") + '" data-t="' + t + '">' + t + " " + n + "</button>";
+    }).join("");
+    function render() {
+      var list = A.items.filter(function (x) { return tag === "全部" || x.tag === tag; });
+      $("corpActions").innerHTML = list.length ? list.map(function (x) {
+        return '<div class="news-item"><div class="nt"><span class="nt-' + x.tag + '">' + x.tag + "</span></div>" +
+          '<div class="nb"><span class="act-name">' + x.name + " · " + x.code + "</span>" +
+          '<div class="nh"><a href="' + x.url + '" target="_blank" rel="noopener">' + x.title + "</a></div></div>" +
+          '<div class="nd num">' + x.date.slice(5) + "</div></div>";
+      }).join("") : '<div class="empty">该分类下近30日暂无相关公告</div>';
+    }
+    $("corpActionFilter").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      tag = b.dataset.t;
+      document.querySelectorAll("#corpActionFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      render();
+    });
+    render();
+  })();
+
   // ---- 主题切换（白天 / 护眼 / 夜晚） ----
   (function () {
     function apply(t) {
@@ -1307,7 +1353,7 @@ main { flex: 1; min-width: 0; }
       var p = pos[qd[0]], x = m + p[0] * (W - 2 * m) / 2, y = m + p[1] * (H - 2 * m) / 2;
       var on = qd[0] === q;
       s += '<rect x="' + x + '" y="' + y + '" width="' + (W - 2 * m) / 2 + '" height="' + (H - 2 * m) / 2 +
-        '" fill="' + (on ? "rgba(22,93,255,.12)" : "var(--panel2)") + '" stroke="var(--line)" rx="8"/>' +
+        '" fill="' + (on ? "rgba(59,130,246,.12)" : "var(--panel2)") + '" stroke="var(--line)" rx="8"/>' +
         '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 - 4) + '" text-anchor="middle" fill="' +
         (on ? "var(--accent)" : "var(--tx2)") + '" font-size="14" font-weight="600">' + qd[0] + "</text>" +
         '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 + 14) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + qd[1] + "</text>";
