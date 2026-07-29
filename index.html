@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>公募REITs 全量投研面板</title>
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+<meta name="theme-color" content="#f5f6fa">
+<script>
+(function(){var t=localStorage.getItem("rd-theme")||"light";document.documentElement.dataset.theme=t;})();
+</script>
 <style>
 :root {
   --bg: #f5f6fa; --panel: #ffffff; --panel2: #f2f3f7; --line: #e5e6eb;
@@ -12,9 +20,32 @@
   --up: #f53f3f; --down: #00b42a; --accent: #165dff; --gold: #ff7d00;
   --def: #0fc6c2; --cyc: #ff7d00; --gro: #722ed1;
   --radius: 8px;
+  --th-bg: #f7f8fa; --grid: #e5e6eb;
   --shadow: 0 1px 2px rgba(29,33,41,.04), 0 4px 16px rgba(29,33,41,.05);
   --shadow-h: 0 2px 4px rgba(29,33,41,.06), 0 10px 28px rgba(29,33,41,.1);
   --ease: cubic-bezier(.22,.9,.28,1);
+}
+/* ---------- 护眼模式 ---------- */
+[data-theme="eye"] {
+  --bg: #e9f2e2; --panel: #f8fbf4; --panel2: #edf4e6; --line: #d3dfca;
+  --line2: #b7c8a9;
+  --tx: #2f3d2b; --tx2: #55654d; --tx3: #87977c;
+  --up: #e5484d; --down: #18794e; --accent: #2e6fd8; --gold: #c96a00;
+  --def: #0d9e9a; --cyc: #c96a00; --gro: #6a3ec0;
+  --th-bg: #eff5e8; --grid: #d3dfca;
+  --shadow: 0 1px 2px rgba(47,61,43,.05), 0 4px 16px rgba(47,61,43,.06);
+  --shadow-h: 0 2px 4px rgba(47,61,43,.07), 0 10px 28px rgba(47,61,43,.11);
+}
+/* ---------- 夜晚模式 ---------- */
+[data-theme="dark"] {
+  --bg: #0a0e14; --panel: #121722; --panel2: #1a2130; --line: rgba(148,163,184,.13);
+  --line2: rgba(148,163,184,.24);
+  --tx: #eef2f7; --tx2: #9aa7ba; --tx3: #5f6d82;
+  --up: #f04f4f; --down: #2bb5a3; --accent: #5b93ff; --gold: #e0ab4a;
+  --def: #5ec9c3; --cyc: #ee8545; --gro: #a67ee0;
+  --th-bg: #1a2130; --grid: #2a3342;
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.25);
+  --shadow-h: 0 2px 4px rgba(0,0,0,.4), 0 14px 36px rgba(0,0,0,.4);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -42,10 +73,17 @@ svg path.line { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: dash
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }
 
-header { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.brand-badge { width: 40px; height: 40px; border-radius: 10px; box-shadow: var(--shadow); }
 h1 { font-size: 21px; font-weight: 700; letter-spacing: .01em; color: var(--tx); }
 h1 em { font-style: normal; color: var(--accent); }
-header .meta { color: var(--tx3); font-size: 12px; }
+header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
+.theme-sw { margin-left: auto; display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px; }
+.theme-sw button { background: transparent; border: 0; border-radius: 999px; padding: 4px 12px;
+  font: inherit; font-size: 11.5px; color: var(--tx3); cursor: pointer; transition: all .18s; }
+.theme-sw button:hover { color: var(--tx); }
+.theme-sw button.on { background: var(--accent); color: #fff; }
 .up { color: var(--up); } .down { color: var(--down); } .flat { color: var(--tx2); }
 
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 16px; }
@@ -125,7 +163,7 @@ header .meta { color: var(--tx3); font-size: 12px; }
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 7px 9px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
 th { color: var(--tx3); font-weight: 500; font-size: 11.5px; letter-spacing: .03em; cursor: pointer; user-select: none;
-  position: sticky; top: 0; background: #f7f8fa; z-index: 1; }
+  position: sticky; top: 0; background: var(--th-bg); z-index: 1; }
 th:hover { color: var(--accent); }
 td.l, th.l { text-align: left; }
 tbody tr { transition: background .15s; }
@@ -213,8 +251,7 @@ tbody tr { cursor: pointer; }
   box-shadow: var(--shadow); }
 #sideNav .brand { display: flex; align-items: center; gap: 8px; padding: 10px 10px 12px; margin-bottom: 4px;
   border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 700; color: var(--tx); }
-#sideNav .brand i { width: 22px; height: 22px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center;
-  background: var(--accent); color: #fff; font-size: 12px; font-style: normal; }
+#sideNav .brand img { width: 24px; height: 24px; border-radius: 6px; }
 #sideNav .ink { position: absolute; left: 6px; right: 6px; top: 53px; height: 58px; border-radius: 9px;
   background: rgba(22,93,255,.08);
   transition: top .38s var(--ease), background .3s; pointer-events: none; }
@@ -246,20 +283,26 @@ main { flex: 1; min-width: 0; }
 .page:not([hidden]) { animation: fade .35s var(--ease); }
 .page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
+  html, body { overflow-x: clip; }
   body { padding: 12px 10px 32px; }
   header { margin-bottom: 12px; }
   h1 { font-size: 17px; }
+  .brand-badge { width: 32px; height: 32px; }
   .layout { flex-direction: column; gap: 12px; }
-  #sideNav { position: sticky; top: 0; z-index: 20; flex-direction: row; flex-wrap: wrap; flex: none;
-    overflow-x: auto; padding: 4px; border-radius: 10px; gap: 2px; }
+  main { width: 100%; }
+  #sideNav { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: repeat(3, 1fr);
+    flex: none; padding: 4px; border-radius: 10px; gap: 2px; }
   #sideNav .brand { display: none; }
-  #sideNav > button { flex: 1 0 auto; height: 40px; padding: 5px 10px; gap: 6px; }
+  #sideNav > button { order: 1; height: 40px; padding: 5px 6px; gap: 5px; justify-content: center; }
   #sideNav > button .d { display: none; }
-  #sideNav > button .t { font-size: 12.5px; }
+  #sideNav > button .t { font-size: 12px; white-space: nowrap; }
   #sideNav .ink { display: none; }
   #sideNav > button.on { background: rgba(22,93,255,.08); border-radius: 7px; }
   #sideNav.adv > button.on { background: rgba(255,125,0,.1); }
-  #sideNav .sub { display: none; flex: 1 0 100%; flex-direction: row; overflow-x: auto; padding: 2px 0 0 0; margin: 0; gap: 4px; }
+  [data-theme="dark"] #sideNav > button.on { background: rgba(91,147,255,.16); }
+  [data-theme="dark"] #sideNav.adv > button.on { background: rgba(224,171,74,.16); }
+  #sideNav .sub { order: 2; grid-column: 1 / -1; display: none; flex-direction: row; overflow-x: auto;
+    padding: 2px 0 0 0; margin: 0; gap: 4px; -webkit-overflow-scrolling: touch; }
   #sideNav[data-cur="pano"] #panoSub,
   #sideNav[data-cur="research"] #researchSub,
   #sideNav[data-cur="advice"] #adviceSub { display: flex; }
@@ -271,18 +314,28 @@ main { flex: 1; min-width: 0; }
   .sec-head { margin: 20px 0 12px; flex-wrap: wrap; gap: 8px; }
   #treemap { height: 320px !important; }
   th, td { padding: 6px 7px; }
+  .rv-item { flex-wrap: wrap; gap: 4px 8px; }
+  .rv-item .nm { min-width: 0; }
+  .rv-item .vl { min-width: 0; flex: 1; }
+  .rv-item .ds { flex: 1 0 100%; }
 }
 </style>
 </head>
 <body>
 <header>
+  <img class="brand-badge" src="icons/lion-icon-badge-light-512.png" alt="Lion badge">
   <h1>公募REITs 全量投研面板</h1>
   <span class="meta" id="meta">数据加载中…</span>
+  <span class="theme-sw" id="themeSw">
+    <button data-t="light" title="白天">☀️ 白天</button>
+    <button data-t="eye" title="护眼">🌿 护眼</button>
+    <button data-t="dark" title="夜晚">🌙 夜晚</button>
+  </span>
 </header>
 
 <div class="layout">
 <nav id="sideNav" data-cur="pano">
-  <div class="brand"><i>R</i>REITs 投研工作台</div>
+  <div class="brand"><img src="icons/lion-icon-badge-light-512.png" alt="Lion">REITs 投研工作台</div>
   <div class="ink"></div>
   <button data-pg="pano" class="on"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></svg></span><span class="tx"><span class="t">市场全景</span><span class="d">行情总览 · 热力图 · 事件流</span></span></button>
   <div class="sub" id="panoSub">
@@ -688,11 +741,11 @@ main { flex: 1; min-width: 0; }
     var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
     for (var g = 0; g <= 4; g++) {
       var gv = lo + (hi - lo) * g / 4, gy = Y(gv);
-      out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="#e5e6eb"/>' +
-             '<text x="' + (pl - 6) + '" y="' + (gy + 3) + '" text-anchor="end" fill="#86909c" font-size="10">' + gv.toFixed(1) + '</text>';
+      out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="var(--grid)"/>' +
+             '<text x="' + (pl - 6) + '" y="' + (gy + 3) + '" text-anchor="end" fill="var(--tx3)" font-size="10">' + gv.toFixed(1) + '</text>';
     }
     for (var t = 0; t < dates.length; t += Math.ceil(dates.length / 7))
-      out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="#86909c" font-size="10">' + dates[t].slice(5) + '</text>';
+      out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + dates[t].slice(5) + '</text>';
     series.forEach(function (s) {
       var d = "", started = false;
       s.data.forEach(function (v, i) {
@@ -717,7 +770,7 @@ main { flex: 1; min-width: 0; }
   }
 
   // 策略走势
-  var stSeries = [{ key: "market", label: "全市场", color: "#1d2129", w: 2.2, data: D.series.market }];
+  var stSeries = [{ key: "market", label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.strategies.forEach(function (st) {
     stSeries.push({ key: st, label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
   });
@@ -761,7 +814,7 @@ main { flex: 1; min-width: 0; }
 
   // ---- 板块视图 ----
   var SEC_PALETTE = ["#4c8dff","#d9a441","#e54545","#26a69a","#9b6dd6","#e07b39","#5bbfbb","#c25d8f","#8fb14e"];
-  var secSeries = [{ key: "market", label: "全市场", color: "#1d2129", w: 2.2, data: D.series.market }];
+  var secSeries = [{ key: "market", label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.sectors.forEach(function (s, i) {
     secSeries.push({ key: s, label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s] });
   });
@@ -1136,6 +1189,24 @@ main { flex: 1; min-width: 0; }
       render();
     });
     render();
+  })();
+
+  // ---- 主题切换（白天 / 护眼 / 夜晚） ----
+  (function () {
+    function apply(t) {
+      document.documentElement.dataset.theme = t;
+      localStorage.setItem("rd-theme", t);
+      document.querySelectorAll("#themeSw button").forEach(function (x) { x.classList.toggle("on", x.dataset.t === t); });
+      var mc = document.querySelector('meta[name="theme-color"]');
+      if (mc) mc.content = t === "dark" ? "#0a0e14" : t === "eye" ? "#e9f2e2" : "#f5f6fa";
+      var badge = t === "dark" ? "icons/lion-icon-badge-dark-512.png" : "icons/lion-icon-badge-light-512.png";
+      document.querySelectorAll(".brand-badge, #sideNav .brand img").forEach(function (im) { im.src = badge; });
+    }
+    $("themeSw").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      apply(b.dataset.t);
+    });
+    apply(document.documentElement.dataset.theme || "light");
   })();
 
   // ---- 左侧导航：三大板块 + 研究二级菜单 ----
