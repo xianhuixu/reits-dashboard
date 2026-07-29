@@ -14,7 +14,7 @@
 </script>
 <style>
 :root {
-  --bg: #f4f6f9; --panel: #ffffff; --panel2: #f2f5f9; --line: #e5e8ef;
+  --bg: #f8fafc; --panel: #ffffff; --panel2: #f2f5f9; --line: #e5e8ef;
   --line2: #c9cdd4;
   --tx: #1d2129; --tx2: #4e5969; --tx3: #86909c;
   --up: #f53f3f; --down: #10b981; --accent: #3b82f6; --gold: #ff7d00;
@@ -76,12 +76,7 @@ svg path.line { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: dash
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }
 
-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
-.brand-badge { width: 40px; height: 40px; border-radius: 10px; box-shadow: var(--shadow); }
-h1 { font-size: 21px; font-weight: 700; letter-spacing: .01em; color: var(--tx); }
-h1 em { font-style: normal; color: var(--accent); }
-header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
-.theme-sw { margin-left: auto; display: flex; gap: 4px; background: var(--panel); border: 1px solid var(--line);
+.theme-sw { margin-left: auto; display: flex; gap: 4px; background: var(--panel2); border: none;
   border-radius: 999px; padding: 3px; }
 .theme-sw button { background: transparent; border: 0; border-radius: 999px; padding: 4px 12px;
   font: inherit; font-size: 11.5px; color: var(--tx3); cursor: pointer; transition: all .18s; }
@@ -113,13 +108,14 @@ header .meta { color: var(--tx3); font-size: 12px; align-self: baseline; }
 .tabs button.on::after { transform: scaleX(1); }
 .view[hidden] { display: none; }
 
-.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 14px; }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
 @media (max-width: 900px) { .grid, .grid3 { grid-template-columns: 1fr; } }
 .card { background: var(--panel);
-  border: none; border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow);
+  border: none; border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
 .card:hover { box-shadow: var(--shadow-h); }
+.view > .card + .card, section > .card + .card { margin-top: 24px; }
 .card h2 { font-size: 14px; font-weight: 650; letter-spacing: .02em; margin-bottom: 4px; }
 .card .note { color: var(--tx3); font-size: 11.5px; margin-bottom: 12px; }
 
@@ -252,70 +248,63 @@ tbody tr { cursor: pointer; }
 .rv-item .nm { min-width: 110px; font-weight: 600; }
 .rv-item .vl { color: var(--tx2); min-width: 170px; }
 .rv-item .ds { color: var(--tx3); font-size: 11px; }
-/* ---------- 左侧三大导航 + 页面骨架 ---------- */
+/* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 22px; font-weight: 700; }
-.layout { display: flex; gap: 24px; align-items: flex-start; }
-#sideNav { position: sticky; top: 24px; flex: 0 0 196px; background: var(--panel);
-  border: 1px solid var(--line); border-radius: 12px; padding: 6px; display: flex; flex-direction: column;
-  box-shadow: var(--shadow); }
-#sideNav .brand { display: flex; align-items: center; gap: 8px; padding: 10px 10px 12px; margin-bottom: 4px;
-  border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 700; color: var(--tx); }
-#sideNav .brand img { width: 24px; height: 24px; border-radius: 6px; }
-#sideNav .ink { position: absolute; left: 6px; right: 6px; top: 53px; height: 58px; border-radius: 9px;
-  background: rgba(59,130,246,.08);
-  transition: top .38s var(--ease), background .3s; pointer-events: none; }
-#sideNav.adv .ink { background: rgba(255,125,0,.1); }
-#sideNav .sub { position: relative; z-index: 1; display: flex; flex-direction: column;
-  margin: 0 0 4px; padding: 0 4px 0 38px; }
-#sideNav .sub button { height: auto; padding: 6px 8px; font-size: 12px; border-radius: 7px;
-  color: var(--tx3); display: block; text-align: left; }
-#sideNav .sub button + button { margin-top: 0; }
-#sideNav .sub button:hover { color: var(--accent); }
-#sideNav .sub button.on { color: var(--accent); background: rgba(59,130,246,.09); font-weight: 600; }
-#sideNav button { position: relative; z-index: 1; text-align: left; background: transparent; border: 0;
-  border-radius: 9px; padding: 9px 10px; height: 58px; color: var(--tx2); font: inherit; cursor: pointer;
-  transition: color .2s; display: flex; align-items: center; gap: 10px; }
-#sideNav button + button { margin-top: 2px; }
-#sideNav button .ic { flex: 0 0 22px; display: inline-flex; align-items: center; justify-content: center; color: var(--tx3); transition: color .2s; }
-#sideNav button .tx { min-width: 0; }
-#sideNav button .t { display: block; font-size: 13.5px; font-weight: 600; letter-spacing: .01em; }
-#sideNav button .d { display: block; font-size: 10px; color: var(--tx3); margin-top: 1px; line-height: 1.35;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#sideNav button:hover { color: var(--accent); }
-#sideNav button:hover .ic { color: var(--accent); }
-#sideNav button.on { color: var(--accent); }
-#sideNav button.on .ic { color: var(--accent); }
-#sideNav.adv button.on { color: var(--gold); }
-#sideNav.adv button.on .ic { color: var(--gold); }
-main { flex: 1; min-width: 0; }
+#topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
+  background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
+#topbar .tb-brand { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
+#topbar .tb-brand img { width: 26px; height: 26px; border-radius: 7px; }
+#tbNav { position: relative; display: flex; gap: 2px; }
+#tbNav button { background: transparent; border: 0; font: inherit; font-size: 13.5px; font-weight: 550;
+  color: var(--tx2); padding: 8px 14px; cursor: pointer; border-radius: 8px; transition: color .2s; white-space: nowrap; }
+#tbNav button:hover { color: var(--accent); }
+#tbNav button.on { color: var(--accent); font-weight: 650; }
+#topbar.adv #tbNav button.on { color: var(--gold); }
+#tbNav .ink { position: absolute; bottom: 1px; left: 0; width: 0; height: 2.5px; border-radius: 2px;
+  background: var(--accent); transition: left .32s var(--ease), width .32s var(--ease), background .3s; pointer-events: none; }
+#topbar.adv #tbNav .ink { background: var(--gold); }
+.tb-search { position: relative; margin-left: auto; }
+.tb-search input { width: 216px; background: #f1f5f9; border: 0; border-radius: 8px; padding: 7px 12px;
+  font: inherit; font-size: 12.5px; color: var(--tx); transition: box-shadow .15s; }
+[data-theme="dark"] .tb-search input { background: #1a2130; }
+[data-theme="eye"] .tb-search input { background: #e2ebda; }
+.tb-search input:focus { outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,.16); }
+.tb-drop { position: absolute; top: calc(100% + 6px); right: 0; width: 300px; max-height: 320px; overflow: auto;
+  background: var(--panel); border-radius: 10px; box-shadow: var(--shadow-h); padding: 4px; z-index: 50; }
+.tb-drop .it { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 7px 10px;
+  border-radius: 7px; font-size: 12.5px; cursor: pointer; color: var(--tx); }
+.tb-drop .it:hover { background: rgba(59,130,246,.07); }
+.tb-drop .it .cd { color: var(--tx3); font-size: 11px; white-space: nowrap; }
+#topbar .theme-sw { margin-left: 0; }
+#subbar { position: sticky; top: 66px; z-index: 30; display: flex; align-items: center; gap: 8px;
+  padding: 6px 2px; margin-bottom: 18px; background: var(--bg); }
+#subbar .meta { color: var(--tx3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#subbar .sub { display: none; gap: 6px; margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#subbar[data-cur="pano"] #panoSub,
+#subbar[data-cur="research"] #researchSub,
+#subbar[data-cur="advice"] #adviceSub { display: flex; }
+#subbar .sub button { white-space: nowrap; border: 0; background: var(--panel); color: var(--tx2);
+  font: inherit; font-size: 12px; padding: 6px 13px; border-radius: 999px; cursor: pointer;
+  box-shadow: var(--shadow); transition: all .18s; }
+#subbar .sub button:hover { color: var(--accent); }
+#subbar .sub button.on { background: var(--accent); color: #fff; font-weight: 600; }
+main { min-width: 0; }
 .page[hidden] { display: none; }
 .page:not([hidden]) { animation: fade .35s var(--ease); }
 .page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
   html, body { overflow-x: clip; }
-  body { padding: 12px 10px 32px; }
-  header { margin-bottom: 12px; }
-  h1 { font-size: 17px; }
-  .brand-badge { width: 32px; height: 32px; }
-  .layout { flex-direction: column; gap: 12px; }
-  main { width: 100%; }
-  #sideNav { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: repeat(3, 1fr);
-    flex: none; padding: 4px; border-radius: 10px; gap: 2px; }
-  #sideNav .brand { display: none; }
-  #sideNav > button { order: 1; height: 40px; padding: 5px 6px; gap: 5px; justify-content: center; }
-  #sideNav > button .d { display: none; }
-  #sideNav > button .t { font-size: 12px; white-space: nowrap; }
-  #sideNav .ink { display: none; }
-  #sideNav > button.on { background: rgba(59,130,246,.08); border-radius: 7px; }
-  #sideNav.adv > button.on { background: rgba(255,125,0,.1); }
-  [data-theme="dark"] #sideNav > button.on { background: rgba(91,147,255,.16); }
-  [data-theme="dark"] #sideNav.adv > button.on { background: rgba(224,171,74,.16); }
-  #sideNav .sub { order: 2; grid-column: 1 / -1; display: none; flex-direction: row; overflow-x: auto;
-    padding: 2px 0 0 0; margin: 0; gap: 4px; -webkit-overflow-scrolling: touch; }
-  #sideNav[data-cur="pano"] #panoSub,
-  #sideNav[data-cur="research"] #researchSub,
-  #sideNav[data-cur="advice"] #adviceSub { display: flex; }
-  #sideNav .sub button { white-space: nowrap; padding: 4px 10px; font-size: 11.5px; }
+  body { padding: 8px 10px 32px; }
+  #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
+  #topbar .tb-brand span { font-size: 12.5px; }
+  #tbNav { order: 3; width: 100%; overflow-x: auto; }
+  #tbNav button { padding: 6px 10px; font-size: 12.5px; }
+  .tb-search { margin-left: auto; }
+  .tb-search input { width: 132px; font-size: 11.5px; }
+  #topbar .theme-sw { margin-left: 0; }
+  #subbar { top: 118px; padding: 4px 0; margin-bottom: 12px; }
+  #subbar .meta { display: none; }
+  #subbar .sub { margin-left: 0; }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
   .kpi { padding: 10px 12px; }
   .kpi .v { font-size: 20px; }
@@ -331,27 +320,30 @@ main { flex: 1; min-width: 0; }
 </style>
 </head>
 <body>
-<header>
-  <img class="brand-badge" src="icons/lion-icon-badge-light-512.png" alt="Lion badge">
-  <h1>公募REITs 全量投研面板</h1>
-  <span class="meta" id="meta">数据加载中…</span>
+<nav id="topbar">
+  <div class="tb-brand"><img src="icons/lion-icon-badge-light-512.png" alt="Lion"><span>REITs 投研工作台</span></div>
+  <div id="tbNav">
+    <button data-pg="pano" class="on">市场全景</button>
+    <button data-pg="research">多维研究分析</button>
+    <button data-pg="advice">配置建议与风险</button>
+    <span class="ink"></span>
+  </div>
+  <div class="tb-search">
+    <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
+    <div class="tb-drop" id="gSearchDrop" hidden></div>
+  </div>
   <span class="theme-sw" id="themeSw">
     <button data-t="light" title="白天">☀️ 白天</button>
     <button data-t="eye" title="护眼">🌿 护眼</button>
     <button data-t="dark" title="夜晚">🌙 夜晚</button>
   </span>
-</header>
-
-<div class="layout">
-<nav id="sideNav" data-cur="pano">
-  <div class="brand"><img src="icons/lion-icon-badge-light-512.png" alt="Lion">REITs 投研工作台</div>
-  <div class="ink"></div>
-  <button data-pg="pano" class="on"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></svg></span><span class="tx"><span class="t">市场全景</span><span class="d">行情总览 · 热力图 · 事件流</span></span></button>
+</nav>
+<div id="subbar" data-cur="pano">
+  <span class="meta" id="meta">数据加载中…</span>
   <div class="sub" id="panoSub">
     <button data-pg="pano" data-scroll="v-heatmap" class="on">行情总览与热力图</button>
     <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
   </div>
-  <button data-pg="research"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 16v-5"/><path d="M11 16V7"/><path d="M16 16v-8"/><path d="M21 16V5"/></svg></span><span class="tx"><span class="t">多维研究分析</span><span class="d">策略 · 周期 · 相关性 · 信号</span></span></button>
   <div class="sub" id="researchSub">
     <button data-v="strategy" class="on">策略分类研究</button>
     <button data-v="cycle">周期耦合分析</button>
@@ -361,16 +353,13 @@ main { flex: 1; min-width: 0; }
     <button data-v="sector">板块轮动</button>
     <button data-v="signal">策略信号</button>
   </div>
-  <button data-pg="advice"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><span class="tx"><span class="t">配置建议与风险</span><span class="d">周期判断 · 交叉验证 · 退出</span></span></button>
   <div class="sub" id="adviceSub">
-    <button data-pg="advice" data-scroll="advCycle">① 当前经济周期判断</button>
-    <button data-pg="advice" data-scroll="advMapping">② 长期配置方向</button>
-    <button data-pg="advice" data-scroll="advPerf">③ 策略表现验证</button>
-    <button data-pg="advice" data-scroll="advTactic">④ 短期交易战术</button>
-    <button data-pg="advice" data-scroll="advList">⑤ 配置建议</button>
-    <button data-pg="advice" data-scroll="advRisk">⑥ 风险提示</button>
+    <button data-pg="advice" data-scroll="advCycle">① 大类策略配置建议</button>
+    <button data-pg="advice" data-scroll="advTactic">② 短期交易战术</button>
+    <button data-pg="advice" data-scroll="advPerf">③ 中长期配置建议</button>
+    <button data-pg="advice" data-scroll="advRisk">④ 风险提示</button>
   </div>
-</nav>
+</div>
 <main>
 <div class="page" id="pg-pano">
 
@@ -409,6 +398,24 @@ main { flex: 1; min-width: 0; }
 <!-- ============ 周期耦合分析 ============ -->
 <section class="view" id="v-cycle" hidden>
   <div class="card">
+    <h2>海外 REITs 代表标的走势（近 250 日，起点=100）</h2>
+    <p class="note">iFinD 自动每日更新 · 点击图例切换 · 中国 REITs 周期的海外参照系</p>
+    <div class="legend" id="legendOverseas"></div>
+    <div id="chartOverseas"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>四大经典周期定位 <span class="note" style="display:inline" id="cycleUpdated"></span></h2>
+      <p class="note">手动月度判定 + 数据佐证 · 进度条为该周期当前阶段的相对位置</p>
+      <div id="cycleGrid"></div>
+    </div>
+    <div class="card">
+      <h2>美林时钟</h2>
+      <p class="note">增长 × 通胀四象限 · 标记为当前位置（<span id="clockNote"></span>）</p>
+      <div id="clockChart" style="max-width:300px;margin:0 auto"></div>
+    </div>
+  </div>
+  <div class="card">
     <h2>资产重估判断（"资产重估理论"框架）</h2>
     <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
     <div id="revalPanel"></div>
@@ -428,24 +435,6 @@ main { flex: 1; min-width: 0; }
         若重估假说成立，应观察到：① 利差继续压缩（平均分派率 - 10Y 向历史 25% 分位回落）；② 成交额中枢持续抬升（60/250 日量比 >1）；③ 上涨从防御型扩散到周期型/成长型（市场宽度 >50%）；④ 全市场价格分位均值站上 50%。<br>
         <b>证伪条件</b>：10Y 快速升破 2%（利率反转）→ 假说失效，债性定价逻辑受冲击，应系统性降低仓位。该判断已纳入"策略信号"因子体系与下方配置建议的触发/退出条件。</p>
       </div>
-    </div>
-  </div>
-  <div class="card">
-    <h2>四大经典周期定位 <span class="note" style="display:inline" id="cycleUpdated"></span></h2>
-    <p class="note">手动月度判定 + 数据佐证 · 进度条为该周期当前阶段的相对位置</p>
-    <div id="cycleGrid"></div>
-  </div>
-  <div class="grid">
-    <div class="card">
-      <h2>美林时钟</h2>
-      <p class="note">增长 × 通胀四象限 · 标记为当前位置（<span id="clockNote"></span>）</p>
-      <div id="clockChart"></div>
-    </div>
-    <div class="card">
-      <h2>海外 REITs 代表标的走势（近 250 日，起点=100）</h2>
-      <p class="note">iFinD 自动每日更新 · 点击图例切换</p>
-      <div class="legend" id="legendOverseas"></div>
-      <div id="chartOverseas"></div>
     </div>
   </div>
   <div class="card">
@@ -636,8 +625,8 @@ main { flex: 1; min-width: 0; }
 
 <section id="v-advice">
   <div class="card" id="advCycle">
-    <h2>① 当前经济周期判断（宏观输入 + 四大周期定位）</h2>
-    <p class="note">来源：国家统计局、中债、中金 REITs 周报 · 周期判定见"周期耦合分析"Tab</p>
+    <h2>① 大类策略配置建议（周期判断 → 长期方向 → 交叉验证）</h2>
+    <p class="note">来源：国家统计局、中债 · 周期判定见"周期耦合分析" · 配置方向经面板实时数据交叉验证</p>
     <div id="adviceCycleBadges" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
     <div class="grid3" style="margin-bottom:0">
       <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI（6月）</div>
@@ -651,47 +640,39 @@ main { flex: 1; min-width: 0; }
         <div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div></div>
     </div>
     <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/成长型切换。</p>
-  </div>
-
-  <div class="card" id="advMapping">
-    <h2>② 长期配置方向（周期耦合结论，3-5 年维度）</h2>
+    <h3 style="font-size:13px;margin:16px 0 6px">长期配置方向（周期耦合结论，3-5 年维度）</h3>
     <p class="note" id="adviceMappingNote"></p>
     <div id="adviceMapping" class="grid3" style="margin-bottom:0"></div>
-  </div>
-
-  <div class="card" id="advPerf">
-    <h2>③ 三种策略分类二级市场表现（面板实时数据交叉验证）</h2>
-    <p class="note">等权平均涨跌幅 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性</p>
-    <div id="advicePerf"></div>
+    <h3 style="font-size:13px;margin:16px 0 6px">配置建议（数据交叉验证后）</h3>
+    <div id="adviceList"></div>
   </div>
 
   <div class="card" id="advTactic">
-    <h2>④ 短期交易战术（月 / 季 / 年三档 · 每日随行情自动重算）</h2>
+    <h2>② 短期交易战术（月 / 季 / 年三档 · 每日随行情自动重算）</h2>
     <p class="note">信号因子：六因子信号分（流动性/情绪/资金面/业绩/利差/股债联动）· RSI14 超买超卖 · MACD 柱线方向 · 量比 · 历史价格分位 · 偏离250日线幅度 · 均给出建议理由与止损点位，不构成投资建议</p>
     <div id="tacticGrid" class="grid3" style="margin-bottom:0"></div>
   </div>
 
-  <div class="grid">
-    <div class="card" id="advList">
-      <h2>⑤ 配置建议（数据交叉验证后）</h2>
-      <div id="adviceList"></div>
-    </div>
-    <div class="card" id="advRisk">
-      <h2>⑥ 风险提示</h2>
-      <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
-        <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
-        <li><b>基本面修复不及预期</b>：产业园供需未出清、仓储租金下行压力仍存，周期型左侧布局需以出租率连续 2 个季度修复为确认信号，避免过早加仓。</li>
-        <li><b>解禁与供给压力</b>：数据中心等板块临近解禁，短期卖压可能独立于基本面（参考 7 月数据中心领跌 -6.32%）。</li>
-        <li><b>政策变化</b>：收费/补贴/税收政策调整可能直接影响经营权类底层现金流。</li>
-        <li><b>数据口径局限</b>：本面板为行情量价 + 相关性口径，不含分派率、P/NAV 等估值指标；建议结合估值数据交叉确认，本内容不构成投资建议。</li>
-        <li><b>周期判定错误风险</b>：顺周期配置框架的有效性依赖周期阶段的正确判定；若基钦/朱格拉周期阶段误判（如补库未能延续），向周期型切换的节奏将失效，需以月度数据复核修正。</li>
-      </ul>
-    </div>
+  <div class="card" id="advPerf">
+    <h2>③ 中长期配置建议（三种策略分类二级市场表现交叉验证）</h2>
+    <p class="note">等权平均涨跌幅 + 信号分 + 大类资产相关性 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性，作为中长期底仓结构依据</p>
+    <div id="advicePerf"></div>
+  </div>
+
+  <div class="card" id="advRisk">
+    <h2>④ 风险提示</h2>
+    <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
+      <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
+      <li><b>基本面修复不及预期</b>：产业园供需未出清、仓储租金下行压力仍存，周期型左侧布局需以出租率连续 2 个季度修复为确认信号，避免过早加仓。</li>
+      <li><b>解禁与供给压力</b>：数据中心等板块临近解禁，短期卖压可能独立于基本面（参考 7 月数据中心领跌 -6.32%）。</li>
+      <li><b>政策变化</b>：收费/补贴/税收政策调整可能直接影响经营权类底层现金流。</li>
+      <li><b>数据口径局限</b>：本面板为行情量价 + 相关性口径，不含分派率、P/NAV 等估值指标；建议结合估值数据交叉确认，本内容不构成投资建议。</li>
+      <li><b>周期判定错误风险</b>：顺周期配置框架的有效性依赖周期阶段的正确判定；若基钦/朱格拉周期阶段误判（如补库未能延续），向周期型切换的节奏将失效，需以月度数据复核修正。</li>
+    </ul>
   </div>
 </section>
 </div><!-- /pg-advice -->
 </main>
-</div><!-- /layout -->
 
 <footer id="foot">
   数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：《公募REITs投资策略分享-2026》（防御/周期/成长分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
@@ -756,8 +737,8 @@ main { flex: 1; min-width: 0; }
   }).join("");
 
   // ---- 通用折线图 ----
-  function drawChart(el, dates, series) {
-    var W = 760, H = 300, pl = 42, pr = 10, pt = 12, pb = 26;
+  function drawChart(el, dates, series, opts) {
+    var W = 760, H = (opts && opts.h) || 300, pl = 42, pr = 10, pt = 12, pb = 26;
     var all = [];
     series.forEach(function (s) { s.data.forEach(function (v) { if (v != null) all.push(v); }); });
     if (!all.length) { el.innerHTML = '<div class="empty">暂无数据</div>'; return; }
@@ -1405,7 +1386,7 @@ main { flex: 1; min-width: 0; }
       var mc = document.querySelector('meta[name="theme-color"]');
       if (mc) mc.content = t === "dark" ? "#0a0e14" : t === "eye" ? "#e9f2e2" : "#f5f6fa";
       var badge = t === "dark" ? "icons/lion-icon-badge-dark-512.png" : "icons/lion-icon-badge-light-512.png";
-      document.querySelectorAll(".brand-badge, #sideNav .brand img").forEach(function (im) { im.src = badge; });
+      document.querySelectorAll("#topbar .tb-brand img").forEach(function (im) { im.src = badge; });
     }
     $("themeSw").addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b) return;
@@ -1421,27 +1402,64 @@ main { flex: 1; min-width: 0; }
     stagger($("v-" + v));
   }
   function showPage(pg, keepScroll) {
-    var btn = document.querySelector('#sideNav > button[data-pg="' + pg + '"]');
-    $("sideNav").dataset.cur = pg;
-    document.querySelectorAll("#sideNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
-    document.querySelector("#sideNav .ink").style.top = btn.offsetTop + "px";
-    $("sideNav").classList.toggle("adv", pg === "advice");
+    var btn = document.querySelector('#tbNav > button[data-pg="' + pg + '"]');
+    $("subbar").dataset.cur = pg;
+    document.querySelectorAll("#tbNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
+    var ink = document.querySelector("#tbNav .ink");
+    ink.style.left = btn.offsetLeft + "px"; ink.style.width = btn.offsetWidth + "px";
+    $("topbar").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
     if (!keepScroll) window.scrollTo({ top: 0, behavior: "instant" });
   }
-  $("sideNav").addEventListener("click", function (e) {
+  $("subbar").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     if (b.dataset.scroll) {
       showPage(b.dataset.pg, true);
-      document.querySelectorAll("#sideNav .sub button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      document.querySelectorAll("#subbar .sub button").forEach(function (x) { x.classList.toggle("on", x === b); });
       var t = document.getElementById(b.dataset.scroll);
-      if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 12, behavior: "instant" });
+      if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 132, behavior: "instant" });
       return;
     }
     if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
-    document.querySelectorAll("#sideNav .sub button.on").forEach(function (x) { x.classList.remove("on"); });
+  });
+  $("tbNav").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b || !b.dataset.pg) return;
+    document.querySelectorAll("#subbar .sub button.on").forEach(function (x) { x.classList.remove("on"); });
     showPage(b.dataset.pg);
   });
+  // ink 初始定位
+  (function () {
+    var b = document.querySelector("#tbNav > button.on"), ink = document.querySelector("#tbNav .ink");
+    if (b && ink) { ink.style.left = b.offsetLeft + "px"; ink.style.width = b.offsetWidth + "px"; }
+  })();
+
+  // ---- 全局资产搜索 ----
+  (function () {
+    var inp = $("gSearch"), drop = $("gSearchDrop");
+    function close() { drop.hidden = true; }
+    inp.addEventListener("input", function () {
+      var q = inp.value.trim().toLowerCase();
+      if (!q) { close(); return; }
+      var hits = D.reits.filter(function (r) {
+        return r.name.toLowerCase().indexOf(q) >= 0 || r.code.toLowerCase().indexOf(q) >= 0;
+      }).slice(0, 8);
+      drop.innerHTML = hits.length ? hits.map(function (r, i) {
+        return '<div class="it" data-i="' + i + '"><span>' + r.name + '</span><span class="cd">' + r.code + " · " + r.sector + "</span></div>";
+      }).join("") : '<div class="it" style="color:var(--tx3);cursor:default">无匹配个券</div>';
+      drop.hidden = false;
+      drop.querySelectorAll(".it[data-i]").forEach(function (el) {
+        el.addEventListener("click", function () {
+          var r = hits[+el.dataset.i];
+          close(); inp.value = "";
+          showPage("research"); switchView("detail");
+          $("fSearch").value = r.code;
+          $("fSearch").dispatchEvent(new Event("input"));
+          window.scrollTo({ top: 0, behavior: "instant" });
+        });
+      });
+    });
+    document.addEventListener("click", function (e) { if (!e.target.closest(".tb-search")) close(); });
+  })();
 
   // ---- 周期耦合分析 ----
   (function () {
@@ -1510,9 +1528,9 @@ main { flex: 1; min-width: 0; }
       var osDates = D.overseas[0].dates;
       var osActive = osSeries.map(function () { return true; });
       buildLegend($("legendOverseas"), osSeries, osActive, function () {
-        drawChart($("chartOverseas"), osDates, osSeries.filter(function (s2, i) { return osActive[i]; }));
+        drawChart($("chartOverseas"), osDates, osSeries.filter(function (s2, i) { return osActive[i]; }), { h: 400 });
       });
-      drawChart($("chartOverseas"), osDates, osSeries);
+      drawChart($("chartOverseas"), osDates, osSeries, { h: 400 });
     } else {
       $("chartOverseas").innerHTML = '<div class="empty">海外数据未取到</div>';
     }

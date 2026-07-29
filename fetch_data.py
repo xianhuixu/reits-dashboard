@@ -538,11 +538,19 @@ def main():
     close_w = close.tail(250)
 
     def eq_index(code_list):
-        sub = close_w[[c for c in code_list if c in close_w.columns]].dropna(how="all")
+        cols = [c for c in code_list if c in close_w.columns]
+        sub = close_w[cols].dropna(how="all")
         if sub.empty:
             return []
-        norm = sub / sub.iloc[0] * 100.0
-        return [round(float(v), 2) if pd.notna(v) else None for v in norm.mean(axis=1)]
+        base = close_w[cols].loc[sub.index[0]]
+        out = []
+        for dt in close_w.index:
+            if dt < sub.index[0]:
+                out.append(None)  # 板块尚无成员上市的日期以前端空值补齐，保证与全局日期轴对齐
+                continue
+            m = (close_w[cols].loc[dt] / base * 100.0).mean()
+            out.append(round(float(m), 2) if pd.notna(m) else None)
+        return out
 
     wdates = [d.strftime("%Y-%m-%d") for d in close_w.index]
     payload = {
