@@ -246,11 +246,31 @@ main { flex: 1; min-width: 0; }
 .page:not([hidden]) { animation: fade .35s var(--ease); }
 .page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
-  .layout { flex-direction: column; }
-  #sideNav { position: static; flex-direction: row; flex: none; overflow-x: auto; }
-  #sideNav button { flex: 1 0 150px; height: auto; }
-  #sideNav .sub, #sideNav .brand { display: none; }
+  body { padding: 12px 10px 32px; }
+  header { margin-bottom: 12px; }
+  h1 { font-size: 17px; }
+  .layout { flex-direction: column; gap: 12px; }
+  #sideNav { position: sticky; top: 0; z-index: 20; flex-direction: row; flex-wrap: wrap; flex: none;
+    overflow-x: auto; padding: 4px; border-radius: 10px; gap: 2px; }
+  #sideNav .brand { display: none; }
+  #sideNav > button { flex: 1 0 auto; height: 40px; padding: 5px 10px; gap: 6px; }
+  #sideNav > button .d { display: none; }
+  #sideNav > button .t { font-size: 12.5px; }
   #sideNav .ink { display: none; }
+  #sideNav > button.on { background: rgba(22,93,255,.08); border-radius: 7px; }
+  #sideNav.adv > button.on { background: rgba(255,125,0,.1); }
+  #sideNav .sub { display: none; flex: 1 0 100%; flex-direction: row; overflow-x: auto; padding: 2px 0 0 0; margin: 0; gap: 4px; }
+  #sideNav[data-cur="pano"] #panoSub,
+  #sideNav[data-cur="research"] #researchSub,
+  #sideNav[data-cur="advice"] #adviceSub { display: flex; }
+  #sideNav .sub button { white-space: nowrap; padding: 4px 10px; font-size: 11.5px; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+  .kpi { padding: 10px 12px; }
+  .kpi .v { font-size: 20px; }
+  .card { padding: 14px; }
+  .sec-head { margin: 20px 0 12px; flex-wrap: wrap; gap: 8px; }
+  #treemap { height: 320px !important; }
+  th, td { padding: 6px 7px; }
 }
 </style>
 </head>
@@ -261,10 +281,14 @@ main { flex: 1; min-width: 0; }
 </header>
 
 <div class="layout">
-<nav id="sideNav">
+<nav id="sideNav" data-cur="pano">
   <div class="brand"><i>R</i>REITs 投研工作台</div>
   <div class="ink"></div>
   <button data-pg="pano" class="on"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="10" rx="1.5"/><rect x="13" y="3" width="8" height="6" rx="1.5"/><rect x="13" y="11" width="8" height="10" rx="1.5"/><rect x="3" y="15" width="8" height="6" rx="1.5"/></svg></span><span class="tx"><span class="t">市场全景</span><span class="d">行情总览 · 热力图 · 事件流</span></span></button>
+  <div class="sub" id="panoSub">
+    <button data-pg="pano" data-scroll="v-heatmap" class="on">行情总览与热力图</button>
+    <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
+  </div>
   <button data-pg="research"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M6 16v-5"/><path d="M11 16V7"/><path d="M16 16v-8"/><path d="M21 16V5"/></svg></span><span class="tx"><span class="t">多维研究分析</span><span class="d">策略 · 周期 · 相关性 · 信号</span></span></button>
   <div class="sub" id="researchSub">
     <button data-v="strategy" class="on">策略分类研究</button>
@@ -276,6 +300,13 @@ main { flex: 1; min-width: 0; }
     <button data-v="signal">策略信号</button>
   </div>
   <button data-pg="advice"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span><span class="tx"><span class="t">配置建议与风险</span><span class="d">周期判断 · 交叉验证 · 退出</span></span></button>
+  <div class="sub" id="adviceSub">
+    <button data-pg="advice" data-scroll="advCycle">① 当前经济周期判断</button>
+    <button data-pg="advice" data-scroll="advMapping">② 长期配置方向</button>
+    <button data-pg="advice" data-scroll="advPerf">③ 策略表现验证</button>
+    <button data-pg="advice" data-scroll="advList">④ 配置建议</button>
+    <button data-pg="advice" data-scroll="advRisk">⑤ 风险提示</button>
+  </div>
 </nav>
 <main>
 <div class="page" id="pg-pano">
@@ -300,7 +331,7 @@ main { flex: 1; min-width: 0; }
   </div>
 </section>
 
-<div class="card" style="margin-top:14px">
+<div class="card" style="margin-top:14px" id="newsCard">
   <h2>近期重点事件信息流</h2>
   <p class="note">政策监管 · 拟上市与申报 · 上市项目公告 · 扩募动态 · 市场观点 · 来源：东方财富新闻检索，每日更新 · 近 30 日</p>
   <div class="filters" id="newsFilter"></div>
@@ -314,7 +345,7 @@ main { flex: 1; min-width: 0; }
 <!-- ============ 周期耦合分析 ============ -->
 <section class="view" id="v-cycle" hidden>
   <div class="card">
-    <h2>资产重估判断（高善文"资产重估理论"框架）</h2>
+    <h2>资产重估判断（"资产重估理论"框架）</h2>
     <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
     <div id="revalPanel"></div>
     <div class="grid" style="margin-top:14px;margin-bottom:0">
@@ -481,7 +512,7 @@ main { flex: 1; min-width: 0; }
     <div id="stratSignalBars"></div>
   </div>
   <div class="card">
-    <h2>资产重估判断（高善文"资产重估理论"框架 · 每日自动验证）</h2>
+    <h2>资产重估判断（"资产重估理论"框架 · 每日自动验证）</h2>
     <p class="note">假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估 · 四项排他性条件与六因子映射：利率下行 → <b>利差因子</b>；资金中枢 → <b>资金面因子</b>；市场宽度 → <b>情绪因子</b>；估值分位 → <b>个券历史分位</b> · 完整理论回溯与预测见"周期耦合分析"</p>
     <div id="revalSignalMap"></div>
   </div>
@@ -533,7 +564,7 @@ main { flex: 1; min-width: 0; }
 <div class="sec-head"><span class="no">③</span><span class="t">配置建议与风险提示</span><span class="d">周期判断 · 长期方向 · 数据交叉验证 · 触发/退出条件</span></div>
 
 <section id="v-advice">
-  <div class="card">
+  <div class="card" id="advCycle">
     <h2>① 当前经济周期判断（宏观输入 + 四大周期定位）</h2>
     <p class="note">来源：国家统计局、中债、中金 REITs 周报 · 周期判定见"周期耦合分析"Tab</p>
     <div id="adviceCycleBadges" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
@@ -551,24 +582,24 @@ main { flex: 1; min-width: 0; }
     <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/成长型切换。</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="advMapping">
     <h2>② 长期配置方向（周期耦合结论，3-5 年维度）</h2>
     <p class="note" id="adviceMappingNote"></p>
     <div id="adviceMapping" class="grid3" style="margin-bottom:0"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="advPerf">
     <h2>③ 三种策略分类二级市场表现（面板实时数据交叉验证）</h2>
     <p class="note">等权平均涨跌幅 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性</p>
     <div id="advicePerf"></div>
   </div>
 
   <div class="grid">
-    <div class="card">
+    <div class="card" id="advList">
       <h2>④ 配置建议（数据交叉验证后）</h2>
       <div id="adviceList"></div>
     </div>
-    <div class="card">
+    <div class="card" id="advRisk">
       <h2>⑤ 风险提示</h2>
       <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
         <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
@@ -1115,14 +1146,24 @@ main { flex: 1; min-width: 0; }
   }
   function showPage(pg) {
     var btn = document.querySelector('#sideNav > button[data-pg="' + pg + '"]');
+    $("sideNav").dataset.cur = pg;
     document.querySelectorAll("#sideNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
     document.querySelector("#sideNav .ink").style.top = btn.offsetTop + "px";
     $("sideNav").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
   $("sideNav").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.scroll) {
+      showPage(b.dataset.pg);
+      document.querySelectorAll("#sideNav .sub button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      setTimeout(function () {
+        var t = document.getElementById(b.dataset.scroll);
+        if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 12, behavior: "instant" });
+      }, 60);
+      return;
+    }
     if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
     showPage(b.dataset.pg);
   });
