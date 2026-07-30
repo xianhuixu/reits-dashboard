@@ -25,7 +25,7 @@
   --shadow-h: 0 2px 6px rgba(15,23,42,.05), 0 14px 34px rgba(15,23,42,.08);
   --prog-track: #f1f5f9; --prog-fill: #10b981;
   --ease: cubic-bezier(.22,.9,.28,1);
-  --sticky-offset: 118px;
+  --sticky-offset: 164px;
 }
 /* ---------- 护眼模式 ---------- */
 [data-theme="eye"] {
@@ -265,25 +265,28 @@ tbody tr { cursor: pointer; }
 .rv-item .ds { color: var(--tx3); font-size: 11px; }
 /* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 22px; font-weight: 700; }
-#topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
-  background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
-#topbar .tb-brand { display: flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 800; letter-spacing: .01em; white-space: nowrap; color: var(--tx); }
-#topbar .tb-brand img { width: 104px; height: 104px; border-radius: 22px; background: transparent;
+#topbar { position: sticky; top: 12px; z-index: 40; background: var(--panel); border-radius: 14px;
+  box-shadow: var(--shadow); margin-bottom: 10px; overflow: hidden; }
+.tb-main { display: flex; align-items: stretch; gap: 18px; padding: 4px 16px; min-height: 96px; }
+#topbar .tb-brand { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 800; letter-spacing: .01em;
+  white-space: nowrap; color: var(--tx); padding-right: 18px; border-right: 1px solid var(--line); }
+#topbar .tb-brand img { width: 88px; height: 88px; border-radius: 20px; background: transparent;
   padding: 0; box-shadow: none; }
 [data-theme="dark"] #topbar .tb-brand img { box-shadow: none; }
-#tbNav { position: relative; display: flex; gap: 6px; }
+#tbNav { position: relative; display: flex; gap: 4px; }
 #tbNav button { background: transparent; border: 0; font: inherit; font-size: 15.5px; font-weight: 600; letter-spacing: .01em;
-  color: var(--tx2); padding: 9px 18px; cursor: pointer; border-radius: 10px; transition: color .2s, background .2s, box-shadow .2s; white-space: nowrap; }
-#tbNav button:hover { color: var(--accent); }
-#tbNav button.on { color: var(--accent); font-weight: 700; background: rgba(59,130,246,.09);
-  box-shadow: 0 2px 10px rgba(15,23,42,.1), inset 0 0 0 1px rgba(59,130,246,.22); }
-[data-theme="dark"] #tbNav button.on { background: rgba(59,130,246,.16); box-shadow: 0 2px 10px rgba(0,0,0,.4), inset 0 0 0 1px rgba(59,130,246,.35); }
-[data-theme="eye"] #tbNav button.on { background: rgba(59,111,90,.1); box-shadow: 0 2px 10px rgba(60,80,60,.1), inset 0 0 0 1px rgba(59,111,90,.25); }
-#topbar.adv #tbNav button.on { color: var(--gold); background: rgba(191,155,48,.1); box-shadow: 0 2px 10px rgba(15,23,42,.1), inset 0 0 0 1px rgba(191,155,48,.28); }
-#tbNav .ink { position: absolute; bottom: 1px; left: 0; width: 0; height: 2.5px; border-radius: 2px;
-  background: var(--accent); transition: left .32s var(--ease), width .32s var(--ease), background .3s; pointer-events: none; }
-#topbar.adv #tbNav .ink { background: var(--gold); }
-.tb-search { position: relative; margin-left: auto; flex: 0 1 216px; }
+  color: var(--tx2); padding: 9px 16px; cursor: pointer; border-radius: 8px 8px 0 0; transition: color .2s; white-space: nowrap; }
+#tbNav button:hover { color: var(--tx); }
+#tbNav button.on { font-weight: 750; }
+#tbNav button.on[data-pg="pano"] { color: #3B82F6; }
+#tbNav button.on[data-pg="research"] { color: #8B5CF6; }
+#tbNav button.on[data-pg="advice"] { color: var(--gold); }
+#tbNav .ink { position: absolute; bottom: 0; left: 0; width: 0; height: 3px; border-radius: 2px 2px 0 0;
+  background: #3B82F6; transition: left .32s var(--ease), width .32s var(--ease), background .3s; pointer-events: none; }
+#topbar[data-cur="pano"] #tbNav .ink { background: #3B82F6; }
+#topbar[data-cur="research"] #tbNav .ink { background: #8B5CF6; }
+#topbar[data-cur="advice"] #tbNav .ink { background: var(--gold); }
+.tb-search { position: relative; margin-left: auto; flex: 0 1 216px; align-self: center; }
 .tb-search input { width: 100%; min-width: 150px; background: #f1f5f9; border: 0; border-radius: 6px; padding: 7px 12px;
   font: inherit; font-size: 12.5px; color: var(--tx); transition: box-shadow .15s; }
 [data-theme="dark"] .tb-search input { background: #1a2130; }
@@ -295,11 +298,11 @@ tbody tr { cursor: pointer; }
   border-radius: 7px; font-size: 12.5px; cursor: pointer; color: var(--tx); }
 .tb-drop .it:hover { background: rgba(59,130,246,.07); }
 .tb-drop .it .cd { color: var(--tx3); font-size: 11px; white-space: nowrap; }
-#topbar .theme-sw { margin-left: 0; }
-#subbar { position: sticky; top: 82px; z-index: 30; display: flex; align-items: center; gap: 8px;
-  padding: 6px 2px; margin-bottom: 18px; background: var(--bg); }
+#topbar .theme-sw { margin-left: 0; align-self: center; }
+#subbar { display: flex; align-items: center; gap: 8px; padding: 7px 16px;
+  background: var(--panel2); border-top: 1px solid var(--line); }
 #subbar .meta { color: var(--tx3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#subbar .sub { display: none; gap: 6px; margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch;
+#subbar .sub { display: none; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch;
   scroll-snap-type: x proximity; scrollbar-width: none;
   -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
   mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); padding-right: 24px; }
@@ -310,9 +313,10 @@ tbody tr { cursor: pointer; }
 #subbar .sub button { white-space: nowrap; border: 0; background: transparent; color: var(--tx2);
   font: inherit; font-size: 12px; padding: 6px 11px; border-radius: 6px; cursor: pointer;
   box-shadow: none; transition: color .18s, background .18s; scroll-snap-align: start; }
-#subbar .sub button:hover { color: var(--accent); background: rgba(59,130,246,.06); }
-#subbar .sub button.on { background: rgba(59,130,246,.10); color: var(--accent); font-weight: 650; }
-[data-theme="dark"] #subbar .sub button.on { background: rgba(91,147,255,.15); }
+#subbar .sub button:hover { color: var(--tx); background: rgba(100,116,139,.1); }
+#subbar[data-cur="pano"] .sub button.on { background: #3B82F6; color: #fff; font-weight: 650; }
+#subbar[data-cur="research"] .sub button.on { background: #8B5CF6; color: #fff; font-weight: 650; }
+#subbar[data-cur="advice"] .sub button.on { background: var(--gold); color: #fff; font-weight: 650; }
 .data-meta { min-height: 24px; padding: 2px 2px 0; color: var(--tx3); font-size: 11.5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #v-heatmap, #newsCard, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
@@ -326,15 +330,17 @@ main { min-width: 0; }
   :root { --sticky-offset: 150px; }
   html, body { max-width: 100%; }
   body { padding: 8px 10px 32px; }
-  #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
+  #topbar { top: 6px; border-radius: 12px; }
+  .tb-main { flex-wrap: wrap; gap: 6px 10px; padding: 6px 12px; min-height: 0; }
+  #topbar .tb-brand { border-right: 0; padding-right: 0; }
   #topbar .tb-brand span { font-size: 15px; font-weight: 800; }
-  #topbar .tb-brand img { width: 68px; height: 68px; }
+  #topbar .tb-brand img { width: 60px; height: 60px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
   #tbNav button { padding: 6px 10px; font-size: 12.5px; }
-  .tb-search { margin-left: auto; }
-  .tb-search input { width: 132px; font-size: 11.5px; }
+  .tb-search { margin-left: auto; flex: 0 1 auto; }
+  .tb-search input { width: 132px; min-width: 0; font-size: 11.5px; }
   #topbar .theme-sw { margin-left: 0; }
-  #subbar { top: 128px; padding: 4px 0; margin-bottom: 12px; }
+  #subbar { padding: 5px 10px; }
   #subbar .meta { display: none; }
   #subbar .sub { margin-left: 0; }
   .data-meta { display: none; }
@@ -356,25 +362,26 @@ main { min-width: 0; }
 </style>
 </head>
 <body>
-<nav id="topbar">
-  <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>公募REITs投研平台</span></div>
-  <div id="tbNav">
-    <button data-pg="pano" class="on">市场全景</button>
-    <button data-pg="research">多维研究分析</button>
-    <button data-pg="advice">配置建议与风险</button>
-    <span class="ink"></span>
+<nav id="topbar" data-cur="pano">
+  <div class="tb-main">
+    <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>公募REITs投研平台</span></div>
+    <div id="tbNav">
+      <button data-pg="pano" class="on">市场全景</button>
+      <button data-pg="research">多维研究分析</button>
+      <button data-pg="advice">配置建议与风险</button>
+      <span class="ink"></span>
+    </div>
+    <div class="tb-search">
+      <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
+      <div class="tb-drop" id="gSearchDrop" hidden></div>
+    </div>
+    <span class="theme-sw" id="themeSw">
+      <button data-t="light" title="白天">☀️ 白天</button>
+      <button data-t="eye" title="护眼">🌿 护眼</button>
+      <button data-t="dark" title="夜晚">🌙 夜晚</button>
+    </span>
   </div>
-  <div class="tb-search">
-    <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
-    <div class="tb-drop" id="gSearchDrop" hidden></div>
-  </div>
-  <span class="theme-sw" id="themeSw">
-    <button data-t="light" title="白天">☀️ 白天</button>
-    <button data-t="eye" title="护眼">🌿 护眼</button>
-    <button data-t="dark" title="夜晚">🌙 夜晚</button>
-  </span>
-</nav>
-<div id="subbar" data-cur="pano">
+  <div id="subbar" data-cur="pano">
     <div class="sub" id="panoSub">
       <button data-pg="pano" data-scroll="v-heatmap" class="on" aria-current="page">行情总览与热力图</button>
       <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
@@ -395,6 +402,7 @@ main { min-width: 0; }
       <button data-pg="advice" data-scroll="advRisk">风险提示</button>
     </div>
   </div>
+</nav>
 <div class="data-meta" id="meta">数据加载中…</div>
 <main>
 <div class="page" id="pg-pano">
@@ -1493,6 +1501,7 @@ main { min-width: 0; }
       currentPage = pg;
     }
     $("subbar").dataset.cur = pg;
+    $("topbar").dataset.cur = pg;
     setActiveNav(document.querySelectorAll("#tbNav > button"), btn);
     var ink = document.querySelector("#tbNav .ink");
     ink.style.left = btn.offsetLeft + "px"; ink.style.width = btn.offsetWidth + "px";
