@@ -265,22 +265,22 @@ tbody tr { cursor: pointer; }
 .rv-item .ds { color: var(--tx3); font-size: 11px; }
 /* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 22px; font-weight: 700; }
-#topbar { position: sticky; top: 8px; z-index: 40; display: block; overflow: visible;
-  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-  box-shadow: var(--shadow); margin-bottom: 8px; }
-.topbar-main { min-height: 64px; display: flex; align-items: center; gap: 18px; padding: 0 16px; }
-#topbar .tb-brand { min-width: 214px; display: flex; align-items: center; gap: 10px; padding-right: 18px;
-  border-right: 1px solid var(--line); font-size: 14.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
-#topbar .tb-brand img { width: 46px; height: 46px; border-radius: 8px; background: transparent;
+#topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
+  background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
+#topbar .tb-brand { display: flex; align-items: center; gap: 12px; font-size: 21px; font-weight: 800; letter-spacing: .01em; white-space: nowrap; color: var(--tx); }
+#topbar .tb-brand img { width: 104px; height: 104px; border-radius: 22px; background: transparent;
   padding: 0; box-shadow: none; }
 [data-theme="dark"] #topbar .tb-brand img { box-shadow: none; }
-#tbNav { position: relative; align-self: stretch; display: flex; gap: 2px; min-width: 0; }
+#tbNav { position: relative; display: flex; gap: 6px; }
 #tbNav button { background: transparent; border: 0; font: inherit; font-size: 15.5px; font-weight: 600; letter-spacing: .01em;
-  color: var(--tx2); padding: 0 15px; cursor: pointer; border-radius: 0; transition: color .18s; white-space: nowrap; }
+  color: var(--tx2); padding: 9px 18px; cursor: pointer; border-radius: 10px; transition: color .2s, background .2s, box-shadow .2s; white-space: nowrap; }
 #tbNav button:hover { color: var(--accent); }
-#tbNav button.on { color: var(--accent); font-weight: 650; }
-#topbar.adv #tbNav button.on { color: var(--gold); }
-#tbNav .ink { position: absolute; bottom: 0; left: 0; width: 0; height: 3px; border-radius: 2px 2px 0 0;
+#tbNav button.on { color: var(--accent); font-weight: 700; background: rgba(59,130,246,.09);
+  box-shadow: 0 2px 10px rgba(15,23,42,.1), inset 0 0 0 1px rgba(59,130,246,.22); }
+[data-theme="dark"] #tbNav button.on { background: rgba(59,130,246,.16); box-shadow: 0 2px 10px rgba(0,0,0,.4), inset 0 0 0 1px rgba(59,130,246,.35); }
+[data-theme="eye"] #tbNav button.on { background: rgba(59,111,90,.1); box-shadow: 0 2px 10px rgba(60,80,60,.1), inset 0 0 0 1px rgba(59,111,90,.25); }
+#topbar.adv #tbNav button.on { color: var(--gold); background: rgba(191,155,48,.1); box-shadow: 0 2px 10px rgba(15,23,42,.1), inset 0 0 0 1px rgba(191,155,48,.28); }
+#tbNav .ink { position: absolute; bottom: 1px; left: 0; width: 0; height: 2.5px; border-radius: 2px;
   background: var(--accent); transition: left .32s var(--ease), width .32s var(--ease), background .3s; pointer-events: none; }
 #topbar.adv #tbNav .ink { background: var(--gold); }
 .tb-search { position: relative; margin-left: auto; flex: 0 1 216px; }
@@ -296,10 +296,13 @@ tbody tr { cursor: pointer; }
 .tb-drop .it:hover { background: rgba(59,130,246,.07); }
 .tb-drop .it .cd { color: var(--tx3); font-size: 11px; white-space: nowrap; }
 #topbar .theme-sw { margin-left: 0; }
-#subbar { min-height: 42px; display: flex; align-items: center; overflow: hidden;
-  padding: 0 16px 0 248px; border-top: 1px solid var(--line); background: var(--panel2); }
-#subbar .sub { display: none; width: 100%; gap: 4px; margin-left: 0; overflow-x: auto;
-  -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; scrollbar-width: none; }
+#subbar { position: sticky; top: 82px; z-index: 30; display: flex; align-items: center; gap: 8px;
+  padding: 6px 2px; margin-bottom: 18px; background: var(--bg); }
+#subbar .meta { color: var(--tx3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#subbar .sub { display: none; gap: 6px; margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity; scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); padding-right: 24px; }
 #subbar .sub::-webkit-scrollbar { display: none; }
 #subbar[data-cur="pano"] #panoSub,
 #subbar[data-cur="research"] #researchSub,
@@ -323,20 +326,16 @@ main { min-width: 0; }
   :root { --sticky-offset: 150px; }
   html, body { max-width: 100%; }
   body { padding: 8px 10px 32px; }
-  #topbar { top: 4px; }
-  .topbar-main { min-height: 92px; display: grid; grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "brand search" "primary theme"; gap: 4px 8px; padding: 6px 10px; }
-  #topbar .tb-brand { grid-area: brand; min-width: 0; border-right: 0; padding-right: 0; }
-  #topbar .tb-brand span { font-size: 12.5px; }
-  #topbar .tb-brand img { width: 36px; height: 36px; }
-  #tbNav { grid-area: primary; width: 100%; min-width: 0; min-height: 36px; overflow-x: auto; }
-  #tbNav button { min-height: 36px; padding: 0 9px; font-size: 12.5px; }
-  .tb-search { grid-area: search; margin-left: 0; width: 132px; }
-  .tb-search input { width: 132px; min-width: 0; font-size: 11.5px; }
-  #topbar .theme-sw { grid-area: theme; margin-left: 0; gap: 2px; padding: 2px; }
-  #topbar .theme-sw button { width: 28px; height: 28px; padding: 0; font-size: 12px; }
-  #topbar .theme-label { display: none; }
-  #subbar { min-height: 40px; padding: 0 10px; }
+  #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
+  #topbar .tb-brand span { font-size: 15px; font-weight: 800; }
+  #topbar .tb-brand img { width: 68px; height: 68px; }
+  #tbNav { order: 3; width: 100%; overflow-x: auto; }
+  #tbNav button { padding: 6px 10px; font-size: 12.5px; }
+  .tb-search { margin-left: auto; }
+  .tb-search input { width: 132px; font-size: 11.5px; }
+  #topbar .theme-sw { margin-left: 0; }
+  #subbar { top: 128px; padding: 4px 0; margin-bottom: 12px; }
+  #subbar .meta { display: none; }
   #subbar .sub { margin-left: 0; }
   .data-meta { display: none; }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
@@ -358,25 +357,24 @@ main { min-width: 0; }
 </head>
 <body>
 <nav id="topbar">
-  <div class="topbar-main">
-    <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>REITs 投研工作台</span></div>
-    <div id="tbNav">
-      <button data-pg="pano" class="on" aria-current="page">市场全景</button>
-      <button data-pg="research">多维研究分析</button>
-      <button data-pg="advice">配置建议与风险</button>
-      <span class="ink"></span>
-    </div>
-    <div class="tb-search">
-      <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
-      <div class="tb-drop" id="gSearchDrop" hidden></div>
-    </div>
-    <span class="theme-sw" id="themeSw">
-      <button data-t="light" title="白天" aria-label="白天模式">☀️ <span class="theme-label">白天</span></button>
-      <button data-t="eye" title="护眼" aria-label="护眼模式">🌿 <span class="theme-label">护眼</span></button>
-      <button data-t="dark" title="夜晚" aria-label="夜晚模式">🌙 <span class="theme-label">夜晚</span></button>
-    </span>
+  <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>公募REITs投研平台</span></div>
+  <div id="tbNav">
+    <button data-pg="pano" class="on">市场全景</button>
+    <button data-pg="research">多维研究分析</button>
+    <button data-pg="advice">配置建议与风险</button>
+    <span class="ink"></span>
   </div>
-  <div id="subbar" data-cur="pano">
+  <div class="tb-search">
+    <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
+    <div class="tb-drop" id="gSearchDrop" hidden></div>
+  </div>
+  <span class="theme-sw" id="themeSw">
+    <button data-t="light" title="白天">☀️ 白天</button>
+    <button data-t="eye" title="护眼">🌿 护眼</button>
+    <button data-t="dark" title="夜晚">🌙 夜晚</button>
+  </span>
+</nav>
+<div id="subbar" data-cur="pano">
     <div class="sub" id="panoSub">
       <button data-pg="pano" data-scroll="v-heatmap" class="on" aria-current="page">行情总览与热力图</button>
       <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
@@ -397,7 +395,6 @@ main { min-width: 0; }
       <button data-pg="advice" data-scroll="advRisk">风险提示</button>
     </div>
   </div>
-</nav>
 <div class="data-meta" id="meta">数据加载中…</div>
 <main>
 <div class="page" id="pg-pano">
@@ -1113,7 +1110,7 @@ main { min-width: 0; }
     var fl = pool.length - up - dn;
     $("hmSummary").innerHTML = "<span>下跌 <b class='down'>" + dn + "</b></span><span>平 <b>" + fl + "</b></span><span>上涨 <b class='up'>" + up + "</b></span>";
     $("hmCrumb").innerHTML = hmDrill
-      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）</span>'
+      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 点击个券色块查看个券透视</span>'
       : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
     $("treemap").innerHTML = rects.map(function (r, i) {
       var amt = Math.round(r.amount / 1e4).toLocaleString();
@@ -1122,17 +1119,19 @@ main { min-width: 0; }
       var sub = r.w > 96 && r.h > 56
         ? '<div style="font-size:' + (fs * 0.72) + 'px;opacity:.88">' + subTxt + "</div>" : "";
       var label = r.w > 56 && r.h > 30 ? '<div style="font-size:' + fs + 'px;font-weight:600">' + r.sector + "</div>" + sub : "";
-      return '<div data-sec="' + (hmDrill ? "" : r.sector) + '" title="' + r.sector + " " + fmt(r.ret) + '" style="position:absolute;--d:' + (i * 55) + 'ms;' +
+      return '<div data-sec="' + (hmDrill ? "" : r.sector) + '"' + (hmDrill && r.code ? ' data-code="' + r.code + '"' : "") +
+        ' title="' + r.sector + " " + fmt(r.ret) + (hmDrill ? " · 点击查看个券透视" : "") + '" style="position:absolute;--d:' + (i * 55) + 'ms;' +
         "left:" + r.x / 10 + "%;top:" + r.y / 4.4 + "%;width:" + r.w / 10 + "%;height:" + r.h / 4.4 + "%;" +
         "background:" + hmColor(r.ret) + ";border:2px solid var(--panel);border-radius:4px;" +
-        'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:' + (hmDrill ? "default" : "pointer") + ";" +
+        'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;' +
         'text-shadow:0 1px 2px rgba(0,0,0,.35);overflow:hidden;padding:4px;text-align:center;box-sizing:border-box">' + label + "</div>";
     }).join("");
   }
   $("treemap").addEventListener("click", function (e) {
-    var d = e.target.closest("div[data-sec]"); if (!d || !d.dataset.sec) return;
-    hmDrill = d.dataset.sec;
-    renderTreemap();
+    var d = e.target.closest("div[data-sec]");
+    if (d && d.dataset.sec) { hmDrill = d.dataset.sec; renderTreemap(); return; }
+    var dc = e.target.closest("div[data-code]");
+    if (dc && hmDrill && dc.dataset.code) openReitDetail(dc.dataset.code);
   });
   $("hmCrumb").addEventListener("click", function (e) {
     if (!e.target.closest("#hmBack")) return;
@@ -1448,6 +1447,21 @@ main { min-width: 0; }
     apply(document.documentElement.dataset.theme || "light");
   })();
 
+  // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
+  function openReitDetail(code) {
+    var r = null;
+    for (var i = 0; i < D.reits.length; i++) if (D.reits[i].code === code) { r = D.reits[i]; break; }
+    if (!r) return;
+    showPage("research"); switchView("detail");
+    ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
+    $("fSearch").value = r.code;
+    selCode = r.code;
+    renderTbl();
+    renderDetail(r.code);
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+  }
+
   // ---- 左侧导航：三大板块 + 研究二级菜单 ----
   var currentPage = "pano";
   var pageScroll = { pano: 0, research: 0, advice: 0 };
@@ -1514,14 +1528,7 @@ main { min-width: 0; }
     function close() { drop.hidden = true; }
     function go(r) {
       close(); inp.value = "";
-      showPage("research"); switchView("detail");
-      ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
-      $("fSearch").value = r.code;
-      selCode = r.code;
-      renderTbl();
-      renderDetail(r.code);
-      window.scrollTo({ top: 0, behavior: "auto" });
-      setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+      openReitDetail(r.code);
     }
     inp.addEventListener("input", function () {
       var q = inp.value.trim().toLowerCase();
