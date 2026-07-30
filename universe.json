@@ -186,42 +186,42 @@
   "name": "华夏华润消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "180602.SZ",
   "name": "中金印力消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508011.SH",
   "name": "嘉实物美消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "180603.SZ",
   "name": "华夏大悦城购物中心REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "180606.SZ",
   "name": "中金中国绿发消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "180605.SZ",
   "name": "易方达华威农贸市场REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508066.SH",
@@ -291,7 +291,7 @@
   "name": "华夏金茂消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508096.SH",
@@ -347,7 +347,7 @@
   "name": "南方润泽科技数据中心REIT",
   "sector": "数据中心",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "扩张型"
  },
  {
   "code": "180305.SZ",
@@ -410,14 +410,14 @@
   "name": "华安百联消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508005.SH",
   "name": "华夏首创奥特莱斯REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508028.SH",
@@ -459,7 +459,7 @@
   "name": "南方万国数据中心REIT",
   "sector": "数据中心",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "扩张型"
  },
  {
   "code": "508003.SH",
@@ -501,7 +501,7 @@
   "name": "中金唯品会奥莱REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508087.SH",
@@ -522,7 +522,7 @@
   "name": "华夏凯德消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508092.SH",
@@ -550,7 +550,7 @@
   "name": "华夏中海消费REIT",
   "sector": "消费",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508012.SH",
@@ -585,27 +585,27 @@
   "name": "汇添富上海地产商业REIT",
   "sector": "商业不动产",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508601.SH",
   "name": "中信建投首农商业REIT",
   "sector": "商业不动产",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508602.SH",
   "name": "国泰海通砂之船商业REIT",
   "sector": "商业不动产",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  },
  {
   "code": "508603.SH",
   "name": "中金唯品会商业REIT",
   "sector": "商业不动产",
   "right": "产权",
-  "strategy": "成长型"
+  "strategy": "周期型"
  }
 ]

@@ -173,18 +173,15 @@ tbody tr:hover { background: rgba(148,163,184,.07); }
 .st-tag { display: inline-block; font-size: 10.5px; padding: 2px 8px; border-radius: 999px; }
 .st-防御型 { background: rgba(15,198,194,.12); color: #0aa3a0; }
 .st-周期型 { background: rgba(255,125,0,.12); color: var(--cyc); }
-.st-成长型 { background: rgba(114,46,209,.12); color: var(--gro); }
+.st-扩张型 { background: rgba(114,46,209,.12); color: var(--gro); }
 .tbl-wrap { max-height: 620px; overflow: auto; border-radius: 10px; }
 footer { color: var(--tx3); font-size: 11.5px; margin-top: 20px; line-height: 1.8;
   border-top: 1px solid var(--line); padding-top: 14px; }
-.foot-quote { max-width: 820px; margin: 6px auto 16px; padding: 18px 26px 14px; text-align: center;
-  border-top: 2px solid var(--accent, #3B82F6); position: relative; }
-.foot-quote::before { content: "“"; display: block; font-size: 34px; line-height: 1;
-  color: var(--accent, #3B82F6); opacity: .35; font-family: Georgia, serif; margin-bottom: 4px; }
-.foot-quote p { color: var(--tx2); font-size: 13px; line-height: 2; margin: 0 0 8px;
-  font-family: Georgia, "Songti SC", "STSong", serif; letter-spacing: .01em; }
-.foot-quote cite { display: block; font-style: normal; font-size: 12px; color: var(--tx3);
-  letter-spacing: .04em; }
+.foot-quote { max-width: 860px; margin: 14px auto 2px; padding: 0 20px; text-align: center; }
+.foot-quote p { color: var(--tx2); font-size: 13px; line-height: 2; margin: 0 0 6px;
+  font-family: Georgia, "Songti SC", "STSong", serif; font-style: italic; letter-spacing: .02em; }
+.foot-quote cite { display: block; font-style: italic; font-size: 12px; color: var(--tx3);
+  font-family: Georgia, "Songti SC", "STSong", serif; letter-spacing: .05em; }
 .empty { color: var(--tx2); padding: 40px 0; text-align: center; }
 .signal h3 { font-size: 13px; margin-bottom: 8px; letter-spacing: .02em; }
 .signal p { color: var(--tx2); font-size: 12px; line-height: 1.7; }
@@ -260,10 +257,10 @@ tbody tr { cursor: pointer; }
 .rv-stage { font-size: 22px; font-weight: 700; }
 #topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
   background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
-#topbar .tb-brand { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
-#topbar .tb-brand img { width: 40px; height: 40px; border-radius: 10px; background: #ffffff;
-  padding: 2px; box-shadow: 0 1px 3px rgba(15,23,42,.1), 0 4px 12px rgba(15,23,42,.08); }
-[data-theme="dark"] #topbar .tb-brand img { box-shadow: 0 1px 3px rgba(0,0,0,.5), 0 4px 14px rgba(0,0,0,.4); }
+#topbar .tb-brand { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
+#topbar .tb-brand img { width: 52px; height: 52px; border-radius: 14px; background: #ffffff;
+  padding: 3px; box-shadow: 0 2px 5px rgba(15,23,42,.12), 0 6px 18px rgba(15,23,42,.1); }
+[data-theme="dark"] #topbar .tb-brand img { box-shadow: 0 2px 5px rgba(0,0,0,.55), 0 6px 18px rgba(0,0,0,.45); }
 #tbNav { position: relative; display: flex; gap: 2px; }
 #tbNav button { background: transparent; border: 0; font: inherit; font-size: 15.5px; font-weight: 600; letter-spacing: .01em;
   color: var(--tx2); padding: 9px 18px; cursor: pointer; border-radius: 8px; transition: color .2s; white-space: nowrap; }
@@ -307,6 +304,7 @@ main { min-width: 0; }
   body { padding: 8px 10px 32px; }
   #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
   #topbar .tb-brand span { font-size: 12.5px; }
+  #topbar .tb-brand img { width: 44px; height: 44px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
   #tbNav button { padding: 6px 10px; font-size: 12.5px; }
   .tb-search { margin-left: auto; }
@@ -331,7 +329,7 @@ main { min-width: 0; }
 </head>
 <body>
 <nav id="topbar">
-  <div class="tb-brand"><img src="icons/lion-v2.png" alt="Lion"><span>REITs 投研工作台</span></div>
+  <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>REITs 投研工作台</span></div>
   <div id="tbNav">
     <button data-pg="pano" class="on">市场全景</button>
     <button data-pg="research">多维研究分析</button>
@@ -409,7 +407,7 @@ main { min-width: 0; }
 <section class="view" id="v-cycle" hidden>
   <div class="card">
     <h2>美国 REITs 代表标的长期走势（对数轴 · 起点=100）</h2>
-    <p class="note">防御型（净租赁/基础设施/医疗/住宅）· 周期型（工业物流/购物中心）· 成长型（数据中心）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新（美股收盘数据次一交易日同步，<span id="usLongAsOf"></span>）· 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：成长型 2010 年前为 Equinix 单标的，科网泡沫期曾深度回撤（对数轴下端）；2005-2009 年 iFinD 行情缺失，以断线如实呈现，2008 年回撤无从计算（显示"—"）</p>
+    <p class="note">防御型（净租赁/基础设施/医疗/住宅）· 周期型（工业物流/购物中心）· 扩张型（数据中心）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新（美股收盘数据次一交易日同步，<span id="usLongAsOf"></span>）· 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：扩张型 2010 年前为 Equinix 单标的，科网泡沫期曾深度回撤（对数轴下端）；2005-2009 年 iFinD 行情缺失，以断线如实呈现，2008 年回撤无从计算（显示"—"）</p>
     <div class="legend" id="legendUsLong"></div>
     <div id="chartUsLong"></div>
     <div id="usCoupleStats" style="margin-top:14px"></div>
@@ -444,7 +442,7 @@ main { min-width: 0; }
       <div style="background:var(--panel2);border-radius:10px;padding:12px 14px">
         <h3 style="font-size:12.5px;margin-bottom:6px">🔭 排他性预测（可被证伪，逐季验证）</h3>
         <p style="font-size:12px;color:var(--tx2);line-height:1.7">
-        若重估假说成立，应观察到：① 利差继续压缩（平均分派率 - 10Y 向历史 25% 分位回落）；② 成交额中枢持续抬升（60/250 日量比 >1）；③ 上涨从防御型扩散到周期型/成长型（市场宽度 >50%）；④ 全市场价格分位均值站上 50%。<br>
+        若重估假说成立，应观察到：① 利差继续压缩（平均分派率 - 10Y 向历史 25% 分位回落）；② 成交额中枢持续抬升（60/250 日量比 >1）；③ 上涨从防御型扩散到周期型/扩张型（市场宽度 >50%）；④ 全市场价格分位均值站上 50%。<br>
         <b>证伪条件</b>：10Y 快速升破 2%（利率反转）→ 假说失效，债性定价逻辑受冲击，应系统性降低仓位。该判断已纳入"策略信号"因子体系与下方配置建议的触发/退出条件。</p>
       </div>
     </div>
@@ -505,13 +503,13 @@ main { min-width: 0; }
   <div class="grid">
     <div class="card">
       <h2>策略组合等权指数（区间起点 = 100）</h2>
-      <p class="note">按投资策略分类（防御型 / 周期型 / 成长型）等权构建 · 点击图例切换</p>
+      <p class="note">按投资策略分类（防御型 / 周期型 / 扩张型）等权构建 · 点击图例切换</p>
       <div class="legend" id="legendStrategy"></div>
       <div id="chartStrategy"></div>
     </div>
     <div class="card">
       <h2>产权 vs 经营权</h2>
-      <p class="note">中金口径：产权看分派率，经营权看中债 IRR</p>
+      <p class="note">产权看分派率，经营权看中债 IRR</p>
       <div class="legend" id="legendRight"></div>
       <div id="chartRight"></div>
     </div>
@@ -624,8 +622,8 @@ main { min-width: 0; }
     <div id="corpActions" style="max-height:460px;overflow:auto"></div>
   </div>
   <div class="card signal">
-    <h3>🧭 顺周期动态配置框架（防御型 / 周期型 / 成长型）</h3>
-    <p>经济下行或衰退期：超配<b>防御型</b>（保租房、能源、市政环保），获取稳定股息与防御价值；经济上行周期：增配<b>周期型</b>（仓储物流、产业园、高速公路）与<b>成长型</b>（消费、数据中心）博取弹性。当前中金建议：优先现金流稳定的保租房、头部消费及长租约数据中心；其次关注路网引流受益的高速；逢低精选出租率修复、租约结构确定的仓储物流及产业园。</p>
+    <h3>🧭 顺周期动态配置框架（防御型 / 周期型 / 扩张型）</h3>
+    <p>经济下行或衰退期：超配<b>防御型</b>（保租房、市政公用环保、医疗养老、通信铁塔、新能源）——需求刚性、收入可预期，估值靠分派率支撑，走势类债；经济上行周期：增配<b>周期型</b>（产业园、消费及商业不动产、物流仓储、收费公路、文旅景区）——收入与宏观景气直接挂钩，估值含顺周期期权；<b>扩张型</b>（数据中心等新型基础设施）底层动力为渗透率提升与量的扩张，市场给予成长溢价，可作为穿越周期的结构性配置。实证：2022-2023 年深度回调期保租房与市政类回撤最小、最先修复；2021 年首批上市至 2022 年初景气期园区与物流领涨，2023 年基本面下行时园区跌幅最深。</p>
   </div>
 </section>
 
@@ -651,7 +649,7 @@ main { min-width: 0; }
         <div class="big num" style="font-size:24px;font-weight:600">1.73%</div>
         <div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div></div>
     </div>
-    <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/成长型切换。</p>
+    <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/扩张型切换。</p>
     <h3 style="font-size:13px;margin:16px 0 6px">长期配置方向（周期耦合结论，3-5 年维度）</h3>
     <p class="note" id="adviceMappingNote"></p>
     <div id="adviceMapping" class="grid3" style="margin-bottom:0"></div>
@@ -687,11 +685,11 @@ main { min-width: 0; }
 </main>
 
 <footer id="foot">
+  数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：《公募REITs投资策略分享-2026》（防御/周期/扩张分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
   <div class="foot-quote">
     <p>我们可以思考未来，推测未来，但并无可能分析未来…如果我们执意以确定性甚至信心作为采取行动的前提，我们将会陷入无所作为的僵局，而不采取行动的决定与做出改变的决定一样，都应被审慎考量…但是，当不利事态纷至沓来，通常是果断出击的最佳时机。最后，……必须牢记一切皆可瞬息万变。</p>
     <cite>—— 霍华德·马克斯 《无人知晓》</cite>
   </div>
-  数据源：同花顺 iFinD · 每日收盘后自动更新 · 分析框架：《公募REITs投资策略分享-2026》（防御/周期/成长分类）· 等权口径仅用于相对表现跟踪，不构成投资建议。
 </footer>
 
 <script src="data.js"></script>
@@ -708,11 +706,11 @@ main { min-width: 0; }
   $("meta").textContent = "更新 " + D.updated + " · 最新交易日 " + D.lastTradeDate +
     " · 全覆盖 " + D.count + " 只 · 来源 iFinD";
 
-  var ST_COLOR = { "防御型": "var(--def)", "周期型": "var(--cyc)", "成长型": "var(--gro)" };
+  var ST_COLOR = { "防御型": "var(--def)", "周期型": "var(--cyc)", "扩张型": "var(--gro)" };
   var ST_DESC = {
-    "防御型": ["保租房 / 能源 / 市政环保", "下行期超配：稳定股息 + 防御价值", "现金流确定性高，类债属性强"],
-    "周期型": ["仓储物流 / 产业园 / 高速公路", "顺周期轮动：与宏观景气度联动", "关注出租率修复与路网引流"],
-    "成长型": ["消费 / 数据中心", "上行期增配：博取业绩与估值弹性", "头部运营与长租约为核心变量"]
+    "防御型": ["保租房 / 市政公用环保 / 医疗养老 / 通信铁塔 / 新能源", "需求刚性 + 收入可预期，出租率租金受经济下行扰动小", "估值靠分派率支撑，走势类债；2022-2023 回调期回撤最小、最先修复"],
+    "周期型": ["产业园 / 消费及商业不动产 / 物流仓储 / 收费公路 / 文旅景区", "收入与宏观景气直接挂钩，出租率、租金、RevPAR 弹性波动", "估值含顺周期期权；景气期园区物流领涨，下行期跌幅最深"],
+    "扩张型": ["数据中心等新型基础设施", "短期受周期扰动，底层动力是渗透率提升与量的扩张", "市场给予成长溢价；关注长租约、上架率与解禁节奏"]
   };
   function cls(v) { return v > 0 ? "up" : v < 0 ? "down" : "flat"; }
   function fmt(v, suf) { return v == null ? "—" : (v > 0 ? "+" : "") + v.toFixed(2) + (suf || "%"); }
@@ -1240,14 +1238,14 @@ main { min-width: 0; }
     $("advicePerf").innerHTML = html + "</tbody></table>";
 
     // 交叉验证建议（规则由数据驱动：弱市抗跌性 + 债性强弱 + 周期定位）
-    var def60 = stAvg("防御型", "ret60"), cyc60 = stAvg("周期型", "ret60"), gro20 = stAvg("成长型", "ret20");
+    var def60 = stAvg("防御型", "ret60"), cyc60 = stAvg("周期型", "ret60"), gro20 = stAvg("扩张型", "ret20");
     var items = [
       { st: "防御型", pos: "超配（底仓）", color: "var(--def)",
-        text: "近 60 日 " + fmt(def60) + "，显著抗跌于周期型（" + fmt(cyc60) + "），且与国债相关性最高（债性最强）。弱复苏初期 + 利率 1.73% 历史低位，保租房/能源/市政环保的高股息防御价值突出，作底仓持有。8-9 月分红季临近，可提前布局抢权行情。" },
-      { st: "成长型", pos: "标配", color: "var(--gro)",
-        text: "近 20 日 " + fmt(gro20) + "，三类中最抗跌，消费头部与数据中心长租约的确定性获资金认可。但今日上涨家数最少、弹性不足，且数据中心面临解禁压力，维持标配、精选头部，不追高。" },
+        text: "近 60 日 " + fmt(def60) + "，显著抗跌于周期型（" + fmt(cyc60) + "），且与国债相关性最高（债性最强）。弱复苏初期 + 利率历史低位，保租房/新能源/市政环保的需求刚性与分派率支撑凸显防御价值，作底仓持有。8-9 月分红季临近，可提前布局抢权行情。" },
+      { st: "扩张型", pos: "标配", color: "var(--gro)",
+        text: "近 20 日 " + fmt(gro20) + "，数据中心等新型基础设施以渗透率提升与量的扩张为底层动力，长租约确定性获资金认可、市场给予成长溢价。但板块标的少、流动性薄，且面临解禁节奏扰动，维持标配、精选长租约头部，不追高。" },
       { st: "周期型", pos: "低配转左侧分批", color: "var(--cyc)",
-        text: "近 60 日 " + fmt(cyc60) + " 深度回调，二季报确认以价换量仍在持续。中金指出近期下跌由资金情绪主导、与基本面趋稳背离——可左侧<b>分批</b>布局出租率连续修复（如建信中关村、华夏金隅）及路网引流受益的高速标的，但需以出租率连续 2 季度修复为加仓确认信号。" }
+        text: "近 60 日 " + fmt(cyc60) + " 深度回调，以价换量仍在持续。若近期下跌由资金情绪主导、与基本面趋稳背离，可左侧<b>分批</b>布局出租率连续修复的园区标的、消费复苏受益的商业不动产及路网引流受益的高速，但需以出租率连续 2 季度修复为加仓确认信号。" }
     ];
     $("adviceList").innerHTML = items.map(function (it) {
       return '<div style="border-left:3px solid ' + it.color + ';padding:8px 12px;margin-bottom:10px;background:var(--panel2);border-radius:0 8px 8px 0">' +
@@ -1315,7 +1313,7 @@ main { min-width: 0; }
     var ss = D.stratSignals || {};
     var mktRank = avgOf(D.reits.map(function (r) { return r.pctRank; }).filter(function (v) { return v != null; }));
     var rvScore = D.revaluation ? D.revaluation.score : null;
-    var defS = ss["防御型"] || {}, cycS = ss["周期型"] || {}, groS = ss["成长型"] || {};
+    var defS = ss["防御型"] || {}, cycS = ss["周期型"] || {}, groS = ss["扩张型"] || {};
     function stLine(st, o) {
       return '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65;margin-bottom:5px"><span class="st-tag st-' + st + '">' + st + "</span> " + o + "</div>";
     }
@@ -1323,9 +1321,9 @@ main { min-width: 0; }
       '<div style="font-size:12.5px;font-weight:650">🗓️ 年度战术 · 战略底仓</div>' +
       '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：周期定位 + 三策略信号分 + 全市场价格分位（当前 ' + (mktRank == null ? "—" : Math.round(mktRank * 100) + "%") + "）" +
       (rvScore != null ? " · 重估条件 " + rvScore + "/4" : "") + "</div>" +
-      stLine("防御型", "底仓超配 40-50%：信号分 " + (defS.avg != null ? defS.avg : "—") + "（" + (defS.label || "—") + "）。弱复苏初期 + 低利率资产荒，保租房/能源/市政环保股息确定性最强，叠加 8-9 月分红季抢权。") +
-      stLine("成长型", "标配 25-35%：信号分 " + (groS.avg != null ? groS.avg : "—") + "（" + (groS.label || "—") + "）。消费头部与长租约数据中心做确定性，注意数据中心解禁节奏，逢低布局。") +
-      stLine("周期型", "左侧分批 20-30%：信号分 " + (cycS.avg != null ? cycS.avg : "—") + "（" + (cycS.label || "—") + "）。基钦周期补库启动期左侧埋伏仓储/产业园/高速，以出租率连续 2 季修复为加仓确认。") +
+      stLine("防御型", "底仓超配 40-50%：信号分 " + (defS.avg != null ? defS.avg : "—") + "（" + (defS.label || "—") + "）。弱复苏初期 + 低利率资产荒，保租房/新能源/市政环保的需求刚性与分派率支撑最强，叠加 8-9 月分红季抢权。") +
+      stLine("扩张型", "标配 25-35%：信号分 " + (groS.avg != null ? groS.avg : "—") + "（" + (groS.label || "—") + "）。数据中心等新型基础设施以渗透率提升与量的扩张为底层动力，优先长租约、高上架率标的，注意解禁节奏，逢低布局。") +
+      stLine("周期型", "左侧分批 20-30%：信号分 " + (cycS.avg != null ? cycS.avg : "—") + "（" + (cycS.label || "—") + "）。基钦周期补库启动期左侧埋伏产业园/仓储物流/消费及商业不动产/收费公路，以出租率连续 2 季修复为加仓确认。") +
       stopLine("全市场等权价格分位升破 90% 时系统性减仓；重估条件跌破 2/4 或 10Y 国债收益率快速升破 2% 时降总仓位至 50% 以下") +
       "</div>";
 
@@ -1542,8 +1540,8 @@ main { min-width: 0; }
       }
       var W = 760, H = 400, pl = 46, pr = 10, pt = 14, pb = 26;
       $("usLongAsOf").textContent = "当前截至 " + U.dates[U.dates.length - 1] + " 美股收盘";
-      var cats = ["防御型", "周期型", "成长型"];
-      var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "成长型": "#8b5cf6" };
+      var cats = ["防御型", "周期型", "扩张型"];
+      var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
       var vals = [];
       cats.forEach(function (c) { (U.cats[c] || []).forEach(function (v) { if (v != null && v > 0) vals.push(Math.log10(v)); }); });
       if (!vals.length) { $("chartUsLong").innerHTML = '<div class="empty">暂无数据</div>'; return; }
@@ -1592,13 +1590,13 @@ main { min-width: 0; }
             "</td><td class='num'>" + pf(s.dd2020) + "</td><td class='num'>" + pf(s.cagr10) + "</td></tr>";
         }).join("") + "</tbody></table>";
 
-      var sd = S["防御型"], sc = S["周期型"], sg = S["成长型"];
+      var sd = S["防御型"], sc = S["周期型"], sg = S["扩张型"];
       if (sd && sc && sg) {
         var yrs = Math.round((new Date(U.dates[U.dates.length - 1]) - new Date(sd.start)) / 3.154e10);
         $("usCoupleText").innerHTML = "<b>长周期耦合结论（" + sd.start.slice(0, 4) + "–" + U.dates[U.dates.length - 1].slice(0, 4) + "，约 " + yrs + " 年）：</b>" +
           "① 衰退期（灰带）三类齐跌但回撤分层清晰——<b>周期型</b> 2008 年最大回撤 <b class='up'>" + sc.dd0809 + "%</b>，深于<b>防御型</b> " + sd.dd0809 + "%，验证「周期型对衰退敏感、防御型相对抗跌」；" +
-          "② <b>成长型</b>（数据中心）全期年化 +" + sg.cagr + "%、近 10 年年化 +" + sg.cagr10 + "% 领跑，2020 年新冠衰退仅回撤 " + sg.dd2020 + "%，呈现「进攻属性 + 新基建刚需」双重特征，对应康波导入期的结构性机会；" +
-          "③ 扩张期弹性排序为 成长 &gt; 周期 &gt; 防御——与中国 REITs「防御 / 周期 / 成长」三分类的顺周期配置框架互为印证，<b>分类具备跨市场、跨周期的稳健性</b>。";
+          "② <b>扩张型</b>（数据中心）全期年化 +" + sg.cagr + "%、近 10 年年化 +" + sg.cagr10 + "% 领跑，2020 年新冠衰退仅回撤 " + sg.dd2020 + "%，呈现「进攻属性 + 新基建刚需」双重特征，对应康波导入期的结构性机会；" +
+          "③ 扩张期弹性排序为 扩张 &gt; 周期 &gt; 防御——与中国 REITs「防御 / 周期 / 扩张」三分类的顺周期配置框架互为印证，<b>分类具备跨市场、跨周期的稳健性</b>。";
       }
     })();
 

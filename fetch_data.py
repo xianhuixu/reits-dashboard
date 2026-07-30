@@ -53,13 +53,13 @@ OVERSEAS = {
     "PLD.N": {"name": "Prologis", "market": "美国", "type": "工业物流", "cat": "周期型"},
     "O.N": {"name": "Realty Income", "market": "美国", "type": "零售/净租赁", "cat": "防御型"},
     "AMT.N": {"name": "American Tower", "market": "美国", "type": "基础设施", "cat": "防御型"},
-    "EQIX.O": {"name": "Equinix", "market": "美国", "type": "数据中心", "cat": "成长型"},
+    "EQIX.O": {"name": "Equinix", "market": "美国", "type": "数据中心", "cat": "扩张型"},
     "AVB.N": {"name": "AvalonBay", "market": "美国", "type": "住宅", "cat": "防御型"},
     "WELL.N": {"name": "Welltower", "market": "美国", "type": "医疗", "cat": "防御型"},
     "SPG.N": {"name": "Simon Property", "market": "美国", "type": "购物中心", "cat": "周期型"},
     "0823.HK": {"name": "领展房产基金", "market": "中国香港", "type": "综合", "cat": "防御型"},
 }
-# 美国 REITs 长期序列起点（验证防御/周期/成长分类与经济周期的长周期耦合）
+# 美国 REITs 长期序列起点（验证防御/周期/扩张分类与经济周期的长周期耦合）
 US_HIST_START = "1990-01-01"
 # NBER 美国经济衰退区间（1980 年以后，公开事实口径）
 US_RECESSIONS = [
@@ -383,7 +383,7 @@ def main():
         })
         print(f"[overseas] {oc} ok", flush=True)
 
-    # ---------- 3b. 美国 REITs 长期序列：防御/周期/成长三类合成指数 + 周期耦合统计 ----------
+    # ---------- 3b. 美国 REITs 长期序列：防御/周期/扩张三类合成指数 + 周期耦合统计 ----------
     us_long = None
     us_series = {}
     for oc, meta in OVERSEAS.items():
@@ -417,7 +417,7 @@ def main():
         if len(udf) and weekly.index[-1] != udf.index[-1]:
             weekly = pd.concat([weekly, udf.iloc[[-1]]])
         cats = {}
-        for cat in ("防御型", "周期型", "成长型"):
+        for cat in ("防御型", "周期型", "扩张型"):
             cols = [oc for oc, m in OVERSEAS.items() if m.get("cat") == cat and oc in weekly.columns]
             if not cols:
                 continue
@@ -498,7 +498,7 @@ def main():
         })
 
     sectors = sorted({u["sector"] for u in universe})
-    strategies = ["防御型", "周期型", "成长型"]
+    strategies = ["防御型", "周期型", "扩张型"]
 
     # ---------- 5. 相关性（近 130 交易日口径） ----------
     corr_payload = None
