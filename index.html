@@ -25,6 +25,7 @@
   --shadow-h: 0 2px 6px rgba(15,23,42,.05), 0 14px 34px rgba(15,23,42,.08);
   --prog-track: #f1f5f9; --prog-fill: #10b981;
   --ease: cubic-bezier(.22,.9,.28,1);
+  --sticky-offset: 118px;
 }
 /* ---------- 护眼模式 ---------- */
 [data-theme="eye"] {
@@ -264,23 +265,26 @@ tbody tr { cursor: pointer; }
 .rv-item .ds { color: var(--tx3); font-size: 11px; }
 /* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 22px; font-weight: 700; }
-#topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
-  background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
-#topbar .tb-brand { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
-#topbar .tb-brand img { width: 88px; height: 88px; border-radius: 20px; background: transparent;
+#topbar { position: sticky; top: 8px; z-index: 40; display: block; overflow: visible;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+  box-shadow: var(--shadow); margin-bottom: 8px; }
+.topbar-main { min-height: 64px; display: flex; align-items: center; gap: 18px; padding: 0 16px; }
+#topbar .tb-brand { min-width: 214px; display: flex; align-items: center; gap: 10px; padding-right: 18px;
+  border-right: 1px solid var(--line); font-size: 14.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
+#topbar .tb-brand img { width: 46px; height: 46px; border-radius: 8px; background: transparent;
   padding: 0; box-shadow: none; }
 [data-theme="dark"] #topbar .tb-brand img { box-shadow: none; }
-#tbNav { position: relative; display: flex; gap: 2px; }
+#tbNav { position: relative; align-self: stretch; display: flex; gap: 2px; min-width: 0; }
 #tbNav button { background: transparent; border: 0; font: inherit; font-size: 15.5px; font-weight: 600; letter-spacing: .01em;
-  color: var(--tx2); padding: 9px 18px; cursor: pointer; border-radius: 8px; transition: color .2s; white-space: nowrap; }
+  color: var(--tx2); padding: 0 15px; cursor: pointer; border-radius: 0; transition: color .18s; white-space: nowrap; }
 #tbNav button:hover { color: var(--accent); }
 #tbNav button.on { color: var(--accent); font-weight: 650; }
 #topbar.adv #tbNav button.on { color: var(--gold); }
-#tbNav .ink { position: absolute; bottom: 1px; left: 0; width: 0; height: 2.5px; border-radius: 2px;
+#tbNav .ink { position: absolute; bottom: 0; left: 0; width: 0; height: 3px; border-radius: 2px 2px 0 0;
   background: var(--accent); transition: left .32s var(--ease), width .32s var(--ease), background .3s; pointer-events: none; }
 #topbar.adv #tbNav .ink { background: var(--gold); }
-.tb-search { position: relative; margin-left: auto; }
-.tb-search input { width: 216px; background: #f1f5f9; border: 0; border-radius: 8px; padding: 7px 12px;
+.tb-search { position: relative; margin-left: auto; flex: 0 1 216px; }
+.tb-search input { width: 100%; min-width: 150px; background: #f1f5f9; border: 0; border-radius: 6px; padding: 7px 12px;
   font: inherit; font-size: 12.5px; color: var(--tx); transition: box-shadow .15s; }
 [data-theme="dark"] .tb-search input { background: #1a2130; }
 [data-theme="eye"] .tb-search input { background: #e2ebda; }
@@ -292,41 +296,49 @@ tbody tr { cursor: pointer; }
 .tb-drop .it:hover { background: rgba(59,130,246,.07); }
 .tb-drop .it .cd { color: var(--tx3); font-size: 11px; white-space: nowrap; }
 #topbar .theme-sw { margin-left: 0; }
-#subbar { position: sticky; top: 66px; z-index: 30; display: flex; align-items: center; gap: 8px;
-  padding: 6px 2px; margin-bottom: 18px; background: var(--bg); }
-#subbar .meta { color: var(--tx3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#subbar .sub { display: none; gap: 6px; margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x proximity; scrollbar-width: none;
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
-  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); padding-right: 24px; }
+#subbar { min-height: 42px; display: flex; align-items: center; overflow: hidden;
+  padding: 0 16px 0 248px; border-top: 1px solid var(--line); background: var(--panel2); }
+#subbar .sub { display: none; width: 100%; gap: 4px; margin-left: 0; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity; scrollbar-width: none; }
 #subbar .sub::-webkit-scrollbar { display: none; }
 #subbar[data-cur="pano"] #panoSub,
 #subbar[data-cur="research"] #researchSub,
 #subbar[data-cur="advice"] #adviceSub { display: flex; }
-#subbar .sub button { white-space: nowrap; border: 0; background: var(--panel); color: var(--tx2);
-  font: inherit; font-size: 12px; padding: 6px 13px; border-radius: 999px; cursor: pointer;
-  box-shadow: var(--shadow); transition: all .18s; scroll-snap-align: start; }
-#subbar .sub button:hover { color: var(--accent); }
-#subbar .sub button.on { background: var(--accent); color: #fff; font-weight: 600; }
+#subbar .sub button { white-space: nowrap; border: 0; background: transparent; color: var(--tx2);
+  font: inherit; font-size: 12px; padding: 6px 11px; border-radius: 6px; cursor: pointer;
+  box-shadow: none; transition: color .18s, background .18s; scroll-snap-align: start; }
+#subbar .sub button:hover { color: var(--accent); background: rgba(59,130,246,.06); }
+#subbar .sub button.on { background: rgba(59,130,246,.10); color: var(--accent); font-weight: 650; }
+[data-theme="dark"] #subbar .sub button.on { background: rgba(91,147,255,.15); }
+.data-meta { min-height: 24px; padding: 2px 2px 0; color: var(--tx3); font-size: 11.5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#v-heatmap, #newsCard, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
+  scroll-margin-top: var(--sticky-offset); }
 main { min-width: 0; }
 .page, .view, .card { min-width: 0; }
 .page[hidden] { display: none; }
 .page:not([hidden]) { animation: fade .22s var(--ease); }
 .page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .32s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
+  :root { --sticky-offset: 150px; }
   html, body { max-width: 100%; }
   body { padding: 8px 10px 32px; }
-  #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
+  #topbar { top: 4px; }
+  .topbar-main { min-height: 92px; display: grid; grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "brand search" "primary theme"; gap: 4px 8px; padding: 6px 10px; }
+  #topbar .tb-brand { grid-area: brand; min-width: 0; border-right: 0; padding-right: 0; }
   #topbar .tb-brand span { font-size: 12.5px; }
-  #topbar .tb-brand img { width: 60px; height: 60px; }
-  #tbNav { order: 3; width: 100%; overflow-x: auto; }
-  #tbNav button { padding: 6px 10px; font-size: 12.5px; }
-  .tb-search { margin-left: auto; }
-  .tb-search input { width: 132px; font-size: 11.5px; }
-  #topbar .theme-sw { margin-left: 0; }
-  #subbar { top: 118px; padding: 4px 0; margin-bottom: 12px; }
-  #subbar .meta { display: none; }
+  #topbar .tb-brand img { width: 36px; height: 36px; }
+  #tbNav { grid-area: primary; width: 100%; min-width: 0; min-height: 36px; overflow-x: auto; }
+  #tbNav button { min-height: 36px; padding: 0 9px; font-size: 12.5px; }
+  .tb-search { grid-area: search; margin-left: 0; width: 132px; }
+  .tb-search input { width: 132px; min-width: 0; font-size: 11.5px; }
+  #topbar .theme-sw { grid-area: theme; margin-left: 0; gap: 2px; padding: 2px; }
+  #topbar .theme-sw button { width: 28px; height: 28px; padding: 0; font-size: 12px; }
+  #topbar .theme-label { display: none; }
+  #subbar { min-height: 40px; padding: 0 10px; }
   #subbar .sub { margin-left: 0; }
+  .data-meta { display: none; }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
   .kpi { padding: 10px 12px; }
   .kpi .v { font-size: 20px; }
@@ -346,45 +358,47 @@ main { min-width: 0; }
 </head>
 <body>
 <nav id="topbar">
-  <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>REITs 投研工作台</span></div>
-  <div id="tbNav">
-    <button data-pg="pano" class="on">市场全景</button>
-    <button data-pg="research">多维研究分析</button>
-    <button data-pg="advice">配置建议与风险</button>
-    <span class="ink"></span>
+  <div class="topbar-main">
+    <div class="tb-brand"><img src="icons/lion-v2-crop.png" alt="Lion"><span>REITs 投研工作台</span></div>
+    <div id="tbNav">
+      <button data-pg="pano" class="on" aria-current="page">市场全景</button>
+      <button data-pg="research">多维研究分析</button>
+      <button data-pg="advice">配置建议与风险</button>
+      <span class="ink"></span>
+    </div>
+    <div class="tb-search">
+      <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
+      <div class="tb-drop" id="gSearchDrop" hidden></div>
+    </div>
+    <span class="theme-sw" id="themeSw">
+      <button data-t="light" title="白天" aria-label="白天模式">☀️ <span class="theme-label">白天</span></button>
+      <button data-t="eye" title="护眼" aria-label="护眼模式">🌿 <span class="theme-label">护眼</span></button>
+      <button data-t="dark" title="夜晚" aria-label="夜晚模式">🌙 <span class="theme-label">夜晚</span></button>
+    </span>
   </div>
-  <div class="tb-search">
-    <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
-    <div class="tb-drop" id="gSearchDrop" hidden></div>
+  <div id="subbar" data-cur="pano">
+    <div class="sub" id="panoSub">
+      <button data-pg="pano" data-scroll="v-heatmap" class="on" aria-current="page">行情总览与热力图</button>
+      <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
+    </div>
+    <div class="sub" id="researchSub">
+      <button data-v="strategy" class="on" aria-current="page">策略分类研究</button>
+      <button data-v="cycle">周期耦合分析</button>
+      <button data-v="track">赛道透视</button>
+      <button data-v="corr">大类资产相关性</button>
+      <button data-v="detail">个券透视</button>
+      <button data-v="sector">板块轮动</button>
+      <button data-v="signal">策略信号</button>
+    </div>
+    <div class="sub" id="adviceSub">
+      <button data-pg="advice" data-scroll="advCycle" class="on" aria-current="page">大类策略配置建议</button>
+      <button data-pg="advice" data-scroll="advTactic">短期交易战术</button>
+      <button data-pg="advice" data-scroll="advPerf">中长期配置建议</button>
+      <button data-pg="advice" data-scroll="advRisk">风险提示</button>
+    </div>
   </div>
-  <span class="theme-sw" id="themeSw">
-    <button data-t="light" title="白天">☀️ 白天</button>
-    <button data-t="eye" title="护眼">🌿 护眼</button>
-    <button data-t="dark" title="夜晚">🌙 夜晚</button>
-  </span>
 </nav>
-<div id="subbar" data-cur="pano">
-  <span class="meta" id="meta">数据加载中…</span>
-  <div class="sub" id="panoSub">
-    <button data-pg="pano" data-scroll="v-heatmap" class="on">行情总览与热力图</button>
-    <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
-  </div>
-  <div class="sub" id="researchSub">
-    <button data-v="strategy" class="on">策略分类研究</button>
-    <button data-v="cycle">周期耦合分析</button>
-    <button data-v="track">赛道透视</button>
-    <button data-v="corr">大类资产相关性</button>
-    <button data-v="detail">个券透视</button>
-    <button data-v="sector">板块轮动</button>
-    <button data-v="signal">策略信号</button>
-  </div>
-  <div class="sub" id="adviceSub">
-    <button data-pg="advice" data-scroll="advCycle">① 大类策略配置建议</button>
-    <button data-pg="advice" data-scroll="advTactic">② 短期交易战术</button>
-    <button data-pg="advice" data-scroll="advPerf">③ 中长期配置建议</button>
-    <button data-pg="advice" data-scroll="advRisk">④ 风险提示</button>
-  </div>
-</div>
+<div class="data-meta" id="meta">数据加载中…</div>
 <main>
 <div class="page" id="pg-pano">
 
@@ -1442,9 +1456,18 @@ main { min-width: 0; }
       window.scrollTo({ top: pageScroll[page] || 0, behavior: "auto" });
     });
   }
+  function setActiveNav(buttons, activeButton) {
+    buttons.forEach(function (button) {
+      var isActive = button === activeButton;
+      button.classList.toggle("on", isActive);
+      if (isActive) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
+  }
   function switchView(v) {
     document.querySelectorAll(".view").forEach(function (x) { x.hidden = x.id !== "v-" + v; });
-    document.querySelectorAll("#researchSub button").forEach(function (x) { x.classList.toggle("on", x.dataset.v === v); });
+    var active = document.querySelector('#researchSub button[data-v="' + v + '"]');
+    setActiveNav(document.querySelectorAll("#researchSub button"), active);
     stagger($("v-" + v));
   }
   function showPage(pg, keepScroll) {
@@ -1456,27 +1479,26 @@ main { min-width: 0; }
       currentPage = pg;
     }
     $("subbar").dataset.cur = pg;
-    document.querySelectorAll("#tbNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
+    setActiveNav(document.querySelectorAll("#tbNav > button"), btn);
     var ink = document.querySelector("#tbNav .ink");
     ink.style.left = btn.offsetLeft + "px"; ink.style.width = btn.offsetWidth + "px";
     $("topbar").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
-    if (switching) restorePageScroll(pg);
+    if (switching && !keepScroll) restorePageScroll(pg);
   }
   $("subbar").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     if (b.dataset.scroll) {
       showPage(b.dataset.pg, true);
-      document.querySelectorAll("#subbar .sub button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      setActiveNav(b.parentElement.querySelectorAll("button"), b);
       var t = document.getElementById(b.dataset.scroll);
-      if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 132, behavior: "smooth" });
+      if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
     if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
   });
   $("tbNav").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b || !b.dataset.pg) return;
-    document.querySelectorAll("#subbar .sub button.on").forEach(function (x) { x.classList.remove("on"); });
     showPage(b.dataset.pg);
   });
   // ink 初始定位
