@@ -16,11 +16,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 API = "https://search-api-web.eastmoney.com/search/jsonp"
-KEYWORDS = ["公募REITs", "REITs 上市", "REITs 申报", "商业不动产REIT", "REITs 扩募", "REITs 政策"]
+KEYWORDS = ["公募REITs", "REITs 上市", "REITs 申报", "商业不动产REIT", "REITs 扩募", "REITs 政策",
+            "机构间REITs", "机构间 REITs", "REITs 招标", "REITs 中标", "REITs 选聘",
+            "REITs 遴选", "REITs 比选", "REITs 采购"]
 
 RULES = [
     ("申报动态", ["申报", "受理", "获批", "反馈", "注册", "问询", "过会"]),
     ("拟上市", ["询价", "发售", "认购", "即将上市", "启动发行", "路演", "拟上市"]),
+    ("招投标", ["招标", "投标", "中标", "比选", "选聘", "遴选", "采购人", "成交候选", "评标", "开标"]),
     ("上市公告", ["上市", "挂牌", "首日", "公告", "分红", "收益分配", "解禁", "季报", "经营情况"]),
     ("扩募动态", ["扩募", "新购入资产", "定增"]),
     ("政策监管", ["证监会", "发改委", "政策", "通知", "试点", "规则", "监管", "国务院", "交易所"]),
@@ -49,6 +52,9 @@ def search(kw, pages=2):
 
 
 def classify(title, content):
+    # 机构间REITs：标题命中，或正文中出现2次以上（避免普通行情文中顺带提及被误归类）
+    if "机构间" in title or content.count("机构间") >= 2:
+        return "机构间REITs"
     text = title + " " + content
     for tag, kws in RULES:
         if any(k in text for k in kws):
@@ -81,7 +87,7 @@ def main():
                    key=lambda x: x["date"], reverse=True)[:40]
     payload = {
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "tags": ["全部", "政策监管", "拟上市", "申报动态", "上市公告", "扩募动态", "市场观点"],
+        "tags": ["全部", "政策监管", "机构间REITs", "招投标", "拟上市", "申报动态", "上市公告", "扩募动态", "市场观点"],
         "items": items,
     }
     (ROOT / "news.js").write_text("window.REITS_NEWS = " + json.dumps(payload, ensure_ascii=False) + ";\n", encoding="utf-8")
