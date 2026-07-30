@@ -71,7 +71,7 @@ body {
 #v-heatmap .card, #v-advice .card { opacity: 0; animation: rise .5s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 #treemap > div { opacity: 0; animation: pop .5s var(--ease) forwards; animation-delay: var(--d, 0ms); transition: filter .18s ease, transform .18s ease; }
 #treemap > div:hover { filter: brightness(1.08); transform: scale(1.015); z-index: 2; }
-svg path.line { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: dash 1.1s var(--ease) forwards; }
+svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s var(--ease) forwards; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }
@@ -784,7 +784,7 @@ main { min-width: 0; }
       if (firstX != null)
         out += '<path d="' + d + "L" + lastX.toFixed(1) + " " + (H - pb) + "L" + firstX.toFixed(1) + " " + (H - pb) +
           'Z" fill="url(#' + gid + ')" stroke="none"/>';
-      out += '<path class="line" d="' + d + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.w || 1.6) + '" stroke-linejoin="round" stroke-linecap="round"/>';
+      out += '<path class="line" pathLength="1" d="' + d + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.w || 1.6) + '" stroke-linejoin="round" stroke-linecap="round"/>';
     });
     el.innerHTML = out + '</svg>';
   }
@@ -1581,10 +1581,10 @@ main { min-width: 0; }
       cats.forEach(function (c) {
         var d2 = "", started = false;
         (U.cats[c] || []).forEach(function (v, i) {
-          if (v == null || v <= 0) return;
+          if (v == null || v <= 0) { started = false; return; }
           d2 += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(Math.log10(v)).toFixed(1); started = true;
         });
-        out += '<path class="line" d="' + d2 + '" fill="none" stroke="' + cols[c] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+        out += '<path class="line" pathLength="1" d="' + d2 + '" fill="none" stroke="' + cols[c] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
       });
       $("chartUsLong").innerHTML = out + "</svg>";
       $("legendUsLong").innerHTML = cats.map(function (c) {
