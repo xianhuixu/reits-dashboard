@@ -258,8 +258,8 @@ tbody tr { cursor: pointer; }
 #topbar { position: sticky; top: 12px; z-index: 40; display: flex; align-items: center; gap: 18px;
   background: var(--panel); border-radius: 12px; padding: 9px 16px; box-shadow: var(--shadow); margin-bottom: 10px; }
 #topbar .tb-brand { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 700; white-space: nowrap; color: var(--tx); }
-#topbar .tb-brand img { width: 96px; height: 96px; border-radius: 22px; background: #ffffff;
-  padding: 4px; box-shadow: 0 3px 8px rgba(15,23,42,.14), 0 10px 28px rgba(15,23,42,.12); }
+#topbar .tb-brand img { width: 88px; height: 88px; border-radius: 20px; background: #ffffff;
+  padding: 0; box-shadow: 0 3px 8px rgba(15,23,42,.14), 0 10px 28px rgba(15,23,42,.12); }
 [data-theme="dark"] #topbar .tb-brand img { box-shadow: 0 2px 5px rgba(0,0,0,.55), 0 6px 18px rgba(0,0,0,.45); }
 #tbNav { position: relative; display: flex; gap: 2px; }
 #tbNav button { background: transparent; border: 0; font: inherit; font-size: 15.5px; font-weight: 600; letter-spacing: .01em;
@@ -304,7 +304,7 @@ main { min-width: 0; }
   body { padding: 8px 10px 32px; }
   #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
   #topbar .tb-brand span { font-size: 12.5px; }
-  #topbar .tb-brand img { width: 64px; height: 64px; }
+  #topbar .tb-brand img { width: 60px; height: 60px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
   #tbNav button { padding: 6px 10px; font-size: 12.5px; }
   .tb-search { margin-left: auto; }
@@ -883,7 +883,7 @@ main { min-width: 0; }
     var list = D.reits.filter(function (r) {
       return (!fs || r.strategy === fs) && (!fc || r.sector === fc) && (!fr || r.right === fr) &&
         (!fl || r.signals.label === fl) &&
-        (!q || r.name.toLowerCase().includes(q) || r.code.includes(q));
+        (!q || r.name.toLowerCase().includes(q) || r.code.toLowerCase().includes(q));
     }).sort(function (a, b) {
       var k = sortKey === "sigTotal" ? "signals" : null;
       var x = k ? a.signals.total : a[sortKey], y = k ? b.signals.total : b[sortKey];
@@ -1448,11 +1448,23 @@ main { min-width: 0; }
   // ---- 全局资产搜索 ----
   (function () {
     var inp = $("gSearch"), drop = $("gSearchDrop");
+    var hits = [];
     function close() { drop.hidden = true; }
+    function go(r) {
+      close(); inp.value = "";
+      showPage("research"); switchView("detail");
+      ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
+      $("fSearch").value = r.code;
+      selCode = r.code;
+      renderTbl();
+      renderDetail(r.code);
+      window.scrollTo({ top: 0, behavior: "instant" });
+      setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+    }
     inp.addEventListener("input", function () {
       var q = inp.value.trim().toLowerCase();
       if (!q) { close(); return; }
-      var hits = D.reits.filter(function (r) {
+      hits = D.reits.filter(function (r) {
         return r.name.toLowerCase().indexOf(q) >= 0 || r.code.toLowerCase().indexOf(q) >= 0;
       }).slice(0, 8);
       drop.innerHTML = hits.length ? hits.map(function (r, i) {
@@ -1460,15 +1472,14 @@ main { min-width: 0; }
       }).join("") : '<div class="it" style="color:var(--tx3);cursor:default">无匹配个券</div>';
       drop.hidden = false;
       drop.querySelectorAll(".it[data-i]").forEach(function (el) {
-        el.addEventListener("click", function () {
-          var r = hits[+el.dataset.i];
-          close(); inp.value = "";
-          showPage("research"); switchView("detail");
-          $("fSearch").value = r.code;
-          $("fSearch").dispatchEvent(new Event("input"));
-          window.scrollTo({ top: 0, behavior: "instant" });
-        });
+        el.addEventListener("click", function () { go(hits[+el.dataset.i]); });
       });
+    });
+    inp.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" || !hits.length) return;
+      var q = inp.value.trim().toLowerCase();
+      var exact = hits.filter(function (r) { return r.code.toLowerCase() === q; })[0];
+      go(exact || hits[0]);
     });
     document.addEventListener("click", function (e) { if (!e.target.closest(".tb-search")) close(); });
   })();
