@@ -52,7 +52,7 @@ SECTOR_PEER = {
 OVERSEAS = {
     "PLD.N": {"name": "Prologis", "market": "美国", "type": "工业物流", "cat": "周期型"},
     "O.N": {"name": "Realty Income", "market": "美国", "type": "零售/净租赁", "cat": "防御型"},
-    "AMT.N": {"name": "American Tower", "market": "美国", "type": "基础设施", "cat": "防御型"},
+    "AMT.N": {"name": "American Tower", "market": "美国", "type": "通信铁塔", "cat": "扩张型"},
     "EQIX.O": {"name": "Equinix", "market": "美国", "type": "数据中心", "cat": "扩张型"},
     "AVB.N": {"name": "AvalonBay", "market": "美国", "type": "住宅", "cat": "防御型"},
     "WELL.N": {"name": "Welltower", "market": "美国", "type": "医疗", "cat": "防御型"},
@@ -111,7 +111,7 @@ def fetch_history(code, end, start0=None):
     if start <= end:
         parts = []
         seg = date.fromisoformat(start)
-        e = date.fromisoformat(end)
+        e = date.fromisoformat(end) + timedelta(days=1)  # iFinD 单日查询(start==end)返回空，上界向后多取一天
         while seg <= e:                          # 700 天一段，规避区间上限
             seg_end = min(seg + timedelta(days=700), e)
             d = ifind_price([code], seg.isoformat(), seg_end.isoformat(), retries=1)
