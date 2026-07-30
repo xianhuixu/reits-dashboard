@@ -51,7 +51,7 @@
   --prog-track: #1f2733; --prog-fill: #2bb5a3;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 body {
   background: var(--bg);
   color: var(--tx);
@@ -60,16 +60,18 @@ body {
   padding: 26px 28px 44px; max-width: 1480px; margin: 0 auto; }
 .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
 ::selection { background: rgba(59,130,246,.2); }
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ---------- 入场动画 ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes pop { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: scale(1); } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes dash { to { stroke-dashoffset: 0; } }
-.anim { opacity: 0; animation: rise .55s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-.view:not([hidden]) .card { opacity: 0; animation: rise .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-#v-heatmap .card, #v-advice .card { opacity: 0; animation: rise .5s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-#treemap > div { opacity: 0; animation: pop .5s var(--ease) forwards; animation-delay: var(--d, 0ms); transition: filter .18s ease, transform .18s ease; }
+.anim { opacity: 0; animation: rise .32s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+.view:not([hidden]) .card { opacity: 0; animation: rise .32s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+#v-heatmap .card, #v-advice .card { opacity: 0; animation: rise .32s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+#treemap > div { opacity: 0; animation: pop .36s var(--ease) forwards; animation-delay: var(--d, 0ms); transition: filter .18s ease, transform .18s ease; }
 #treemap > div:hover { filter: brightness(1.08); transform: scale(1.015); z-index: 2; }
 svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s var(--ease) forwards; }
 @media (prefers-reduced-motion: reduce) {
@@ -89,8 +91,11 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
   border: none; border-radius: var(--radius); padding: 14px 16px; overflow: hidden; box-shadow: var(--shadow);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
 .kpi:hover { transform: translateY(-3px); box-shadow: var(--shadow-h); }
-.kpi .k { color: var(--tx3); font-size: 11.5px; letter-spacing: .04em; margin-bottom: 6px; }
+.kpi .k { color: var(--tx3); font-size: 11px; letter-spacing: .04em; line-height: 1.45;
+  min-height: 2.9em; margin-bottom: 6px; display: -webkit-box; -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; overflow: hidden; }
 .kpi .v { font-size: 26px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; }
+.kpi .v.kpi-name { font-size: 19px; line-height: 1.35; font-weight: 650; letter-spacing: 0; }
 .kpi .s { font-size: 11.5px; color: var(--tx2); margin-top: 4px; }
 .kpi .s .up-b { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 999px; padding: 1px 8px; font-weight: 600; }
 [data-theme="dark"] .kpi .s .up-b { background: rgba(43,181,163,.14); color: var(--down); }
@@ -144,6 +149,10 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
 .matrix td.l, .matrix th.l { text-align: left; }
 .matrix tbody tr { transition: background .15s; }
 .matrix tbody tr:hover { background: rgba(148,163,184,.06); }
+.table-scroll { width: 100%; max-width: 100%; overflow-x: auto; overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch; scrollbar-gutter: stable; }
+.advice-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.advice-summary > * { margin-bottom: 0 !important; }
 
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
 .chip { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
@@ -286,21 +295,26 @@ tbody tr { cursor: pointer; }
 #subbar { position: sticky; top: 66px; z-index: 30; display: flex; align-items: center; gap: 8px;
   padding: 6px 2px; margin-bottom: 18px; background: var(--bg); }
 #subbar .meta { color: var(--tx3); font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#subbar .sub { display: none; gap: 6px; margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#subbar .sub { display: none; gap: 6px; margin-left: auto; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity; scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); padding-right: 24px; }
+#subbar .sub::-webkit-scrollbar { display: none; }
 #subbar[data-cur="pano"] #panoSub,
 #subbar[data-cur="research"] #researchSub,
 #subbar[data-cur="advice"] #adviceSub { display: flex; }
 #subbar .sub button { white-space: nowrap; border: 0; background: var(--panel); color: var(--tx2);
   font: inherit; font-size: 12px; padding: 6px 13px; border-radius: 999px; cursor: pointer;
-  box-shadow: var(--shadow); transition: all .18s; }
+  box-shadow: var(--shadow); transition: all .18s; scroll-snap-align: start; }
 #subbar .sub button:hover { color: var(--accent); }
 #subbar .sub button.on { background: var(--accent); color: #fff; font-weight: 600; }
 main { min-width: 0; }
+.page, .view, .card { min-width: 0; }
 .page[hidden] { display: none; }
-.page:not([hidden]) { animation: fade .35s var(--ease); }
-.page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .45s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+.page:not([hidden]) { animation: fade .22s var(--ease); }
+.page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .32s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
-  html, body { overflow-x: clip; }
+  html, body { max-width: 100%; }
   body { padding: 8px 10px 32px; }
   #topbar { flex-wrap: wrap; gap: 6px 10px; padding: 8px 12px; top: 6px; }
   #topbar .tb-brand span { font-size: 12.5px; }
@@ -316,10 +330,13 @@ main { min-width: 0; }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
   .kpi { padding: 10px 12px; }
   .kpi .v { font-size: 20px; }
+  .kpi .v.kpi-name { font-size: 17px; }
   .card { padding: 14px; }
   .sec-head { margin: 20px 0 12px; flex-wrap: wrap; gap: 8px; }
   #treemap { height: 320px !important; }
   th, td { padding: 6px 7px; }
+  .table-scroll > table { min-width: 680px; }
+  .advice-summary { grid-template-columns: 1fr; }
   .rv-item { flex-wrap: wrap; gap: 4px 8px; }
   .rv-item .nm { min-width: 0; }
   .rv-item .vl { min-width: 0; flex: 1; }
@@ -450,7 +467,7 @@ main { min-width: 0; }
   <div class="card">
     <h2>海外 REITs 周期-资产类型耦合矩阵（历史平均年化超额收益 %）</h2>
     <p class="note" id="osMatrixNote"></p>
-    <div id="osMatrix" style="overflow-x:auto"></div>
+    <div class="table-scroll" id="osMatrix"></div>
   </div>
   <div class="card">
     <h2>对中国 REITs 的映射结论（3-5 年维度）</h2>
@@ -469,7 +486,7 @@ main { min-width: 0; }
   <div class="card">
     <h2>分派达成与分红监测</h2>
     <p class="note">达成率 &lt;95% 触发减持警戒，连续两期 &lt;90% 系统性减持（框架红线）</p>
-    <div id="fundTable"></div>
+    <div class="table-scroll" id="fundTable"></div>
   </div>
 </section>
 
@@ -482,7 +499,7 @@ main { min-width: 0; }
       <h2>相关性热力矩阵（日收益率 Pearson，近约 130 交易日）</h2>
       <p class="note">森绿 = 正相关，陶红 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
       <div id="allocDonut" style="margin-bottom:10px"></div>
-      <div id="corrMatrix" style="overflow-x:auto"></div>
+      <div class="table-scroll" id="corrMatrix"></div>
     </div>
     <div class="card">
       <h2>股性 - 债性定位</h2>
@@ -493,7 +510,7 @@ main { min-width: 0; }
   <div class="card">
     <h2>REITs 板块 vs A股对应板块（区间约 130 交易日）</h2>
     <p class="note">相关系数 + 区间累计涨跌幅对比，检验 REITs 与对应股票板块的联动程度</p>
-    <div id="peerBars"></div>
+    <div class="table-scroll" id="peerBars"></div>
   </div>
 </section>
 
@@ -517,7 +534,7 @@ main { min-width: 0; }
   <div class="card">
     <h2>策略 × 板块 今日表现矩阵（平均日涨跌 %）</h2>
     <p class="note">单元格为该策略-板块组合内个券今日平均涨跌幅，括号内为只数</p>
-    <div id="matrix"></div>
+    <div class="table-scroll" id="matrix"></div>
   </div>
 </section>
 
@@ -598,7 +615,7 @@ main { min-width: 0; }
     <div class="card">
       <h2>信号历史回测（全历史样本）</h2>
       <p class="note">信号出现后 5/20 交易日的平均收益与胜率——信号有效性的可验证依据</p>
-      <div id="backtestTable"></div>
+      <div class="table-scroll" id="backtestTable"></div>
     </div>
   </div>
   <div class="grid3">
@@ -650,11 +667,11 @@ main { min-width: 0; }
         <div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div></div>
     </div>
     <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/扩张型切换。</p>
+    <h3 style="font-size:13px;margin:16px 0 6px">配置建议（数据交叉验证后）</h3>
+    <div id="adviceList" class="advice-summary"></div>
     <h3 style="font-size:13px;margin:16px 0 6px">长期配置方向（周期耦合结论，3-5 年维度）</h3>
     <p class="note" id="adviceMappingNote"></p>
     <div id="adviceMapping" class="grid3" style="margin-bottom:0"></div>
-    <h3 style="font-size:13px;margin:16px 0 6px">配置建议（数据交叉验证后）</h3>
-    <div id="adviceList"></div>
   </div>
 
   <div class="card" id="advTactic">
@@ -666,7 +683,7 @@ main { min-width: 0; }
   <div class="card" id="advPerf">
     <h2>③ 中长期配置建议（三种策略分类二级市场表现交叉验证）</h2>
     <p class="note">等权平均涨跌幅 + 信号分 + 大类资产相关性 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性，作为中长期底仓结构依据</p>
-    <div id="advicePerf"></div>
+    <div class="table-scroll" id="advicePerf"></div>
   </div>
 
   <div class="card" id="advRisk">
@@ -695,6 +712,7 @@ main { min-width: 0; }
 <script src="data.js"></script>
 <script src="news.js"></script>
 <script src="corp_actions.js"></script>
+<script src="ui-utils.js"></script>
 <script>
 (function () {
   var D = window.REITS_DATA;
@@ -716,6 +734,11 @@ main { min-width: 0; }
   function fmt(v, suf) { return v == null ? "—" : (v > 0 ? "+" : "") + v.toFixed(2) + (suf || "%"); }
   function fmtVol(v) { return v == null ? "—" : v >= 1e8 ? (v/1e8).toFixed(2)+"亿" : v >= 1e4 ? (v/1e4).toFixed(0)+"万" : String(v); }
   function avgOf(list) { return list.length ? list.reduce(function (a, b) { return a + b; }, 0) / list.length : null; }
+  function svgTitle(title) {
+    return "<title>" + String(title).replace(/[&<>]/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[ch];
+    }) + "</title>";
+  }
 
   // ---- KPI ----
   var pcts = D.reits.map(function (r) { return r.pct; });
@@ -732,8 +755,9 @@ main { min-width: 0; }
     ["领跌", worst.name.replace(/REIT$/, ""), fmt(worst.pct), "down"]
   ].map(function (x) {
     var sub = x[2];
+    var valueClass = x[0] === "领涨" || x[0] === "领跌" ? " kpi-name" : "";
     if (typeof sub === "string" && sub.indexOf("+") === 0) sub = '<span class="up-b">' + sub + "</span>";
-    return '<div class="kpi"><div class="k">' + x[0] + '</div><div class="v num ' + x[3] + '">' + x[1] +
+    return '<div class="kpi"><div class="k">' + x[0] + '</div><div class="v num ' + x[3] + valueClass + '">' + x[1] +
            '</div><div class="s num">' + sub + '</div></div>';
   }).join("");
 
@@ -760,7 +784,8 @@ main { min-width: 0; }
     var pad = (hi - lo) * 0.1 || 1; lo -= pad; hi += pad;
     function X(i) { return pl + i * (W - pl - pr) / (dates.length - 1); }
     function Y(v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); }
-    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">' +
+      svgTitle("走势折线图：" + series.map(function (s) { return s.label; }).join("、"));
     drawChart._n = (drawChart._n || 0) + 1; var cid = drawChart._n;
     for (var g = 0; g <= 4; g++) {
       var gv = lo + (hi - lo) * g / 4, gy = Y(gv);
@@ -900,7 +925,7 @@ main { min-width: 0; }
         '<td class="num ' + cls(r.ret20) + '">' + fmt(r.ret20) + "</td>" +
         '<td class="num ' + cls(r.sinceIPO) + '">' + fmt(r.sinceIPO) + "</td>" +
         '<td class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</td>" +
-        '<td class="num">' + (r.pctRank == null ? "—" : r.pctRank + "%") + "</td>" +
+        '<td class="num">' + formatPercentile(r.pctRank) + "</td>" +
         '<td class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</td>" +
         '<td class="num" style="font-weight:600">' + (r.signals.total > 0 ? "+" : "") + r.signals.total + "</td>" +
         "<td>" + sigLabel(r.signals.label) + "</td></tr>";
@@ -933,7 +958,7 @@ main { min-width: 0; }
       var ang = -Math.PI / 2 + i * Math.PI / 3, r = R * (v + 2) / 4;
       return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
     }
-    var s = '<svg viewBox="0 0 220 200" width="220">';
+    var s = '<svg viewBox="0 0 220 200" width="220">' + svgTitle("个券六因子信号雷达图");
     [0.25, 0.5, 0.75, 1].forEach(function (f) {
       var ring = F.map(function (_, i) { return pt(i, f * 4 - 2); });
       s += '<polygon points="' + ring.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") +
@@ -975,7 +1000,7 @@ main { min-width: 0; }
       '<span class="k">MACD</span><span class="num">' + r.macd.dif + " / " + r.macd.dea +
       (r.macd.cross === "golden" ? ' <span class="up">金叉</span>' : r.macd.cross === "death" ? ' <span class="down">死叉</span>' : "") + "</span>" +
       '<span class="k">RSI14</span><span class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</span>" +
-      '<span class="k">历史分位</span><span class="num">' + (r.pctRank == null ? "—" : r.pctRank + "%") + "</span>" +
+      '<span class="k">历史分位</span><span class="num">' + formatPercentile(r.pctRank) + "</span>" +
       '<span class="k">250日线乖离</span><span class="num ' + cls(r.devMA250) + '">' + fmt(r.devMA250) + "</span>" +
       '<span class="k">量比(20/60)</span><span class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</span></div>" +
       '<div class="radar-wrap" style="margin-top:6px">' + radarSVG(r.signals) + "</div></div>" +
@@ -1159,7 +1184,8 @@ main { min-width: 0; }
       var total = arr.reduce(function (a, b) { return a + b.v; }, 0);
       if (!total) { $("allocDonut").innerHTML = ""; return; }
       var R = 44, CIRC = 2 * Math.PI * R, off = 0;
-      var svg = '<svg viewBox="0 0 120 120" width="104" height="104" style="flex:0 0 auto">';
+      var svg = '<svg viewBox="0 0 120 120" width="104" height="104" style="flex:0 0 auto">' +
+        svgTitle("板块成交额分布环形图");
       svg += '<circle cx="60" cy="60" r="' + R + '" fill="none" stroke="var(--prog-track)" stroke-width="13"/>';
       arr.forEach(function (a, i) {
         var frac = a.v / total, len = frac * CIRC;
@@ -1187,7 +1213,7 @@ main { min-width: 0; }
       var W = 380, H = 380, pad = 44;
       function X(v) { return pad + (v + 1) / 2 * (W - pad - 14); }
       function Y(v) { return H - pad - (v + 1) / 2 * (H - pad - 14); }
-      var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+      var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">' + svgTitle("REITs 板块股性与债性定位散点图");
       s += '<rect x="' + pad + '" y="14" width="' + (W - pad - 14) + '" height="' + (H - pad - 14) + '" fill="var(--panel2)" rx="6"/>';
       s += '<line x1="' + X(0) + '" y1="14" x2="' + X(0) + '" y2="' + (H - pad) + '" stroke="var(--line)"/>' +
            '<line x1="' + pad + '" y1="' + Y(0) + '" x2="' + (W - 14) + '" y2="' + Y(0) + '" stroke="var(--line)"/>';
@@ -1288,7 +1314,8 @@ main { min-width: 0; }
     // ===== 季度战术：行业轮动（板块动量修复 + 拥挤度） =====
     var secStats = D.sectors.map(function (s) {
       return { s: s, r20: avgSec(s, "ret20"), r60: avgSec(s, "ret60"),
-               rank: avgSec(s, "pctRank"), amtR: avgSec(s, "amtRatio") };
+               rank: averagePercentile(D.reits.filter(function (r) { return r.sector === s; }).map(function (r) { return r.pctRank; })),
+               amtR: avgSec(s, "amtRatio") };
     }).filter(function (x) { return x.r20 != null; });
     var picks = secStats.filter(function (x) { return x.r20 > 0; }).sort(function (a, b) { return b.r20 - a.r20; }).slice(0, 3);
     if (!picks.length) picks = secStats.sort(function (a, b) { return b.r20 - a.r20; }).slice(0, 2);
@@ -1297,10 +1324,10 @@ main { min-width: 0; }
       '<div style="font-size:12.5px;font-weight:650">📆 季度战术 · 行业轮动</div>' +
       '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：板块 20 日动量为正且量能配合，避开拥挤（分位>85%）与动量垫底板块</div>' +
       picks.map(function (x) {
-        var crowd = x.rank != null && x.rank > 0.85;
+        var crowd = x.rank != null && x.rank > 85;
         return '<div style="margin-bottom:9px"><span class="act-name">' + x.s + "</span>" +
           '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">20日 <b class="' + cls(x.r20) + '">' + fmt(x.r20) + "</b> · 60日 " + fmt(x.r60) +
-          " · 历史分位 " + (x.rank == null ? "—" : Math.round(x.rank * 100) + "%") + " · 量比 " + (x.amtR == null ? "—" : x.amtR.toFixed(1)) +
+          " · 历史分位 " + formatPercentile(x.rank) + " · 量比 " + (x.amtR == null ? "—" : x.amtR.toFixed(1)) +
           "<br>理由：" + (x.r60 != null && x.r60 < 0 ? "板块自 60 日回调中修复，动量反转初期，赔率较优。" : "板块趋势延续，动量与量能共振。") +
           (crowd ? " <b style='color:var(--gold)'>注意分位偏高，只低吸不追高。</b>" : "") +
           stopLine("板块等权 20 日涨幅回吐并转负，或板块指数自介入点回撤 <b>-8%</b>") +
@@ -1311,7 +1338,7 @@ main { min-width: 0; }
 
     // ===== 年度战术：战略底仓（周期定位 + 信号分 + 分位） =====
     var ss = D.stratSignals || {};
-    var mktRank = avgOf(D.reits.map(function (r) { return r.pctRank; }).filter(function (v) { return v != null; }));
+    var mktRank = averagePercentile(D.reits.map(function (r) { return r.pctRank; }));
     var rvScore = D.revaluation ? D.revaluation.score : null;
     var defS = ss["防御型"] || {}, cycS = ss["周期型"] || {}, groS = ss["扩张型"] || {};
     function stLine(st, o) {
@@ -1319,7 +1346,7 @@ main { min-width: 0; }
     }
     var yearHtml = '<div class="card" style="background:var(--panel2)">' +
       '<div style="font-size:12.5px;font-weight:650">🗓️ 年度战术 · 战略底仓</div>' +
-      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：周期定位 + 三策略信号分 + 全市场价格分位（当前 ' + (mktRank == null ? "—" : Math.round(mktRank * 100) + "%") + "）" +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：周期定位 + 三策略信号分 + 全市场价格分位（当前 ' + formatPercentile(mktRank) + "）" +
       (rvScore != null ? " · 重估条件 " + rvScore + "/4" : "") + "</div>" +
       stLine("防御型", "底仓超配 40-50%：信号分 " + (defS.avg != null ? defS.avg : "—") + "（" + (defS.label || "—") + "）。弱复苏初期 + 低利率资产荒，保租房/新能源/市政环保的需求刚性与分派率支撑最强，叠加 8-9 月分红季抢权。") +
       stLine("扩张型", "标配 25-35%：信号分 " + (groS.avg != null ? groS.avg : "—") + "（" + (groS.label || "—") + "）。数据中心等新型基础设施以渗透率提升与量的扩张为底层动力，优先长租约、高上架率标的，注意解禁节奏，逢低布局。") +
@@ -1408,6 +1435,13 @@ main { min-width: 0; }
   })();
 
   // ---- 左侧导航：三大板块 + 研究二级菜单 ----
+  var currentPage = "pano";
+  var pageScroll = { pano: 0, research: 0, advice: 0 };
+  function restorePageScroll(page) {
+    requestAnimationFrame(function () {
+      window.scrollTo({ top: pageScroll[page] || 0, behavior: "auto" });
+    });
+  }
   function switchView(v) {
     document.querySelectorAll(".view").forEach(function (x) { x.hidden = x.id !== "v-" + v; });
     document.querySelectorAll("#researchSub button").forEach(function (x) { x.classList.toggle("on", x.dataset.v === v); });
@@ -1415,13 +1449,19 @@ main { min-width: 0; }
   }
   function showPage(pg, keepScroll) {
     var btn = document.querySelector('#tbNav > button[data-pg="' + pg + '"]');
+    if (!btn) return;
+    var switching = pg !== currentPage;
+    if (switching) {
+      pageScroll[currentPage] = window.scrollY;
+      currentPage = pg;
+    }
     $("subbar").dataset.cur = pg;
     document.querySelectorAll("#tbNav > button").forEach(function (x) { x.classList.toggle("on", x === btn); });
     var ink = document.querySelector("#tbNav .ink");
     ink.style.left = btn.offsetLeft + "px"; ink.style.width = btn.offsetWidth + "px";
     $("topbar").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
-    if (!keepScroll) window.scrollTo({ top: 0, behavior: "instant" });
+    if (switching) restorePageScroll(pg);
   }
   $("subbar").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
@@ -1429,7 +1469,7 @@ main { min-width: 0; }
       showPage(b.dataset.pg, true);
       document.querySelectorAll("#subbar .sub button").forEach(function (x) { x.classList.toggle("on", x === b); });
       var t = document.getElementById(b.dataset.scroll);
-      if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 132, behavior: "instant" });
+      if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 132, behavior: "smooth" });
       return;
     }
     if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
@@ -1458,7 +1498,7 @@ main { min-width: 0; }
       selCode = r.code;
       renderTbl();
       renderDetail(r.code);
-      window.scrollTo({ top: 0, behavior: "instant" });
+      window.scrollTo({ top: 0, behavior: "auto" });
       setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
     }
     inp.addEventListener("input", function () {
@@ -1521,7 +1561,7 @@ main { min-width: 0; }
                  ["滞胀", "增长↓ 通胀↑", "#f59e0b"], ["衰退", "增长↓ 通胀↓", "#3b82f6"]];
     var W = 340, H = 300, m = 30;
     var pos = { "复苏": [1, 1], "过热": [1, 0], "滞胀": [0, 0], "衰退": [0, 1] };
-    var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%">';
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%">' + svgTitle("美林时钟周期定位图");
     quads.forEach(function (qd) {
       var p = pos[qd[0]], x = m + p[0] * (W - 2 * m) / 2, y = m + p[1] * (H - 2 * m) / 2;
       var on = qd[0] === q, col = qd[2];
@@ -1564,7 +1604,7 @@ main { min-width: 0; }
         while (a < b) { var m = (a + b) >> 1; if (U.dates[m] < ds) a = m + 1; else b = m; }
         return X(a);
       }
-      var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">';
+      var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">' + svgTitle("美国 REITs 长期走势与衰退周期");
       (U.recessions || []).forEach(function (r) {
         if (r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]) return;
         var x1 = dateX(r[0]), x2 = dateX(r[1]);
@@ -1795,10 +1835,10 @@ main { min-width: 0; }
   // ---- 入场动画：卡片错峰 + KPI 数字滚动 ----
   function stagger(scope) {
     if (!scope) return;
-    scope.querySelectorAll(".card").forEach(function (c, i) { c.style.setProperty("--d", (i * 70) + "ms"); });
+    scope.querySelectorAll(".card").forEach(function (c, i) { c.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); });
   }
   document.querySelectorAll(".view, #v-heatmap, #v-advice").forEach(function (v) { stagger(v); });
-  document.querySelectorAll(".kpi").forEach(function (k, i) { k.style.setProperty("--d", (i * 80) + "ms"); k.classList.add("anim"); });
+  document.querySelectorAll(".kpi").forEach(function (k, i) { k.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); k.classList.add("anim"); });
 
   (function countUp() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -1807,7 +1847,7 @@ main { min-width: 0; }
       if (!mch) return;
       var target = parseFloat(mch[1]), suf = mch[2] || "";
       var dec = (mch[1].split(".")[1] || "").length;
-      var t0 = performance.now(), dur = 800;
+      var t0 = performance.now(), dur = 550;
       (function tick(t) {
         var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
         el.textContent = (target * e).toFixed(dec) + suf;

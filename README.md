@@ -7,3 +7,20 @@
 - 框架：中金 REITs 研究 + 《公募REITs投资策略分享-2026》顺周期动态配置框架
 
 > 行情数据为第三方数据源口径，仅供研究参考，不构成投资建议。
+
+## 本地运行与测试
+
+```bash
+npm run dev
+npm test
+```
+
+页面保持原生 HTML、CSS 与 JavaScript 的静态架构，可直接由 GitHub Pages 部署。桌面端采用多栏信息布局；移动端将宽表限制在各自模块内横向滚动，并保留主模块的阅读位置，避免整页横向溢出。
+
+自动化测试覆盖历史分位格式、移动端布局契约、配置建议层级、动画时长上限、键盘焦点样式、SVG 图表标题及主模块滚动位置恢复。
+
+## 部署
+
+`main` 分支根目录为 GitHub Pages 发布源。推送后由 `pages-build-deployment` 工作流自动发布至：
+
+https://xianhuixu.github.io/reits-dashboard/
