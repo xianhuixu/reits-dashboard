@@ -5,3 +5,16 @@ __pycache__/
 .DS_Store
 candidates*.txt
 universe_validated*.json
+
+# OpenClaw workspace files
+.openclaw/
+AGENTS.md
+BOOTSTRAP.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+memory_consolidation/
+scripts/auto_update.log
+skills/
