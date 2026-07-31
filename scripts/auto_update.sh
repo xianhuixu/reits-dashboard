@@ -1,51 +1,94 @@
 #!/bin/bash
+# REITs Dashboard 自动更新脚本
+# 每个交易日下午运行：拉取最新代码、更新信息流、提交推送
+
 set -e
 cd /root/.openclaw/workspace
 
 LOG_FILE="/root/.openclaw/workspace/scripts/auto_update.log"
+HOLIDAYS_FILE="/root/.openclaw/workspace/holidays.txt"
 
-echo "=== REITs Dashboard Auto Update ===" | tee -a "$LOG_FILE"
-echo "Start: $(date '+%Y-%m-%d %H:%M:%S')" | tee -a "$LOG_FILE"
+green() { echo -e "\033[32m$1\033[0m"; }
+red() { echo -e "\033[31m$1\033[0m"; }
+yellow() { echo -e "\033[33m$1\033[0m"; }
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+}
+
+# 日志轮转：超过 5MB 时截断
+rotate_log() {
+    if [ -f "$LOG_FILE" ] && [ "$(stat -c%s "$LOG_FILE" 2>/dev/null || echo 0)" -gt 5242880 ]; then
+        tail -n 1000 "$LOG_FILE" > "${LOG_FILE}.tmp"
+        mv "${LOG_FILE}.tmp" "$LOG_FILE"
+        log "日志已轮转（保留最后1000行）"
+    fi
+}
+
+rotate_log
+
+log "=== REITs Dashboard Auto Update Started ==="
 
 # 1. 判断是否为交易日（排除周末）
 dow=$(date +%u)
 if [ "$dow" -gt 5 ]; then
-    echo "周末，跳过更新" | tee -a "$LOG_FILE"
+    log "周末，跳过更新"
     exit 0
 fi
 
-# 2. 拉取最新代码（包含本地更新的 data.js）
-echo "[1/4] Pulling latest code..." | tee -a "$LOG_FILE"
-if ! git pull origin main 2>&1 | tee -a "$LOG_FILE"; then
-    echo "Git pull failed, aborting" | tee -a "$LOG_FILE"
+# 2. 判断是否为节假日
+today=$(date +%Y-%m-%d)
+if [ -f "$HOLIDAYS_FILE" ]; then
+    holiday=$(grep "^${today}=" "$HOLIDAYS_FILE" | cut -d= -f2)
+    if [ -n "$holiday" ]; then
+        log "节假日（${holiday}），跳过更新"
+        exit 0
+    fi
+fi
+
+# 3. 拉取最新代码（包含本地 Mac 更新的 data.js）
+log "[1/4] Pulling latest code from GitHub..."
+if ! git pull origin main >> "$LOG_FILE" 2>&1; then
+    log "ERROR: Git pull failed"
     exit 1
 fi
 
-# 3. 更新信息流
-echo "[2/4] Updating news feed..." | tee -a "$LOG_FILE"
-if timeout 300 python3 fetch_news.py 2>&1 | tee -a "$LOG_FILE"; then
-    echo "News update completed" | tee -a "$LOG_FILE"
+# 4. 更新信息流（东方财富新闻 + 搜狗微信 + 招标投标平台）
+log "[2/4] Updating news feed..."
+if timeout 300 python3 fetch_news.py >> "$LOG_FILE" 2>&1; then
+    log "News update completed successfully"
 else
-    echo "News update completed or timed out (exit code: $?)" | tee -a "$LOG_FILE"
+    exit_code=$?
+    log "WARNING: News update exited with code ${exit_code} (may be timeout or error)"
 fi
 
-# 4. 检查是否有变更
-echo "[3/4] Checking for changes..." | tee -a "$LOG_FILE"
+# 5. 尝试更新行情数据（服务器版本，当前为 mock 模式）
+log "[3/4] Updating market data (server version)..."
+if timeout 600 python3 fetch_data_server.py >> "$LOG_FILE" 2>&1; then
+    log "Market data update completed"
+else
+    exit_code=$?
+    log "INFO: fetch_data_server.py exited with code ${exit_code} (expected in mock mode)"
+fi
+
+# 6. 检查是否有变更需要提交
+log "[4/4] Checking for changes..."
 if git diff --quiet && git diff --cached --quiet; then
-    echo "No changes to commit" | tee -a "$LOG_FILE"
+    log "No changes to commit, nothing to do"
     exit 0
 fi
 
-# 5. 提交并推送
-echo "[4/4] Committing and pushing..." | tee -a "$LOG_FILE"
+# 7. 提交并推送到 GitHub（自动触发 GitHub Pages 部署）
+log "[5/4] Committing and pushing..."
 git add -A
-git commit -m "auto: update REITs news feed $(date '+%Y-%m-%d %H:%M')" | tee -a "$LOG_FILE"
-if git push origin main 2>&1 | tee -a "$LOG_FILE"; then
-    echo "Push successful" | tee -a "$LOG_FILE"
+git commit -m "auto: update REITs dashboard $(date '+%Y-%m-%d %H:%M')" >> "$LOG_FILE" 2>&1
+if git push origin main >> "$LOG_FILE" 2>&1; then
+    log "SUCCESS: Push completed - GitHub Pages will auto-deploy shortly"
+    log "Site: https://xianhuixu.github.io/reits-dashboard"
 else
-    echo "Push failed" | tee -a "$LOG_FILE"
+    log "ERROR: Git push failed"
     exit 1
 fi
 
-echo "Done: $(date '+%Y-%m-%d %H:%M:%S')" | tee -a "$LOG_FILE"
-echo "---" | tee -a "$LOG_FILE"
+log "=== Auto Update Finished ==="
+echo "" >> "$LOG_FILE"
