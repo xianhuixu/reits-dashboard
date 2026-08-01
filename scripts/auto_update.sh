@@ -53,8 +53,17 @@ if ! git pull origin main >> "$LOG_FILE" 2>&1; then
     exit 1
 fi
 
-# 4. 更新信息流（东方财富新闻 + 搜狗微信 + 招标投标平台）
-log "[2/4] Updating news feed..."
+# 5. 更新行情数据（基于本地 hist_cache 数据生成 data.js）
+log "[3/4] Updating market data from local cache..."
+if timeout 120 python3 fetch_data_server_v2.py >> "$LOG_FILE" 2>&1; then
+    log "Market data processed successfully"
+else
+    exit_code=$?
+    log "WARNING: fetch_data_server_v2.py exited with code ${exit_code}"
+fi
+
+# 6. 更新信息流（东方财富新闻 + 搜狗微信 + 招标投标平台）
+log "[4/4] Updating news feed..."
 if timeout 300 python3 fetch_news.py >> "$LOG_FILE" 2>&1; then
     log "News update completed successfully"
 else
@@ -62,17 +71,8 @@ else
     log "WARNING: News update exited with code ${exit_code} (may be timeout or error)"
 fi
 
-# 5. 尝试更新行情数据（服务器版本，当前为 mock 模式）
-log "[3/4] Updating market data (server version)..."
-if timeout 600 python3 fetch_data_server.py >> "$LOG_FILE" 2>&1; then
-    log "Market data update completed"
-else
-    exit_code=$?
-    log "INFO: fetch_data_server.py exited with code ${exit_code} (expected in mock mode)"
-fi
-
-# 6. 检查是否有变更需要提交
-log "[4/4] Checking for changes..."
+# 7. 检查是否有变更需要提交
+log "[5/4] Checking for changes..."
 if git diff --quiet && git diff --cached --quiet; then
     log "No changes to commit, nothing to do"
     exit 0
