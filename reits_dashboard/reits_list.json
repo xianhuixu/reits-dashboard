@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "last_updated": "2025-08-01",
+  "description": "中国公募REITs代码列表，支持同花顺数据接口",
+  "markets": {
+    "shanghai": {
+      "prefix": "508",
+      "exchange": ".SH",
+      "name": "上海证券交易所"
+    },
+    "shenzhen": {
+      "prefix": "180",
+      "exchange": ".SZ",
+      "name": "深圳证券交易所"
+    }
+  },
+  "reits": [
+    {"code": "508000.SH", "name": "华安张江光大REIT", "category": "产业园区", "list_date": "2021-06-21"},
+    {"code": "508001.SH", "name": "浙商沪杭甬REIT", "category": "高速公路", "list_date": "2021-06-21"},
+    {"code": "508006.SH", "name": "富国首创水务REIT", "category": "环保", "list_date": "2021-06-21"},
+    {"code": "508008.SH", "name": "国金中国铁建REIT", "category": "高速公路", "list_date": "2022-07-08"},
+    {"code": "508009.SH", "name": "平安广州广河REIT", "category": "高速公路", "list_date": "2021-06-21"},
+    {"code": "508018.SH", "name": "华夏中国交建REIT", "category": "高速公路", "list_date": "2022-04-28"},
+    {"code": "508019.SH", "name": "中金湖北科投光谷REIT", "category": "产业园区", "list_date": "2023-06-30"},
+    {"code": "508021.SH", "name": "国泰海通临港创新REIT", "category": "产业园区", "list_date": "2023-10-20"},
+    {"code": "508027.SH", "name": "东吴苏州工业园区REIT", "category": "产业园区", "list_date": "2021-06-21"},
+    {"code": "508028.SH", "name": "中金普洛斯REIT", "category": "仓储物流", "list_date": "2021-06-21"},
+    {"code": "508056.SH", "name": "中金厦门安居REIT", "category": "保障性租赁住房", "list_date": "2022-08-31"},
+    {"code": "508058.SH", "name": "中金厦门安居REIT(扩募)", "category": "保障性租赁住房", "list_date": "2023-03-17"},
+    {"code": "508066.SH", "name": "华泰江苏交控REIT", "category": "高速公路", "list_date": "2022-11-15"},
+    {"code": "508068.SH", "name": "华夏北京保障房REIT", "category": "保障性租赁住房", "list_date": "2022-08-31"},
+    {"code": "508077.SH", "name": "华夏基金华润有巢REIT", "category": "保障性租赁住房", "list_date": "2022-12-09"},
+    {"code": "508096.SH", "name": "嘉实京东仓储REIT", "category": "仓储物流", "list_date": "2023-02-08"},
+    {"code": "508098.SH", "name": "嘉实中国电建清洁能源REIT", "category": "能源", "list_date": "2023-03-28"},
+    {"code": "508099.SH", "name": "建信中关村REIT", "category": "产业园区", "list_date": "2022-08-12"},
+    {"code": "508033.SH", "name": "易方达深高速REIT", "category": "高速公路", "list_date": "2024-03-29"}
+  ],
+  "reits_sz": [
+    {"code": "180101.SZ", "name": "博时蛇口产园REIT", "category": "产业园区", "list_date": "2021-06-21"},
+    {"code": "180102.SZ", "name": "平安广州广河REIT", "category": "高速公路", "list_date": "2021-06-21"},
+    {"code": "180103.SZ", "name": "红土创新盐田港REIT", "category": "仓储物流", "list_date": "2021-06-21"},
+    {"code": "180201.SZ", "name": "中航首钢绿能REIT", "category": "环保", "list_date": "2021-06-21"},
+    {"code": "180301.SZ", "name": "红土深圳安居REIT", "category": "保障性租赁住房", "list_date": "2022-08-31"},
+    {"code": "180302.SZ", "name": "中金深圳安居REIT", "category": "保障性租赁住房", "list_date": "2022-08-31"},
+    {"code": "180401.SZ", "name": "鹏华深圳能源REIT", "category": "能源", "list_date": "2022-07-11"},
+    {"code": "180501.SZ", "name": "华夏和达高科REIT", "category": "产业园区", "list_date": "2022-12-27"},
+    {"code": "180601.SZ", "name": "国金中国铁建REIT", "category": "高速公路", "list_date": "2022-07-08"},
+    {"code": "180701.SZ", "name": "银华绍兴原水水利REIT", "category": "水利", "list_date": "2024-11-08"},
+    {"code": "180801.SZ", "name": "华夏合肥高新REIT", "category": "产业园区", "list_date": "2022-09-20"},
+    {"code": "180901.SZ", "name": "平安宁波交投REIT", "category": "高速公路", "list_date": "2024-12-26"}
+  ]
+}
