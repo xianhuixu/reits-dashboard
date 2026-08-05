@@ -401,7 +401,8 @@ main { min-width: 0; }
       <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
     </div>
     <div class="sub" id="researchSub">
-      <button data-v="strategy" class="on" aria-current="page">策略分类研究</button>
+      <button data-v="review" class="on" aria-current="page">市场阶段复盘</button>
+      <button data-v="strategy">策略分类研究</button>
       <button data-v="cycle">周期耦合分析</button>
       <button data-v="track">赛道透视</button>
       <button data-v="corr">大类资产相关性</button>
@@ -548,7 +549,42 @@ main { min-width: 0; }
 </section>
 
 <!-- ============ 策略分类研究 ============ -->
-<section class="view" id="v-strategy">
+<!-- ============ 市场阶段复盘（过去可解释 · 现在可定位 · 未来可预测） ============ -->
+<section class="view" id="v-review">
+  <div class="card">
+    <h2>二级市场阶段划分与四因子归因（2021.06 – 至今）</h2>
+    <p class="note">分析框架：资产重估理论 + 四因子归因（利率中枢 / 估值溢价 / 资金面 / 基本面）· 定价锚：P = 分派 ÷（无风险利率 + 风险溢价），利率下行分母变小、价格系统性上移，反向亦然 · 方法论来源：《公募REITs研究方法论与投资策略深度研究报告》《资产重估理论深度研究报告》</p>
+    <div class="grid3" id="stageGrid"></div>
+  </div>
+  <div class="card">
+    <h2>四因子统一归因矩阵</h2>
+    <p class="note">↑ = 该因子推动上涨 · ↓ = 该因子拖累下跌 · → = 中性 · 加粗行为每阶段的主导矛盾</p>
+    <div class="table-scroll" id="stageMatrix"></div>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h2>定价锚：股息率溢价标尺</h2>
+      <p class="note">股息率溢价 = 平均分派率 − 10Y 国债收益率 · &gt;250BP 具备安全边际（买入区）· 150–250BP 中性 · &lt;100BP 高估（减仓区）· 单一指标判断配置时机</p>
+      <div id="spreadGauge" style="margin-top:14px"></div>
+      <p style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:12px">
+        <b>历史锚点</b>：2021 年初约 350BP（深度便宜，随后四年牛市 +120%）→ 2025 年中压缩至 170BP（缓冲垫不足，随后利率回升触发回调）→ 2026 年 7 月回升至约 180BP（中性，尚未到"便宜"的 250BP 以上）。<br>
+        <b>当前判断</b>：回调释放了一部分估值压力但安全边际仍不足；若利率见顶回落或分派率进一步抬升使溢价走向 250BP 以上，将打开新一轮配置窗口——与下方实时验证和第三段配置建议联动。</p>
+    </div>
+    <div class="card">
+      <h2>现在：重估状态实时验证</h2>
+      <p class="note">四项排他性条件每日随行情自动计算 · 与"周期耦合分析"页的重估判断同源 · 证伪条件：10Y 国债收益率快速升破 2% → 系统性降仓</p>
+      <div id="rvLiveStrip"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>现在如何操作：四步操作流程</h2>
+    <p class="note">对过去可解释（四因子归因）→ 对未来可预测（排他性条件逐季验证）→ 对现在可操作（规则化触发/退出）· 与"配置建议与风险"页的触发条件一致</p>
+    <div class="grid3" style="margin-bottom:0" id="opSteps"></div>
+  </div>
+</section>
+
+<!-- ============ 策略分类研究 ============ -->
+<section class="view" id="v-strategy" hidden>
   <div class="grid3" id="stratCards"></div>
   <div class="grid">
     <div class="card">
@@ -1598,6 +1634,93 @@ main { min-width: 0; }
     } else {
       $("revalPanel").innerHTML = '<div class="empty">重估状态数据未生成</div>';
     }
+
+    // ---- 市场阶段复盘 ----
+    (function () {
+      var stages = [
+        { p: "2021.06–2022.02", name: "上市红利期", perf: "+35%", cls: "up",
+          logic: "首批 9 只供给稀缺 + 打新情绪，高溢价发行上市，属情绪定价而非重估",
+          f: { rate: "→", val: "↑", fund: "↑", base: "→" }, main: "资金面 · 估值" },
+        { p: "2022.03–2023.12", name: "深度调整期", perf: "−16.5%（2023 均值）", cls: "dn",
+          logic: "四重叠加：过热估值消化 + 战配解禁供给冲击 + 宏观偏弱基本面证伪 + 持有人同质化抛压自我强化；2023 年 29 只仅 1 只上涨，11 月末 P/NAV 跌至 0.90、估值分位 1.2%",
+          f: { rate: "→", val: "↓", fund: "↓", base: "↓" }, main: "估值 · 基本面" },
+        { p: "2024.01–2024.12", name: "筑底回升期", perf: "+12.3%（全收益）", cls: "up",
+          logic: "OCI 会计落地缓释机构卖压 + 长端利率下移抬升估值中枢 + 约 5.2% 股息率的红利价值获认可；两波九连阳，保租房 +35.3% 领涨",
+          f: { rate: "↑", val: "↑", fund: "↑", base: "→" }, main: "利率 · 资金面" },
+        { p: "2025.01–2025.06", name: "结构性牛市", perf: "+14.2%（上半年）", cls: "up",
+          logic: "10Y 国债破 2% 历史低位 + 资产荒，利差扩至历史高分位，保险/OCI 资金入场，重估真正启动；消费（易方达华威 +70%）、供热经营权（济南能源 +66.8%）、首批数据中心领涨，产业园明显偏弱",
+          f: { rate: "↑", val: "↑", fund: "↑", base: "→" }, main: "利率 · 资金面" },
+        { p: "2025.06–2026.07", name: "利率回升估值压缩", perf: "−8%", cls: "dn",
+          logic: "重估反向逻辑：10Y 自 2.1% 回升至 2.7%（分母变大）+ 估值透支（溢价仅 170BP）+ OCI 增速放缓与成长板块抽血（港股红利同期 −21.9%）+ 产业园空置率上升、车流量不及预期等基本面恶化——流动性退潮后基本面露馅",
+          f: { rate: "↓", val: "↓", fund: "↓", base: "↓" }, main: "利率 · 估值" },
+        { p: "2026 以来", name: "扩容与承压并存", perf: "年内 −3.7%（全收益）", cls: "dn",
+          logic: "供给端商业不动产放量（首批募资 203 亿、在途拟募超 750 亿）与存量估值消化拉锯，指数 1030 高点回落至 928 后修复至 970；资金端指数基金（12 亿）与险资商业不动产通道次第打开；产权类分派率 4.06%、利差接近 3% 处历史高位——机构普遍认为估值已进入低位区间",
+          f: { rate: "↓", val: "↑", fund: "→", base: "→" }, main: "估值修复 · 资金通道" }
+      ];
+      var fName = { rate: "利率", val: "估值", fund: "资金", base: "基本面" };
+      var arrow = { "↑": '<b style="color:var(--up)">↑</b>', "↓": '<b style="color:var(--dn)">↓</b>', "→": '<b style="color:var(--tx3)">→</b>' };
+      if ($("stageGrid")) $("stageGrid").innerHTML = stages.map(function (s, i) {
+        var chips = Object.keys(s.f).map(function (k) {
+          return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;background:var(--bg);border-radius:6px;padding:2px 7px">' + fName[k] + " " + arrow[s.f[k]] + "</span>";
+        }).join(" ");
+        return '<div class="card" style="background:var(--panel2)">' +
+          '<div style="display:flex;justify-content:space-between;align-items:baseline">' +
+          '<span style="font-size:11px;color:var(--tx3)">' + s.p + "</span>" +
+          '<span class="num" style="font-size:13.5px;font-weight:700;color:var(--' + s.cls + ')">' + s.perf + "</span></div>" +
+          '<div style="font-size:13px;font-weight:650;margin:5px 0">' + (i + 1) + ". " + s.name + "</div>" +
+          '<div style="margin-bottom:7px">' + chips + "</div>" +
+          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">' + s.logic + "</div>" +
+          '<div style="font-size:10.5px;color:var(--tx3);margin-top:7px">主导矛盾：<b style="color:var(--tx2)">' + s.main + "</b></div></div>";
+      }).join("");
+      if ($("stageMatrix")) $("stageMatrix").innerHTML =
+        '<table class="tbl"><thead><tr><th>阶段</th><th>利率中枢</th><th>估值溢价</th><th>资金面</th><th>基本面</th><th style="text-align:left">主导逻辑</th></tr></thead><tbody>' +
+        stages.map(function (s) {
+          return "<tr><td style=\"white-space:nowrap\">" + s.name + "</td>" +
+            ["rate", "val", "fund", "base"].map(function (k) { return "<td>" + arrow[s.f[k]] + "</td>"; }).join("") +
+            '<td style="text-align:left;font-size:11.5px;color:var(--tx2)">' + s.main + "</td></tr>";
+        }).join("") + "</tbody></table>";
+      if ($("spreadGauge")) {
+        // 标尺 0–400BP：买入区 250-400（红/暖），中性 100-250，高估 0-100
+        var cur = 180, anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: 180, l: "当前 180BP" }];
+        var pct = function (v) { return Math.min(100, Math.max(0, v / 400 * 100)); };
+        $("spreadGauge").innerHTML =
+          '<div style="position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex">' +
+          '<div style="width:' + pct(100) + '%;background:rgba(16,185,129,.28)"></div>' +
+          '<div style="width:' + (pct(250) - pct(100)) + '%;background:rgba(100,116,139,.18)"></div>' +
+          '<div style="flex:1;background:rgba(239,68,68,.24)"></div></div>' +
+          '<div style="position:relative;height:0">' + anchors.map(function (a, i) {
+            return '<div style="position:absolute;left:' + pct(a.v) + '%;transform:translateX(-50%);top:-32px">' +
+              '<div style="width:2.5px;height:' + (i === 2 ? 34 : 24) + 'px;background:' + (i === 2 ? "var(--accent)" : "var(--tx3)") + ';margin:0 auto"></div>' +
+              '<div style="font-size:10px;white-space:nowrap;color:' + (i === 2 ? "var(--accent);font-weight:700" : "var(--tx3)") + ';margin-top:2px">' + a.l + "</div></div>";
+          }).join("") + "</div>" +
+          '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--tx3);margin-top:30px">' +
+          "<span>0BP · 高估（减仓区）</span><span>100BP</span><span>250BP · 安全边际（买入区）</span><span>400BP</span></div>" +
+          '<div style="margin-top:12px;font-size:12.5px">当前位置：<b class="num" style="color:var(--accent)">≈180BP（中性区间）</b><span style="color:var(--tx3);font-size:11.5px"> = 平均分派率约 4.5% − 10Y 国债约 2.7% · 距 250BP 买入区仍有缓冲差距</span></div>';
+      }
+      if ($("rvLiveStrip")) {
+        $("rvLiveStrip").innerHTML = RV ? (
+          '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px">' +
+          '<span class="rv-stage" style="color:' + (RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)") + '">' + RV.stage + "</span>" +
+          '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项成立 · 每日自动更新</span></div>" +
+          RV.items.map(function (it) {
+            return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
+              '<span class="vl num">' + it.value + "</span>" +
+              '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓" : "✗") + "</span></div>";
+          }).join("") +
+          '<p style="font-size:11.5px;color:var(--tx3);margin-top:10px">重估的利率驱动力在，资金与价格验证未跟上——仍处初期反复阶段；若条件全部成立且股息率溢价 &gt;250BP，构成右侧确认买点。</p>'
+        ) : '<div class="empty">重估状态数据未生成</div>';
+      }
+      if ($("opSteps")) $("opSteps").innerHTML = [
+        { t: "① 宏观环境扫描", d: "监测 10Y 国债趋势（核心变量）、M2 与实体回报率、保险 OCI 政策与持仓变化。利率下行=顺势而为，利率快速上行=降低暴露。" },
+        { t: "② 资产筛选", d: "分派率 >4%、分红稳定 3 年以上、负债率 <60%；优先保租房/市政环保/能源等防御型打底，周期型做弹性，扩张型做期权。" },
+        { t: "③ 估值安全边际", d: "买入：股息率溢价 >250BP；持有：>150BP；减仓：<100BP。当前约 180BP——中性，未到闭眼买入区。" },
+        { t: "④ 动态再平衡", d: "逐季验证排他性条件（本页右侧）；跟踪险资持仓、解禁与扩募事件；全市场分位升破 90% 系统性减仓；10Y 升破 2% 降总仓至 50% 以下。" }
+      ].map(function (s) {
+        return '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px">' +
+          '<h3 style="font-size:12.5px;margin-bottom:6px">' + s.t + "</h3>" +
+          '<p style="font-size:12px;color:var(--tx2);line-height:1.7">' + s.d + "</p></div>";
+      }).join("");
+    })();
 
     var CY = D.cycle;
     if (!CY) { $("cycleGrid").innerHTML = '<div class="empty">cycle_judgment.json 未配置</div>'; return; }
