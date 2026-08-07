@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """更新 REITs Dashboard 数据 - 从腾讯接口获取实时数据并更新 data.js/data.json"""
 import json
+import os
 import re
+import subprocess
 import sys
 from datetime import date, datetime
 from pathlib import Path
@@ -12,9 +14,31 @@ ROOT = Path(__file__).resolve().parent
 DATA_JS = ROOT / "data.js"
 DATA_JSON = ROOT / "data.json"
 UNIVERSE = ROOT / "universe.json"
+HOLIDAYS = ROOT / "holidays.txt"
 
 # 腾讯股票接口（支持批量查询，每次最多60只）
 TENCENT_API = "http://qt.gtimg.cn/q={}"
+
+
+def is_trading_day():
+    """判断今天是否为交易日（非周末、非节假日）"""
+    today = date.today()
+    
+    # 周末不是交易日
+    if today.weekday() >= 5:  # 5=周六, 6=周日
+        return False
+    
+    # 读取节假日配置
+    if HOLIDAYS.exists():
+        today_str = today.isoformat()
+        content = HOLIDAYS.read_text(encoding='utf-8')
+        for line in content.split('\n'):
+            line = line.strip()
+            if line.startswith(today_str):
+                return False
+    
+    return True
+
 
 def fetch_tencent(codes):
     """从腾讯接口获取股票实时数据"""
@@ -120,8 +144,7 @@ def parse_data_js():
         raise ValueError("无法在 data.js 中找到 window.REITS_DATA")
     start += len('window.REITS_DATA = ')
     
-    # 找到对应的结束位置（最后一个分号前的JSON）
-    # data.js 格式: window.REITS_DATA = {...};
+    # 找到对应的结束位置
     brace_count = 0
     in_string = False
     escape = False
@@ -176,8 +199,6 @@ def update_reits_data(data, tencent_data):
         last_date = hist_dates[-1]
         
         # 判断是否需要更新
-        # 如果最后一天已经是今天，更新价格
-        # 否则追加新一天
         if last_date == today_str:
             # 更新今天的收盘价
             hist_close[-1] = round(td['price'], 3)
@@ -217,18 +238,51 @@ def save_data(data):
     DATA_JSON.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(f"[info] 已保存 {DATA_JSON}")
     
-    # 保存 data.js (带 window.REITS_DATA 前缀)
+    # 保存 data.js
     js_content = "window.REITS_DATA = " + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + ";\n"
     DATA_JS.write_text(js_content, encoding='utf-8')
     print(f"[info] 已保存 {DATA_JS}")
 
 
+def git_commit_push():
+    """自动提交到 GitHub"""
+    today_str = date.today().isoformat()
+    try:
+        # 检查是否有变更
+        result = subprocess.run(
+            ['git', 'diff', '--quiet'],
+            cwd=ROOT,
+            capture_output=True
+        )
+        if result.returncode == 0:
+            print("[info] 无变更，跳过提交")
+            return True
+        
+        # 添加、提交、推送
+        subprocess.run(['git', 'add', 'data.js', 'data.json'], cwd=ROOT, check=True)
+        subprocess.run(
+            ['git', 'commit', '-m', f'数据更新: {today_str} - 自动更新REITs数据'],
+            cwd=ROOT, check=True
+        )
+        subprocess.run(['git', 'push', 'origin', 'main'], cwd=ROOT, check=True)
+        print(f"[info] 已推送到 GitHub")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"[error] Git 操作失败: {e}")
+        return False
+
+
 def main():
+    # 检查是否为交易日
+    if not is_trading_day():
+        print("[info] 今天不是交易日，跳过更新")
+        sys.exit(0)
+    
     print("=" * 50)
-    print("REITs Dashboard 数据更新")
+    print(f"REITs Dashboard 数据更新 - {date.today()}")
     print("=" * 50)
     
-    # 1. 读取 universe.json 获取代码列表
+    # 1. 读取 universe.json
     universe = json.loads(UNIVERSE.read_text(encoding='utf-8'))
     codes = [u['code'] for u in universe]
     print(f"[info] 共 {len(codes)} 只 REITs")
@@ -250,6 +304,10 @@ def main():
     
     # 5. 保存
     save_data(data)
+    
+    # 6. 自动提交到 GitHub
+    print("[info] 正在推送到 GitHub...")
+    git_commit_push()
     
     print("=" * 50)
     print("更新完成!")
