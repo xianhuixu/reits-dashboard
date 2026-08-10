@@ -1,5 +1,5 @@
 {
- "updated": "2026-08-06 16:15:28",
+ "updated": "2026-08-10 16:36:34",
  "tags": [
   "全部",
   "政策监管",
@@ -13,36 +13,427 @@
  ],
  "items": [
   {
-   "date": "2026-08-06",
-   "title": "成熟海上风电投资价值凸显 公募REITs市场迎来新供给",
-   "summary": "通过公募REITs盘活进入成熟运营期的项目，回收资金可按规定用于新项目建设等领域，形成“开发建设、稳定运营、项目盘活、再投资”的资本循环。公募REITs持续的信息披露和收益分派安排，也提升了项目经营透明度，为长期资金参与海上风电项目提供了标…",
-   "media": "中国基金报",
-   "url": "http://finance.eastmoney.com/a/202608063833787875.html",
+   "code": "ceb_8a9c96a69fca",
+   "date": "2026-08-10",
+   "title": "兰州热力REITs项目法律服务机构选聘项目中标结果公示",
+   "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
+   "media": "中国招标投标公共服务平台",
+   "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fca1237019fcab1320f2f02&inpvalue=&dataSource=0&tenderAgency=",
+   "tag": "招投标"
+  },
+  {
+   "date": "2026-08-10",
+   "title": "【财经分析】租赁住房行业步入高质量发展下半场 保租房REITs以“运营力”重构资产估值逻辑",
+   "summary": "公开数据显示，2026年二季度，9只已上市的保租房公募REITs交出了亮眼的经营成绩单——全样本租金收缴率均值高达99.27%，现金流稳定性得到了资本市场的充分认可。 　　不过，记者也观察到，目前不同城市、不同运营主体间的资产估值分化有所加…",
+   "media": "新华财经",
+   "url": "http://finance.eastmoney.com/a/202608103836528441.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-10",
+   "title": "公募REITs二级市场延续调整走势，上海发布工商业项目土地使用权续期新政",
+   "summary": "公募REITs二级市场继续调整，生态环保、市政水利板块REITs表现较优 　　上周公募REITs二级市场延续了调整走势。截至上周五，中证REITs（收盘）指数收于701.5点，环比下跌1.69%；中证REITs全收益指数收于938.1点，环…",
+   "media": "每日经济新闻",
+   "url": "http://bond.eastmoney.com/a/202608103836510752.html",
    "tag": "市场观点"
   },
   {
-   "date": "2026-08-06",
-   "title": "公募个人养老金持续扩容 激活耐心资本源头活水",
-   "summary": "中欧基金指出，养老FOF通过横跨股票、债券及另类资产（如黄金、REITs等）的多元配置，构建了抵御单一资产波动的分散化防线。回撤得到控制，投资者才会在波动中恐慌离场，这是“耐心”能够在个体层面成立的心理基础。",
-   "media": "新京报",
-   "url": "http://fund.eastmoney.com/a/202608063833660138.html",
+   "date": "2026-08-10",
+   "title": "资管周报：禁止理财子公司通过合作机构不当估值；多家中小银行罕见上调存款利率，幅度20-30BP不等",
+   "summary": "REITs市场已跌出性价比？37只产品排队待发产权类利差持续走高性价比凸显 　　持续调整数月的公募REITs市场迎来阶段性修复。Wind数据显示，8月7日中证REITs全指数在触及年内次新低后开启反弹，单日涨幅达0.56%，终结近期连续下行…",
+   "media": "财联社",
+   "url": "http://bond.eastmoney.com/a/202608103836432774.html",
    "tag": "市场观点"
   },
   {
-   "date": "2026-08-06",
-   "title": "加量又加价 算力产业服务大单不断",
-   "summary": "国金资管机构间REITs业务负责人杨一飞向记者表示，近期算力服务订单金额持续走高，意味着各方对于AI资本开支的信心更足了。在AI大模型对Token（词元）调用量快速增长的背景下，市场需要适度超前布局算力资源。",
-   "media": "上海证券报",
-   "url": "http://finance.eastmoney.com/a/202608063832950225.html",
+   "date": "2026-08-10",
+   "title": "10年期国债1.70%关口反复拉锯 30年期国债期货创年内新高",
+   "summary": "当前，中国证监会会同香港方面，正在抓紧推进人民币股票交易柜台、不动产投资信托基金（REITs）纳入沪深港通各项准备工作。",
+   "media": "新华财经",
+   "url": "http://bond.eastmoney.com/a/202608103836347594.html",
+   "tag": "政策监管"
+  },
+  {
+   "date": "2026-08-10",
+   "title": "债市早参8月10日|券商债券投顾迎新规，单券持仓设25%红线；港交所五年期国债期货首周成交逾1.3万手",
+   "summary": "【REITs市场已跌出性价比？37只产品排队待发产权类利差持续走高性价比凸显】 　　持续调整数月的公募REITs市场迎来阶段性修复。Wind数据显示，8月7日中证REITs全指数在触及年内次新低后开启反弹，单日涨幅达0.56%，终结近期连续…",
+   "media": "财联社",
+   "url": "http://bond.eastmoney.com/a/202608103836071617.html",
    "tag": "市场观点"
   },
   {
-   "date": "2026-08-06",
-   "title": "稳健型基金占据发行“C位” 多元配置策略走俏",
-   "summary": "在供给端，基金公司不断拓宽资产配置边界，将商品、QDII、REITs等多元资产纳入FOF组合，运用多资产策略进一步分散风险、拓宽收益来源，创造稳健且可持续的回报。 　　风格剧烈调整阶段或逐步收尾 　　资金借道配置型产品持续涌入，那么这些产品…",
+   "date": "2026-08-10",
+   "title": "两单能源REITs相继上市  公募REITs调整中酝酿布局机遇",
+   "summary": "今年以来，公募REITs仍然是跌多涨少，截至8月7日收盘，在全部78只2026年1月1日以前上市的公募REITs中，取得正收益的REITs仅有13只，65只REITs今年以来收益为负。",
    "media": "中国证券报",
-   "url": "http://fund.eastmoney.com/a/202608063832976289.html",
+   "url": "http://bond.eastmoney.com/a/202608103836102623.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-10",
+   "title": "广发基金朱坤：用纪律化、体系化方法应对市场不确定性",
+   "summary": "根据基金招募说明书，广发招瑞多元机遇6个月持有期（FOF）的投资范围横跨境内外市场，覆盖股票、债券、商品、REITs等多类资产。",
+   "media": "上海证券报",
+   "url": "http://stock.eastmoney.com/a/202608103836015889.html",
    "tag": "市场观点"
+  },
+  {
+   "code": "wx_2da1a4509085",
+   "date": "2026-08-10",
+   "title": "【国信固收】公募REITs周报(第78期):指数延续调整走势",
+   "summary": "东北首单能源公募REITs成功上市.8月7日,华泰三峡清洁能源REIT在上海证券交易所挂牌上市,该项目是东北地区首单能源公募...",
+   "media": "宏观看债（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9SmMikZgSQBHOTr5Vjlfd4gVSIXd9oaXVdcp8_TluWvXz6r6rqSUXJxPkip1cO-nTc55OdgBADyfPRdZg2Nk0iS7AuSowm-8a8FYeGo3Ddc6BlQdSr9Zpry3Gw_qcAcpk9LgBiuDakwYzaFCkJ-XG4_KO4ErxMQn6AxlBm-3HKppj32-j2KiwUw..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
+   "tag": "上市公告"
+  },
+  {
+   "code": "wx_a191502d6b91",
+   "date": "2026-08-10",
+   "title": "透视 || 公募REITs向左,千亿资金向右:一条65.5亿高速路划出的“第二通道”",
+   "summary": "相比公募REITs的公开交易市场,机构间REITs的二级市场活跃度差距明显.大量产品面临“有价无市”的困境,日均换手率仅0.05%至...",
+   "media": "热浪REITs（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJBqtBh2cqF_a-KiElGL2n2FqXa8Fplpd9K6NDBE0QfWXQhYxlAkX38A_jk3BaVoWX-uAdANWdoDgIjlTLxozSDJwVDvFV_pCnhPRVEskYEPAsd33Ir6Bx-bD7Az4V-WNRwYiRtZGPUChTrwaOvTaLOhe-kiItrm3Fari_rk4sZMALw6QMSOhueJOwrmXXq6dlUHhGwyggYk-fxjh3za6jWA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24033BC38D8D3A6E4B4C12E7747CB1AA4BCEC89A6A798D7D",
+   "tag": "市场观点"
+  },
+  {
+   "code": "wx_dc53aa3d5cdd",
+   "date": "2026-08-10",
+   "title": "千亿机构间REITs 的新规则:三句话拆掉了信用包装的最后一层纸",
+   "summary": "月,上交所机构间REITs 累计发行规模已逼近 1000 亿元,覆盖 15 个细分业态.就在政策发布前不到一个月,凯德投资与中金合作的凯...",
+   "media": "不动产盘活存量资管研究森（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJwAeuyb9BiKC-KiElGL2n2FqXa8Fplpd9PWlIVGsqxvP8XEV02O-IFowO4i19ZSlQb2P0CpTl3MTPC1KLA5GiIgGNneGU3Xoxb3FvJVuS5r71kpETQmVQLTZMGfS50jT2OQHRJOUFxiPqgzSc4_YdzUZK-pCtAVJY0arEez3BGjX7yeDJDbu8TCp_-y28j9njq3MvCET-by5Q_LeJW-Rhtg..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=2403728D96962075515709FC6EB2DBA0518F1F236A798D88",
+   "tag": "机构间REITs"
+  },
+  {
+   "code": "wx_ac12667f0c7d",
+   "date": "2026-08-10",
+   "title": "首单光热熔盐储能机构间REITs 中光新能源认购30% 底层青海2个储能电站",
+   "summary": "今天来聊聊首单光热熔盐储能机构间REITs.兴证基实-中光新能源持有型不动产资产支持专项计划,今年3月26日上交所受理,7月3日...",
+   "media": "小楠言REITs（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJ0hLivTdkzJe-KiElGL2n2FqXa8Fplpd94wuyFvo1t-1XC68VmffPlGz0i9wNjrkv1JM-5rRLsdiC7euaDswKSRh9QUNQryBXZLSlsiCtR2Ywisfkw5pKkrGhGpWXfADX7LHuHTlUkMdmax7S4on7Q46VSsyz8VLEZt6MUedlh3Sw9HA274hJ5IeK9Ptb76n7N56uwZ0583LyPfCoem7FzA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=24038047C4C5722603045BAE431B94E303F84BD66A798D8C",
+   "tag": "机构间REITs"
+  },
+  {
+   "date": "2026-08-09",
+   "title": "新时空：恒生科技指数周涨0.6%，港股通MINIMAX入通两日涨近三成领涨板块",
+   "summary": "8月3日，监管层释放人民币股票交易柜台、REITs纳入沪深港通信号。同日，港交所下调最低上落价位第二阶段正式实施，价格在0.5至10港元区间的证券最小变动单位从0.01港元降至0.005港元。",
+   "media": "界面新闻",
+   "url": "http://finance.eastmoney.com/a/202608093835987311.html",
+   "tag": "政策监管"
+  },
+  {
+   "date": "2026-08-09",
+   "title": "万联证券63.70%控股长安基金，公募牌照正式落袋",
+   "summary": "对于后续规划，万联证券表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。 　　来源…",
+   "media": "消费日报财经",
+   "url": "http://finance.eastmoney.com/a/202608093835992764.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-09",
+   "title": "三峡集团首单公募REITs发行上市",
+   "summary": "华泰三峡新能源REIT是三峡集团首单公募REITs，也是我国东北地区首单能源公募REITs。",
+   "media": "上海证券报·中国证券网",
+   "url": "http://finance.eastmoney.com/a/202608093835942113.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-09",
+   "title": "基金大事件|前7月公募基金分红破千亿元！人民币国际化大消息！",
+   "summary": "8.8【★★★★★】REITs 本周REITs快报>> 　　本周（8月3日—7日），中证REITs全收益指数跌1.64%。其中，超八成公募REITs产品下跌，跌幅最大达11.51%。 　　本周，又有多只公募REITs产品进入“受理”“反馈”…",
+   "media": "中国基金报",
+   "url": "http://fund.eastmoney.com/a/202608083835843711.html",
+   "tag": "申报动态"
+  },
+  {
+   "code": "wx_7bcbc5483bbf",
+   "date": "2026-08-09",
+   "title": "公募REITs上市第262周表现深度解析(8月3日-8月7日)",
+   "summary": "公募REITs总指数7.98%、经营权REITs指数6.22%、产权REITs指数9.88%.与其他股票指数相比,本周公募REITs相关指数波动率变化...",
+   "media": "如此REITs（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJaNjaMHrjFni-KiElGL2n2FqXa8Fplpd90mK23WEeXJslJeZYQuKnk5smXVZh54wGvGTTYf-uPUP08P6P8O01BZ1D2Y_FtcgXxvQV1_6hn0j7HHbS9AvgxPntwU2aNAV-0Hf1QjCpftxuXXnpDunQynqfkczXM6FWWezP6HkYIzDEjhhArBE0MdHlU7D8IU-buxSAT0gJp1KFW6cwuUnkdA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24031820EDEA5C0F2C2A738612E26C132CAB6C016A798D76",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "又有多只REITs产品，迎来新进展！",
+   "summary": "华安中电浦软商业REIT底层资产为坐落于上海张江科学城核心区域的浦东软件园成熟科创产业园区物业，由原始权益人上海浦东软件园股份有限公司持有运营，控股股东为央企中国电子。 　　8月6日，华泰紫金金鹰商业不动产REIT状态更新为“已受理”。",
+   "media": "中国基金报",
+   "url": "http://bond.eastmoney.com/a/202608083835828381.html",
+   "tag": "申报动态"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "下半年楼市结构性行情预计强化 差异化产品成房企竞争关键",
+   "summary": "7日，普睿数智还发布了数智云住宅开发平台、数智云商业不动产REITs投研平台两大核心数字化产品。普睿数智方面表示，作为专注于房地产行业数字化发展的创新型企业，其将持续围绕“数据平台”和“产业资源平台”两大方向建设核心能力。",
+   "media": "新华财经",
+   "url": "http://finance.eastmoney.com/a/202608083835819074.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "新房探底、二手房企稳 房地产进入结构优化阶段",
+   "summary": "“未来，企业应聚焦核心城市与重点板块，加强客户研究，把握商业不动产REITs与存量运营等新机会，同时以数据和AI持续提升数字化能力。真正匹配客户需求的产品，将成为市场竞争的关键。”丁祖昱说。 　　诚然，当前，中国房地产行业正在经历从规模增长…",
+   "media": "证券时报",
+   "url": "http://finance.eastmoney.com/a/202608083835585423.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "曲线布局！万联证券控股长安基金，补齐公募业务关键拼图",
+   "summary": "对于后续规划，万联证券表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。",
+   "media": "券商中国",
+   "url": "http://finance.eastmoney.com/a/202608083835871680.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "万联证券拿下长安基金控股权 补齐公募牌照后如何发力？",
+   "summary": "公募REITs与协同联动成重点 　　补齐公募牌照后，如何用好这张牌照赋能现有业务，成为万联证券的下一步重点。",
+   "media": "财联社",
+   "url": "http://finance.eastmoney.com/a/202608083835826790.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "发展绿色产业是低碳转型之钥",
+   "summary": "国家持续优化绿色产业扶持政策，更新产业指导目录，用好绿色信贷、低碳基金、产业REITs等金融工具，精准赋能绿色项目落地见效。碳排放权交易、绿电交易、碳普惠等市场化机制不断健全，实现了正向激励与刚性约束双向发力。",
+   "media": "经济日报",
+   "url": "http://finance.eastmoney.com/a/202608083835604042.html",
+   "tag": "政策监管"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "SpaceX早期投资者坐看股价腰斩 解禁后持股还是跑路陷入两难",
+   "summary": "来自加州的日内交易员Lance Breitstein，也是另一位早期投资者。Breitstein表示，他太想在6月股价最高点时卖出了。",
+   "media": "财联社",
+   "url": "http://finance.eastmoney.com/a/202608083835577234.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-08",
+   "title": "FOF迎来发行大年 年内首募规模已超1300亿元",
+   "summary": "“这类FOF能有效降低组合波动，通过加入黄金、REITs、跨境ETF等资产，进一步分散传统股债的相关性风险。”邓达说。 　　行业面临新挑战 　　今年以来，FOF产品的结构性分化现象较为显著。",
+   "media": "上海证券报",
+   "url": "http://fund.eastmoney.com/a/202608083835588480.html",
+   "tag": "市场观点"
+  },
+  {
+   "code": "wx_afa0a5bf7f73",
+   "date": "2026-08-08",
+   "title": "产权类公募REITs土地续期政策研究",
+   "summary": "REITs发行以来,底层资产剩余土地使用年限持续消耗.2026-2035年,将是早期出让用地剩余年限降至25年以下的高峰期,恰好与...",
+   "media": "商业资管REITs（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9Uv1IFdr0sWkHOyF8EyCMlwbEWPhYvVbkOoTx3layztYLzL5o5_zwV8TESYBbozFfO1n2TudjCQeL1e_KFJl285v2oM6hOKyAS4BPvabgIyuckOqbLVkx2_7IlMJ9nbILOaWofMlXRoaQRGSFe5ptsqkmHYlAllePi0DT92eemXLvzHZXxeLdyg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
+   "tag": "政策监管"
+  },
+  {
+   "code": "wx_c42afabe020e",
+   "date": "2026-08-08",
+   "title": "详解公募REITs估值的＂资本化率＂和＂折现率＂",
+   "summary": "读公募REITs的招募说明书时,很多人翻到＂资产评估＂章节都会愣一下:资本化率5.8%,折现率7.2%——这两个百分比到底啥关系?...",
+   "media": "REITs行业联盟（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJBqtBh2cqF_a-KiElGL2n2FqXa8Fplpd9x7Z_kHKU0iAPws_nQZ73JkTJrjcKNSwEyl9ff9qPdVcz4_2hQVD-vZ97MEKOrBU3twZQUTBqgXyFktSa9kfMbqajDmIzuANRzBmcKSQdMD8uWOYd8BD4aTVvVyf1cNx0ygvry0ejQpdpj3cbul_YGTdpVinzIqUoGPXAzRmuQwHzAjcIGepUqA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24033BC38D8D3A6E4B4C12E7747CB1AA4BCEC89A6A798D7D",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "天津上半年机构间REITs发行规模跃居全国第四",
+   "summary": "商业不动产方面，南开大悦城REIT已申报，其土地续期模式为行业提供创新借鉴。这些项目落地将有效盘活优质存量资产，构建不动产资产“投资、运营、退出、再投入”良性闭环。 　　机构间REITs持续保持全国前列。",
+   "media": "中国新闻网",
+   "url": "http://finance.eastmoney.com/a/202608073835492072.html",
+   "tag": "机构间REITs"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "什么情况？又有公募REITs上市首日盘中破发",
+   "summary": "举个例子，首批上市的四只商业不动产REITs中，汇添富上海地产商业REIT和中信建投首农商业REIT都已跌破发行价。",
+   "media": "每日经济新闻",
+   "url": "http://finance.eastmoney.com/a/202608073835338111.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "普睿数智发布两大数字化产品 携手多方助力房地产行业智能化升级",
+   "summary": "普睿数智执行总裁刘文超介绍，数智云商业不动产REITs投研平台聚焦商业不动产投资、运营与资产管理场景，定位为贯穿不动产REITs基金市场与资产基本面研究的综合型投研平台。",
+   "media": "证券日报",
+   "url": "http://finance.eastmoney.com/a/202608073835353434.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "华泰三峡新能源REIT正式上市",
+   "summary": "公司公募REITs业务已打造“以远见，伴未来”品牌，布局高速公路、新能源、商业地产、保障房、仓储物流、产业园等战略领域。依托集团“一个华泰”全业务协同体系，华泰证券资管坚守“金融报国、金融为民”初心，依托完整投行业务链条赋能实体经济高质量发…",
+   "media": "券商中国",
+   "url": "http://finance.eastmoney.com/a/202608073835372992.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "筑牢投资人收益底线 中航易商仓储物流REIT获原始权益人延长业绩保障",
+   "summary": "运营管理机构未发生变更且运营管理能力稳定，不动产项目公司整体运营情况良好，无安全生产事故，未发生重大租约变化。",
+   "media": "新华财经",
+   "url": "http://stock.eastmoney.com/a/202608073835309721.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "REITs市场已跌出性价比？37只产品排队待发 产权类利差持续走高性价比凸显",
+   "summary": "待上市首发产品中，商业不动产REITs数量达18只，底层资产覆盖商业综合体、写字楼、奥特莱斯、酒店等多元业态。 　　财联社梳理发现，从落地节奏上看，商业不动产REITs推进速度显著快于传统基础设施品类，其中注册通过的商业不动产项目合计7只，…",
+   "media": "财联社",
+   "url": "http://bond.eastmoney.com/a/202608073835296129.html",
+   "tag": "申报动态"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "繁华商圈里的“留量”生意：首单外资消费REITs的一线实践",
+   "summary": "记者注意到，2026年以来，凯德投资在华REITs布局明显提速，积极通过多层次公募REITs市场盘活存量资产，如6月华夏凯德商业REIT获批，底层资产为深圳来福士广场综合体与绵阳凯德广场·涪城等。",
+   "media": "21世纪经济报道",
+   "url": "http://biz.eastmoney.com/a/202608073834278773.html",
+   "tag": "申报动态"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "又有基金公司股权变更！",
+   "summary": "对于后续规划，万联证券表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。",
+   "media": "中国基金报",
+   "url": "http://finance.eastmoney.com/a/202608073835537981.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "中信建投沈阳国际软件园REIT：经营底盘稳固 修复动能正在积聚",
+   "summary": "2026年上半年，基金实现可供分配金额合计2984.07万元，上半年年化分派率达6.48%，在20只已上市产业园REITs产品中排名第2，按天折算的同期预测完成率为104.57%。这一较高分派水平主要依托于底层资产扎实的经营与现金流创造能力…",
+   "media": "新华财经",
+   "url": "http://stock.eastmoney.com/a/202608073835533971.html",
+   "tag": "上市公告"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "牌照版图再扩容！广州市属国资券商万联证券控股长安基金 补齐公募业务关键拼图",
+   "summary": "对于后续规划，万联证券表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。",
+   "media": "广州日报",
+   "url": "http://finance.eastmoney.com/a/202608073835487023.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "万联证券“曲线”获批公募牌照：63.70%控股长安基金，剑指公募REITs",
+   "summary": "2023年10月，公司董事长王达公开表示，湾区巨大的存量资产需要通过REITs等方式盘活，这让万联证券更加坚定不移地加快推进公募基金牌照的获取进程，以能尽快实现重点布局湾区公募REITs业务。 　　如今，随着控制权获批落定，公募牌照成功“入…",
+   "media": "每日经济新闻",
+   "url": "http://finance.eastmoney.com/a/202608073835494819.html",
+   "tag": "申报动态"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "万联证券控股长安基金 补齐公募业务关键拼图",
+   "summary": "对于后续规划，万联证券方面表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。",
+   "media": "证券日报",
+   "url": "http://finance.eastmoney.com/a/202608073835481654.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "长安基金控股权变更，广州市属国资券商万联证券补齐公募业务关键拼图",
+   "summary": "对于后续规划，万联证券表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。",
+   "media": "中国证券报·中证金牛座",
+   "url": "http://finance.eastmoney.com/a/202608073835428712.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "三峡能源：华泰三峡新能源REIT在上交所挂牌上市",
+   "summary": "本次发行总份额5亿份，募集资金规模40.065亿元，网下认购倍数超160倍，网上认购倍数超38倍。 　　作为我国东北地区首单、全市场第11单能源公募REITs，其成功上市标志着东北地区存量能源资产盘活迈出重要一步，对畅通社会资本参与清洁能源…",
+   "media": "中证网",
+   "url": "http://stock.eastmoney.com/a/202608073835555261.html",
+   "tag": "拟上市"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "广州市属国资券商万联证券控股长安基金 补齐公募业务拼图",
+   "summary": "对于后续规划，万联证券表示，将依托股东资源优势，深化各业务条线协同联动，积极储备公募REITs优质基础资产项目，继续立足广州，服务实体经济，在优化居民资产配置、服务广大投资者等方面发挥国有券商的作用，为区域金融高质量发展提供助力。",
+   "media": "上海证券报·中国证券网",
+   "url": "http://finance.eastmoney.com/a/202608073835430673.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "美股盘前：三大股指期货齐涨 存储、光通信概念股走高 市场静待美国7月非农数据",
+   "summary": "他建议投资者减少风险资产暴露，转向必需消费品等防御板块，同时关注REITs、小盘股、生物科技等久期资产以及美元。 　　黄金牛市回来了？",
+   "media": "哈富证券",
+   "url": "http://stock.eastmoney.com/a/202608073835379377.html",
+   "tag": "市场观点"
+  },
+  {
+   "date": "2026-08-07",
+   "title": "保租房转向提质发展，长效运营如何做实？城投宽庭打造全链路实践样本",
+   "summary": "“以城投宽庭为例，其保租房REIT租金收缴率达99.93%，在9只保租房公募REITs中排名第三。正是依托标准化、可复制的运营系统，才得以持续兑现REITs价值。” 　　城投宽庭的七年发展历程，也印证了标准化运营体系对于适配行业转型、实现长…",
+   "media": "上观新闻",
+   "url": "http://biz.eastmoney.com/a/202608073835317718.html",
+   "tag": "市场观点"
+  },
+  {
+   "code": "wx_15f1dfcaf615",
+   "date": "2026-08-07",
+   "title": "砖济研究丨公募REITs的学理界定与多层架构逻辑",
+   "summary": "砖济总部 | 深圳 南山公募REITs的学理界定与多层架构逻辑公募基础设施REITs(以下简称“公募REITs”)的推出,标志着我国基础设...",
+   "media": "砖济咨询（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJaNjaMHrjFni-KiElGL2n2FqXa8Fplpd92lkWdcN46KeY7Vjfmo_ZQzrCAZebQypIeUQCjVnmOc71ZLii8sXI8QIWXCOq9XGhp1TcfDU9Jc8ZpiKuiuT66cUJ33e6FQtMuByGg1wyiLbPdziZKidL1NGx_qEkpyzgSYN80fV5nYZlpeoYY12mIQBzBvwkW1rcAbAk59S_BJpOJBjQH7pCxQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24031820EDEA5C0F2C2A738612E26C132CAB6C016A798D76",
+   "tag": "市场观点"
+  },
+  {
+   "code": "wx_9e4bc2eea35d",
+   "date": "2026-08-07",
+   "title": "公募REITs市场日报2026年8月6日(周四",
+   "summary": "公募REITs市场日报日期:2026年8月6日(周四)一、今日市场大事件分红南方万国数据中心REIT(508060)披露2026年首次分红. 基...",
+   "media": "REITs余与于（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9YsE6_S-3CsYxlRSu2Ih5hnYib40iMirfJu0OKysbPebmEUZGSBb5BnwZbAF9jqKDZAZi8-valmLwVYsvJwDRTxlXzVc7XrtTi8n68yScEAYxdGzS9Y-Q5YfCNY6fOhCbVx0noXaO2PmVl-GQcX5at_lHEB9iOBqJybLzkxutiST1AfaFW2DefQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
+   "tag": "上市公告"
+  },
+  {
+   "code": "wx_73b7ef5d34cb",
+   "date": "2026-08-07",
+   "title": "研究 | 公募REITs扩募全解析:法律框架、合规要点与存续期管理",
+   "summary": "引言自2021年首批公募REITs上市以来,中国基础设施公募REITs市场蓬勃发展,已成为盘活存量资产、拓宽投资渠道的重要工具.随...",
+   "media": "道可特合规与ESG（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJBqtBh2cqF_a-KiElGL2n2FqXa8Fplpd9PCVLYzE1rlQ17smKs0daxpgoAd3rJ5kW1jN4OO50NvSH00sbjloCQSmpbJ6AMsjOpoUO966k_mp19FfHTtwPax1HIITYM8wVVjxAeIMCdq1JSsoIU6DguwChM71K5J3RQlw-XiabGZNidENx7VrIyeRs63eMGfX0s3ZTeY1b_29hlgeRt7bSzA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24033BC38D8D3A6E4B4C12E7747CB1AA4BCEC89A6A798D7D",
+   "tag": "上市公告"
+  },
+  {
+   "code": "wx_fa16325a2eeb",
+   "date": "2026-08-07",
+   "title": "通俗读懂公募REITs重点:股债结构是什么、背后逻辑、如何搭建等",
+   "summary": "翻开任何一只公募REITs的招募说明书,你大概率会撞上几个读起来拗口的词:反向吸收合并股东借款应付减资款应付股利确认债权…...",
+   "media": "invictus耀的法研库（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJBqtBh2cqF_a-KiElGL2n2FqXa8Fplpd9kNBTEBlvBvVc_igcb96JB-bIkVmbc0H8NTe_Zbgv4-ysU9c2YJV9Rv6J6x-YsctIoew2u_WzVkJGF_gml5sZWVI0sw4y6HB2WhX41Fl9ys8E0lM7-PN5jhdtXEcmYl-b-ST9kRZlOb5Ekqj6o7nP511Vd17f9b5AYotqAXE1Tiy00NVofL2iDw..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24033BC38D8D3A6E4B4C12E7747CB1AA4BCEC89A6A798D7D",
+   "tag": "市场观点"
+  },
+  {
+   "code": "wx_72a37458b176",
+   "date": "2026-08-07",
+   "title": "3分钟看懂公募REITs估值的“资本化率”和“折现率”",
+   "summary": "公募REITs招募说明书的资产评估章节,通常并列披露两个形态相近的指标:资本化率与折现率.对非专业投资者而言,二者均以百分...",
+   "media": "ABS交流合作（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJBqtBh2cqF_a-KiElGL2n2FqXa8Fplpd9pfnKQLPDedPFyHhJdFbNE3qV9eORGTaghvXajgHAs00k0j9PYpUF8wCkoFj8AjFBfI52_3djPVtqgdfA_KmxeDCCWaYV3BAuDJ4-q6xzF5sZZt951x6bbe8kTl2AE_1EHbCPBU4j4IjdeXpYOeKbGUQcy7FQOY4dZczM1ICaQazP28temKTOwg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24033BC38D8D3A6E4B4C12E7747CB1AA4BCEC89A6A798D7D",
+   "tag": "市场观点"
+  },
+  {
+   "code": "wx_37f04684e734",
+   "date": "2026-08-07",
+   "title": "机构间REITs正式定名:沪深ABS新规将不动产证券化带入“主动管理”时代",
+   "summary": "其中,最受市场关注的变化,是将原来的“持有型不动产ABS”正式命名为“机构间REITs”,并系统规定不动产基础资产准入、交易...",
+   "media": "海天之间四人行（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJwAeuyb9BiKC-KiElGL2n2FqXa8Fplpd9COZwY0DxuTz2OxqwO2D_5gPekRROdMAAi5_PMfXUt6ekjE11LMY6b43E-3r-XTnINw11fNBIK_mo-hMqT_qhXb93MKL--5A6nOOkzPU2QsTF4rIRmostg13wu0uQLtkIhfasywzw-VXNZ874VT0p4teA3DjC2DUEBJfiAK_zvedf_71bqkOtiw..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=2403728D96962075515709FC6EB2DBA0518F1F236A798D88",
+   "tag": "机构间REITs"
+  },
+  {
+   "code": "wx_2ab54d676bc1",
+   "date": "2026-08-07",
+   "title": "工商业分布式光伏机构间REITs成功发行",
+   "summary": "01导语近日,兴证基实-宏祚新能源持有型不动产资产支持专项计划(碳中和) 成功发行,作为标准化机构间REITs(持有型不动产...",
+   "media": "枫野轩蓝S（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJwAeuyb9BiKC-KiElGL2n2FqXa8Fplpd92lnSXzPTPhpvjZLY9UQ1XjsSQd8bTKMA8BRmYRh6dCf_E1n4TQu8dngcvMnIHR2M5iqQvfPO2RGAD4sp3h7fmnx_EC71x_eFdSJhuhXFiUlnjnP6M6lBfRorHWz2jWuk672Mq6GSrdiGV2pNGfC4uJpXFt4bmvgyr5LKzSvND4Ts46dn8Efgxg..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=2403728D96962075515709FC6EB2DBA0518F1F236A798D88",
+   "tag": "机构间REITs"
   },
   {
    "code": "wx_cc3bfb3832f9",
@@ -50,8 +441,17 @@
    "title": "债市启明|公募REITs 2Q26季报解析:共识之下,捕捉边际",
    "summary": "文|明明  余经纬  秦楚媛  周昀锋2026年二季度,公募REITs各类型资产的业绩延续分化态势.整体来看To C端的消费基础设施、保障房...",
    "media": "中信证券研究（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd95HdMmAgwVMB5GSZ1KEcy-akE3uCJfWMc70z5-jNWwMRzzdZg9JxMP_xSnLmYwMcXq-4U3aJSGGVqQ1HUdKXoPTK1mcm7M3WcDQPBulf7yGwkofrCGq6VDLwR_kE1pAVVDt2kpZgPqYAX-bQKL-jTJw4orBW2szsypzMx-MyQfFX6zvkPgoArRQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9z6J1TzUbHdo5tI0Ytdqi4x3Tni3cgVckjPeVvI2na_O82kxK_7VXv6YT4Al7L_QGupzDQQKTB1ZCw3wQfZF85RiW5p_tCM-63usWXvDleTJf62TNCWRDACXBvK0iG2iPbpPDstr0u_2Z0o3ZzFIG2-iju4hGvEilJS5tduhsIEoHpHkoPMgL3A..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
    "tag": "上市公告"
+  },
+  {
+   "code": "wx_5b7fb53d53bb",
+   "date": "2026-08-06",
+   "title": "沪深交易所ABS新规(机构间REITs)的内容与影响",
+   "summary": "机构间REITs是多层次REITs市场的重要组成部分,其核心功能与IPO、公募REITs一致,发行上市属于标准资产上市行为.3.2 “四要素...",
+   "media": "古邦投资（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJ0hLivTdkzJe-KiElGL2n2FqXa8Fplpd9roMTFpDsl-p5P1deNsrb0B4asyhJ5PBY9XkwulGPpAX4X06wQbOYbXLALQWy9XYcu5X1BTOvQIWqsOQywwD6DxUzZPdB2-PH09Kq9bDlqI2du2GzFqXQdyCmRTm1Burv_qJvw7s3rvx-j9ok_jzLBk1ACo8i57esWbiPO2U44olj3x9Nw6p-Fg..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=24038047C4C5722603045BAE431B94E303F84BD66A798D8C",
+   "tag": "机构间REITs"
   },
   {
    "code": "ceb_8a9c96a69fd0",
@@ -97,28 +497,13 @@
    "tag": "政策监管"
   },
   {
+   "code": "wx_3ad32ca94354",
    "date": "2026-08-05",
-   "title": "权益类理财近一年分化加剧：AI算力领跑，合资理财闯入绩优梯队",
-   "summary": "工银理财\"工银量化理财-恒盛配置\"、光大理财\"阳光红基础设施公募REITs优选1号\"净值也分别回落9.98%、8.99%。 　　一边是科技赛道的高歌猛进，一边是传统行业的持续承压——权益理财市场的极致分化，本质上是A股结构性行情的直接映射。",
-   "media": "21世纪经济报道",
-   "url": "http://stock.eastmoney.com/a/202608053832440923.html",
+   "title": "公募REITs二级市场止跌回稳,保障房板块强势领涨",
+   "summary": "上周公募REITs二级市场止跌回稳.截至上周五(7月31日),中证REITs(收盘)指数收于713.57点,环比上涨0.42%;中证REITs全...",
+   "media": "REITs家（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJaNjaMHrjFni-KiElGL2n2FqXa8Fplpd9OAL7iDMAAbkSXTNRhK4fQMU2koQtpud7Ge2zPyROiLKVR7gbTCeS-v0DnUGpEcCoAPeo4nkwkwLdkXd7svkn9i19o2SQ-kIgfdHERppFom4XNI5AIomocjEbX7tOJh0H4xPp-sccSaaDcmMGhd31WoEbA5hsn2jAf_LUbDog9HFj3x9Nw6p-Fg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24031820EDEA5C0F2C2A738612E26C132CAB6C016A798D76",
    "tag": "市场观点"
-  },
-  {
-   "date": "2026-08-05",
-   "title": "汇聚资本力量 赋能京津冀协同发展——河北证监局联合多方赴保定开展资本市场服务活动",
-   "summary": "高速公路、数据中心两只公募REITs先后发行上市，募集资金超100亿元，数量和规模均走在全国前列，科创债余额将近2000亿元，私募基金管理规模突破千亿元大关。",
-   "media": "中国证券报",
-   "url": "http://finance.eastmoney.com/a/202608053831609819.html",
-   "tag": "上市公告"
-  },
-  {
-   "date": "2026-08-05",
-   "title": "盛松成：房地产转型发展应把握好楼宇经济机遇",
-   "summary": "鼓励社会资本积极参与，支持有条件的地区发行REITs扩容；考虑推动结构性货币政策工具的优惠贷款支持，由特定产业、企业向产业载体的运营主体延伸。 　　（二）支持商业与服务业供给体系健康发展。当前我国商业发展仍存在一定结构性问题。",
-   "media": "大河财立方",
-   "url": "http://finance.eastmoney.com/a/202608053832811919.html",
-   "tag": "政策监管"
   },
   {
    "code": "wx_9c1561618e60",
@@ -126,7 +511,7 @@
    "title": "上市公司参与公募REITs市场的系列问题梳理",
    "summary": "前言国家发改委、中国证监会及各级地方政府接连发布基础设施公募REITs相关支持政策,现基础设施公募REITs发行已进入常态化新...",
    "media": "资本录（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bTsVm5pJFh9On12UHSIZ0oFqXa8Fplpd9LwSPg_C-JhZjNNX61dC_6aI8Xe7Cf5xRA251S3ULtr-0pCx2CagPV4VErmWpzZLgiTUn83N__kAi16qMdOEnqHECmVsAwnyB4AiXgYivw1XTeBGFVFUdxbPpcSWIehpwdNzTFWfJsV-BIzw7-BeZR3c2bbBECCman28KoaCjFkE5eBgmN3LoYQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C1597AB8FB4B6CACC9296B13051DACB6120A76A744284",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJaNjaMHrjFni-KiElGL2n2FqXa8Fplpd9qgnqHqpZUub2OOUq3kIY3n6I4ypfeMjVU-aAMUYoQ9MjyycxjFlA23EQpo3jOltQxCK7Efa3whX5pVMLa77lc9fIOOGR29LWEjajBlZCgvRHigid2ulCQlXNcyPp_YvGg3cLp7jIsJKgPYiDe2hli3AGv_D9DVjqsfokVyNfhpeAFV_3u-a3OQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24031820EDEA5C0F2C2A738612E26C132CAB6C016A798D76",
    "tag": "上市公告"
   },
   {
@@ -135,7 +520,16 @@
    "title": "上市公司参与公募REITs市场的系列问题梳理",
    "summary": "前言国家发改委、中国证监会及各级地方政府接连发布基础设施公募REITs相关支持政策,现基础设施公募REITs发行已进入常态化新...",
    "media": "中国企业投资促进会（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd9pTURWu0uVIif0qJevvfl0pvMZ_Ouh767ZsoWgG_9kEqrtuI04FEQdMzfdKOcT6oTHtZd7Qvnka2fyVLCeehEr_EdIv-3l5q-G3QfpLp6OdKkeDnoCGTI1FPuecHHE09hKmN-6WZBH5DFkWfTCOcf7zGZ1FTV4e2jRgFpWZ6U08aTJmCU1UgHwQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9fQFSInq8BP67OjB1cxAo0J946XOB-rVxt8GHe2nfiuXH3c_syyRBQhEHXZ1FwgxQk-GnwFu81E26_gHONd_rMBo5mLwwslfhl5vDa997GdYS4Ha_UHu_-hVfW1hmTHaTzDs-TcmDlh9a5rOBnNBAW2t3EJ2cQXg-liYlx8MeincGX_iHL9MadA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
+   "tag": "上市公告"
+  },
+  {
+   "code": "wx_066e5fe27c15",
+   "date": "2026-08-05",
+   "title": "公募REITs2026Q2季报",
+   "summary": "租金连续两个季度环比增长的REITs有红土创新深圳安居REIT、招商基金蛇口租赁住房REIT.财务数据2026年二季度保租房板块营业收...",
+   "media": "睿持深研（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9phbKguLikkuRBUkNR_1IEJRL8IIO-CQBg9h64TVOxiga7Yx3v-bhIJKm6ze3LPc6vO8egghNCMB8_XW5eXG-rvQHY2Hu6MCmYQaRG3vCK1BAq9wbe8rRQMsNuAQLu_EGTvmxpMjeO7WZ9ch5jFrqlR-o8sa96iGMmrPE0lv5beqE8RsmObDbtQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
    "tag": "上市公告"
   },
   {
@@ -144,26 +538,8 @@
    "title": "王飞强:让“地”久天长--产权类公募REITs“土地续期”政策建议",
    "summary": "本文字数4131 手搓量 100%   AI含量 0%王飞强:让“地”久天长—— 产权类公募REITs土地续期政策亟待顶层设计一位评估从业者的...",
    "media": "ABS交流合作（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bnQs-gqFCkG-n12UHSIZ0oFqXa8Fplpd92rMCzpDShg4rwY6H5EUQPg7vimj0MEPWMGV3HX_cjlodYbKz3RNp1g--93K4sUs8Sv_gTrgEhFUYR89Md2_hEO4LGGXApsspEtd_FbinTojDu8cVQkE94G39enZmvqlCAx5fYW9Q_-jpMG_HK8_pfKmky8r465BbgUdeMtUpHprzAjcIGepUqA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C3976DDFEC3C0BBBDE3E7C0D859F3BCA3B0256A74428B",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJBqtBh2cqF_a-KiElGL2n2FqXa8Fplpd9pfnKQLPDedPFyHhJdFbNE3qV9eORGTaghvXajgHAs00k0j9PYpUF82jV8XmkchtvwN-HHmiHvZXwzHgcsOY1PAAAM3OzKgT-igCxgM6pjckR9GG4oY_i0sSoYM69VQaAHQAbM_TiGUdtcJPr9TM-T2eShVu54ow9WPE3FK_Qaijs46dn8Efgxg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24033BC38D8D3A6E4B4C12E7747CB1AA4BCEC89A6A798D7D",
    "tag": "政策监管"
-  },
-  {
-   "code": "wx_3ad32ca94354",
-   "date": "2026-08-05",
-   "title": "公募REITs二级市场止跌回稳,保障房板块强势领涨",
-   "summary": "上周公募REITs二级市场止跌回稳.截至上周五(7月31日),中证REITs(收盘)指数收于713.57点,环比上涨0.42%;中证REITs全...",
-   "media": "REITs家（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bnQs-gqFCkG-n12UHSIZ0oFqXa8Fplpd9JWYiBJzvsIlvtGoUidLzeiagxJKAbXRpwM9buEA0bntl_mcUW2cEomrd5wxHACKSIf66GC-y6qHvFeVc9xqmGdvHg3m13ws9COc1mVd_VaqZIEjFGFrPezkjTN-Yjub7gMSmnnl2FBHSzifiEsFahwwHOqzUpN4kYWC49-zV2igHpHkoPMgL3A..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C3976DDFEC3C0BBBDE3E7C0D859F3BCA3B0256A74428B",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_066e5fe27c15",
-   "date": "2026-08-05",
-   "title": "公募REITs2026Q2季报",
-   "summary": "租金连续两个季度环比增长的REITs有红土创新深圳安居REIT、招商基金蛇口租赁住房REIT.财务数据2026年二季度保租房板块营业收...",
-   "media": "睿持深研（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bnQs-gqFCkG-n12UHSIZ0oFqXa8Fplpd9_wjw1mQfKZhsEiP-9ckOEgQMljpMmdSadGthqrsEEnbDVi5CRNGPrDLFfSs2vX7zGqfL1A7U7mp9e_JnqVXrNzIZZUEUZIrcOnf8lwHhlUtl48ks_CEdwvwVlWJAsgbQ7Ib5tjhxwZ66IvppQEw0cJte7zieGiSNOiPnJATnlFgYJSSFPgfogQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C3976DDFEC3C0BBBDE3E7C0D859F3BCA3B0256A74428B",
-   "tag": "上市公告"
   },
   {
    "code": "wx_238a29aa3e93",
@@ -171,7 +547,16 @@
    "title": "昌平保障房机构间REITs中介落定 区级“公募 + 私募”双轨资本化路径成型",
    "summary": "8月5日,‌昌平保障房机构间REITs‌项目的四类中介服务中标结果同步公示,评估、法律、审计、计划管理人均已敲定,标志着这单...",
    "media": "睿思网REITs资讯（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bO-y-EgjjOc-n12UHSIZ0oFqXa8Fplpd9IM3nVd7HmQEQm_I6yRXgpDXuSY2UecrE9c6wAr8oXMExuHDuA58cicCPDfaGJX6OLspz1KV2SrpubKO94tZKAPhrtPWfA2t2Nh392tM4ISCrbMgmFSVbqo_wOXAItmKD_x_LsbyMNFgDT6JVB5tf_u0n1obZT8qPERxeirQb2-sYJSSFPgfogQ..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C874554704B4835326D69480B641D35B1CBA76A744299",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJ0hLivTdkzJe-KiElGL2n2FqXa8Fplpd91q1iNx0KmUjTn2C-ga9yo-htJhIO2hMkU9drXplQ18JG4JEb7pKQWGy5rqtZXNAkZsMM4CLlj-QRNABA1hXJOjLGZHHxl99S01Xh5rQdv8XSCatOMHNCC0peBzAejGn3mfwDHDbN1UR1v_SdlRkn3_pVgAfCulqDLZmh6ROerxeE8RsmObDbtQ..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=24038047C4C5722603045BAE431B94E303F84BD66A798D8C",
+   "tag": "机构间REITs"
+  },
+  {
+   "code": "wx_a7036aaf2401",
+   "date": "2026-08-05",
+   "title": "国新资产 近一年投资了哪些公募和机构间REITs、Pre-Reits?",
+   "summary": "今天来看看最近一年国新资产(全称中国国新资产管理有限公司)投资了哪些公募和机构间REITs、Pre-REITs?从2025年7月1日起至...",
+   "media": "小楠言REITs（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJ0hLivTdkzJe-KiElGL2n2FqXa8Fplpd94wuyFvo1t-1XC68VmffPlGz0i9wNjrkv1JM-5rRLsdiC7euaDswKSZ9FXlJ2dnTHAjXDYurh1YhCNyvB3QlucSzErlKHGNSunwC-Yc4tL21ZhZJEHs4X22xHrq_24bY6Rz8Rsxi4jc3YLEAJkZCvOUzDx2MjcrqND31VZ7cyarBhlgeRt7bSzA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=24038047C4C5722603045BAE431B94E303F84BD66A798D8C",
    "tag": "机构间REITs"
   },
   {
@@ -180,14 +565,6 @@
    "summary": "（类REITs）、持有型类不动产投资信托基金（私募REITs）产品，招标额度不超过21亿元，入围2家承销商； 　　三标段：服务对象为河南港投产业园管理集团有限公司（主项目）和河南港投科技产业发展集团有限公司（次项目），拟发行商业地产抵押贷款…",
    "media": "大河财立方",
    "url": "http://finance.eastmoney.com/a/202608043831512114.html",
-   "tag": "招投标"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "郑州城发安居科技拟发行租赁住房公募REITs，采购审计机构",
-   "summary": "【大河财立方消息】8月4日，郑州城发安居科技有限公司发布采购公告，拟选聘租赁住房公募REITs审计机构，响应文件递交截止时间为8月17日9时30分。",
-   "media": "大河财立方",
-   "url": "http://finance.eastmoney.com/a/202608043831463796.html",
    "tag": "招投标"
   },
   {
@@ -200,12 +577,12 @@
    "tag": "招投标"
   },
   {
-   "code": "ceb_8a9c96a69fca",
+   "code": "ceb_ec5efa2d19e2",
    "date": "2026-08-04",
-   "title": "海悦·梧桐苑机构间REITs发行与存续阶段中介机构-审计机构中选公告",
+   "title": "郑州城发安居科技有限公司租赁住房公募REITs审计机构选聘询比采购公告",
    "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
    "media": "中国招标投标公共服务平台",
-   "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fca1237019fca5ca9480c18&inpvalue=&dataSource=0&tenderAgency=",
+   "url": "https://ctbpsp.com/#/bulletinDetail?uuid=ec5efa2d19e24b23a02a4c3dd2e4538b&inpvalue=&dataSource=0&tenderAgency=",
    "tag": "招投标"
   },
   {
@@ -225,116 +602,13 @@
    "tag": "申报动态"
   },
   {
+   "code": "wx_34af7332eff8",
    "date": "2026-08-04",
-   "title": "吴清定调“十五五”资本市场开放，传递明确信号",
-   "summary": "后续落地动作也已明确：中国证监会正会同香港方面抓紧推进人民币股票交易柜台纳入港股通、REITs纳入沪深港通的各项准备工作；两地行业机构将推出更多基于两地市场、布局中国现代化产业体系的ETF产品；同时，双方将研究扩大两地证券期货专业人员资格互…",
-   "media": "21世纪经济报道",
-   "url": "http://finance.eastmoney.com/a/202608043831542827.html",
-   "tag": "政策监管"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "平安理财上半年存续规模9783.89亿元",
-   "summary": "记者了解到，面对规模收缩，平安理财2026年策略方向聚焦于多资产配置转型，在“固收+”领域持续探索，创新引入ABS、另类ABS与公募REITs三类资产构建分层配置策略，部分产品近一月年化收益率达6.90%。",
-   "media": "上海证券报·中国证券网",
-   "url": "http://money.eastmoney.com/a/202608043831393782.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "中欧基金申报首只ETF！非货前20大基金公司，全员布局",
-   "summary": "除主动ETF外，股债恒定ETF、REITs ETF、商品期货ETF等创新产品也备受期待。在多家基金公司看来，未来的产品创新将更多围绕ETF展开，ETF本身将演变为创新ETF的“基础设施”，这也意味着，将有越来越多的基金公司涉足这一领域。",
-   "media": "中国基金报",
-   "url": "http://stock.eastmoney.com/a/202608043831434552.html",
-   "tag": "申报动态"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "吴清定调“十五五”资本市场开放：国债期货落子香港，五项协同迈入深水区",
-   "summary": "除正在提速推进的人民币股票交易柜台纳入港股通、REITs互联互通外，两地将推出常规股票ETF快速注册机制，加速产业主题跨境ETF布局，持续丰富离岸人民币期货品种，以国债期货落地为起点，持续完善香港离岸利率风险管理体系，强化其离岸人民币金融枢…",
-   "media": "21世纪经济报道",
-   "url": "http://bond.eastmoney.com/a/202608043831456791.html",
-   "tag": "申报动态"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "多地出新政“争抢”3.2亿老年人：押注旅居康养寻找楼市新客",
-   "summary": "在海外市场，养老社区已经成为成熟的不动产资产类别，并通过REITs实现资产证券化。 　　例如，美国养老地产REITs已经形成成熟模式，代表企业包括Welltower、Ventas等。",
-   "media": "第一财经",
-   "url": "http://finance.eastmoney.com/a/202608043831215352.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "正泰安能66.62亿元新能源机构间REITs获受理",
-   "summary": "基于这一背景，新能源机构间REITs也加速扩容，成为增长最快、品类创新最密集的细分领域。据上交所公开数据，截至目前，已有90单机构间REITs项目在该所申报，总规模超过1700亿元。而户用光伏这类现金流稳定、存续周期长的新能源资产，与机构间…",
-   "media": "证券日报",
-   "url": "http://finance.eastmoney.com/a/202608043831184322.html",
-   "tag": "机构间REITs"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "吴清重磅发声！从“资本桥”到“五大协同”，释放了哪些开放信号？",
-   "summary": "“当前，我们会同香港方面，正在抓紧推进人民币股票交易柜台、REITs纳入沪深港通各项准备工作，相信这座大桥还将越来越宽敞、越来越稳固、越来越通畅。”吴清称。",
-   "media": "中国经营报",
-   "url": "http://finance.eastmoney.com/a/202608043830575311.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "证监会主席吴清：内地企业占港股市值八成，成交额占九成",
-   "summary": "“当前，我们会同香港方面，正在抓紧推进人民币股票交易柜台、REITs纳入沪深港通各项准备工作，相信这座大桥还将越来越宽敞、越来越稳固、越来越通畅。”吴清称。",
-   "media": "中国经营报",
-   "url": "http://stock.eastmoney.com/a/202608043830575490.html",
-   "tag": "政策监管"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "21社论丨以算力网为关键支点撬动有效投资",
-   "summary": "同时要完善能耗、土地、电力等要素保障机制，探索绿色数据中心REITs、算力基础设施中长期贷款等金融创新，为社会资本进入开辟多元融资渠道。 　　在市场机制层面，关键是建设全国统一的算力交易市场和算力调度平台。",
-   "media": "21世纪经济报道",
-   "url": "http://finance.eastmoney.com/a/202608043830191782.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "证监会：支持拓展国际布局境内企业赴港上市",
-   "summary": "“当前，我们会同香港方面，正在抓紧推进人民币股票交易柜台、REITs纳入沪深港通各项准备工作，相信这座大桥还将越来越宽敞、越来越稳固、越来越通畅。”吴清说。",
-   "media": "中国证券报",
-   "url": "http://finance.eastmoney.com/a/202608043830183618.html",
+   "title": "公募REITs全流程:发行备案、估值核算、份额登记、收益分配、信息披露运营要点",
+   "summary": "年试点启动以来,我国公开募集基础设施证券投资基金(以下简称 ＂公募 REITs＂)已形成覆盖产权类与经营权类资产、横跨多行业的...",
+   "media": "资管业务与科技（微信公众号）",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJaNjaMHrjFni-KiElGL2n2FqXa8Fplpd9ytMy2YINHI6V4uiJuqn0_cQ1dDgzPaZ14NphcIcKtFF7GEhkqCAfKv_R6RCb8TRv9YJ5ZSljXneF8AjahRWSYlf9f6Vf7PGYEiXhAHWCVbe4Kn4N1Y-wFZb7uo2NlHWDEHkO5hgXrwYo0e2melqSHHAXXf-_PYkZBOFaVE2wTGcO8fIRwtipOg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=24031820EDEA5C0F2C2A738612E26C132CAB6C016A798D76",
    "tag": "上市公告"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "聚焦五大协同 内地与香港资本市场双向合作深化",
-   "summary": "吴清还表示，正会同香港方面抓紧推进人民币股票交易柜台、REITs纳入沪深港通各项准备工作。 　　吴清表示，金融和资本市场未来五年的发展规划正在紧锣密鼓地制定中。两地将进一步推出深化双向务实合作、支持香港资本市场发展的政策举措。",
-   "media": "经济参考报",
-   "url": "http://finance.eastmoney.com/a/202608043830172020.html",
-   "tag": "政策监管"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "支持拓展国际布局的境内企业赴港上市 支持优质港股上市公司境内上市 中国证监会：聚焦五方面深化与香港资本市场合作",
-   "summary": "吴清说，沪深港通已平稳运行超过10年，标的范围和产品类型持续拓展，双向股票标的市值覆盖率不断提高，目前均已超过90%，“当前，我们会同香港方面，正在抓紧推进人民币股票交易柜台、REITs纳入沪深港通各项准备工作，相信这座大桥还将越来越宽敞、…",
-   "media": "上海证券报",
-   "url": "http://finance.eastmoney.com/a/202608043830160091.html",
-   "tag": "上市公告"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "证监会：聚焦五方面协同 深化内地和香港市场合作",
-   "summary": "当前，中国证监会会同香港方面，正在抓紧推进人民币股票交易柜台、不动产投资信托基金（REITs）纳入沪深港通各项准备工作。",
-   "media": "证券时报",
-   "url": "http://finance.eastmoney.com/a/202608043830157078.html",
-   "tag": "政策监管"
-  },
-  {
-   "date": "2026-08-04",
-   "title": "证监会主席吴清：将进一步推出深化双向务实合作、支持香港资本市场发展的政策举措",
-   "summary": "吴清透露：“当前，我们会同香港方面，正在抓紧推进人民币股票交易柜台、REITs（不动产投资信托基金）纳入沪深港通各项准备工作，相信这座大桥还将越来越宽敞、越来越稳固、越来越通畅。”",
-   "media": "证券日报",
-   "url": "http://finance.eastmoney.com/a/202608043830150616.html",
-   "tag": "政策监管"
   },
   {
    "code": "wx_13a9753fc1e7",
@@ -342,34 +616,7 @@
    "title": "中国公募REITs发展回顾以及趋势展望",
    "summary": "公募REITs已经成为商业地产＂投、融、管、退＂大资管链条中极其重要的一环.当然,在这一发展过程中,仍然存在一些有待关注的...",
    "media": "Steven谈商业地产大资管（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bTsVm5pJFh9On12UHSIZ0oFqXa8Fplpd966z-7xsmoD6gwsQ9SaiMFesqgwmwTMO8eY-hGKPWScbpUPi69TpWs6w1BUjxDq3bO7-J7rBsIjNPrUVtp-8_eIis_vLvcOEWCGTP0nQ2sMhBUpaOIH17Hx8HIPwmeW-QjjyuiibdeRP8etTrjc-5pyEB5LFdMr1gUV_mKB59W_RQ_LeJW-Rhtg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C1597AB8FB4B6CACC9296B13051DACB6120A76A744284",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_34af7332eff8",
-   "date": "2026-08-04",
-   "title": "公募REITs全流程:发行备案、估值核算、份额登记、收益分配、信息披露运营要点",
-   "summary": "年试点启动以来,我国公开募集基础设施证券投资基金(以下简称 ＂公募 REITs＂)已形成覆盖产权类与经营权类资产、横跨多行业的...",
-   "media": "资管业务与科技（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bTsVm5pJFh9On12UHSIZ0oFqXa8Fplpd9pyLe4_hi1T5zT0gQBeJFZ7uUC5kWVwW-1ZGYW_gZTHays1FYPzY9OXZ7k3jTTjVS8gn0INW3MA8nZ6wx6_BpTSSQ5GcbIysqCkW2cLLiX7-k0owol6YALMeH2XdbG63gIlTrmmJWJuOWixmtcTDy1GLdHcCJZYVdqJ9l8IiSPB15LU3lqtPw9g..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C1597AB8FB4B6CACC9296B13051DACB6120A76A744284",
-   "tag": "上市公告"
-  },
-  {
-   "code": "wx_ded8a91d09a9",
-   "date": "2026-08-04",
-   "title": "公募REITs东风吹来,西咸五大新城谁能站上资本快车道?——从西安首单产业园REITs看新区存量资产破局路径",
-   "summary": "导语:近日,平安西安高科产业园公募REITs顺利通过深交所审核,成为西安本土首单园区类公募REITs.不同于大众简单理解的“融...",
-   "media": "安那时光（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd9q2mXYAxe8xknNxx4D6q7Ygte0lC0qlIfSBmn9puCKalL092_YBce48C0WqFHeB9zvtcMXd5RtAK2ZbAjdhhFbySGTF176VUvbV3L0evQeOZPnKii6GoCXHlf5fBKS-mPbxYq7bii-iJ3o_QogFWK8cbwrjQ7qomo1468fO2fPc5f_71bqkOtiw..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_eea6c3fabaa9",
-   "date": "2026-08-04",
-   "title": "公募REITs全面扩容:82只产品超2100亿,商业不动产破冰背后的资产退出密码",
-   "summary": "公募REITs全面扩容:82只产品超2100亿,商业不动产破冰背后的资产退出密码最近有个数据,让我挺有感触的.截至2026年5月,国...",
-   "media": "金手指笔记888（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd9JUDs5Nd4gRS10ludzgAhzfstd6sZeoT_IHQizrSIXnnEXtg_736xN7K0GgSqloQSo_c8e8vUN0QuiNITxBmxeY-cQwFjTDF861AvWOtS-Ww8SVs-kp9uA6TvBXEkuwtPwSZgLC3YrGJogcbrhfqZ2wj5BJz7jQNosl19ljCFZaVe0WC6Sbi7DA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9XmpXP3ZX3VmL-ICVtiqyu0aWgUleT7H4udiDQ0xeRqYJagy4LywQfiFO-CY0tgL7hx9Zgh6d9aZjhBp5tojOsDwSoQecXN0ekXq2UEb8xzVRJxCBBxdk77RIi54EBvmIPSO038jDaylPhcVM6gRwxwiEowIltd_jqVoBgxUy0Dp6VKrzu_4XKA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
    "tag": "市场观点"
   },
   {
@@ -378,16 +625,7 @@
    "title": "宏祚新能源机构间REITs成功发行 底层是工商业分布式光伏",
    "summary": "新能源(分布式光伏)机构间REITs+1.今天(8月4日),兴证基实-宏祚新能源持有型不动产资产支持专项计划(碳中和)在上交所成...",
    "media": "小楠言REITs（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bEczXaFBsY3an12UHSIZ0oFqXa8Fplpd9cCREEhR3hDW-bpQGUG0ZquLxCVtQnCOANWpK0ZGjVtkXrfJp5AzG2kjWuHlkvLrPxpicD6mLEYjtUWpOjV0h0aAo6yV78-_B7C-J9_Mu81HuiZxFwWIwV3T7vwOVSu9LpExqhvmICdHKVoYS6uQtGgqysZGxPkbx-B8AziYLzHHf3q8uRDTfkw..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C5E3A7B5F65661A1C414565CAD4A21A1AFC366A744292",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_597b60f31022",
-   "date": "2026-08-04",
-   "title": "正泰安能66.62亿新能源机构间REITs获受理",
-   "summary": "与机构间REITs的产品属性高度匹配.据了解,正泰安能拟发行的REITs同时叠加碳中和与乡村振兴双重政策属性.底层资产全部为已...",
-   "media": "AdvancedForum（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bO-y-EgjjOc-n12UHSIZ0oFqXa8Fplpd99K29VpK6xWvyHvlvQwelZpXRp-l7-ROZKPZWVkK3TkJpWiMahkM9d34typ3NmTYGeRDjmy5TvgFC3pMlaC64qBWj7XjO0jrBa1I-_NG3M5EcYjCGkGWf7zbXaw4oPyOyxpQedtfoeUTO6AT60fX6KNIc7c1I6zhbkURpgvt6PmJhlgeRt7bSzA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C874554704B4835326D69480B641D35B1CBA76A744299",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJ0hLivTdkzJe-KiElGL2n2FqXa8Fplpd94wuyFvo1t-1XC68VmffPlGz0i9wNjrkv1JM-5rRLsdiC7euaDswKSZJjaVgYbp2hup4Ljk_NDXTkSvT2HzJ_fAlZ8DpSiytbetRc6gTADLWAdw5DfiVwM4BLGKzPDqN1Q-Tn4gTeBXyIpzVWefgxdzeUJQanWgTCCTXTv60AnaYHpHkoPMgL3A..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=24038047C4C5722603045BAE431B94E303F84BD66A798D8C",
    "tag": "机构间REITs"
   },
   {
@@ -407,81 +645,13 @@
    "tag": "上市公告"
   },
   {
-   "date": "2026-08-03",
-   "title": "首只离岸国债期货落地香港 资本市场双向开放再升级",
-   "summary": "“当前，我们会同香港方面，正在抓紧推进人民币股票交易柜台、REITs纳入沪深港通各项准备工作。”吴清提到。 　　此外，在促进两地机构与产品合作方面，中国证监会积极支持境内机构以香港为起点“走出去”，主动参与国际竞争，提升全球资源配置能力。",
-   "media": "第一财经",
-   "url": "http://bond.eastmoney.com/a/202608033830030937.html",
-   "tag": "政策监管"
-  },
-  {
-   "date": "2026-08-03",
-   "title": "再添稀缺标的 东北地区首单能源公募REIT上市在即",
-   "summary": "国内能源公募REITs市场即将再添一只稀缺标的。华泰三峡清洁能源封闭式基础设施证券投资基金（简称“华泰三峡新能源REIT”，基金代码508059）已完成募集，将于近日在上海证券交易所挂牌上市。",
-   "media": "上海证券报·中国证券网",
-   "url": "http://finance.eastmoney.com/a/202608033830024195.html",
-   "tag": "上市公告"
-  },
-  {
-   "date": "2026-08-03",
-   "title": "低空经济第一省，解锁低空金融新拼图",
-   "summary": "对于低空企业而言，初创期需要风险投资和耐心资本来覆盖研发投入；成长期需要引入银行信贷资金和保险产品实现顺利运营；成熟期需要通过IPO、发行债券扩大生产规模，利用ABS、REITs盘活基建资产。",
-   "media": "21世纪经济报道",
-   "url": "http://finance.eastmoney.com/a/202608033829951024.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-08-03",
-   "title": "国家发展改革委谈“六张网”建设：突出“多网协同、软硬协同、场景协同”",
-   "summary": "推动基础设施领域不动产投资信托基金（REITs）扩容提效。",
-   "media": "每日经济新闻",
-   "url": "http://finance.eastmoney.com/a/202608033830123473.html",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_723fd75ca346",
-   "date": "2026-08-03",
-   "title": "元联研究 | 公募REITs市场周报(2026年第29周0727-0731)",
-   "summary": "01本周市场交易情况分析1.项目量价走势价格方面,本周公募REITs市场小幅上行,中证REITs指数上涨0.42%,产权类指数上涨0.39%...",
-   "media": "元联基金（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd96skxIQLlOzldcThSbnCHIQ9gxffeJlS7aKfvFUuCyqVCFoL0iaBpgBz6_joJwCor7FvGGadahMyhuDiKXZkaCQ87QWZ_Ryy7g-rh7OCeyQjDYziGkPm8TPje6E88XWpHiFnzOMflsA-CJepDEXCJq_iyW8nNvPItxUa0t4vUT3TyPfCoem7FzA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_402cfa802e02",
-   "date": "2026-08-03",
-   "title": "周度观察 | 公募REITs稳健运营,资产类型更趋多元化",
-   "summary": "公募REITs稳健运营,资产类型更趋多元化今年以来,公募REITs稳健运营,资产类型更趋多元化.数据显示,今年以来新成立12只公...",
-   "media": "天相投顾（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd9iuJWuQCcXtME83UuxN5CI655o-pK1_KWm0bDjTArAkyNwXDBs-6zxti00FJhcqHvbq_5ljdBMVXB12_Q4QeHaK_jDAMcHOoqDCbobbY4emjkGAH5JS1tZec8wsgSrcufZzETitqnMg0dXNaJavrWIfo5MEbJVzk4x8VP9bjTaOyAFV_3u-a3OQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
-   "tag": "市场观点"
-  },
-  {
    "code": "wx_b841c669c015",
    "date": "2026-08-03",
    "title": "公募REITs周报 | 2026.7.27-2026.7.31",
    "summary": "01.重点事件回顾政策1) 7月27日,上海市杨浦区召开国资运营管理与商业不动产REITs政策解读研讨会,围绕存量资产盘活与证券化落...",
    "media": "招商基金-REITs有招（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bnQs-gqFCkG-n12UHSIZ0oFqXa8Fplpd92xW7PmZA0ovjv09lEvjvoKIjWBI1f_7ToHBRsHgPyezyKtAp8CA85D1thfzhW8UOIQ79E9qlzz6xkj8j6CMtEHj2x3E-pjcR2jsmIAlGnsVsxfCzk6eNzACO58azwx9qCs0qiPZ1a9mWDz4BGHMDSHmoit2TKnJjgkZ7aSQYyC_Yl_Q5RRZQjg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C3976DDFEC3C0BBBDE3E7C0D859F3BCA3B0256A74428B",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd9jpsM-qR6zGEfiH7YuJ4bl0Z7o_efitpiLMXEhd9R0vTgWO3lwJzor3NT_4dQrsgAQ_bQ5Zhegq2npDONBldT0hHlq_GYEzd5vwg7v422t9XQtYDzgcpDvrOquwG2PAvrOL7IWGtSJD-EMxm0zCgaG5m2FjZnUdi6z7zRSWIFLimfxjh3za6jWA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
    "tag": "政策监管"
-  },
-  {
-   "code": "wx_0706f4d683eb",
-   "date": "2026-08-03",
-   "title": "机构间REITs的＂保障＂与＂增信＂——新规下保障条款设计的法律边界与实务要点",
-   "summary": "机构间REITs须具备四个特征:四要素含义对应的＂红线＂无外部增信不得设置差额补足、保证担保等主体刚性增信禁止差额补足承诺...",
-   "media": "王小菠-资产证券化律师（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bxb01razdQ46n12UHSIZ0oFqXa8Fplpd9EClOA_wx09JAe9bGpnyjh_AS5M8Ou6w0bES9hzTeismIfgooAGqNVHvDyznSPkhltJOoMapgo-UCaKyg6OyKA1AJ-IRNc7t10kRgk4QeEEIabBBW8esOVlq1DWuBPnOpnjuTlwMUfnM0Dp7HgeLr_VGk3qIIJv1Fdd19DXKtiedFkDr8IT4KYw..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C744110350E0D7177282D0D79D690710BBD676A744296",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_b78e4e75430a",
-   "date": "2026-08-02",
-   "title": "公募REITs周度跟踪报告(7.27-7.31)",
-   "summary": "公募REITs周度跟踪报告        新项目追踪7月27日,绿发商业管理(北京)有限公司发布第10批次工程服务类项目集中采购招标公告,...",
-   "media": "合凡资产（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd91RtjufzYyaGqWoSvz738iZi9xkpELxksQ6kCj_Divx82-j5XDTlcR1K362W0L2bP0JE3kybfEF-MIe1cZc0GJH3NKFiTIktGRpgrUzoQ3HGgFLeU1Pej452-nB-17ksLmE3Bqh15kp2N9A-0gfCQnJF19HvSS5Y-yLv3Y8osrCTI3OTRHYU2og..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
-   "tag": "招投标"
   },
   {
    "code": "wx_8592d3879397",
@@ -489,26 +659,8 @@
    "title": "公募REITs上市第261周表现深度解析(7月27日-7月31日)",
    "summary": "公募REITs总指数8.13%、经营权REITs指数6.60%、产权REITs指数9.64%.与其他股票指数相比,本周公募REITs相关指数波动率变化...",
    "media": "如此REITs（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd98yz-bS_ZZ2ECJCJT_8vi2pCxCVkAfWcQYCze2vh2vjHXiObdFE4RvK1uZhgMt5J7P5M5YtLjp8lpLB70RuNYAf0-lG2mmKhklTYH32G2Qi7yOC2rkIasHAaXdRarLvnvCzTGgKB2ZiIQY3xmkYciHbt1rBQ3HMPRure5mzhXgUyjotuuiAmOIg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
+   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgSz6TryvqL7IJZ5yy3j5-8bW-KiElGL2n2FqXa8Fplpd90mK23WEeXJslJeZYQuKnk5smXVZh54wGvGTTYf-uPUP08P6P8O01BR_AgRRht68cCgYZKlxHP3xnmoYsJYzyRas6V15m1_rENe93PCJuAq6UXcL96GFoj9GJq154U0LwLZd3F5SV-XTpK5-daehUkiXobESwXI6dAoKDCsX-gklQ_LeJW-Rhtg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=240327E698982F7B5F5906F2605FECD65FEA3D966A798D79",
    "tag": "上市公告"
-  },
-  {
-   "code": "wx_4de4987f3533",
-   "date": "2026-08-02",
-   "title": "首单动力电池“储架”机构间REITs--规模50亿,首期3.37亿成功发行",
-   "summary": "本项目完成全球首单动力电池储架机构间REITs落地发行,成为蔚能在动力电池资产证券化业务上又一个新的里程碑,再次为企业助力...",
-   "media": "ABS交流合作（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bO-y-EgjjOc-n12UHSIZ0oFqXa8Fplpd92rMCzpDShg4rwY6H5EUQPg7vimj0MEPWMGV3HX_cjlodYbKz3RNp1gw9gAxgDpLcV6jSl9UbytYPEEpsuTpbASrKZNnK3iEda90I69goKTNOivBLkehM8xlbHEtS1wlqAJI5XhT2BtNuQjQ2eJSY0cRKMVKkLuk7oCACw6bOyIzRtmyIGw2VAg..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C874554704B4835326D69480B641D35B1CBA76A744299",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_f1262fe5ef79",
-   "date": "2026-08-01",
-   "title": "【8月1日线上交流】机构间REITs政策解读",
-   "summary": "截至2026年7月31日,全市场单机构间REITs共发行63,规模1055亿元,主体涵盖央企、地方国企、民企、上市公司和外资等各类型机...",
-   "media": "园园ABS研究（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bEczXaFBsY3an12UHSIZ0oFqXa8Fplpd9FeNTVIeQcUcksHZ5nmr67g8RYD0bS-JkYiZf-OhH89O2HkJAqGbCyv2F__fwgBVGj3i0vPYX5xltS36t4YG4ESAJYpZE5CfJ2_-A6ezfeHCYp8zswadGgRdi_t6bpVPRcB4bbrYj4nY7RdigxB8eEAI8qhMj1FcS6OejPt-rWV3wdVqCwyPdzA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C5E3A7B5F65661A1C414565CAD4A21A1AFC366A744292",
-   "tag": "机构间REITs"
   },
   {
    "code": "ceb_8a9c96a69fb5",
@@ -518,168 +670,6 @@
    "media": "中国招标投标公共服务平台",
    "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fb578c2019fb5e7ac4118d0&inpvalue=&dataSource=0&tenderAgency=",
    "tag": "招投标"
-  },
-  {
-   "date": "2026-07-31",
-   "title": "“智链双城 OPC能量场”各路大咖畅谈拥抱AI浪潮",
-   "summary": "受访者供图 　　葱花投研创始人徐翀的主营业务为金融产品公募REITs(不动产投资信托基金)，目前客户主要为头部金融机构。“这些机构基本都是主动找上门的，我们从没花过一分钱做广告。”",
-   "media": "中国新闻网",
-   "url": "http://biz.eastmoney.com/a/202607313828720444.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-07-31",
-   "title": "连平：下半年如何促进内需复苏向好？",
-   "summary": "建议对进入白名单的优质房企，新增开发贷综合融资成本压降30-50个基点；全年通过商业不动产REITs、持有型ABS等工具盘活房企存量资产规模1000亿元；加快出险房企债务重组，力争全年新增重组落地规模5000亿元以上。",
-   "media": "第一财经",
-   "url": "http://finance.eastmoney.com/a/202607313828751567.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-07-31",
-   "title": "价值稳进 扩局谋新：城投宽庭REIT上市两年半运营进阶之路",
-   "summary": "作为上海城投控股旗下核心的不动产资产证券化平台，城投宽庭REIT自2024年1月12日在上交所上市以来，凭借稳健的现金流表现、稳中有升的出租率与清晰的扩募成长路径，始终是保租房REITs板块的核心标的。",
-   "media": "财联社",
-   "url": "http://fund.eastmoney.com/a/202607313828101971.html",
-   "tag": "上市公告"
-  },
-  {
-   "code": "wx_9359e4ed8c80",
-   "date": "2026-07-31",
-   "title": "以上海公募REITs 发行估值标尺及底层收益率|研判当下上海“酒店/长租公寓”大宗资产收购价值区间!",
-   "summary": "酒店/长租公寓大宗资产收购价值区间2026以公募 REITs 发行收益率为标尺,重新定义上海酒店、长租公寓大宗资产收购价值!公募不...",
-   "media": "申城商业资产管理（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd9B1mpPjXXoyBSfo0RsKaL0R3Hgzc9fEE-uWS95v54_Il6v-e_qc1yS6Z8zpNjOQUq3n9WffbMWtwETd_39wkMiOMFoPMmJNIfmh3fmqDSTdaNqgkzZ-Oj1x8aneAv5j8rR7LplrP-ksKbY_0VFfusprv5nQ9I4K4KvcMhSLI9y0tj3x9Nw6p-Fg..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_2d9f55b5337b",
-   "date": "2026-07-31",
-   "title": "戴德梁行王飞强-公募REITs底层资产评估方法、关键参数与市场前沿",
-   "summary": "公募REITs底层资产评估方法、关键参数与市场前沿分享——戴德梁行王飞强在2026资产盘活金融与法律业务交流会的主题分享以上是...",
-   "media": "SF LEGAL（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bnQs-gqFCkG-n12UHSIZ0oFqXa8Fplpd9PvHTVC-7IN-MpLCtlgwXCY-x5E_gpSmvEM4VIfxa0_MudT5TnyrrRs-8Fa-O8Qzo0uyFcv47jcbhgUhN9aAyYUEKy-6nUTzXq8MjYbPJUfdMCjeRofsQhaCxgjmH0kUYrlv8L589UK9f8uZW-Ej0dSHq9Xm-2Z302GNjM-tk0Lt6VKrzu_4XKA..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C3976DDFEC3C0BBBDE3E7C0D859F3BCA3B0256A74428B",
-   "tag": "市场观点"
-  },
-  {
-   "code": "wx_abefee68debc",
-   "date": "2026-07-31",
-   "title": "机构间REITs估值核算实务探讨",
-   "summary": "精运营 | 创金运营小课堂第108期—机构间REITs估值核算实务探讨—一、什么是机构间REITs?机构间REITs,是在证券交易所挂牌交...",
-   "media": "创金合信运营服务（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bEczXaFBsY3an12UHSIZ0oFqXa8Fplpd9RLylIYKhYUuDxHakRkitoerf_ccYl2nM4En71dYCVWdFlHlB_O126oQhnIYiFEomOynKdOSVvRxyihJ2LsuURss6z1Fk13VSpVVaqLpmhmpESHiiwYQ6mYFAOIOtc2zdgpRA0qfS0Iv_-35aVHRDsmrJun8F9tDTCh1bE3KsnT9FkDr8IT4KYw..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C5E3A7B5F65661A1C414565CAD4A21A1AFC366A744292",
-   "tag": "机构间REITs"
-  },
-  {
-   "date": "2026-07-30",
-   "title": "武汉下发城市更新5年任务，原拆原建规模将达20万平米",
-   "summary": "除依托各级财政资金外，“十五五”期间，武汉还将探索设立城市更新基金，深化国有“三资三化”改革，推动符合条件的项目发行REITs（不动产投资信托基金）等资产证券化产品。",
-   "media": "第一财经",
-   "url": "http://finance.eastmoney.com/a/202607303826907539.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-07-30",
-   "title": "早班车｜特朗普再次威胁袭击伊朗；美联储加息预期升温；道指重挫逾1100点，国际油价飙涨",
-   "summary": "与此同时，随着首批商业不动产REITs成功挂牌，持有型不动产ABS(资产支持证券)等产品持续落地，多层次REITs市场加快形成。 　　上半年理财产品平均年化收益率为2.05% 　　2026年上半年，理财产品整体收益稳健，累计为投资者创造收益…",
-   "media": "中新经纬",
-   "url": "http://finance.eastmoney.com/a/202607303825786798.html",
-   "tag": "上市公告"
-  },
-  {
-   "code": "wx_696fbbfea6ae",
-   "date": "2026-07-30",
-   "title": "陕西首单公募REITs落地:西安办公市场迎来“透明化”时代",
-   "summary": "公募REITs的价值不仅局限于办公市场,对于文旅行业而言,更应尽早布局REITs产品,做好充分准备.1. 政策红利持续释放2025年以...",
-   "media": "张小轶浅思录（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6beOLqmIVkiiKn12UHSIZ0oFqXa8Fplpd9QhA7P3GDisrH_cxkWzSFMp7HLnhXAIsUovAVF_fyiIl8fhhrAMlUvAGHVJRcLnYkAUHhTwznXSSWaMtMcIB9L4tE37TLS9ja4CHdKMit30eqAhxN8rgQcnUB3ArSkzUZnfXHTe_1ikdI_zr_jb_rLQohdsIPvsgpDgZGAx7Zt76E8RsmObDbtQ..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C27672B0E34364B4C121736649F624B4B691C6A744288",
-   "tag": "政策监管"
-  },
-  {
-   "code": "wx_b0c7d072f36d",
-   "date": "2026-07-30",
-   "title": "公募REITs指数基金介绍",
-   "summary": "一、什么是公募REITs指数基金公募REITs指数基金是一种以REITs指数为跟踪标的的被动型基金产品,通过买入一篮子上市公募REITs...",
-   "media": "胡乱预测（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bnQs-gqFCkG-n12UHSIZ0oFqXa8Fplpd9QT5JgcEI9XgJEfSE3kXyTtWXnMPCtT78GzUAJaheuz9BTOqATsuzAjlE0PvLi92KIB16C6gwjll1TpSQaaGAzvdh5RWVl-wvYv2P9Ca_0d7qqHsefqGmPmaDyYeG1nzK1fhzdhIhmVwK7_rEaqDHVz37hpMXBAHNwq9bG2xd_b55LU3lqtPw9g..&type=2&query=%E5%85%AC%E5%8B%9FREITs&token=045C3976DDFEC3C0BBBDE3E7C0D859F3BCA3B0256A74428B",
-   "tag": "上市公告"
-  },
-  {
-   "code": "wx_685fc186fb20",
-   "date": "2026-07-30",
-   "title": "从凯德机构间REITs项目,看不动产市场发生的新变化",
-   "summary": "机构间REITs具有权益属性,投资结果最终取决于底层资产运营、交易结构、治理、市场流动性及退出安排.写在前面7月24日,中金...",
-   "media": "一段棉线的投资思考（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bEczXaFBsY3an12UHSIZ0oFqXa8Fplpd9r3BOZMpTrPa0z9SOqjTHFxs2_j_hfw5bGExRlweQ4unvyb99GL_Q4gIzFl__qggWlc7C7qSXLi-vaHWTFK4YEWGDoRgvHi56hZ9x0egbAlXiWPbc1vqr3qKT_SwlQkg_ROe36DhVAZYFkA9w_pdhMXtqL4qwlkrorxS_GRSCknX2CsG6-xMgzQ..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C5E3A7B5F65661A1C414565CAD4A21A1AFC366A744292",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_566f30907728",
-   "date": "2026-07-30",
-   "title": "机构间REITs的规则“补位”:沪深交易所新版ABS指引带来了哪些新要求?",
-   "summary": "7月24日,沪深交易所同步修订ABS大类基础资产指引,机构间REITs终于有了自己的独立章节.对城投来说,这扇门开得正是时候:...",
-   "media": "基建投融华哥说（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bxb01razdQ46n12UHSIZ0oFqXa8Fplpd9YI8KuFt__lAMSgGuKgCn7F1xXjCSGfcDnn10r_LAMP_kFII8PbK5i7t1Z-mgNcOEXeMk6wGxbn00tcm1dxDkgWPVRfskRGeAfb9wlAQvQbOGR9xbV-ci0I1X9x1ATQISKGDKhDUvhMhGXl_1B4dlJph7CBWgtKHty0udMM5GB_HwdVqCwyPdzA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C744110350E0D7177282D0D79D690710BBD676A744296",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_926ea13fbf4d",
-   "date": "2026-07-30",
-   "title": "多单保租房机构间REITs启动",
-   "summary": "海悦·梧桐苑机构间REITs启动中介机构招投标,招标人为北京市海淀区保障性住房发展有限公司,项目资金来源为自筹资金230万元...",
-   "media": "解读REITs（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bxb01razdQ46n12UHSIZ0oFqXa8Fplpd9eV1CMoYtzYx1WrLOcUD5e4J4LfOaRITYNrwazvCra9dPNjGf0MLUIPkaocqvYA1-wHHJgOwWNsovoBdi5biMc-RjBZVtLg_WSeGuLxDIUQj-NhqBN80mX-SRrnvGXgUdFgndO8v-XBHsOMAc6J5L-lWTGgTu02NJCLKlWYmby3i54z_tGSZTqA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C744110350E0D7177282D0D79D690710BBD676A744296",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_8a998f3b0cf3",
-   "date": "2026-07-30",
-   "title": "2026上半年机构间REITs全景盘点与下半年展望",
-   "summary": "机构间REITs全景盘点千亿已至,翻倍在途 · 截至2026年7月橙乡观察|2026年7月30日累计60单、1,024亿元——2026上半年同比暴增...",
-   "media": "JP简评（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bxb01razdQ46n12UHSIZ0oFqXa8Fplpd9cyMl1H5kOXL-Z6LrdKe4-gwbW_hujB8QXozWkeFKn77LDmG-v6OivpDMhIhmQZ1kBD9qBBSOlBFGayRRtaMTMIXgI5kgPqdbbTr2i7R231UsflPhC6Tgb5ktlUbxApH3hxHa5HXUuQCCbMtRn1_kdG0RuDevxqYF1pSYcb_lalqfxjh3za6jWA..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C744110350E0D7177282D0D79D690710BBD676A744296",
-   "tag": "机构间REITs"
-  },
-  {
-   "code": "wx_fc87e1c44d55",
-   "date": "2026-07-30",
-   "title": "沪市债券新语丨底层资产池拓宽 机构间REITs助力保租房市场发展",
-   "summary": "住房租赁机构间REITs正迈入常态化扩容的黄金周期,该板块在盘活存量、引导长线资本入市、完善住房租赁投融资链条层面前景广阔...",
-   "media": "上交所REITs（微信公众号）",
-   "url": "https://weixin.sogou.com/link?url=dn9a_-gY295K0Rci_xozVXfdMkSQTLW6cwJThYulHEtVjXrGTiVgS2ud2t2t2A6bO-y-EgjjOc-n12UHSIZ0oFqXa8Fplpd9NA3o1TkRQnM6UyiBfylDOP0O4Pi-K47n8C2o0kwJba7plfif-fcTyhRPoVEwXiDCu43KhBReNubT57uNwqXXX2IwyE5BdLhH66ugJBUwZCBUa0TKPdN92rvDrb_03ezmQKOvxzcCEsnNRGwiLylfWNd2dhvS4HpiVJsNGvMvUNpj32-j2KiwUw..&type=2&query=%E6%9C%BA%E6%9E%84%E9%97%B4REITs&token=045C874554704B4835326D69480B641D35B1CBA76A744299",
-   "tag": "机构间REITs"
-  },
-  {
-   "date": "2026-07-29",
-   "title": "房地产特殊资产盘活路在何方？",
-   "summary": "住宅类项目主要依靠销售回款，持有型不动产则可能通过出售或公募REITs（不动产投资信托基金）等方式实现资本化退出。 　　以上海聚博房地产“蝶恋花”项目为例，该项目停工时可处置资产主要是土地和在建工程，变现价值有限。",
-   "media": "证券日报",
-   "url": "http://finance.eastmoney.com/a/202607293825493448.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-07-29",
-   "title": "上半年房地产行业债券融资总额同比增长21.7%",
-   "summary": "在此背景下，以商业不动产REITs为代表的资产类融资工具快速发展，成为行业融资的重要方向。",
-   "media": "证券日报",
-   "url": "http://finance.eastmoney.com/a/202607293825492894.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-07-29",
-   "title": "深耕住房租赁赛道 建信长租项目运行稳健",
-   "summary": "设立于2024年7月的建信长租项目，是我国首单住房租赁机构间REIT，由中金公司担任ABS管理人，建信住房租赁基金担任原始权益人。 　　近期，“建信住房租赁基金持有型不动产资产支持计划”（以下简称“建信长租项目”）在北京举行2025年度及2…",
-   "media": "证券日报",
-   "url": "http://bond.eastmoney.com/a/202607293825386640.html",
-   "tag": "市场观点"
-  },
-  {
-   "date": "2026-07-29",
-   "title": "大悦城控股启动商业不动产REITs申报 天津大悦城为底层资产",
-   "summary": "此举旨在响应证监会2025年底启动的商业不动产REITs试点政策，盘活优质存量商业资产。 　　根据公告，本次交易将通过设立公募基金和资产支持专项计划，由专项计划收购中粮置业持有的大悦城（天津）100%股权，最终实现天津大悦城的资产证券化。",
-   "media": "北京商报",
-   "url": "http://finance.eastmoney.com/a/202607293825239153.html",
-   "tag": "申报动态"
   },
   {
    "code": "ceb_8a9494759dbe",
@@ -710,11 +700,11 @@
   },
   {
    "code": "ceb_8a9494849e5d",
-   "date": "2026-07-07",
-   "title": "徐州市国投能源集团有限公司公募REITs财务顾问选聘项目招标公告",
+   "date": "2026-07-16",
+   "title": "昌平保障房机构间REITs项目评估服务竞争性磋商公告",
    "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
    "media": "中国招标投标公共服务平台",
-   "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849e5d0d8a019f3bc42e181e5b&inpvalue=&dataSource=0&tenderAgency=",
+   "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849e5d0d8a019f69c34697600d&inpvalue=&dataSource=0&tenderAgency=",
    "tag": "招投标"
   }
  ]
