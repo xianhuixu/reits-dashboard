@@ -15,6 +15,7 @@ DATA_JS = ROOT / "data.js"
 DATA_JSON = ROOT / "data.json"
 UNIVERSE = ROOT / "universe.json"
 HOLIDAYS = ROOT / "holidays.txt"
+CYCLE_JSON = ROOT / "cycle_judgment.json"
 
 # 腾讯股票接口（支持批量查询，每次最多60只）
 TENCENT_API = "http://qt.gtimg.cn/q={}"
@@ -110,15 +111,30 @@ def fetch_tencent(codes):
                 if len(parts) > 6:
                     volume = safe_int(parts[6]) * 100  # 手->股
                 
-                # 成交额和最高最低位置可能有变化，尝试从后面找
-                if len(parts) > 33:
-                    amount = safe_float(parts[33])
+                # 成交额解析（腾讯接口字段位置修正）
+                # parts[35] 格式: 当前价/成交量(手)/成交额(元) 的复合字段
+                # parts[37] 是成交额(万元, 取整)
+                # parts[57] 是成交额(万元, 精确)
+                amount = 0
+                if len(parts) > 35:
+                    # 优先从复合字段解析: "2.271/21561/4882298"
+                    composite = str(parts[35])
+                    if '/' in composite:
+                        sub = composite.split('/')
+                        if len(sub) >= 3:
+                            amount = safe_float(sub[2])  # 元
+                if not amount and len(parts) > 37:
+                    amount = safe_float(parts[37])
                     if amount:
                         amount = amount * 10000  # 万->元
+                if not amount and len(parts) > 57:
+                    amount = safe_float(parts[57])
+                    if amount:
+                        amount = amount * 10000  # 万->元
+                if len(parts) > 33:
+                    high = safe_float(parts[33])
                 if len(parts) > 34:
-                    high = safe_float(parts[34])
-                if len(parts) > 35:
-                    low = safe_float(parts[35])
+                    low = safe_float(parts[34])
                 
                 results[origin_code] = {
                     'name': name,
@@ -227,6 +243,15 @@ def update_reits_data(data, tencent_data):
     # 更新时间戳
     data['updated'] = now_str
     data['lastTradeDate'] = today_str
+    
+    # 更新周期判断数据
+    if CYCLE_JSON.exists():
+        try:
+            cycle_data = json.loads(CYCLE_JSON.read_text(encoding='utf-8'))
+            data['cycle'] = cycle_data
+            print(f"[info] 已更新周期判断数据 (bond10y={cycle_data.get('bond10y')}, updated={cycle_data.get('updated')})")
+        except Exception as e:
+            print(f"[warn] 周期判断数据更新失败: {e}")
     
     print(f"[info] 已更新 {updated_count}/{len(reits)} 只 REITs")
     return data
