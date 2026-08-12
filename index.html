@@ -724,16 +724,16 @@ main { min-width: 0; }
     <h2>① 大类策略配置建议（周期判断 → 长期方向 → 交叉验证）</h2>
     <p class="note">来源：国家统计局、中债 · 周期判定见"周期耦合分析" · 配置方向经面板实时数据交叉验证</p>
     <div id="adviceCycleBadges" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
-    <div class="grid3" style="margin-bottom:0">
-      <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI（6月）</div>
-        <div class="big num" style="font-size:24px;font-weight:600">50.3 <span style="font-size:12px;color:var(--up)">重回扩张</span></div>
-        <div style="font-size:11px;color:var(--tx2)">新订单 51.2，但小型企业 48.2、高耗能 47.1，内需仍弱</div></div>
-      <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">CPI 同比（6月）</div>
-        <div class="big num" style="font-size:24px;font-weight:600">+1.0%</div>
-        <div style="font-size:11px;color:var(--tx2)">温和通胀，货币政策空间充裕</div></div>
-      <div class="card" style="background:var(--panel2)"><div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率（7/27）</div>
-        <div class="big num" style="font-size:24px;font-weight:600">1.73%</div>
-        <div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div></div>
+    <div class="grid3" style="margin-bottom:0" id="macroCards">
+      <div class="card" style="background:var(--panel2)" id="macroPmi"><div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI</div>
+        <div class="big num" style="font-size:24px;font-weight:600">—</div>
+        <div style="font-size:11px;color:var(--tx2)">加载中…</div></div>
+      <div class="card" style="background:var(--panel2)" id="macroCpi"><div class="k" style="color:var(--tx3);font-size:11.5px">CPI 同比</div>
+        <div class="big num" style="font-size:24px;font-weight:600">—</div>
+        <div style="font-size:11px;color:var(--tx2)">加载中…</div></div>
+      <div class="card" style="background:var(--panel2)" id="macroBond"><div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率</div>
+        <div class="big num" style="font-size:24px;font-weight:600">—</div>
+        <div style="font-size:11px;color:var(--tx2)">加载中…</div></div>
     </div>
     <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/扩张型切换。</p>
     <h3 style="font-size:13px;margin:16px 0 6px">配置建议（数据交叉验证后）</h3>
@@ -1680,8 +1680,14 @@ main { min-width: 0; }
             '<td style="text-align:left;font-size:11.5px;color:var(--tx2)">' + s.main + "</td></tr>";
         }).join("") + "</tbody></table>";
       if ($("spreadGauge")) {
+        // 动态计算股息率溢价
+        var bond10y = (D.cycle && D.cycle.bond10y != null) ? D.cycle.bond10y : 1.7;
+        var avgYield = (D.cycle && D.cycle.avgYield != null) ? D.cycle.avgYield : 4.5;
+        var cur = Math.round((avgYield - bond10y) * 100);
+        var zone = cur >= 250 ? "安全边际（买入区）" : cur >= 100 ? "中性区间" : "高估（减仓区）";
+        var zoneColor = cur >= 250 ? "var(--up)" : cur >= 100 ? "var(--gold)" : "var(--down)";
         // 标尺 0–400BP：买入区 250-400（红/暖），中性 100-250，高估 0-100
-        var cur = 180, anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: 180, l: "当前 180BP" }];
+        var anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: cur, l: "当前 " + cur + "BP" }];
         var pct = function (v) { return Math.min(100, Math.max(0, v / 400 * 100)); };
         $("spreadGauge").innerHTML =
           '<div style="position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex">' +
@@ -1695,7 +1701,7 @@ main { min-width: 0; }
           }).join("") + "</div>" +
           '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--tx3);margin-top:30px">' +
           "<span>0BP · 高估（减仓区）</span><span>100BP</span><span>250BP · 安全边际（买入区）</span><span>400BP</span></div>" +
-          '<div style="margin-top:12px;font-size:12.5px">当前位置：<b class="num" style="color:var(--accent)">≈180BP（中性区间）</b><span style="color:var(--tx3);font-size:11.5px"> = 平均分派率约 4.5% − 10Y 国债约 2.7% · 距 250BP 买入区仍有缓冲差距</span></div>';
+          '<div style="margin-top:12px;font-size:12.5px">当前位置：<b class="num" style="color:' + zoneColor + '">≈' + cur + 'BP（' + zone + '）</b><span style="color:var(--tx3);font-size:11.5px"> = 平均分派率约 ' + avgYield + '% − 10Y 国债约 ' + bond10y + '% · ' + (cur >= 250 ? '已进入买入区' : '距 250BP 买入区仍有 ' + (250 - cur) + 'BP 差距') + "</span></div>";
       }
       if ($("rvLiveStrip")) {
         $("rvLiveStrip").innerHTML = RV ? (
@@ -2004,6 +2010,33 @@ main { min-width: 0; }
             '<p style="font-size:11.5px;color:var(--tx2);margin-top:6px;line-height:1.6">' + d2.reason + "</p></div>";
         }).join("");
       }
+      // 动态渲染宏观指标卡片
+      var pm = D.cycle.pm || {};
+      var upd = D.cycle.updated || "";
+      var m = upd.match(/\d{4}-(\d{2})-(\d{2})/);
+      var monthLabel = m ? m[1] + "月" : "";
+      var dayLabel = m ? m[2] : "";
+      // PMI
+      var pmi = pm.pmi;
+      var pmiHtml = pmi != null
+        ? '<div class="big num" style="font-size:24px;font-weight:600">' + pmi + ' <span style="font-size:12px;color:' + (pmi >= 50 ? 'var(--up)' : 'var(--down)') + '">' + (pmi >= 50 ? '重回扩张' : '低于荣枯线') + '</span></div>'
+        : '<div class="big num" style="font-size:24px;font-weight:600">—</div>';
+      $("macroPmi").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI（' + monthLabel + '）</div>' + pmiHtml +
+        '<div style="font-size:11px;color:var(--tx2)">' + (pm.note ? pm.note.split('，')[0] : 'PMI数据加载中…') + '</div>';
+      // CPI
+      var cpi = pm.cpi;
+      var cpiHtml = cpi != null
+        ? '<div class="big num" style="font-size:24px;font-weight:600">' + (cpi > 0 ? '+' : '') + cpi + '%</div>'
+        : '<div class="big num" style="font-size:24px;font-weight:600">—</div>';
+      $("macroCpi").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">CPI 同比（' + monthLabel + '）</div>' + cpiHtml +
+        '<div style="font-size:11px;color:var(--tx2)">' + (cpi != null ? (cpi < 1 ? '低通胀，货币政策空间充裕' : '温和通胀') : 'CPI数据加载中…') + '</div>';
+      // Bond10y
+      var bond = D.cycle.bond10y;
+      var bondHtml = bond != null
+        ? '<div class="big num" style="font-size:24px;font-weight:600">' + bond + '%</div>'
+        : '<div class="big num" style="font-size:24px;font-weight:600">—</div>';
+      $("macroBond").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率（' + monthLabel + dayLabel + '）</div>' + bondHtml +
+        '<div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div>';
     }
   })();
 
