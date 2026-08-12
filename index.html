@@ -2014,8 +2014,8 @@ main { min-width: 0; }
       var pm = D.cycle.pm || {};
       var upd = D.cycle.updated || "";
       var m = upd.match(/\d{4}-(\d{2})-(\d{2})/);
-      var monthLabel = m ? m[1] + "月" : "";
-      var dayLabel = m ? m[2] : "";
+      var monthLabel = m ? parseInt(m[1], 10) + "月" : "";
+      var dayLabel = m ? parseInt(m[2], 10) : "";
       // PMI
       var pmi = pm.pmi;
       var pmiHtml = pmi != null
