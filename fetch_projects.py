@@ -113,7 +113,7 @@ def fetch_sse() -> List[Dict[str, Any]]:
             "updateDate": _d(it.get("PUBLISH_DATE")),
             "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=" + (it.get("BOND_NUM") or ""),
         })
-    out.sort(key=lambda x: x["acceptDate"], reverse=True)
+    out.sort(key=lambda x: x["acceptDate"] or x["updateDate"], reverse=True)
     return out
 
 
