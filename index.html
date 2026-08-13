@@ -119,7 +119,9 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
 
 .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
-@media (max-width: 900px) { .grid, .grid3 { grid-template-columns: 1fr; } }
+.news-projects-grid { display: grid; grid-template-columns: 1.12fr 1fr; gap: 20px; margin-top: 14px; align-items: start; }
+#projectCard .table-scroll table { min-width: 560px; }
+@media (max-width: 900px) { .grid, .grid3, .news-projects-grid { grid-template-columns: 1fr; } }
 .card { background: var(--panel);
   border: none; border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
@@ -448,28 +450,30 @@ main { min-width: 0; }
   </div>
 </section>
 
-<div class="card" style="margin-top:14px" id="newsCard">
-  <h2>近期重点事件信息流</h2>
-  <p class="note">政策监管 · 机构间REITs · 招投标 · 拟上市与申报 · 上市项目公告 · 扩募动态 · 市场观点 · 来源：东方财富新闻检索 / 微信公众号（搜狗微信）/ 中国招标投标公共服务平台，每日更新 · 近 30 日</p>
-  <div class="filters" id="newsFilter"></div>
-  <div id="newsFeed" style="max-height:460px;overflow:auto"></div>
-</div>
+<div class="news-projects-grid">
+  <div class="card" id="newsCard">
+    <h2>近期重点事件信息流</h2>
+    <p class="note">政策监管 · 机构间REITs · 招投标 · 拟上市与申报 · 上市项目公告 · 扩募动态 · 市场观点 · 来源：东方财富新闻检索 / 微信公众号（搜狗微信）/ 中国招标投标公共服务平台，每日更新 · 近 30 日</p>
+    <div class="filters" id="newsFilter"></div>
+    <div id="newsFeed" style="max-height:520px;overflow:auto"></div>
+  </div>
 
-<div class="card" style="margin-top:14px" id="projectCard">
-  <h2>项目申报与推荐动态（2026 年以来）</h2>
-  <p class="note">国家发改委基础设施 REITs 推荐项目清单 · 上交所 / 深交所受理项目 · 点击项目名称跳转交易所详情页 · 每日更新</p>
-  <div class="filters" id="projectTabs">
-    <button class="range-btn on" data-t="ndrc">发改委推荐清单</button>
-    <button class="range-btn" data-t="sse">上交所受理</button>
-    <button class="range-btn" data-t="szse">深交所受理</button>
+  <div class="card" id="projectCard">
+    <h2>项目申报与推荐动态（2026 年以来）</h2>
+    <p class="note">国家发改委基础设施 REITs 推荐项目清单 · 上交所 / 深交所受理项目 · 点击项目名称跳转交易所详情页 · 每日更新</p>
+    <div class="filters" id="projectTabs">
+      <button class="range-btn on" data-t="ndrc">发改委推荐清单</button>
+      <button class="range-btn" data-t="sse">上交所受理</button>
+      <button class="range-btn" data-t="szse">深交所受理</button>
+    </div>
+    <div class="table-scroll" style="max-height:520px;overflow:auto">
+      <table class="matrix" id="projectTable">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="note" id="projectMeta" style="margin:10px 0 0"></div>
   </div>
-  <div class="table-scroll" style="max-height:520px;overflow:auto">
-    <table class="matrix" id="projectTable">
-      <thead></thead>
-      <tbody></tbody>
-    </table>
-  </div>
-  <div class="note" id="projectMeta" style="margin:10px 0 0"></div>
 </div>
 </div><!-- /pg-pano -->
 
