@@ -98,6 +98,7 @@ def fetch_sse() -> List[Dict[str, Any]]:
     resp = _get(url, referer="https://www.sse.com.cn/reits/info/")
     items = (resp.get("pageHelp") or {}).get("data") or []
     status_map = {"0": "已申报", "1": "已受理", "2": "已反馈", "4": "通过", "5": "未通过"}
+    asset_map = {"0": "商业不动产", "1": "基础设施"}
     out: List[Dict[str, Any]] = []
     for it in items:
         accept = _d(it.get("ACCEPT_DATE"))
@@ -108,6 +109,7 @@ def fetch_sse() -> List[Dict[str, Any]]:
         out.append({
             "name": it.get("AUDIT_NAME") or "",
             "manager": it.get("WRITER_NAME") or "",
+            "assetType": asset_map.get(str(it.get("REITS_ASSET_TYPE")), ""),
             "status": status_map.get(str(it.get("AUDIT_STATUS")), "已申报"),
             "acceptDate": accept,
             "updateDate": _d(it.get("PUBLISH_DATE")),
@@ -130,6 +132,7 @@ def fetch_szse() -> List[Dict[str, Any]]:
         out.append({
             "name": it.get("cmpnm") or "",
             "type": it.get("biztypsbName") or "",
+            "assetType": it.get("bizcategorynm") or "",
             "status": it.get("prjst") or "",
             "originator": it.get("primitiveInterestsor") or "",
             "acceptDate": accept,

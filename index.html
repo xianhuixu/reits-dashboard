@@ -427,6 +427,7 @@ main { min-width: 0; }
       <button data-pg="pano" data-v="proj-ndrc">发改委推荐项目清单</button>
       <button data-pg="pano" data-v="proj-sse">上交所受理项目清单</button>
       <button data-pg="pano" data-v="proj-szse">深交所项目清单</button>
+      <button data-pg="pano" data-v="proj-commercial">商业不动产REIT受理项目清单</button>
     </div>
     <div class="sub" id="researchSub">
       <button data-v="review" class="on" aria-current="page">市场阶段复盘</button>
@@ -519,6 +520,20 @@ main { min-width: 0; }
       </table>
     </div>
     <div class="note" id="projectMetaSzse" style="margin:10px 0 0"></div>
+  </div>
+</section>
+
+<section class="view" id="v-proj-commercial" hidden>
+  <div class="card">
+    <h2>商业不动产 REIT 受理项目清单（上交所 + 深交所汇总 · 2026 年以来）</h2>
+    <p class="note">汇总上交所、深交所 2026 年以来受理的商业不动产 REIT 项目 · 点击项目名称跳转交易所详情页 · 每日更新</p>
+    <div class="table-scroll" style="max-height:560px;overflow:auto">
+      <table class="matrix" id="projectTableCommercial">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="note" id="projectMetaCommercial" style="margin:10px 0 0"></div>
   </div>
 </section>
 </div><!-- /pg-pano -->
@@ -852,7 +867,7 @@ main { min-width: 0; }
 <script src="corp_actions.js"></script>
 <script src="projects.js"></script>
 <script src="ui-utils.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" crossorigin="anonymous"></script>
+<script src="lib/echarts.min.js"></script>
 <script>
 (function () {
   // ---- iOS 旧版兼容性 Polyfill ----
@@ -961,7 +976,7 @@ main { min-width: 0; }
     ? '<span class="' + cls(mktIdx.pct) + '">' + fmt(mktIdx.pct) + '</span>'
     : '<span style="color:var(--tx3)">待更新</span>';
   var kpiCards =
-    kpiCard("中证REITs收益指数", idxClose,
+    kpiCard("中证REITs全收益指数", idxClose,
       '日涨跌 ' + idxPct + ' · ' + (mktIdx && mktIdx.code ? mktIdx.code : "待 iFinD 接入"), " kpi-idx") +
     '<div class="kpi"><div class="k">全市场等权日涨跌</div>' +
       '<div class="v num ' + avgCls + '">' + fmt(avg) + '</div>' +
@@ -1820,8 +1835,24 @@ main { min-width: 0; }
       }).join("");
       fillTable("#projectTableSzse", "#projectMetaSzse", thead, rows, "深交所受理 " + list.length + " 个项目 · 2026 年以来");
     }
+    function renderCommercial() {
+      var sse = (P.sse || []).filter(function (p) { return p.assetType === "商业不动产"; })
+        .map(function (p) { return { name: p.name, exchange: "上交所", status: p.status, acceptDate: p.acceptDate, link: p.link }; });
+      var szse = (P.szse || []).filter(function (p) { return p.assetType === "商业不动产"; })
+        .map(function (p) { return { name: p.name, exchange: "深交所", status: p.status, acceptDate: p.acceptDate, link: p.link }; });
+      var list = sse.concat(szse).sort(function (a, b) {
+        return a.acceptDate < b.acceptDate ? 1 : a.acceptDate > b.acceptDate ? -1 : 0;
+      });
+      var thead = '<tr><th class="l">项目名称</th><th class="l">交易所</th><th class="l">状态</th><th class="l">受理日期</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.exchange) + "</td><td class='l'>" + stTag(p.status) +
+          "</td><td class='l'>" + esc(p.acceptDate) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableCommercial", "#projectMetaCommercial", thead, rows,
+        "商业不动产受理 " + list.length + " 个项目 · 上交所+深交所汇总 · 2026 年以来");
+    }
     if (!P) {
-      ["#projectMetaNdrc", "#projectMetaSse", "#projectMetaSzse"].forEach(function (id) {
+      ["#projectMetaNdrc", "#projectMetaSse", "#projectMetaSzse", "#projectMetaCommercial"].forEach(function (id) {
         var el = document.querySelector(id);
         if (el) el.textContent = "项目动态数据未生成，请运行 fetch_projects.py";
       });
@@ -1830,6 +1861,7 @@ main { min-width: 0; }
     renderNdrc();
     renderSse();
     renderSzse();
+    renderCommercial();
   })();
 
   // ---- 主题切换（白天 / 护眼 / 夜晚） ----
