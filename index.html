@@ -454,6 +454,23 @@ main { min-width: 0; }
   <div class="filters" id="newsFilter"></div>
   <div id="newsFeed" style="max-height:460px;overflow:auto"></div>
 </div>
+
+<div class="card" style="margin-top:14px" id="projectCard">
+  <h2>项目申报与推荐动态（2026 年以来）</h2>
+  <p class="note">国家发改委基础设施 REITs 推荐项目清单 · 上交所 / 深交所受理项目 · 点击项目名称跳转交易所详情页 · 每日更新</p>
+  <div class="filters" id="projectTabs">
+    <button class="range-btn on" data-t="ndrc">发改委推荐清单</button>
+    <button class="range-btn" data-t="sse">上交所受理</button>
+    <button class="range-btn" data-t="szse">深交所受理</button>
+  </div>
+  <div class="table-scroll" style="max-height:520px;overflow:auto">
+    <table class="matrix" id="projectTable">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="note" id="projectMeta" style="margin:10px 0 0"></div>
+</div>
 </div><!-- /pg-pano -->
 
 <div class="page" id="pg-research" hidden>
@@ -783,6 +800,7 @@ main { min-width: 0; }
 <script src="data.js"></script>
 <script src="news.js"></script>
 <script src="corp_actions.js"></script>
+<script src="projects.js"></script>
 <script src="ui-utils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" crossorigin="anonymous"></script>
 <script>
@@ -1654,6 +1672,72 @@ main { min-width: 0; }
       var b = e.target.closest("button"); if (!b) return;
       tag = b.dataset.t;
       document.querySelectorAll("#corpActionFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      render();
+    });
+    render();
+  })();
+
+  // ---- 项目申报与推荐动态（发改委 / 上交所 / 深交所 三源 tab） ----
+  (function () {
+    var P = window.REITS_PROJECTS;
+    var tab = "ndrc";
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function money(v) { return v == null ? "—" : Number(v).toFixed(2); }
+    function nameCell(p, link) {
+      var t = esc(p.name);
+      return link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener">' + t + "</a>" : t;
+    }
+    function stTag(s) {
+      var c = "var(--tx2)";
+      if (/受理|申报/.test(s)) c = "var(--accent)";
+      else if (/问询|反馈/.test(s)) c = "var(--gold)";
+      else if (/通过|生效/.test(s)) c = "var(--down)";
+      else if (/未通过|终止/.test(s)) c = "var(--up)";
+      return '<span class="sec-tag" style="color:' + c + '">' + esc(s) + "</span>";
+    }
+    function render() {
+      var thead = "", rows = "", meta = "", list = [];
+      if (tab === "ndrc") {
+        thead = '<tr><th class="l">项目名称</th><th class="l">行业</th><th class="l">申报地区</th><th>募集规模(亿元)</th><th class="l">推荐时间</th></tr>';
+        list = P.ndrc || [];
+        rows = list.map(function (p) {
+          return '<tr><td class="l">' + nameCell(p) + "</td><td class='l'>" + esc(p.industry) + "</td><td class='l'>" + esc(p.region) +
+            '</td><td class="num">' + money(p.fundMoney) + "</td><td class='l'>" + esc(p.date) + "</td></tr>";
+        }).join("");
+        meta = "发改委推荐 " + list.length + " 个 · 2026 年以来";
+      } else if (tab === "sse") {
+        thead = '<tr><th class="l">项目名称</th><th class="l">管理人</th><th class="l">状态</th><th class="l">受理日期</th><th class="l">更新日期</th></tr>';
+        list = P.sse || [];
+        rows = list.map(function (p) {
+          return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.manager) + "</td><td class='l'>" + stTag(p.status) +
+            "</td><td class='l'>" + esc(p.acceptDate) + "</td><td class='l'>" + esc(p.updateDate) + "</td></tr>";
+        }).join("");
+        meta = "上交所受理 " + list.length + " 个项目 · 2026 年以来";
+      } else {
+        thead = '<tr><th class="l">项目名称</th><th class="l">申报类型</th><th class="l">状态</th><th class="l">原始权益人</th><th class="l">受理日期</th></tr>';
+        list = P.szse || [];
+        rows = list.map(function (p) {
+          return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.type) + "</td><td class='l'>" + stTag(p.status) +
+            "</td><td class='l'>" + esc(p.originator) + "</td><td class='l'>" + esc(p.acceptDate) + "</td></tr>";
+        }).join("");
+        meta = "深交所受理 " + list.length + " 个项目 · 2026 年以来";
+      }
+      document.querySelector("#projectTable thead").innerHTML = thead;
+      document.querySelector("#projectTable tbody").innerHTML =
+        rows || '<tr><td colspan="5" class="l" style="color:var(--tx3)">暂无数据</td></tr>';
+      document.querySelector("#projectMeta").textContent =
+        (P && P.updated ? "更新 " + P.updated + " · " : "") + meta;
+    }
+    if (!P || (!(P.ndrc || []).length && !(P.sse || []).length && !(P.szse || []).length)) {
+      document.querySelector("#projectMeta").textContent = "项目动态数据未生成，请运行 fetch_projects.py";
+      return;
+    }
+    document.querySelector("#projectTabs").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      tab = b.dataset.t;
+      document.querySelectorAll("#projectTabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
       render();
     });
     render();

@@ -71,6 +71,15 @@ else
     log "WARNING: News update exited with code ${exit_code} (may be timeout or error)"
 fi
 
+# 6. 更新项目申报与推荐动态（发改委 / 上交所 / 深交所）
+log "[5/5] Updating project filing dynamics..."
+if timeout 180 python3 fetch_projects.py >> "$LOG_FILE" 2>&1; then
+    log "Project dynamics update completed successfully"
+else
+    exit_code=$?
+    log "WARNING: fetch_projects.py exited with code ${exit_code} (may be timeout or error)"
+fi
+
 # 7. 检查是否有变更需要提交
 log "[5/4] Checking for changes..."
 if git diff --quiet && git diff --cached --quiet; then
