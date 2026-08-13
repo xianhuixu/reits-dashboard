@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2025-08-01",
+  "last_updated": "2026-08-13",
   "description": "中国公募REITs代码列表，支持同花顺数据接口",
   "markets": {
     "shanghai": {
@@ -33,6 +33,7 @@
     {"code": "508096.SH", "name": "嘉实京东仓储REIT", "category": "仓储物流", "list_date": "2023-02-08"},
     {"code": "508098.SH", "name": "嘉实中国电建清洁能源REIT", "category": "能源", "list_date": "2023-03-28"},
     {"code": "508099.SH", "name": "建信中关村REIT", "category": "产业园区", "list_date": "2022-08-12"},
+    {"code": "508059.SH", "name": "华泰三峡新能源REIT", "category": "能源", "list_date": "2026-08-07"},
     {"code": "508033.SH", "name": "易方达深高速REIT", "category": "高速公路", "list_date": "2024-03-29"}
   ],
   "reits_sz": [
