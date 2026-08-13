@@ -21,7 +21,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 HIST_DIR = ROOT / "hist_cache"
 HIST_START = "2021-06-21"
-SPARK_POINTS = 60
+SPARK_POINTS = 250                # 个券详情走势窗口（近250交易日）
 CORR_WINDOW = 130
 
 # 基准指数
@@ -324,6 +324,7 @@ def main():
             "spark": [round(float(x), 3) for x in s.tail(SPARK_POINTS)],
             "histDates": [d.strftime("%Y-%m-%d") for d in s.index],
             "histClose": [round(float(x), 3) for x in s],
+            "listDays": int(len(s)),
             **ind,
         })
 
@@ -380,6 +381,24 @@ def main():
         corr_payload = {"benchmarks": benchmarks_meta, "matrix": matrix,
                         "scatter": scatter, "peers": peers}
         print(f"[corr] 基准 {len(benchmarks_meta)} 个", flush=True)
+
+
+    # ---------- 5b. 个券相似度（个券×个券收益率相关性 Top5，供详情页"相似个券"） ----------
+    reit_peers = None
+    try:
+        cret_w = close.tail(CORR_WINDOW).pct_change()
+        cols = [c for c in codes if c in cret_w.columns]
+        cm = cret_w[cols].corr(min_periods=20)
+        reit_peers = {}
+        for c in cols:
+            row = cm[c].drop(index=c).dropna()
+            if not len(row):
+                continue
+            top = row.reindex(row.abs().sort_values(ascending=False).index).head(5)
+            reit_peers[c] = {"peers": [{"code": k, "r": round(float(v), 2)} for k, v in top.items()]}
+        print(f"[reitPeers] 计算完成 {len(reit_peers)} 只", flush=True)
+    except Exception as e:
+        print(f"[reitPeers] 计算失败: {e}", flush=True)
 
     # ---------- 5. 六因子信号 ----------
     reits = score_signals(reits, fund, cret_w, bret_w if bclose is not None else None, bond10y)
@@ -478,6 +497,7 @@ def main():
         "strategies": strategies,
         "reits": reits,
         "correlation": corr_payload,
+        "reitPeers": reit_peers,
         "overseas": overseas,
         "usLong": us_long,
         "stratSignals": strat_signals,

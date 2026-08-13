@@ -21,7 +21,7 @@ DATA_JSON = ROOT / "data.json"
 UNIVERSE = ROOT / "universe.json"
 HIST_DIR = ROOT / "hist_cache"      # 逐代码全历史增量缓存
 HIST_START = "2021-06-21"
-SPARK_POINTS = 60
+SPARK_POINTS = 250                # 个券详情走势窗口（近250交易日）
 CORR_WINDOW = 130                   # 相关性口径：近 130 交易日
 FETCH_PAUSE = 0.3                   # 取数间隔
 
@@ -462,6 +462,7 @@ def main():
             "spark": spark,
             "histDates": hist_dates,
             "histClose": spark,  # 与 spark 同步，供 update_data.py 增量更新
+            "listDays": int(len(s_close)),
             "signals": {},
         })
 
@@ -541,6 +542,24 @@ def main():
         print(f"[corr] 基准 {len(benchmarks_meta)} 个", flush=True)
     except Exception as e:
         print(f"[corr] 计算失败: {e}", flush=True)
+
+
+    # ---------- 5b. 个券相似度（个券×个券收益率相关性 Top5，供详情页"相似个券"） ----------
+    reit_peers = None
+    try:
+        cret_w = close.tail(CORR_WINDOW).pct_change()
+        cols = [c for c in codes if c in cret_w.columns]
+        cm = cret_w[cols].corr(min_periods=20)
+        reit_peers = {}
+        for c in cols:
+            row = cm[c].drop(index=c).dropna()
+            if not len(row):
+                continue
+            top = row.reindex(row.abs().sort_values(ascending=False).index).head(5)
+            reit_peers[c] = {"peers": [{"code": k, "r": round(float(v), 2)} for k, v in top.items()]}
+        print(f"[reitPeers] 计算完成 {len(reit_peers)} 只", flush=True)
+    except Exception as e:
+        print(f"[reitPeers] 计算失败: {e}", flush=True)
 
     # ---------- 6. 策略信号汇总 ----------
     strat_signals = {}
@@ -668,6 +687,7 @@ def main():
         "reits": reits,
         "marketIndex": market_index or old_market_index,
         "correlation": corr_payload,
+        "reitPeers": reit_peers,
         "stratSignals": strat_signals,
         "revaluation": revaluation,
         "events": recent_events,

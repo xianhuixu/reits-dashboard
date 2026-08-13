@@ -274,6 +274,29 @@ svg text { font-family: inherit; }
 .radar-wrap { display: flex; justify-content: center; }
 .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: 12px; }
 .kv .k { color: var(--tx3); }
+/* ---------- 个券详情 hero + 相似个券 ---------- */
+.detail-hero { padding: 18px 22px 12px; }
+.dh-main { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.dh-id h2 { font-size: 18px; margin-bottom: 6px; }
+.dh-code { color: var(--tx3); font-size: 12px; font-weight: 500; margin-left: 8px; }
+.dh-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.dh-quote { text-align: right; }
+.dh-close { font-size: 30px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.dh-pct { font-size: 15px; font-weight: 600; margin-top: 2px; }
+.dh-stats { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 12px; padding-top: 10px;
+  border-top: 1px dashed var(--line); font-size: 12.5px; }
+.dh-stats span { display: inline-flex; align-items: baseline; gap: 6px; }
+.dh-stats i { font-style: normal; color: var(--tx3); font-size: 11.5px; }
+.dh-stats b { font-weight: 600; }
+.dh-spark { margin-top: 8px; height: 34px; }
+.dh-spark svg { width: 100%; height: 34px; display: block; }
+.peer-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.peer-it { display: flex; align-items: center; gap: 10px; background: var(--panel2); border: 1px solid var(--line);
+  border-radius: 10px; padding: 9px 12px; font: inherit; cursor: pointer; text-align: left; transition: all .18s; }
+.peer-it:hover { border-color: var(--accent); background: rgba(37,99,235,.05); transform: translateY(-1px); }
+.peer-it .nm { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 600; color: var(--tx); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.peer-it .cd { color: var(--tx3); font-size: 11px; white-space: nowrap; }
+.peer-it .rv { color: var(--accent); font-size: 12px; font-weight: 600; }
 /* ---------- 三段式分区 ---------- */
 tr.sel td { background: rgba(37,99,235,.06); }
 tbody tr { cursor: pointer; }
@@ -1286,22 +1309,59 @@ main { min-width: 0; }
     var r = D.reits.find(function (x) { return x.code === code; });
     if (!r) return;
     var evs = (D.events || []).filter(function (e) { return e.code === code; }).slice(0, 8);
+    var corr = (D.reitPeers && D.reitPeers[code]) || {};
+    var peers = (corr.peers || []).slice(0, 6);
+    var macd = r.macd || {};
+    var sig = r.signals || {};
+    var sparkColor = (r.sinceIPO || 0) >= 0 ? "var(--up)" : "var(--down)";
     var histChartId = "detailChart";
+    var peerHtml = peers.length ? peers.map(function (p) {
+      var pr = D.reits.find(function (x) { return x.code === p.code; });
+      if (!pr) return "";
+      return '<button class="peer-it" data-code="' + p.code + '">' +
+        '<span class="nm" title="' + pr.name + '">' + pr.name + '</span>' +
+        '<span class="cd">' + p.code + " · " + pr.sector + '</span>' +
+        '<span class="rv num">r = ' + p.r.toFixed(2) + '</span></button>';
+    }).join("") : '<div class="empty" style="padding:14px 0">暂无相似券数据</div>';
     $("detailPanel").innerHTML =
-      '<div class="card"><h2>' + r.name + ' <span style="color:var(--tx3);font-size:12px">' + r.code + " · " +
-      r.sector + " · " + r.right + '</span> ' + sigLabel(r.signals.label) + "</h2>" +
-      '<div class="grid3" style="margin-top:10px">' +
+      '<div class="card detail-hero">' +
+        '<div class="dh-main">' +
+          '<div class="dh-id">' +
+            '<h2>' + r.name + '<span class="dh-code">' + r.code + '</span></h2>' +
+            '<div class="dh-tags">' +
+              '<span class="sec-tag">' + r.sector + '</span>' +
+              '<span class="sec-tag">' + r.right + '</span>' +
+              '<span class="st-tag st-' + r.strategy + '">' + r.strategy + '</span>' +
+              sigLabel(sig.label) +
+            '</div>' +
+          '</div>' +
+          '<div class="dh-quote">' +
+            '<div class="dh-close num">' + (r.close != null ? r.close.toFixed(3) : "—") + '</div>' +
+            '<div class="dh-pct num ' + cls(r.pct) + '">' + fmt(r.pct) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dh-stats num">' +
+          '<span><i>今日成交额</i>' + fmtVol(r.amount) + '</span>' +
+          '<span><i>量比20/60</i>' + (r.amtRatio == null ? "—" : r.amtRatio) + '</span>' +
+          '<span><i>历史分位</i>' + formatPercentile(r.pctRank) + '</span>' +
+          '<span><i>250日乖离</i><b class="' + cls(r.devMA250) + '">' + fmt(r.devMA250) + '</b></span>' +
+          '<span><i>上市天数</i>' + (r.listDays || r.histClose.length) + '日</span>' +
+          '<span><i>年化波动</i>' + (r.volAnn == null ? "—" : r.volAnn + "%") + '</span>' +
+        '</div>' +
+        '<div class="dh-spark">' + sparklineSvg(r.histClose, sparkColor) + '</div>' +
+      '</div>' +
+      '<div class="grid3" style="margin-top:14px">' +
       // 历史
       '<div><h3 style="font-size:12.5px;margin-bottom:8px">📈 历史表现（上市以来）</h3><div class="kv">' +
       '<span class="k">累计涨跌幅</span><span class="num ' + cls(r.sinceIPO) + '">' + fmt(r.sinceIPO) + "</span>" +
       '<span class="k">年化波动率</span><span class="num">' + (r.volAnn == null ? "—" : r.volAnn + "%") + "</span>" +
-      '<span class="k">上市天数</span><span class="num">' + r.histClose.length + " 交易日</span>" +
+      '<span class="k">上市天数</span><span class="num">' + (r.listDays || r.histClose.length) + " 交易日</span>" +
       '<span class="k">20日均成交额</span><span class="num">' + fmtVol(r.amt20) + "</span></div>" +
       '<div id="' + histChartId + '" style="margin-top:8px;height:230px"></div></div>' +
       // 当前
       '<div><h3 style="font-size:12.5px;margin-bottom:8px">🎯 当前点位</h3><div class="kv">' +
-      '<span class="k">MACD</span><span class="num">' + r.macd.dif + " / " + r.macd.dea +
-      (r.macd.cross === "golden" ? ' <span class="up">金叉</span>' : r.macd.cross === "death" ? ' <span class="down">死叉</span>' : "") + "</span>" +
+      '<span class="k">MACD</span><span class="num">' + (macd.dif == null ? "—" : macd.dif + " / " + macd.dea) +
+      (macd.cross === "golden" ? ' <span class="up">金叉</span>' : macd.cross === "death" ? ' <span class="down">死叉</span>' : "") + "</span>" +
       '<span class="k">RSI14</span><span class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</span>" +
       '<span class="k">历史分位</span><span class="num">' + formatPercentile(r.pctRank) + "</span>" +
       '<span class="k">250日线乖离</span><span class="num ' + cls(r.devMA250) + '">' + fmt(r.devMA250) + "</span>" +
@@ -1310,11 +1370,11 @@ main { min-width: 0; }
       // 前瞻
       '<div><h3 style="font-size:12.5px;margin-bottom:8px">🔮 信号与前瞻</h3>' +
       '<div style="font-size:12px;margin-bottom:8px">信号总分 <b class="num" style="font-size:18px">' +
-      (r.signals.total > 0 ? "+" : "") + r.signals.total + "</b> / ±12</div>" +
+      (sig.total > 0 ? "+" : "") + sig.total + "</b> / ±12</div>" +
       '<div class="kv">' +
       ["liquidity|流动性", "sentiment|市场情绪", "moneyflow|资金面", "performance|业绩达成", "spread|利差", "stockbond|股债联动"]
         .map(function (x) {
-          var k = x.split("|"), v = r.signals[k[0]];
+          var k = x.split("|"), v = sig[k[0]];
           return '<span class="k">' + k[1] + '</span><span class="num ' + (v > 0 ? "up" : v < 0 ? "down" : "") + '">' +
             (v > 0 ? "+" : "") + v + "</span>";
         }).join("") + "</div>" +
@@ -1322,11 +1382,17 @@ main { min-width: 0; }
         evs.map(function (e) {
           return '<div class="ev-item"><span class="d">' + e.date + '</span><span class="ev-type ev-' + e.type + '">' + e.type + "</span></div>";
         }).join("") : '<div style="margin-top:8px;font-size:11.5px;color:var(--tx3)">近 120 日无信号事件</div>') +
-      "</div></div></div>";
+      "</div></div></div>" +
+      (peers.length ?
+        '<div class="card" style="margin-top:14px"><h2>相似个券 · 近130日收益率相关性 Top ' + peers.length + '</h2>' +
+        '<p class="note">与当前个券同涨同跌程度最高的标的 · 点击切换查看</p>' +
+        '<div class="peer-list">' + peerHtml + '</div></div>' : "");
     renderLineChart(histChartId, r.histDates, [{ label: "收盘", color: "#165dff", data: r.histClose }], { area: true });
-    renderRadar(r.signals);
+    renderRadar(sig);
+    document.querySelectorAll("#detailPanel .peer-it").forEach(function (b) {
+      b.addEventListener("click", function () { openReitDetail(b.dataset.code); });
+    });
   }
-
 
   // ---- 全景热力图（squarified treemap，成交额加权） ----
   var hmRange = "pct";
@@ -1901,10 +1967,13 @@ main { min-width: 0; }
   })();
 
   // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
-  function openReitDetail(code) {
+  function openReitDetail(code, updateHash) {
     var r = null;
     for (var i = 0; i < D.reits.length; i++) if (D.reits[i].code === code) { r = D.reits[i]; break; }
     if (!r) return;
+    if (updateHash !== false) {
+      try { history.replaceState(null, "", "#/detail/" + code); } catch (e) {}
+    }
     showPage("research"); switchView("detail");
     ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
     $("fSearch").value = r.code;
@@ -2519,6 +2588,20 @@ main { min-width: 0; }
     clearTimeout(_resizeTimer);
     _resizeTimer = setTimeout(echResizeAll, 120);
   });
+
+  // ---- hash 路由：#/detail/{code} 直达个券详情（可分享链接） ----
+  (function () {
+    function codeFromHash() {
+      var m = (location.hash || "").match(/^#\/?detail\/([0-9A-Z.]+)/i);
+      return m ? m[1] : null;
+    }
+    window.addEventListener("hashchange", function () {
+      var c = codeFromHash();
+      if (c) openReitDetail(c, false);
+    });
+    var c0 = codeFromHash();
+    if (c0) openReitDetail(c0, false);
+  })();
 
   (function countUp() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
