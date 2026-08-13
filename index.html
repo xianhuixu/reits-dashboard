@@ -1251,12 +1251,29 @@ main { min-width: 0; }
       x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
     });
     var totalAmt = items.reduce(function (a, it) { return a + (it.amount || 0); }, 0) || 1;
+    function tmFont(frac) {
+      var px = Math.round(11 + 26 * Math.sqrt(Math.min(frac, 1)));
+      return Math.max(11, Math.min(26, px));
+    }
+    function escTm(s) { return String(s).replace(/[{}]/g, ""); }
     var data = items.map(function (it) {
+      var frac = (it.amount || 0) / totalAmt;
+      var nameFont = tmFont(frac);
+      var showSub = (it.amount || 0) >= totalAmt * 0.04;
+      var amt = it.amount != null ? Math.round(it.amount / 1e4).toLocaleString() + "万" : "";
+      var sub = (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "") + (it.n ? " · " + it.n + "只" : "");
+      var formatter = "{b|" + escTm(it.sector) + "}" + (showSub ? "\n{s|" + escTm(sub) + "}" : "");
       return {
         name: it.sector, value: Math.max(it.amount || 0, 1),
         amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
-        showSub: (it.amount || 0) >= totalAmt * 0.05,
-        itemStyle: { color: tmColor(it.ret) }
+        itemStyle: { color: tmColor(it.ret) },
+        label: {
+          formatter: formatter,
+          rich: {
+            b: { fontSize: nameFont, fontWeight: 700, color: "#fff", textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.5)" },
+            s: { fontSize: Math.max(10, Math.round(nameFont * 0.62)), color: "rgba(255,255,255,.94)", textShadowBlur: 2, textShadowColor: "rgba(0,0,0,.45)" }
+          }
+        }
       };
     });
     var option = {
@@ -1274,22 +1291,7 @@ main { min-width: 0; }
       series: [{
         type: "treemap", roam: false, nodeClick: false,
         breadcrumb: { show: false }, leafDepth: 1,
-        label: {
-          show: true, position: "inside",
-          formatter: function (p) {
-            var d = p.data || {};
-            if (d.showSub) {
-              var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "";
-              var sub = (d.ret != null ? fmt(d.ret) : "") + (amt ? " · " + amt : "") + (d.n ? " · " + d.n + "只" : "");
-              return "{b|" + d.name + "}\n{s|" + sub + "}";
-            }
-            return "{b|" + d.name + "}";
-          },
-          rich: {
-            b: { fontSize: 12, fontWeight: 700, color: "#fff", textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.45)" },
-            s: { fontSize: 10, color: "rgba(255,255,255,.9)", textShadowBlur: 2, textShadowColor: "rgba(0,0,0,.4)" }
-          }
-        },
+        label: { show: true, position: "inside" },
         itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
         data: data
       }]
