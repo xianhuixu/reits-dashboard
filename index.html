@@ -784,7 +784,7 @@ main { min-width: 0; }
 <script src="news.js"></script>
 <script src="corp_actions.js"></script>
 <script src="ui-utils.js"></script>
-<script src="lib/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" crossorigin="anonymous"></script>
 <script>
 (function () {
   var D = window.REITS_DATA;
@@ -1004,16 +1004,16 @@ main { min-width: 0; }
   D.strategies.forEach(function (st) {
     stSeries.push({ label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
   });
-  registerChart(function () { renderLineChart("chartStrategy", D.series.dates, stSeries); });
-  renderLineChart("chartStrategy", D.series.dates, stSeries);
+  registerChart(function () { renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false}); });
+  renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false});
 
   // 产权/经营权走势
   var rtSeries = [
     { label: "产权 REITs", color: "#3b82f6", data: D.series.byRight["产权"] },
     { label: "经营权 REITs", color: "#10b981", data: D.series.byRight["经营权"] }
   ];
-  registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries); });
-  renderLineChart("chartRight", D.series.dates, rtSeries);
+  registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); });
+  renderLineChart("chartRight", D.series.dates, rtSeries, {area: false});
 
   // ---- 策略×板块矩阵 ----
   (function () {
@@ -1042,8 +1042,8 @@ main { min-width: 0; }
   D.sectors.forEach(function (s, i) {
     secSeries.push({ label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s], off: true });
   });
-  registerChart(function () { renderLineChart("chartSector", D.series.dates, secSeries); });
-  renderLineChart("chartSector", D.series.dates, secSeries);
+  registerChart(function () { renderLineChart("chartSector", D.series.dates, secSeries, {area: false}); });
+  renderLineChart("chartSector", D.series.dates, secSeries, {area: false});
 
   var secMap = {};
   D.reits.forEach(function (r) { (secMap[r.sector] = secMap[r.sector] || []).push(r.pct); });
