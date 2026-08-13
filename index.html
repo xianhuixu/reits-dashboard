@@ -1250,58 +1250,89 @@ main { min-width: 0; }
     document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) {
       x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
     });
-    var totalAmt = items.reduce(function (a, it) { return a + (it.amount || 0); }, 0) || 1;
-    function tmFont(frac) {
-      var px = Math.round(88 * Math.sqrt(Math.min(frac, 1)));
-      return Math.max(11, Math.min(30, px));
+    function escTm(s) { return String(s).replace(/[\n\r{}]/g, " "); }
+    function tmTextUnits(s) {
+      var u = 0;
+      for (var i = 0; i < s.length; i++) u += (s.charCodeAt(i) >= 0x2E80) ? 1 : 0.62;
+      return u || 1;
     }
-    function escTm(s) { return String(s).replace(/[{}]/g, "").replace(/[\n\r]/g, " "); }
-    var data = items.map(function (it) {
-      var frac = (it.amount || 0) / totalAmt;
-      var nameFont = tmFont(frac);
-      var showSub = (it.amount || 0) >= totalAmt * 0.04;
+    function tmSub(it) {
       var amt = it.amount != null ? Math.round(it.amount / 1e4).toLocaleString() + "万" : "";
-      var sub = (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "");
-      var formatter = escTm(it.sector) + (showSub && sub ? "\n" + sub : "");
+      return (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "");
+    }
+    // 依据色块实际宽高 + 文字长度，计算能完整显示的最大字号（优先两行，放不下退化为单行标题）
+    function tmFit(w, h, name, sub) {
+      var aw = Math.max(w - 14, 16), ah = Math.max(h - 10, 16);
+      function fontFor(lines) {
+        var maxU = Math.max(tmTextUnits(name), lines >= 2 ? tmTextUnits(sub) : 0);
+        var byW = aw / maxU, byH = ah / (lines * 1.35);
+        return Math.max(10, Math.min(30, Math.floor(Math.min(byW, byH))));
+      }
+      if (sub) {
+        var f2 = fontFor(2);
+        if (f2 >= 11) return { formatter: name + "\n" + sub, fontSize: f2 };
+      }
+      return { formatter: name, fontSize: fontFor(1) };
+    }
+    function buildData(fits) {
+      return items.map(function (it) {
+        var key = it.sector;
+        var sub = tmSub(it);
+        var fit = (fits && fits[key]) ? fits[key] : { formatter: escTm(it.sector), fontSize: 14 };
+        return {
+          name: it.sector, value: Math.max(it.amount || 0, 1),
+          amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
+          itemStyle: { color: tmColor(it.ret) },
+          label: {
+            position: "inside", align: "center", verticalAlign: "middle",
+            color: "#fff", fontWeight: 700,
+            textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.5)",
+            formatter: fit.formatter, fontSize: fit.fontSize
+          }
+        };
+      });
+    }
+    function buildOption(dataArr) {
       return {
-        name: it.sector, value: Math.max(it.amount || 0, 1),
-        amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
-        itemStyle: { color: tmColor(it.ret) },
-        label: {
-          position: "inside",
-          align: "center",
-          verticalAlign: "middle",
-          fontSize: nameFont,
-          fontWeight: 700,
-          color: "#fff",
-          textShadowBlur: 4,
-          textShadowColor: "rgba(0,0,0,.55)",
-          formatter: formatter,
-        }
+        backgroundColor: "transparent",
+        tooltip: {
+          backgroundColor: th.panel, borderColor: th.line,
+          textStyle: { color: th.tx, fontSize: 12 },
+          formatter: function (p) {
+            var d = p.data || {};
+            var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "—";
+            var retTxt = d.ret != null ? fmt(d.ret) : "—";
+            return "<b>" + p.name + "</b><br/>涨跌 " + retTxt + "<br/>成交额 " + amt + (d.n ? " · " + d.n + "只" : "");
+          }
+        },
+        series: [{
+          type: "treemap", roam: false, nodeClick: false,
+          breadcrumb: { show: false }, leafDepth: 1,
+          label: { show: true, position: "inside" },
+          itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
+          data: dataArr
+        }]
       };
-    });
-    var option = {
-      backgroundColor: "transparent",
-      tooltip: {
-        backgroundColor: th.panel, borderColor: th.line,
-        textStyle: { color: th.tx, fontSize: 12 },
-        formatter: function (p) {
-          var d = p.data || {};
-          var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "—";
-          var retTxt = d.ret != null ? fmt(d.ret) : "—";
-          return "<b>" + p.name + "</b><br/>涨跌 " + retTxt + "<br/>成交额 " + amt + (d.n ? " · " + d.n + "只" : "");
-        }
-      },
-      series: [{
-        type: "treemap", roam: false, nodeClick: false,
-        breadcrumb: { show: false }, leafDepth: 1,
-        label: { show: true, position: "inside" },
-        itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
-        data: data
-      }]
-    };
-    var inst = echSet("treemap", option);
+    }
+    var inst = echSet("treemap", buildOption(buildData(null)));
     if (inst) {
+      // 首次渲染后读取每个色块的真实宽高，回填「完全显示」的字号
+      try {
+        var fits = {};
+        var series = inst.getModel().getSeriesByIndex(0);
+        var dd = series.getData();
+        for (var i = 0; i < dd.count(); i++) {
+          var nm = dd.getName(i);
+          if (!nm) continue;
+          var layout = dd.getItemLayout(i);
+          if (!layout || !layout.width || !layout.height) continue;
+          var it = null;
+          for (var j = 0; j < items.length; j++) if (items[j].sector === nm) { it = items[j]; break; }
+          if (!it) continue;
+          fits[nm] = tmFit(layout.width, layout.height, escTm(nm), tmSub(it));
+        }
+        inst.setOption(buildOption(buildData(fits)), true);
+      } catch (e) { /* 测量失败时保留初版字号 */ }
       inst.off("click");
       inst.on("click", function (p) {
         var d = p.data || {};
