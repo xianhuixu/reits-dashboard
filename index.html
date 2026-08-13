@@ -1253,16 +1253,16 @@ main { min-width: 0; }
     var totalAmt = items.reduce(function (a, it) { return a + (it.amount || 0); }, 0) || 1;
     function tmFont(frac) {
       var px = Math.round(88 * Math.sqrt(Math.min(frac, 1)));
-      return Math.max(11, Math.min(32, px));
+      return Math.max(11, Math.min(30, px));
     }
-    function escTm(s) { return String(s).replace(/[{}]/g, ""); }
+    function escTm(s) { return String(s).replace(/[{}]/g, "").replace(/[\n\r]/g, " "); }
     var data = items.map(function (it) {
       var frac = (it.amount || 0) / totalAmt;
       var nameFont = tmFont(frac);
       var showSub = (it.amount || 0) >= totalAmt * 0.04;
       var amt = it.amount != null ? Math.round(it.amount / 1e4).toLocaleString() + "万" : "";
-      var sub = (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "") + (it.n ? " · " + it.n + "只" : "");
-      var formatter = "{b|" + escTm(it.sector) + "}" + (showSub ? "\n{s|" + escTm(sub) + "}" : "");
+      var sub = (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "");
+      var formatter = escTm(it.sector) + (showSub && sub ? "\n" + sub : "");
       return {
         name: it.sector, value: Math.max(it.amount || 0, 1),
         amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
@@ -1271,11 +1271,12 @@ main { min-width: 0; }
           position: "inside",
           align: "center",
           verticalAlign: "middle",
+          fontSize: nameFont,
+          fontWeight: 700,
+          color: "#fff",
+          textShadowBlur: 4,
+          textShadowColor: "rgba(0,0,0,.55)",
           formatter: formatter,
-          rich: {
-            b: { fontSize: nameFont, fontWeight: 800, color: "#fff", textShadowBlur: 4, textShadowColor: "rgba(0,0,0,.55)" },
-            s: { fontSize: Math.max(10, Math.round(nameFont * 0.56)), color: "rgba(255,255,255,.95)", textShadowBlur: 2, textShadowColor: "rgba(0,0,0,.5)" }
-          }
         }
       };
     });
