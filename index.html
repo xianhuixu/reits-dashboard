@@ -1850,7 +1850,7 @@ main { min-width: 0; }
     if (pg === "pano") {
       var activeSub = document.querySelector('#panoSub button.on');
       if (activeSub) {
-        $("kpis").style.display = activeSub.dataset.scroll === "v-heatmap" ? "" : "none";
+        $("kpis").style.display = activeSub.dataset.v === "heatmap" ? "" : "none";
       }
     }
     if (switching && !keepScroll) restorePageScroll(pg);
@@ -1872,6 +1872,10 @@ main { min-width: 0; }
       showPage(b.dataset.pg || "research");
       switchView(b.dataset.v);
       window.scrollTo({ top: 0, behavior: "auto" });
+      // KPI 只在行情总览与热力图 tab 显示（市场全景的 data-v 分支）
+      if (b.dataset.pg === "pano") {
+        $("kpis").style.display = b.dataset.v === "heatmap" ? "" : "none";
+      }
       return;
     }
   });
@@ -1889,7 +1893,7 @@ main { min-width: 0; }
   (function () {
     var activeSub = document.querySelector('#panoSub button.on');
     if (activeSub) {
-      $("kpis").style.display = activeSub.dataset.scroll === "v-heatmap" ? "" : "none";
+      $("kpis").style.display = activeSub.dataset.v === "heatmap" ? "" : "none";
     }
   })();
 
