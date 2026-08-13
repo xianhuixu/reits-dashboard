@@ -51,7 +51,7 @@ test("primary navigation preserves page scroll positions", () => {
 });
 
 test("primary and secondary navigation share one sticky shell", () => {
-  assert.match(html, /<nav id="topbar">[\s\S]*<div id="subbar"[\s\S]*<\/nav>\s*<div class="data-meta" id="meta">/);
+  assert.match(html, /<nav id="topbar"[^>]*>[\s\S]*<div id="subbar"[\s\S]*<\/nav>\s*<div class="data-meta" id="meta">/);
   assert.match(html, /#topbar\s*\{[^}]*position:\s*sticky/s);
   assert.doesNotMatch(html, /#subbar\s*\{[^}]*position:\s*sticky/s);
   assert.doesNotMatch(html, /#subbar\s*\{[^}]*(?:^|;)\s*top:\s*\d+px/ms);

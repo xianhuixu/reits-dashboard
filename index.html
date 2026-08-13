@@ -56,7 +56,7 @@ html { scroll-behavior: auto; }
 body {
   background: var(--bg);
   color: var(--tx);
-  font: 13px/1.6 "Inter", "DIN Alternate", -apple-system, BlinkMacSystemFont, "PingFangSC-Regular", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font: 13.5px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   padding: 26px 28px 44px; max-width: 1480px; margin: 0 auto; }
 .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
@@ -92,14 +92,17 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
   border: none; border-radius: var(--radius); padding: 14px 16px; overflow: hidden; box-shadow: var(--shadow);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
 .kpi:hover { transform: translateY(-3px); box-shadow: var(--shadow-h); }
+.kpi.kpi-idx { box-shadow: inset 0 0 0 1px rgba(59,130,246,.28), var(--shadow); background: linear-gradient(180deg, rgba(59,130,246,.05), var(--panel) 42%); }
 .kpi .k { color: var(--tx3); font-size: 11px; letter-spacing: .04em; line-height: 1.45;
   min-height: 2.9em; margin-bottom: 6px; display: -webkit-box; -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; overflow: hidden; }
-.kpi .v { font-size: 26px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; }
+.kpi .v { font-size: 28px; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; }
 .kpi .v.kpi-name { font-size: 19px; line-height: 1.35; font-weight: 650; letter-spacing: 0; }
 .kpi .s { font-size: 11.5px; color: var(--tx2); margin-top: 4px; }
-.kpi .s .up-b { display: inline-block; background: #e6f4ea; color: #137333; border-radius: 999px; padding: 1px 8px; font-weight: 600; }
-[data-theme="dark"] .kpi .s .up-b { background: rgba(43,181,163,.14); color: var(--down); }
+.kpi .s .up-b { display: inline-block; background: rgba(245,63,63,.1); color: var(--up); border-radius: 999px; padding: 1px 8px; font-weight: 600; }
+.kpi .s .down-b { display: inline-block; background: rgba(16,185,129,.1); color: var(--down); border-radius: 999px; padding: 1px 8px; font-weight: 600; }
+.kpi-spark { margin-top: 7px; height: 30px; }
+.kpi-spark svg { width: 100%; height: 30px; display: block; }
 
 .tabs { position: relative; display: flex; gap: 2px; margin: 22px 0 16px; flex-wrap: wrap;
   border-bottom: 1px solid var(--line); width: 100%; }
@@ -122,8 +125,8 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
   transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
 .card:hover { box-shadow: var(--shadow-h); }
 .view > .card + .card, section > .card + .card { margin-top: 24px; }
-.card h2 { font-size: 14px; font-weight: 650; letter-spacing: .02em; margin-bottom: 4px; }
-.card .note { color: var(--tx3); font-size: 11.5px; margin-bottom: 12px; }
+.card h2 { font-size: 15px; font-weight: 700; letter-spacing: .01em; margin-bottom: 4px; }
+.card .note { color: var(--tx3); font-size: 12px; margin-bottom: 12px; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 8px; font-size: 12px; color: var(--tx2); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; transition: opacity .15s; }
@@ -176,6 +179,8 @@ th, td { padding: 7px 9px; text-align: right; border-bottom: 1px solid var(--lin
 th { color: var(--tx3); font-weight: 500; font-size: 11.5px; letter-spacing: .03em; cursor: pointer; user-select: none;
   position: sticky; top: 0; background: var(--th-bg); z-index: 1; }
 th:hover { color: var(--accent); }
+#tbl th[data-k].sorted-asc::after { content: " ↑"; color: var(--accent); font-size: 9px; }
+#tbl th[data-k].sorted-desc::after { content: " ↓"; color: var(--accent); font-size: 9px; }
 td.l, th.l { text-align: left; }
 tbody tr { transition: background .15s; }
 tbody tr:hover { background: rgba(148,163,184,.07); }
@@ -257,7 +262,7 @@ tbody tr { cursor: pointer; }
 .sec-head:first-of-type { margin-top: 0; }
 .sec-head .no { font-size: 12px; font-weight: 700; color: #fff; background: var(--accent);
   border-radius: 6px; padding: 3px 9px; letter-spacing: .03em; white-space: nowrap; }
-.sec-head .t { font-size: 17px; font-weight: 700; letter-spacing: .02em; }
+.sec-head .t { font-size: 18px; font-weight: 700; letter-spacing: .01em; }
 .sec-head .d { color: var(--tx3); font-size: 12px; }
 #v-advice { border-top: 3px solid var(--gold); border-radius: 12px; padding-top: 14px; margin-top: 8px; }
 .rv-ok { color: var(--down); } .rv-no { color: var(--up); }
@@ -269,10 +274,10 @@ tbody tr { cursor: pointer; }
 .rv-stage { font-size: 22px; font-weight: 700; }
 #topbar { position: sticky; top: 12px; z-index: 40; background: var(--panel); border-radius: 14px;
   box-shadow: var(--shadow); margin-bottom: 10px; overflow: hidden; }
-.tb-main { display: flex; align-items: stretch; gap: 18px; padding: 4px 16px; min-height: 96px; }
-#topbar .tb-brand { display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 800; letter-spacing: .01em;
+.tb-main { display: flex; align-items: stretch; gap: 14px; padding: 4px 16px; min-height: 76px; }
+#topbar .tb-brand { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 800; letter-spacing: .01em;
   white-space: nowrap; color: var(--tx); padding-right: 18px; border-right: 1px solid var(--line); }
-#topbar .tb-brand img { width: 88px; height: 88px; border-radius: 20px; background: transparent;
+#topbar .tb-brand img { width: 64px; height: 64px; border-radius: 14px; background: transparent;
   padding: 0; box-shadow: none; }
 [data-theme="dark"] #topbar .tb-brand img { box-shadow: none; }
 #tbNav { position: relative; display: flex; gap: 4px; }
@@ -348,7 +353,7 @@ main { min-width: 0; }
   .tb-main { flex-wrap: wrap; gap: 6px 10px; padding: 6px 12px; min-height: 0; }
   #topbar .tb-brand { border-right: 0; padding-right: 0; }
   #topbar .tb-brand span { font-size: 15px; font-weight: 800; }
-  #topbar .tb-brand img { width: 60px; height: 60px; }
+  #topbar .tb-brand img { width: 48px; height: 48px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
   #tbNav button { padding: 6px 10px; font-size: 12.5px; }
   .tb-search { margin-left: auto; flex: 0 1 auto; }
@@ -460,7 +465,7 @@ main { min-width: 0; }
     <h2>美国 REITs 代表标的长期走势（对数轴 · 起点=100）</h2>
     <p class="note">防御型（净租赁/医疗/住宅）· 周期型（工业物流/购物中心）· 扩张型（数据中心/通信铁塔）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新（美股收盘数据次一交易日同步，<span id="usLongAsOf"></span>）· 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：扩张型由 American Tower（1998 年起）与 Equinix（2001 年起）合成，Equinix 在科网泡沫期曾深度回撤（对数轴下端）；2005-2009 年 Equinix iFinD 行情缺失，以断线如实呈现，2008 年回撤无从计算（显示"—"）</p>
     <div class="legend" id="legendUsLong"></div>
-    <div id="chartUsLong"></div>
+    <div id="chartUsLong" style="height:400px"></div>
     <div class="table-scroll" id="usCoupleStats" style="margin-top:14px"></div>
     <p id="usCoupleText" style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:10px"></p>
   </div>
@@ -531,14 +536,14 @@ main { min-width: 0; }
   <div class="grid">
     <div class="card">
       <h2>相关性热力矩阵（日收益率 Pearson，近约 130 交易日）</h2>
-      <p class="note">森绿 = 正相关，陶红 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
+      <p class="note">砖红 = 正相关，墨绿 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
       <div id="allocDonut" style="margin-bottom:10px"></div>
       <div class="table-scroll" id="corrMatrix"></div>
     </div>
     <div class="card">
       <h2>股性 - 债性定位</h2>
       <p class="note">X = 与国债指数相关性（债性）· Y = 与沪深300相关性（股性）</p>
-      <div id="corrScatter"></div>
+      <div id="corrScatter" style="height:380px"></div>
     </div>
   </div>
   <div class="card">
@@ -590,14 +595,12 @@ main { min-width: 0; }
     <div class="card">
       <h2>策略组合等权指数（区间起点 = 100）</h2>
       <p class="note">按投资策略分类（防御型 / 周期型 / 扩张型）等权构建 · 点击图例切换</p>
-      <div class="legend" id="legendStrategy"></div>
-      <div id="chartStrategy"></div>
+      <div id="chartStrategy" style="height:300px"></div>
     </div>
     <div class="card">
       <h2>产权 vs 经营权</h2>
       <p class="note">产权看分派率，经营权看中债 IRR</p>
-      <div class="legend" id="legendRight"></div>
-      <div id="chartRight"></div>
+      <div id="chartRight" style="height:300px"></div>
     </div>
   </div>
   <div class="card">
@@ -613,8 +616,7 @@ main { min-width: 0; }
     <div class="card">
       <h2>板块等权指数走势（区间起点 = 100）</h2>
       <p class="note">点击图例切换板块显示</p>
-      <div class="legend" id="legendSector"></div>
-      <div id="chartSector"></div>
+      <div id="chartSector" style="height:300px"></div>
     </div>
     <div class="card">
       <h2>板块今日表现</h2>
@@ -782,6 +784,7 @@ main { min-width: 0; }
 <script src="news.js"></script>
 <script src="corp_actions.js"></script>
 <script src="ui-utils.js"></script>
+<script src="lib/echarts.min.js"></script>
 <script>
 (function () {
   var D = window.REITS_DATA;
@@ -814,21 +817,55 @@ main { min-width: 0; }
   var avg = avgOf(pcts);
   var upN = pcts.filter(function (v) { return v > 0; }).length;
   var downN = pcts.filter(function (v) { return v < 0; }).length;
-  var totVol = D.reits.reduce(function (a, r) { return a + (r.volume || 0); }, 0);
-  var best = D.reits.slice().sort(function (a, b) { return b.pct - a.pct; })[0];
-  var worst = D.reits.slice().sort(function (a, b) { return a.pct - b.pct; })[0];
-  $("kpis").innerHTML = [
-    ["全市场等权日涨跌", fmt(avg), D.count + " 只样本", cls(avg)],
-    ["上涨 / 下跌", upN + " / " + downN, "平盘 " + (pcts.length - upN - downN) + " 只", ""],
-    ["领涨", best.name.replace(/REIT$/, ""), fmt(best.pct), "up"],
-    ["领跌", worst.name.replace(/REIT$/, ""), fmt(worst.pct), "down"]
-  ].map(function (x) {
-    var sub = x[2];
-    var valueClass = x[0] === "领涨" || x[0] === "领跌" ? " kpi-name" : "";
-    if (typeof sub === "string" && sub.indexOf("+") === 0) sub = '<span class="up-b">' + sub + "</span>";
-    return '<div class="kpi"><div class="k">' + x[0] + '</div><div class="v num ' + x[3] + valueClass + '">' + x[1] +
-           '</div><div class="s num">' + sub + '</div></div>';
-  }).join("");
+  var flatN = pcts.length - upN - downN;
+  var breadth = pcts.length ? Math.round(upN / pcts.length * 100) : null;
+  var totAmt = D.reits.reduce(function (a, r) { return a + (r.amount || 0); }, 0);
+  var pctRanks = D.reits.map(function (r) { return r.pctRank; }).filter(function (v) { return v != null; });
+  var avgRank = avgOf(pctRanks);
+  var bond10y = (D.cycle && D.cycle.bond10y != null) ? D.cycle.bond10y : null;
+  var rv = D.revaluation || {};
+  var mktIdx = D.marketIndex || null;
+
+  function sparklineSvg(series, color) {
+    if (!series || series.length < 2) return "";
+    var w = 120, h = 30, lo = Math.min.apply(null, series), hi = Math.max.apply(null, series);
+    var span = (hi - lo) || 1;
+    var pts = series.map(function (v, i) {
+      var x = 1 + i / (series.length - 1) * (w - 2);
+      var y = h - 2 - (v - lo) / span * (h - 4);
+      return x.toFixed(1) + "," + y.toFixed(1);
+    }).join(" ");
+    var last = series[series.length - 1];
+    var ly = h - 2 - (last - lo) / span * (h - 4);
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<polyline points="' + pts + '" fill="none" stroke="' + color + '" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>' +
+      '<circle cx="' + (w - 1) + '" cy="' + ly.toFixed(1) + '" r="2" fill="' + color + '"/></svg>';
+  }
+  function kpiCard(label, valueHtml, subHtml, cls2) {
+    return '<div class="kpi' + (cls2 || "") + '"><div class="k">' + label + '</div>' +
+      '<div class="v num">' + valueHtml + '</div>' +
+      '<div class="s num">' + subHtml + '</div></div>';
+  }
+  var avgCls = cls(avg);
+  var sparkColor = avgCls === "up" ? "var(--up)" : avgCls === "down" ? "var(--down)" : "var(--tx2)";
+  var idxClose = (mktIdx && mktIdx.close != null) ? mktIdx.close.toFixed(2) : "—";
+  var idxPct = (mktIdx && mktIdx.pct != null)
+    ? '<span class="' + cls(mktIdx.pct) + '">' + fmt(mktIdx.pct) + '</span>'
+    : '<span style="color:var(--tx3)">待更新</span>';
+  var kpiCards =
+    kpiCard("中证REITs收益指数", idxClose,
+      '日涨跌 ' + idxPct + ' · ' + (mktIdx && mktIdx.code ? mktIdx.code : "待 iFinD 接入"), " kpi-idx") +
+    '<div class="kpi"><div class="k">全市场等权日涨跌</div>' +
+      '<div class="v num ' + avgCls + '">' + fmt(avg) + '</div>' +
+      '<div class="kpi-spark">' + sparklineSvg(D.series && D.series.market, sparkColor) + '</div>' +
+      '<div class="s num">' + D.count + ' 只 · 近250日等权</div></div>' +
+    kpiCard("市场宽度（涨/跌家数）", upN + " / " + downN,
+      (breadth == null ? "—" : breadth + "% 上涨") + " · 平 " + flatN + " 只") +
+    kpiCard("市场总成交额", fmtVol(totAmt), "全市场 " + D.count + " 只") +
+    kpiCard("平均历史价格分位", avgRank == null ? "—" : formatPercentile(avgRank), "价格位置 · 低=相对便宜") +
+    kpiCard("10Y 国债收益率", bond10y == null ? "—" : bond10y.toFixed(2) + "%", "无风险利率锚（债性定价分母）") +
+    kpiCard("资产重估状态", rv.stage || "—", (rv.score != null ? rv.score : "—") + "/4 项成立 · 每日更新");
+  $("kpis").innerHTML = kpiCards;
 
   // ---- 策略卡片 ----
   $("stratCards").innerHTML = D.strategies.map(function (st) {
@@ -843,79 +880,140 @@ main { min-width: 0; }
       '<ul><li>' + ST_DESC[st][1] + '</li><li>' + ST_DESC[st][2] + '</li></ul></div>';
   }).join("");
 
-  // ---- 通用折线图 ----
-  function drawChart(el, dates, series, opts) {
-    var W = 760, H = (opts && opts.h) || 300, pl = 42, pr = 10, pt = 12, pb = 26;
-    var all = [];
-    series.forEach(function (s) { s.data.forEach(function (v) { if (v != null) all.push(v); }); });
-    if (!all.length) { el.innerHTML = '<div class="empty">暂无数据</div>'; return; }
-    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
-    var pad = (hi - lo) * 0.1 || 1; lo -= pad; hi += pad;
-    function X(i) { return pl + i * (W - pl - pr) / (dates.length - 1); }
-    function Y(v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); }
-    var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">' +
-      svgTitle("走势折线图：" + series.map(function (s) { return s.label; }).join("、"));
-    drawChart._n = (drawChart._n || 0) + 1; var cid = drawChart._n;
-    for (var g = 0; g <= 4; g++) {
-      var gv = lo + (hi - lo) * g / 4, gy = Y(gv);
-      out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="var(--grid)"/>' +
-             '<text x="' + (pl - 6) + '" y="' + (gy + 3) + '" text-anchor="end" fill="var(--tx3)" font-size="10">' + gv.toFixed(1) + '</text>';
-    }
-    for (var t = 0; t < dates.length; t += Math.ceil(dates.length / 7))
-      out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + dates[t].slice(5) + '</text>';
-    series.forEach(function (s, si) {
-      var d = "", firstX = null, lastX = null;
-      s.data.forEach(function (v, i) {
-        if (v == null) return;
-        if (firstX == null) firstX = X(i);
-        lastX = X(i);
-        d += (d ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1);
-      });
-      var gid = "ag" + cid + "_" + si;
-      out += '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0%" stop-color="' + s.color + '" stop-opacity=".12"/>' +
-        '<stop offset="100%" stop-color="' + s.color + '" stop-opacity=".01"/></linearGradient></defs>';
-      if (firstX != null)
-        out += '<path d="' + d + "L" + lastX.toFixed(1) + " " + (H - pb) + "L" + firstX.toFixed(1) + " " + (H - pb) +
-          'Z" fill="url(#' + gid + ')" stroke="none"/>';
-      out += '<path class="line" pathLength="1" d="' + d + '" fill="none" stroke="' + s.color + '" stroke-width="' + (s.w || 1.6) + '" stroke-linejoin="round" stroke-linecap="round"/>';
-    });
-    el.innerHTML = out + '</svg>';
+  // ---- ECharts 基础设施 ----
+  var CHART = {};            // id -> echarts 实例
+  var CHART_RENDERERS = [];  // 主题切换时重渲染的回调
+  function ech() { return window.echarts; }
+  function cssVal(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "";
   }
-  function buildLegend(el, series, active, redraw) {
-    el.innerHTML = series.map(function (s, i) {
-      return '<span data-i="' + i + '" class="' + (active[i] ? "" : "off") + '"><i style="background:' + s.color + '"></i>' + s.label + '</span>';
-    }).join("");
-    el.onclick = function (e) {
-      var sp = e.target.closest("span"); if (!sp) return;
-      var i = +sp.dataset.i; active[i] = !active[i];
-      if (!active.some(Boolean)) active[i] = true;
-      sp.classList.toggle("off", !active[i]);
-      redraw();
+  function chartTheme() {
+    return {
+      tx: cssVal('--tx'), tx2: cssVal('--tx2'), tx3: cssVal('--tx3'),
+      up: cssVal('--up'), down: cssVal('--down'), accent: cssVal('--accent'),
+      gold: cssVal('--gold'), grid: cssVal('--grid'), line: cssVal('--line'),
+      panel: cssVal('--panel'), panel2: cssVal('--panel2'), bg: cssVal('--bg'),
+      def: cssVal('--def'), cyc: cssVal('--cyc'), gro: cssVal('--gro')
     };
+  }
+  function resolveColor(c) {
+    var m = /var\((--[\w-]+)\)/.exec(c || "");
+    if (!m) return c;
+    return cssVal(m[1]) || c;
+  }
+  function hexToRgb(hex) {
+    var h = (hex || "").replace("#", "");
+    if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+    var n = parseInt(h, 16);
+    if (isNaN(n)) return { r: 138, g: 147, b: 160 };
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+  function rgba(hex, a) {
+    var c = hexToRgb(hex);
+    return "rgba(" + c.r + "," + c.g + "," + c.b + "," + a + ")";
+  }
+  function echInit(id) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    var inst = CHART[id];
+    if (inst && (inst.isDisposed() || inst.getDom() !== el)) {
+      inst.dispose(); delete CHART[id]; inst = null;
+    }
+    if (!inst) { inst = ech().init(el, null, { renderer: "canvas" }); CHART[id] = inst; }
+    return inst;
+  }
+  function echSet(id, option) {
+    var inst = echInit(id);
+    if (inst) { inst.setOption(option, true); inst.resize(); }
+    return inst;
+  }
+  function echResizeAll() {
+    Object.keys(CHART).forEach(function (id) {
+      if (CHART[id] && !CHART[id].isDisposed()) CHART[id].resize();
+    });
+  }
+  function disposeAllCharts() {
+    Object.keys(CHART).forEach(function (id) {
+      if (CHART[id] && !CHART[id].isDisposed()) CHART[id].dispose();
+    });
+    CHART = {};
+  }
+  function renderAllCharts() {
+    disposeAllCharts();
+    CHART_RENDERERS.forEach(function (fn) { try { fn(); } catch (e) { /* 忽略单项失败 */ } });
+  }
+  function registerChart(fn) { CHART_RENDERERS.push(fn); }
+
+  // ---- 通用折线图（ECharts） ----
+  function lineChartOption(dates, series, opts) {
+    var th = chartTheme();
+    var selected = null;
+    var hasOff = series.some(function (s) { return s.off; });
+    if (hasOff) {
+      selected = {};
+      series.forEach(function (s) { if (s.off) selected[s.label] = false; });
+    }
+    return {
+      backgroundColor: "transparent",
+      color: series.map(function (s) { return resolveColor(s.color); }),
+      grid: { left: 46, right: 14, top: 34, bottom: 28 },
+      tooltip: {
+        trigger: "axis",
+        backgroundColor: th.panel, borderColor: th.line,
+        textStyle: { color: th.tx, fontSize: 12 },
+        axisPointer: { type: "line", lineStyle: { color: th.tx3, type: "dashed" } },
+        valueFormatter: function (v) { return v == null ? "—" : Number(v).toFixed(2); }
+      },
+      legend: {
+        data: series.map(function (s) { return s.label; }),
+        selected: selected, top: 0, left: "center", icon: "roundRect",
+        itemWidth: 12, itemHeight: 4, itemGap: 14,
+        textStyle: { color: th.tx2, fontSize: 11 }
+      },
+      xAxis: {
+        type: "category", data: dates, boundaryGap: false,
+        axisLine: { lineStyle: { color: th.line } }, axisTick: { show: false },
+        axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true },
+        splitLine: { show: false }
+      },
+      yAxis: {
+        type: "value", scale: true,
+        axisLabel: { color: th.tx3, fontSize: 10 },
+        splitLine: { lineStyle: { color: th.grid } }
+      },
+      series: series.map(function (s) {
+        return {
+          name: s.label, type: "line", data: s.data, smooth: false,
+          showSymbol: false, connectNulls: true,
+          lineStyle: { width: s.w || 1.8 },
+          areaStyle: (opts && opts.area === false) ? null : { opacity: 0.07 },
+          emphasis: { focus: "series" }
+        };
+      })
+    };
+  }
+  function renderLineChart(id, dates, series, opts) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (!series.length || !dates || !dates.length) { el.innerHTML = '<div class="empty">暂无数据</div>'; return; }
+    echSet(id, lineChartOption(dates, series, opts));
   }
 
   // 策略走势
-  var stSeries = [{ key: "market", label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
+  var stSeries = [{ label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.strategies.forEach(function (st) {
-    stSeries.push({ key: st, label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
+    stSeries.push({ label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
   });
-  var stActive = stSeries.map(function () { return true; });
-  buildLegend($("legendStrategy"), stSeries, stActive, function () {
-    drawChart($("chartStrategy"), D.series.dates, stSeries.filter(function (s, i) { return stActive[i]; }));
-  });
-  drawChart($("chartStrategy"), D.series.dates, stSeries);
+  registerChart(function () { renderLineChart("chartStrategy", D.series.dates, stSeries); });
+  renderLineChart("chartStrategy", D.series.dates, stSeries);
 
   // 产权/经营权走势
   var rtSeries = [
     { label: "产权 REITs", color: "#3b82f6", data: D.series.byRight["产权"] },
     { label: "经营权 REITs", color: "#10b981", data: D.series.byRight["经营权"] }
   ];
-  var rtActive = [true, true];
-  buildLegend($("legendRight"), rtSeries, rtActive, function () {
-    drawChart($("chartRight"), D.series.dates, rtSeries.filter(function (s, i) { return rtActive[i]; }));
-  });
-  drawChart($("chartRight"), D.series.dates, rtSeries);
+  registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries); });
+  renderLineChart("chartRight", D.series.dates, rtSeries);
 
   // ---- 策略×板块矩阵 ----
   (function () {
@@ -940,15 +1038,12 @@ main { min-width: 0; }
 
   // ---- 板块视图 ----
   var SEC_PALETTE = ["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316"];
-  var secSeries = [{ key: "market", label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
+  var secSeries = [{ label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.sectors.forEach(function (s, i) {
-    secSeries.push({ key: s, label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s] });
+    secSeries.push({ label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s], off: true });
   });
-  var secActive = secSeries.map(function (s, i) { return i === 0; });
-  buildLegend($("legendSector"), secSeries, secActive, function () {
-    drawChart($("chartSector"), D.series.dates, secSeries.filter(function (s, i) { return secActive[i]; }));
-  });
-  drawChart($("chartSector"), D.series.dates, [secSeries[0]]);
+  registerChart(function () { renderLineChart("chartSector", D.series.dates, secSeries); });
+  renderLineChart("chartSector", D.series.dates, secSeries);
 
   var secMap = {};
   D.reits.forEach(function (r) { (secMap[r.sector] = secMap[r.sector] || []).push(r.pct); });
@@ -999,6 +1094,10 @@ main { min-width: 0; }
         '<td class="num" style="font-weight:600">' + (r.signals.total > 0 ? "+" : "") + r.signals.total + "</td>" +
         "<td>" + sigLabel(r.signals.label) + "</td></tr>";
     }).join("");
+    document.querySelectorAll("#tbl th[data-k]").forEach(function (th) {
+      th.classList.remove("sorted-asc", "sorted-desc");
+      if (th.dataset.k === sortKey) th.classList.add(sortDir > 0 ? "sorted-asc" : "sorted-desc");
+    });
   }
   document.querySelector("#tbl tbody").addEventListener("click", function (e) {
     var tr = e.target.closest("tr"); if (!tr) return;
@@ -1019,34 +1118,30 @@ main { min-width: 0; }
   renderTbl();
 
   // ---- 个券详情（历史 / 当前 / 前瞻） ----
-  function radarSVG(signals) {
-    var F = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"],
-             ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
-    var cx = 110, cy = 100, R = 70, pts = [];
-    function pt(i, v) {
-      var ang = -Math.PI / 2 + i * Math.PI / 3, r = R * (v + 2) / 4;
-      return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
-    }
-    var s = '<svg viewBox="0 0 220 200" width="220">' + svgTitle("个券六因子信号雷达图");
-    [0.25, 0.5, 0.75, 1].forEach(function (f) {
-      var ring = F.map(function (_, i) { return pt(i, f * 4 - 2); });
-      s += '<polygon points="' + ring.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") +
-        '" fill="none" stroke="var(--line)"/>';
-    });
-    F.forEach(function (_, i) {
-      var p = pt(i, 2);
-      s += '<line x1="' + cx + '" y1="' + cy + '" x2="' + p[0] + '" y2="' + p[1] + '" stroke="var(--line)"/>';
-    });
-    var poly = F.map(function (f, i) { return pt(i, signals[f[0]]); });
-    s += '<polygon points="' + poly.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ") +
-      '" fill="rgba(59,130,246,.15)" stroke="var(--accent)" stroke-width="1.6"/>';
-    F.forEach(function (f, i) {
-      var p = pt(i, 2.55);
-      s += '<text x="' + p[0] + '" y="' + p[1] + '" text-anchor="middle" fill="var(--tx2)" font-size="10">' + f[1] + "</text>";
-      var pv = pt(i, signals[f[0]]);
-      s += '<circle cx="' + pv[0] + '" cy="' + pv[1] + '" r="2.5" fill="var(--accent)"/>';
-    });
-    return s + "</svg>";
+  var RADAR_FACTORS = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"],
+                        ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
+  function renderRadar(signals) {
+    var th = chartTheme();
+    var option = {
+      radar: {
+        indicator: RADAR_FACTORS.map(function (f) { return { name: f[1], min: -2, max: 2 }; }),
+        radius: "64%", center: ["50%", "54%"], splitNumber: 4,
+        axisName: { color: th.tx2, fontSize: 10 },
+        splitLine: { lineStyle: { color: th.grid } },
+        splitArea: { show: false },
+        axisLine: { lineStyle: { color: th.grid } }
+      },
+      series: [{
+        type: "radar", symbolSize: 5,
+        data: [{
+          value: RADAR_FACTORS.map(function (f) { return signals[f[0]]; }),
+          areaStyle: { color: "rgba(59,130,246,.16)" },
+          lineStyle: { color: th.accent, width: 1.6 },
+          itemStyle: { color: th.accent }
+        }]
+      }]
+    };
+    echSet("detailRadar", option);
   }
   function renderDetail(code) {
     var r = D.reits.find(function (x) { return x.code === code; });
@@ -1063,7 +1158,7 @@ main { min-width: 0; }
       '<span class="k">年化波动率</span><span class="num">' + (r.volAnn == null ? "—" : r.volAnn + "%") + "</span>" +
       '<span class="k">上市天数</span><span class="num">' + r.histClose.length + " 交易日</span>" +
       '<span class="k">20日均成交额</span><span class="num">' + fmtVol(r.amt20) + "</span></div>" +
-      '<div id="' + histChartId + '" style="margin-top:8px"></div></div>' +
+      '<div id="' + histChartId + '" style="margin-top:8px;height:230px"></div></div>' +
       // 当前
       '<div><h3 style="font-size:12.5px;margin-bottom:8px">🎯 当前点位</h3><div class="kv">' +
       '<span class="k">MACD</span><span class="num">' + r.macd.dif + " / " + r.macd.dea +
@@ -1072,7 +1167,7 @@ main { min-width: 0; }
       '<span class="k">历史分位</span><span class="num">' + formatPercentile(r.pctRank) + "</span>" +
       '<span class="k">250日线乖离</span><span class="num ' + cls(r.devMA250) + '">' + fmt(r.devMA250) + "</span>" +
       '<span class="k">量比(20/60)</span><span class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</span></div>" +
-      '<div class="radar-wrap" style="margin-top:6px">' + radarSVG(r.signals) + "</div></div>" +
+      '<div class="radar-wrap" style="margin-top:6px;height:210px"><div id="detailRadar" style="width:100%;height:200px"></div></div></div>' +
       // 前瞻
       '<div><h3 style="font-size:12.5px;margin-bottom:8px">🔮 信号与前瞻</h3>' +
       '<div style="font-size:12px;margin-bottom:8px">信号总分 <b class="num" style="font-size:18px">' +
@@ -1089,7 +1184,8 @@ main { min-width: 0; }
           return '<div class="ev-item"><span class="d">' + e.date + '</span><span class="ev-type ev-' + e.type + '">' + e.type + "</span></div>";
         }).join("") : '<div style="margin-top:8px;font-size:11.5px;color:var(--tx3)">近 120 日无信号事件</div>') +
       "</div></div></div>";
-    drawChart($(histChartId), r.histDates, [{ label: "收盘", color: "#165dff", data: r.histClose }]);
+    renderLineChart(histChartId, r.histDates, [{ label: "收盘", color: "#165dff", data: r.histClose }], { area: true });
+    renderRadar(r.signals);
   }
 
 
@@ -1132,33 +1228,15 @@ main { min-width: 0; }
     hmDrill = b.dataset.s;   // 板块 chip 直接下钻为该板块全部个券组成的热力图
     renderTreemap();
   });
-  function hmColor(ret) {
-    if (ret == null) return "#8a93a0";
-    if (ret > 0.0001) return "#a83c3c";      // 涨：砖红
-    if (ret < -0.0001) return "#2b6b40";     // 跌：墨绿
+  function tmColor(ret) {
+    if (ret == null) return "rgba(138,147,160,.45)";
+    if (ret > 0.0001) return "#c2413d";      // 涨：砖红（深色以保证白字可读）
+    if (ret < -0.0001) return "#1f7a5c";     // 跌：墨绿
     return "#7a8494";                        // 平
-  }
-  function squarify(items, x, y, w, h, out) {
-    if (!items.length) return;
-    if (items.length === 1) { out.push({ ...items[0], x: x, y: y, w: w, h: h }); return; }
-    var total = items.reduce(function (a, b) { return a + b.amount; }, 0);
-    var vertical = w >= h;
-    var acc = 0, best = Infinity, split = 1;
-    // 简单切分：累计到一半处切一刀，递归
-    var half = total / 2, sum = 0, idx = 0;
-    while (idx < items.length - 1 && sum + items[idx].amount <= half) { sum += items[idx].amount; idx++; }
-    if (idx === 0) idx = 1;
-    var first = items.slice(0, idx), rest = items.slice(idx);
-    var f = first.reduce(function (a, b) { return a + b.amount; }, 0) / total;
-    if (vertical) {
-      squarify(first, x, y, w * f, h, out); squarify(rest, x + w * f, y, w * (1 - f), h, out);
-    } else {
-      squarify(first, x, y, w, h * f, out); squarify(rest, x, y + h * f, w, h * (1 - f), out);
-    }
   }
   function renderTreemap() {
     var items = hmData();
-    var rects = []; squarify(items, 0, 0, 1000, 440, rects);
+    var th = chartTheme();
     var pool = hmDrill
       ? D.reits.filter(function (r) { return r.sector === hmDrill; })
       : D.reits.filter(function (r) { return !hmSector || r.sector === hmSector; });
@@ -1169,31 +1247,60 @@ main { min-width: 0; }
     $("hmCrumb").innerHTML = hmDrill
       ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 点击个券色块查看个券透视</span>'
       : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
-    $("treemap").innerHTML = rects.map(function (r, i) {
-      var amt = Math.round(r.amount / 1e4).toLocaleString();
-      var fs = Math.max(11, Math.min(20, r.w / 14));
-      var subTxt = fmt(r.ret) + "<br>" + amt + "万" + (r.n ? " · " + r.n + "只" : "");
-      var sub = r.w > 96 && r.h > 56
-        ? '<div style="font-size:' + (fs * 0.72) + 'px;opacity:.88">' + subTxt + "</div>" : "";
-      var label = r.w > 56 && r.h > 30 ? '<div style="font-size:' + fs + 'px;font-weight:600">' + r.sector + "</div>" + sub : "";
-      return '<div data-sec="' + (hmDrill ? "" : r.sector) + '"' + (hmDrill && r.code ? ' data-code="' + r.code + '"' : "") +
-        ' title="' + r.sector + " " + fmt(r.ret) + (hmDrill ? " · 点击查看个券透视" : "") + '" style="position:absolute;--d:' + (i * 55) + 'ms;' +
-        "left:" + r.x / 10 + "%;top:" + r.y / 4.4 + "%;width:" + r.w / 10 + "%;height:" + r.h / 4.4 + "%;" +
-        "background:" + hmColor(r.ret) + ";border:2px solid var(--panel);border-radius:4px;" +
-        'display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;cursor:pointer;' +
-        'text-shadow:0 1px 2px rgba(0,0,0,.35);overflow:hidden;padding:4px;text-align:center;box-sizing:border-box">' + label + "</div>";
-    }).join("");
-    // 同步板块 chip 激活态（下钻/返回/色块点击均保持一致）
     document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) {
       x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
     });
+    var data = items.map(function (it) {
+      return {
+        name: it.sector, value: Math.max(it.amount || 0, 1),
+        amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
+        itemStyle: { color: tmColor(it.ret) }
+      };
+    });
+    var option = {
+      backgroundColor: "transparent",
+      tooltip: {
+        backgroundColor: th.panel, borderColor: th.line,
+        textStyle: { color: th.tx, fontSize: 12 },
+        formatter: function (p) {
+          var d = p.data || {};
+          var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "—";
+          var retTxt = d.ret != null ? fmt(d.ret) : "—";
+          return "<b>" + p.name + "</b><br/>涨跌 " + retTxt + "<br/>成交额 " + amt + (d.n ? " · " + d.n + "只" : "");
+        }
+      },
+      series: [{
+        type: "treemap", roam: false, nodeClick: false,
+        breadcrumb: { show: false }, leafDepth: 1,
+        label: {
+          show: true, position: "inside",
+          formatter: function (p) {
+            var d = p.data || {};
+            if (!p.rect || p.rect.width < 56 || p.rect.height < 34) return "";
+            var s = d.name;
+            if (p.rect.width > 92 && p.rect.height > 60) {
+              var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "";
+              s += "\n" + (d.ret != null ? fmt(d.ret) : "") + (amt ? " · " + amt : "") + (d.n ? " · " + d.n + "只" : "");
+            }
+            return s;
+          },
+          textStyle: { color: "#fff", fontSize: 12, fontWeight: 600, textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.4)" }
+        },
+        itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
+        data: data
+      }]
+    };
+    var inst = echSet("treemap", option);
+    if (inst) {
+      inst.off("click");
+      inst.on("click", function (p) {
+        var d = p.data || {};
+        if (d.code) { openReitDetail(d.code); return; }
+        if (!hmDrill && d.name) { hmDrill = d.name; renderTreemap(); }
+      });
+    }
   }
-  $("treemap").addEventListener("click", function (e) {
-    var d = e.target.closest("div[data-sec]");
-    if (d && d.dataset.sec) { hmDrill = d.dataset.sec; renderTreemap(); return; }
-    var dc = e.target.closest("div[data-code]");
-    if (dc && hmDrill && dc.dataset.code) openReitDetail(dc.dataset.code);
-  });
+  registerChart(renderTreemap);
   $("hmCrumb").addEventListener("click", function (e) {
     if (!e.target.closest("#hmBack")) return;
     hmDrill = "";
@@ -1233,7 +1340,7 @@ main { min-width: 0; }
     function cellColor(v) {
       if (v == null) return "var(--panel2)";
       var t = Math.min(Math.abs(v), 1);
-      return v >= 0 ? "rgba(25,115,51," + (0.06 + 0.55 * t) + ")" : "rgba(168,34,31," + (0.06 + 0.55 * t) + ")";
+      return v >= 0 ? "rgba(198,40,40," + (0.06 + 0.6 * t) + ")" : "rgba(16,185,129," + (0.06 + 0.6 * t) + ")";
     }
     var html = '<table class="matrix"><thead><tr><th class="l">组合 \\ 基准</th>' +
       cols.map(function (b) { return '<th title="' + b.note + '">' + b.name + "</th>"; }).join("") + "</tr></thead><tbody>";
@@ -1257,21 +1364,8 @@ main { min-width: 0; }
         .sort(function (a, b) { return b.v - a.v; });
       var total = arr.reduce(function (a, b) { return a + b.v; }, 0);
       if (!total) { $("allocDonut").innerHTML = ""; return; }
-      var R = 44, CIRC = 2 * Math.PI * R, off = 0;
-      var svg = '<svg viewBox="0 0 120 120" width="104" height="104" style="flex:0 0 auto">' +
-        svgTitle("板块成交额分布环形图");
-      svg += '<circle cx="60" cy="60" r="' + R + '" fill="none" stroke="var(--prog-track)" stroke-width="13"/>';
-      arr.forEach(function (a, i) {
-        var frac = a.v / total, len = frac * CIRC;
-        a.color = SEC_PALETTE[i % SEC_PALETTE.length]; a.frac = frac;
-        svg += '<circle cx="60" cy="60" r="' + R + '" fill="none" stroke="' + a.color + '" stroke-width="13"' +
-          ' stroke-dasharray="' + len.toFixed(2) + " " + (CIRC - len).toFixed(2) + '"' +
-          ' stroke-dashoffset="' + (-off).toFixed(2) + '" transform="rotate(-90 60 60)"/>';
-        off += len;
-      });
-      svg += '<text x="60" y="57" text-anchor="middle" fill="var(--tx)" font-size="13" font-weight="700">' +
-        (total / 1e4 >= 10000 ? (total / 1e8).toFixed(1) + "亿" : Math.round(total / 1e4).toLocaleString() + "万") + "</text>" +
-        '<text x="60" y="72" text-anchor="middle" fill="var(--tx3)" font-size="8.5">今日总成交额</text></svg>';
+      arr.forEach(function (a, i) { a.color = SEC_PALETTE[i % SEC_PALETTE.length]; a.frac = a.v / total; });
+      var totalTxt = total / 1e4 >= 10000 ? (total / 1e8).toFixed(1) + "亿" : Math.round(total / 1e4).toLocaleString() + "万";
       var legend = '<div style="flex:1;min-width:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:3px 10px;font-size:11px;color:var(--tx2)">' +
         arr.map(function (a) {
           return '<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:' +
@@ -1279,30 +1373,52 @@ main { min-width: 0; }
         }).join("") + "</div>";
       $("allocDonut").innerHTML =
         '<div style="font-size:11.5px;color:var(--tx3);margin-bottom:6px">板块成交额分布（今日）</div>' +
-        '<div style="display:flex;align-items:center;gap:16px">' + svg + legend + "</div>";
+        '<div style="display:flex;align-items:center;gap:16px">' +
+        '<div id="allocDonutChart" style="width:124px;height:124px;flex:0 0 auto"></div>' + legend + "</div>";
+      function renderDonut() {
+        var th = chartTheme();
+        echSet("allocDonutChart", {
+          tooltip: { trigger: "item", backgroundColor: th.panel, borderColor: th.line, textStyle: { color: th.tx, fontSize: 12 }, formatter: function (p) { return p.name + " " + p.percent + "%"; } },
+          series: [{
+            type: "pie", radius: ["58%", "82%"], center: ["50%", "50%"],
+            label: { show: false }, labelLine: { show: false },
+            itemStyle: { borderColor: th.panel, borderWidth: 2 },
+            data: arr.map(function (a) { return { name: a.s, value: a.v, itemStyle: { color: a.color } }; })
+          }],
+          graphic: [
+            { type: "text", left: "center", top: "36%", style: { text: totalTxt, textAlign: "center", fill: th.tx, fontSize: 14, fontWeight: 700 } },
+            { type: "text", left: "center", top: "54%", style: { text: "今日总成交额", textAlign: "center", fill: th.tx3, fontSize: 9 } }
+          ]
+        });
+      }
+      registerChart(renderDonut);
+      renderDonut();
     })();
 
     // 散点：股性-债性
     (function () {
-      var W = 380, H = 380, pad = 44;
-      function X(v) { return pad + (v + 1) / 2 * (W - pad - 14); }
-      function Y(v) { return H - pad - (v + 1) / 2 * (H - pad - 14); }
-      var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">' + svgTitle("REITs 板块股性与债性定位散点图");
-      s += '<rect x="' + pad + '" y="14" width="' + (W - pad - 14) + '" height="' + (H - pad - 14) + '" fill="var(--panel2)" rx="6"/>';
-      s += '<line x1="' + X(0) + '" y1="14" x2="' + X(0) + '" y2="' + (H - pad) + '" stroke="var(--line)"/>' +
-           '<line x1="' + pad + '" y1="' + Y(0) + '" x2="' + (W - 14) + '" y2="' + Y(0) + '" stroke="var(--line)"/>';
-      [-1, -0.5, 0, 0.5, 1].forEach(function (t) {
-        s += '<text x="' + X(t) + '" y="' + (H - pad + 14) + '" text-anchor="middle" fill="var(--tx3)" font-size="9">' + t + "</text>";
-        s += '<text x="' + (pad - 6) + '" y="' + (Y(t) + 3) + '" text-anchor="end" fill="var(--tx3)" font-size="9">' + t + "</text>";
-      });
-      s += '<text x="' + (W - 20) + '" y="' + (Y(0) - 6) + '" text-anchor="end" fill="var(--tx3)" font-size="10">股性 →</text>';
-      s += '<text x="' + (X(0) + 6) + '" y="26" fill="var(--tx3)" font-size="10">债性 ↑</text>';
-      C.scatter.forEach(function (p) {
-        if (p.bond == null || p.equity == null) return;
-        s += '<circle cx="' + X(p.bond) + '" cy="' + Y(p.equity) + '" r="6" fill="var(--accent)" opacity=".85"/>';
-        s += '<text x="' + X(p.bond) + '" y="' + (Y(p.equity) - 10) + '" text-anchor="middle" fill="var(--tx)" font-size="10">' + p.sector + "</text>";
-      });
-      $("corrScatter").innerHTML = s + "</svg>";
+      function renderScatter() {
+        var th = chartTheme();
+        var data = C.scatter.filter(function (p) { return p.bond != null && p.equity != null; })
+          .map(function (p) { return { value: [p.bond, p.equity], name: p.sector }; });
+        echSet("corrScatter", {
+          grid: { left: 46, right: 22, top: 28, bottom: 44 },
+          tooltip: {
+            trigger: "item", backgroundColor: th.panel, borderColor: th.line,
+            textStyle: { color: th.tx, fontSize: 12 },
+            formatter: function (p) { return p.name + "<br/>债性 " + p.value[0].toFixed(2) + "<br/>股性 " + p.value[1].toFixed(2); }
+          },
+          xAxis: { type: "value", min: -1, max: 1, name: "债性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+          yAxis: { type: "value", min: -1, max: 1, name: "股性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+          series: [{
+            type: "scatter", symbolSize: 12, data: data,
+            itemStyle: { color: th.accent, opacity: 0.85 },
+            label: { show: true, position: "top", distance: 5, color: th.tx, fontSize: 10, formatter: "{b}" }
+          }]
+        });
+      }
+      registerChart(renderScatter);
+      renderScatter();
     })();
 
     // 板块 vs A股对应板块
@@ -1500,6 +1616,7 @@ main { min-width: 0; }
       document.querySelectorAll("#themeSw button").forEach(function (x) { x.classList.toggle("on", x.dataset.t === t); });
       var mc = document.querySelector('meta[name="theme-color"]');
       if (mc) mc.content = t === "dark" ? "#0a0e14" : t === "eye" ? "#e9f2e2" : "#f8fafc";
+      renderAllCharts();
     }
     $("themeSw").addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b) return;
@@ -1544,6 +1661,7 @@ main { min-width: 0; }
     var active = document.querySelector('#researchSub button[data-v="' + v + '"]');
     setActiveNav(document.querySelectorAll("#researchSub button"), active);
     stagger($("v-" + v));
+    requestAnimationFrame(echResizeAll);
   }
   function showPage(pg, keepScroll) {
     var btn = document.querySelector('#tbNav > button[data-pg="' + pg + '"]');
@@ -1561,6 +1679,7 @@ main { min-width: 0; }
     $("topbar").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
     if (switching && !keepScroll) restorePageScroll(pg);
+    requestAnimationFrame(echResizeAll);
   }
   $("subbar").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
@@ -1641,7 +1760,7 @@ main { min-width: 0; }
         { p: "2021.06–2022.02", name: "上市红利期", perf: "+35%", cls: "up",
           logic: "首批 9 只供给稀缺 + 打新情绪，高溢价发行上市，属情绪定价而非重估",
           f: { rate: "→", val: "↑", fund: "↑", base: "→" }, main: "资金面 · 估值" },
-        { p: "2022.03–2023.12", name: "深度调整期", perf: "−16.5%（2023 均值）", cls: "dn",
+        { p: "2022.03–2023.12", name: "深度调整期", perf: "−16.5%（2023 均值）", cls: "down",
           logic: "四重叠加：过热估值消化 + 战配解禁供给冲击 + 宏观偏弱基本面证伪 + 持有人同质化抛压自我强化；2023 年 29 只仅 1 只上涨，11 月末 P/NAV 跌至 0.90、估值分位 1.2%",
           f: { rate: "→", val: "↓", fund: "↓", base: "↓" }, main: "估值 · 基本面" },
         { p: "2024.01–2024.12", name: "筑底回升期", perf: "+12.3%（全收益）", cls: "up",
@@ -1650,15 +1769,15 @@ main { min-width: 0; }
         { p: "2025.01–2025.06", name: "结构性牛市", perf: "+14.2%（上半年）", cls: "up",
           logic: "10Y 国债破 2% 历史低位 + 资产荒，利差扩至历史高分位，保险/OCI 资金入场，重估真正启动；消费（易方达华威 +70%）、供热经营权（济南能源 +66.8%）、首批数据中心领涨，产业园明显偏弱",
           f: { rate: "↑", val: "↑", fund: "↑", base: "→" }, main: "利率 · 资金面" },
-        { p: "2025.06–2026.07", name: "利率回升估值压缩", perf: "−8%", cls: "dn",
+        { p: "2025.06–2026.07", name: "利率回升估值压缩", perf: "−8%", cls: "down",
           logic: "重估反向逻辑：10Y 自 2.1% 回升至 2.7%（分母变大）+ 估值透支（溢价仅 170BP）+ OCI 增速放缓与成长板块抽血（港股红利同期 −21.9%）+ 产业园空置率上升、车流量不及预期等基本面恶化——流动性退潮后基本面露馅",
           f: { rate: "↓", val: "↓", fund: "↓", base: "↓" }, main: "利率 · 估值" },
-        { p: "2026 以来", name: "扩容与承压并存", perf: "年内 −3.7%（全收益）", cls: "dn",
+        { p: "2026 以来", name: "扩容与承压并存", perf: "年内 −3.7%（全收益）", cls: "down",
           logic: "供给端商业不动产放量（首批募资 203 亿、在途拟募超 750 亿）与存量估值消化拉锯，指数 1030 高点回落至 928 后修复至 970；资金端指数基金（12 亿）与险资商业不动产通道次第打开；产权类分派率 4.06%、利差接近 3% 处历史高位——机构普遍认为估值已进入低位区间",
           f: { rate: "↓", val: "↑", fund: "→", base: "→" }, main: "估值修复 · 资金通道" }
       ];
       var fName = { rate: "利率", val: "估值", fund: "资金", base: "基本面" };
-      var arrow = { "↑": '<b style="color:var(--up)">↑</b>', "↓": '<b style="color:var(--dn)">↓</b>', "→": '<b style="color:var(--tx3)">→</b>' };
+      var arrow = { "↑": '<b style="color:var(--up)">↑</b>', "↓": '<b style="color:var(--down)">↓</b>', "→": '<b style="color:var(--tx3)">→</b>' };
       if ($("stageGrid")) $("stageGrid").innerHTML = stages.map(function (s, i) {
         var chips = Object.keys(s.f).map(function (k) {
           return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;background:var(--bg);border-radius:6px;padding:2px 7px">' + fName[k] + " " + arrow[s.f[k]] + "</span>";
@@ -1686,7 +1805,7 @@ main { min-width: 0; }
         var cur = Math.round((avgYield - bond10y) * 100);
         var zone = cur >= 250 ? "安全边际（买入区）" : cur >= 100 ? "中性区间" : "高估（减仓区）";
         var zoneColor = cur >= 250 ? "var(--up)" : cur >= 100 ? "var(--gold)" : "var(--down)";
-        // 标尺 0–400BP：买入区 250-400（红/暖），中性 100-250，高估 0-100
+        // 标尺 0–400BP：高估/减仓 0-100（绿），中性 100-250（灰），安全边际/买入 250-400（红）
         var anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: cur, l: "当前 " + cur + "BP" }];
         var pct = function (v) { return Math.min(100, Math.max(0, v / 400 * 100)); };
         $("spreadGauge").innerHTML =
@@ -1777,40 +1896,42 @@ main { min-width: 0; }
       $("usLongAsOf").textContent = "当前截至 " + U.dates[U.dates.length - 1] + " 美股收盘";
       var cats = ["防御型", "周期型", "扩张型"];
       var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
-      var vals = [];
-      cats.forEach(function (c) { (U.cats[c] || []).forEach(function (v) { if (v != null && v > 0) vals.push(Math.log10(v)); }); });
-      if (!vals.length) { $("chartUsLong").innerHTML = '<div class="empty">暂无数据</div>'; return; }
-      var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
-      function X(i) { return pl + i * (W - pl - pr) / (U.dates.length - 1); }
-      function Y(v) { return pt + (hi - v) / (hi - lo) * (H - pt - pb); }
-      function dateX(ds) {
-        var a = 0, b = U.dates.length - 1;
-        while (a < b) { var m = (a + b) >> 1; if (U.dates[m] < ds) a = m + 1; else b = m; }
-        return X(a);
-      }
-      var out = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%">' + svgTitle("美国 REITs 长期走势与衰退周期");
-      (U.recessions || []).forEach(function (r) {
-        if (r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]) return;
-        var x1 = dateX(r[0]), x2 = dateX(r[1]);
-        out += '<rect x="' + x1.toFixed(1) + '" y="' + pt + '" width="' + Math.max(2, x2 - x1).toFixed(1) +
-          '" height="' + (H - pt - pb) + '" fill="rgba(100,116,139,.15)"/>';
-      });
-      for (var g = Math.ceil(lo * 2) / 2; g <= hi; g += 0.5) {
-        var gy = Y(g);
-        out += '<line x1="' + pl + '" y1="' + gy + '" x2="' + (W - pr) + '" y2="' + gy + '" stroke="var(--grid)"/>' +
-          '<text x="' + (pl - 6) + '" y="' + (gy + 3) + '" text-anchor="end" fill="var(--tx3)" font-size="10">' + Math.round(Math.pow(10, g)) + "</text>";
-      }
-      for (var t = 0; t < U.dates.length; t += Math.ceil(U.dates.length / 9))
-        out += '<text x="' + X(t) + '" y="' + (H - 8) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + U.dates[t].slice(0, 4) + "</text>";
-      cats.forEach(function (c) {
-        var d2 = "", started = false;
-        (U.cats[c] || []).forEach(function (v, i) {
-          if (v == null || v <= 0) { started = false; return; }
-          d2 += (started ? "L" : "M") + X(i).toFixed(1) + " " + Y(Math.log10(v)).toFixed(1); started = true;
+      function renderUsLong() {
+        var th = chartTheme();
+        var markAreaData = (U.recessions || []).filter(function (r) {
+          return !(r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]);
+        }).map(function (r) { return [{ xAxis: r[0] }, { xAxis: r[1] }]; });
+        echSet("chartUsLong", {
+          backgroundColor: "transparent",
+          grid: { left: 52, right: 16, top: 18, bottom: 30 },
+          tooltip: {
+            trigger: "axis", backgroundColor: th.panel, borderColor: th.line,
+            textStyle: { color: th.tx, fontSize: 12 },
+            axisPointer: { type: "line", lineStyle: { color: th.tx3, type: "dashed" } }
+          },
+          xAxis: {
+            type: "category", data: U.dates, boundaryGap: false,
+            axisLine: { lineStyle: { color: th.line } }, axisTick: { show: false },
+            axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true },
+            splitLine: { show: false }
+          },
+          yAxis: {
+            type: "log",
+            axisLabel: { color: th.tx3, fontSize: 10 },
+            splitLine: { lineStyle: { color: th.grid } }
+          },
+          series: cats.map(function (c, i) {
+            var data = (U.cats[c] || []).map(function (v) { return (v == null || v <= 0) ? null : v; });
+            return {
+              name: c, type: "line", data: data, showSymbol: false, connectNulls: true,
+              lineStyle: { width: 2, color: cols[c] },
+              markArea: i === 0 ? { silent: true, itemStyle: { color: "rgba(100,116,139,.16)" }, data: markAreaData } : undefined
+            };
+          })
         });
-        out += '<path class="line" pathLength="1" d="' + d2 + '" fill="none" stroke="' + cols[c] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
-      });
-      $("chartUsLong").innerHTML = out + "</svg>";
+      }
+      registerChart(renderUsLong);
+      renderUsLong();
       $("legendUsLong").innerHTML = cats.map(function (c) {
         return '<span><i style="background:' + cols[c] + '"></i>' + c + "</span>";
       }).join("") + '<span><i style="background:rgba(100,116,139,.35);border-radius:2px"></i>NBER 衰退期</span>';
@@ -2050,6 +2171,21 @@ main { min-width: 0; }
   }
   document.querySelectorAll(".view, #v-heatmap, #v-advice").forEach(function (v) { stagger(v); });
   document.querySelectorAll(".kpi").forEach(function (k, i) { k.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); k.classList.add("anim"); });
+
+  // 主题切换时，若个券详情已展开则同步重渲染其图表
+  registerChart(function () {
+    if (typeof selCode !== "undefined" && selCode &&
+        document.getElementById("detailPanel") && document.getElementById("detailPanel").innerHTML) {
+      renderDetail(selCode);
+    }
+  });
+
+  // 窗口尺寸变化时重排所有图表
+  var _resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(echResizeAll, 120);
+  });
 
   (function countUp() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;

@@ -48,6 +48,9 @@ SECTOR_PEER = {
     "能源": "399808.SZ", "高速公路": "399437.SZ", "仓储物流": "399353.SZ",
     "数据中心": "399935.SZ", "消费": "000932.SH",
 }
+# 官方"中证REITs收益指数"（用于首页 KPI 首卡）· TODO(待确认)：请用 iFinD 核对准确代码。
+# 候选：中证REITs(收盘)指数 932047.CSI / 中证REITs全收益指数 932048.CSI。
+MARKET_INDEX_CODE = "932047.CSI"
 # 海外 REITs 代表标的（已验证 iFinD 美股 .N/.O 可取；取不到自动跳过）
 OVERSEAS = {
     "PLD.N": {"name": "Prologis", "market": "美国", "type": "工业物流", "cat": "周期型"},
@@ -361,6 +364,25 @@ def main():
         bdf["time"] = pd.to_datetime(bdf["time"])
         bclose = bdf.pivot_table(index="time", columns="thscode", values="close").sort_index()
 
+    # ---------- 2b. 官方中证REITs指数（首页 KPI 首卡；取不到自动置空，前端显示"待更新"） ----------
+    market_index = None
+    mi_df = fetch_history(MARKET_INDEX_CODE, end)
+    if mi_df is not None and "thscode" in mi_df.columns and len(mi_df):
+        mi_df = mi_df.sort_values("time")
+        mi_close = pd.to_numeric(mi_df["close"], errors="coerce").dropna()
+        if len(mi_close) >= 2:
+            last, prev = mi_close.iloc[-1], mi_close.iloc[-2]
+            market_index = {
+                "code": MARKET_INDEX_CODE,
+                "name": "中证REITs收益指数",
+                "close": round(float(last), 2),
+                "pct": round(float((last / prev - 1) * 100), 2),
+            }
+        else:
+            print(f"[marketIndex] {MARKET_INDEX_CODE} 数据不足，置空", flush=True)
+    else:
+        print(f"[marketIndex] {MARKET_INDEX_CODE} 无数据（请核对 iFinD 代码），置空", flush=True)
+
     # ---------- 3. 海外 REITs（取不到自动跳过） ----------
     overseas = []
     for oc, meta in OVERSEAS.items():
@@ -644,6 +666,7 @@ def main():
         "sectors": sectors,
         "strategies": strategies,
         "reits": reits,
+        "marketIndex": market_index,
         "correlation": corr_payload,
         "overseas": overseas,
         "usLong": us_long,
