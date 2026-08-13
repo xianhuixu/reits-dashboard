@@ -81,6 +81,8 @@ def tencent_kline(code, limit=500):
             rows = []
             for k in klines:
                 # 格式: [日期, 开盘, 收盘, 最高, 最低, 成交量]
+                # 腾讯成交量单位 = 手（1手=100份），×100 归一为"份"，
+                # 与 hist_cache 中 iFinD 口径（volume=份）保持一致
                 rows.append({
                     "time": k[0],
                     "thscode": code,
@@ -88,7 +90,7 @@ def tencent_kline(code, limit=500):
                     "close": float(k[2]),
                     "high": float(k[3]),
                     "low": float(k[4]),
-                    "volume": float(k[5]),
+                    "volume": float(k[5]) * 100,
                 })
             return pd.DataFrame(rows)
     except Exception as e:
@@ -118,6 +120,25 @@ def fetch_history(code, end, start0=None):
 
     # 合并旧数据
     if old is not None:
+        # 自愈：以本次腾讯取数（volume 已归一为"份"）为参照，修复旧缓存中的单位异常行：
+        #  - ratio < 0.5  → 旧行是"手"口径（历史遗留）→ ×100 归一为"份"
+        #  - ratio > 50   → 旧行曾被误乘 ×100 → ÷100 还原
+        try:
+            old["volume"] = pd.to_numeric(old["volume"], errors="coerce")
+            tx_ref = df[["time", "volume"]].rename(columns={"volume": "v_tx"})
+            m = old.merge(tx_ref, on="time", how="left")
+            ratio = m["volume"] / m["v_tx"]
+            valid = m["v_tx"].notna() & (m["v_tx"] > 0)
+            lo = valid & (ratio < 0.5)
+            hi = valid & (ratio > 50)
+            if lo.any():
+                old.loc[lo, "volume"] = old.loc[lo, "volume"] * 100
+                print(f"[heal] {code} 修复 {int(lo.sum())} 行 手→份", flush=True)
+            if hi.any():
+                old.loc[hi, "volume"] = old.loc[hi, "volume"] / 100
+                print(f"[heal] {code} 还原 {int(hi.sum())} 行 误乘×100", flush=True)
+        except Exception:
+            pass
         df = pd.concat([old, df], ignore_index=True)
     df = df.drop_duplicates(subset=["thscode", "time"]).sort_values("time")
     df.to_csv(cache, index=False)
@@ -335,7 +356,8 @@ def main():
     df = df.sort_values("time")
     close = df.pivot_table(index="time", columns="thscode", values="close").sort_index()
     vol = df.pivot_table(index="time", columns="thscode", values="volume").sort_index()
-    amt = close * vol                                # 估算成交额
+    # volume 已归一为"份"（腾讯取数×100 / iFinD 原样），×收盘价 = 估算成交额（元）
+    amt = close * vol
     dates = [d.strftime("%Y-%m-%d") for d in close.index]
 
     # ---------- 2. 基准指数全历史 ----------
@@ -431,7 +453,7 @@ def main():
             **u,
             "close": round(last, 3),
             "pct": round(pct, 2),
-            "volume": int(s_amt.iloc[-1] / last) if last else 0,  # 估算成交量
+            "volume": int(s_amt.iloc[-1] / last) if last else 0,  # 估算成交量（份）
             "amount": round(float(s_amt.iloc[-1]), 2),
             "ret5": ret5,
             "ret20": ret20,

@@ -268,8 +268,13 @@ def main():
     df = pd.concat(frames, ignore_index=True)
     df = df.sort_values("time")
     close = df.pivot_table(index="time", columns="thscode", values="close").sort_index()
-    vol = df.pivot_table(index="time", columns="thscode", values="volume").sort_index()
-    amt = close * vol
+    # 优先使用 hist_cache CSV 自带 amount 列（元）；缺失时用 volume 估算。
+    # hist_cache 的 volume 口径 = 份（iFinD 原样；腾讯取数已 ×100 归一），×收盘价 = 成交额（元）
+    if "amount" in df.columns and df["amount"].notna().any():
+        amt = df.pivot_table(index="time", columns="thscode", values="amount").sort_index()
+    else:
+        vol = df.pivot_table(index="time", columns="thscode", values="volume").sort_index()
+        amt = close * vol
     dates = [d.strftime("%Y-%m-%d") for d in close.index]
 
     # ---------- 2. 加载基准数据 ----------

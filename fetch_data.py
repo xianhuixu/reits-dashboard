@@ -348,7 +348,8 @@ def main():
     df = df.sort_values("time")
     close = df.pivot_table(index="time", columns="thscode", values="close").sort_index()
     vol = df.pivot_table(index="time", columns="thscode", values="volume").sort_index()
-    amt = close * vol                                # 估算成交额
+    # hist_cache volume 口径 = 份（iFinD 原样），×收盘价 = 估算成交额（元）
+    amt = close * vol
     dates = [d.strftime("%Y-%m-%d") for d in close.index]
 
     # ---------- 2. 基准指数全历史 ----------
