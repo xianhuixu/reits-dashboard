@@ -24,3 +24,37 @@ npm test
 `main` 分支根目录为 GitHub Pages 发布源。推送后由 `pages-build-deployment` 工作流自动发布至：
 
 https://xianhuixu.github.io/reits-dashboard/
+
+## 数据更新与自动更新
+
+### 数据文件清单
+
+| 文件 | 内容 | 更新方式 | 频率 |
+|---|---|---|---|
+| `data.js` / `data.json` | 行情、指标、六因子信号、相关性、事件流、回测 | `fetch_data_em.py`（腾讯直连，主）/ `fetch_data_server_v2.py`（hist_cache 兜底）/ `fetch_data.py`（iFinD 插件，备用） | 每交易日收盘后 |
+| `news.js` / `news.json` | 信息流（东财新闻/搜狗微信/招标网） | `fetch_news.py` | 每交易日 |
+| `corp_actions.js` / `corp_actions.json` | 公告（分红/扩募/解禁等） | `fetch_news.py` | 每交易日 |
+| `projects.js` / `projects.json` | 发改委推荐/上交所受理/深交所受理项目 | `fetch_projects.py` | 每交易日 |
+| `universe.json` | 上市个券清单 | 手动（新 REIT 上市时） | 不定期 |
+| `fundamentals.json` | 分派达成率等基本面 | 手动 | 季度 |
+| `cycle_judgment.json` | 周期判定 + 10Y 国债 | 手动 | 月度 |
+| `holidays.txt` | 节假日表（跳过非交易日） | 手动 | 每年初 |
+| `hist_cache/`（gitignore） | 全历史日线增量缓存 | 抓取脚本自动维护，自带单位自愈 | 随行情更新 |
+
+### 自动更新（服务器 cron）
+
+`scripts/auto_update.sh` 已实现全流程自动化，在服务器上以 cron 调度（建议每交易日 15:30 后，收盘数据完整）：
+
+```cron
+30 15 * * 1-5 cd /root/.openclaw/workspace && ./scripts/auto_update.sh >> scripts/auto_update.log 2>&1
+```
+
+脚本流程：交易日/节假日判断 → `git pull` → 行情数据（`fetch_data_em.py` 直连腾讯，失败自动回退 `fetch_data_server_v2.py` 缓存版）→ **数据质量闸门 `check_data.py`**（个券数/收盘价/成交额校验，不通过则放弃推送保护线上）→ 信息流 → 项目申报 → `git commit & push` → GitHub Pages 自动部署。
+
+`fetch_data_em.py` 的 `fetch_history` 自带**成交量单位自愈**（腾讯"手"与 iFinD"份"混用会自动归一）；若服务器 hist_cache 从未修复过，可先跑一次：
+
+```bash
+python3 scripts/repair_volume_units.py
+```
+
+本机（Mac）更新：`python3 fetch_data_em.py`（需 pandas，直连腾讯 + 增量缓存 + 自愈），提交推送即上线。
