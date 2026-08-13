@@ -1265,7 +1265,7 @@ main { min-width: 0; }
       var aw = Math.max(w - 14, 16), ah = Math.max(h - 10, 16);
       function fontFor(lines) {
         var maxU = Math.max(tmTextUnits(name), lines >= 2 ? tmTextUnits(sub) : 0);
-        var byW = aw / maxU, byH = ah / (lines * 1.35);
+        var byW = aw / maxU, byH = ah / (lines * 1.65);
         return Math.max(10, Math.min(30, Math.floor(Math.min(byW, byH))));
       }
       if (sub) {
@@ -1287,6 +1287,7 @@ main { min-width: 0; }
             position: "inside", align: "center", verticalAlign: "middle",
             color: "#fff", fontWeight: 700,
             textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.5)",
+            lineHeight: 1.65,
             formatter: fit.formatter, fontSize: fit.fontSize
           }
         };
@@ -1440,21 +1441,36 @@ main { min-width: 0; }
     (function () {
       function renderScatter() {
         var th = chartTheme();
-        var data = C.scatter.filter(function (p) { return p.bond != null && p.equity != null; })
-          .map(function (p) { return { value: [p.bond, p.equity], name: p.sector }; });
+        var pts = C.scatter.filter(function (p) { return p.bond != null && p.equity != null; });
+        var data = pts.map(function (p) { return { value: [p.bond, p.equity], name: p.sector }; });
+        var xs = pts.map(function (p) { return p.bond; });
+        var ys = pts.map(function (p) { return p.equity; });
+        var xMin = Math.min.apply(null, xs), xMax = Math.max.apply(null, xs);
+        var yMin = Math.min.apply(null, ys), yMax = Math.max.apply(null, ys);
+        // 收缩坐标轴到数据实际范围（留边距），避免气泡挤在一起
+        function axisRange(lo, hi) {
+          var span = hi - lo; if (!span) span = 0.2;
+          var pad = Math.max(span * 0.3, 0.08);
+          var a = Math.floor((lo - pad) * 20) / 20;
+          var b = Math.ceil((hi + pad) * 20) / 20;
+          if (a > -0.02) a = Math.min(a, 0);
+          if (b < 0.02) b = Math.max(b, 0);
+          return [a, b];
+        }
+        var xr = axisRange(xMin, xMax), yr = axisRange(yMin, yMax);
         echSet("corrScatter", {
-          grid: { left: 46, right: 22, top: 28, bottom: 44 },
+          grid: { left: 44, right: 20, top: 24, bottom: 40 },
           tooltip: {
             trigger: "item", backgroundColor: th.panel, borderColor: th.line,
             textStyle: { color: th.tx, fontSize: 12 },
             formatter: function (p) { return p.name + "<br/>债性 " + p.value[0].toFixed(2) + "<br/>股性 " + p.value[1].toFixed(2); }
           },
-          xAxis: { type: "value", min: -1, max: 1, name: "债性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
-          yAxis: { type: "value", min: -1, max: 1, name: "股性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+          xAxis: { type: "value", min: xr[0], max: xr[1], name: "债性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+          yAxis: { type: "value", min: yr[0], max: yr[1], name: "股性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
           series: [{
-            type: "scatter", symbolSize: 12, data: data,
-            itemStyle: { color: th.accent, opacity: 0.85 },
-            label: { show: true, position: "top", distance: 5, color: th.tx, fontSize: 10, formatter: "{b}" }
+            type: "scatter", symbolSize: 9, data: data,
+            itemStyle: { color: th.accent, opacity: 0.9 },
+            label: { show: true, position: "top", distance: 5, color: th.tx, fontSize: 9, formatter: "{b}" }
           }]
         });
       }
