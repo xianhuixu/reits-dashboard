@@ -55,8 +55,9 @@ def _post(url: str, payload: Dict[str, Any], referer: str = "", timeout: int = 3
 
 
 def _d(s: Any) -> str:
-    """截取日期字符串前 10 位，缺省返回空串。"""
-    return str(s or "")[:10].strip()
+    """截取日期字符串前 10 位，'-' 视为空串。"""
+    v = str(s or "")[:10].strip()
+    return "" if v == "-" else v
 
 
 def fetch_ndrc() -> List[Dict[str, Any]]:
@@ -100,7 +101,9 @@ def fetch_sse() -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for it in items:
         accept = _d(it.get("ACCEPT_DATE"))
-        if accept < "2026-01-01":
+        publish = _d(it.get("PUBLISH_DATE"))
+        # 受理日期或发布日期任一在 2026 年及以后即保留（覆盖新申报及2026年有更新的项目）
+        if (accept and accept < "2026-01-01") and (publish and publish < "2026-01-01"):
             continue
         out.append({
             "name": it.get("AUDIT_NAME") or "",
