@@ -886,6 +886,11 @@ main { min-width: 0; }
   };
 
   var D = window.REITS_DATA;
+  // 兼容：若相关性数据为“按个券 peers”的新结构（缺少旧版 matrix/benchmarks/scatter），
+  // 则置空以让下游相关性视图安全降级，避免 undefined 访问导致整页崩溃。
+  if (D && D.correlation && !D.correlation.matrix) {
+    D.correlation = null;
+  }
   var $ = function (id) { return document.getElementById(id); };
   // 安全获取事件目标元素（兼容文本节点）
   function eventEl(e) {
@@ -1477,7 +1482,10 @@ main { min-width: 0; }
   // ---- 大类资产相关性 ----
   (function () {
     var C = D.correlation;
-    if (!C) { $("corrCards").innerHTML = '<div class="card"><div class="empty">相关性数据未生成，请重跑 fetch_data.py</div></div>'; return; }
+    if (!C || !C.matrix || !C.benchmarks || !C.scatter) {
+      $("corrCards").innerHTML = '<div class="card"><div class="empty">相关性矩阵数据未生成（数据结构已更新），请重跑数据脚本</div></div>';
+      return;
+    }
     var BONDS = "000012.SH", DIV = "399324.SZ", HS300 = "000300.SH";
     var m = C.matrix["全市场"] || {};
     function corrText(v) { return v == null ? "—" : v.toFixed(2); }

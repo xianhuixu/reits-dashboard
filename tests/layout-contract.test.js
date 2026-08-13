@@ -46,7 +46,7 @@ test("generated charts expose accessible SVG titles", () => {
 
 test("primary navigation preserves page scroll positions", () => {
   assert.match(html, /var pageScroll = \{ pano: 0, research: 0, advice: 0 \}/);
-  assert.match(html, /pageScroll\[currentPage\] = window\.scrollY/);
+  assert.match(html, /pageScroll\[currentPage\] = window\.(?:pageYOffset \|\| window\.)?scrollY/);
   assert.match(html, /behavior: "auto"/);
 });
 
@@ -69,7 +69,7 @@ test("navigation state and anchor offsets are accessible and header-aware", () =
   assert.match(html, /aria-current/);
   assert.match(html, /function setActiveNav\(/);
   assert.match(html, /setAttribute\("aria-current", "page"\)/);
-  assert.match(html, /b\.parentElement\.querySelectorAll\("button"\)/);
+  assert.match(html, /btn\.parentElement\.querySelectorAll\("button"\)/);
   assert.match(html, /scroll-margin-top:\s*var\(--sticky-offset\)/);
   assert.doesNotMatch(html, /window\.scrollY - 132/);
   assert.doesNotMatch(html, /document\.querySelectorAll\("#subbar \.sub button\.on"\)/);
