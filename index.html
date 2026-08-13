@@ -25,7 +25,7 @@
   --shadow-h: 0 4px 12px rgba(13,17,23,.08), 0 16px 40px rgba(13,17,23,.1);
   --prog-track: #edf1f5; --prog-fill: #1a7f37;
   --ease: cubic-bezier(.22,.9,.28,1);
-  --sticky-offset: 172px;
+  --sticky-offset: 128px;
 }
 /* ---------- 护眼模式 ---------- */
 [data-theme="eye"] {
@@ -87,30 +87,30 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
   *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0ms !important; transition-duration: .01ms !important; }
 }
 
-.theme-sw { margin-left: auto; display: flex; gap: 4px; background: var(--panel2); border: 1px solid var(--line);
-  border-radius: 999px; padding: 3px; }
-.theme-sw button { background: transparent; border: 0; border-radius: 999px; padding: 5px 14px;
-  font: inherit; font-size: 12px; color: var(--tx3); cursor: pointer; transition: all .2s; font-weight: 500; }
+.theme-sw { margin-left: auto; display: flex; gap: 2px; background: var(--panel2); border: 1px solid var(--line);
+  border-radius: 999px; padding: 2px; }
+.theme-sw button { background: transparent; border: 0; border-radius: 999px; padding: 3px 8px;
+  font: inherit; font-size: 13px; color: var(--tx3); cursor: pointer; transition: all .2s; font-weight: 500; line-height: 1.4; }
 .theme-sw button:hover { color: var(--tx); }
 .theme-sw button.on { background: var(--accent); color: #fff; font-weight: 600; }
 .up { color: var(--up); } .down { color: var(--down); } .flat { color: var(--tx2); }
 
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
-.kpi { position: relative; background: var(--panel);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 20px 18px; overflow: hidden; box-shadow: var(--shadow);
-  transition: transform .28s var(--ease), box-shadow .28s var(--ease); }
-.kpi:hover { transform: translateY(-4px); box-shadow: var(--shadow-h); }
-.kpi.kpi-idx { border-color: rgba(37,99,235,.2); background: linear-gradient(180deg, rgba(37,99,235,.04), var(--panel) 50%); }
-.kpi .k { color: var(--tx3); font-size: 12px; letter-spacing: .02em; line-height: 1.5;
-  min-height: 2.6em; margin-bottom: 10px; display: -webkit-box; -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; overflow: hidden; font-weight: 500; }
-.kpi .v { font-size: 32px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
-.kpi .v.kpi-name { font-size: 22px; line-height: 1.4; font-weight: 650; letter-spacing: 0; }
-.kpi .s { font-size: 12px; color: var(--tx2); margin-top: 8px; font-weight: 500; }
-.kpi .s .up-b { display: inline-block; background: rgba(215,58,73,.1); color: var(--up); border-radius: 999px; padding: 2px 10px; font-weight: 600; }
-.kpi .s .down-b { display: inline-block; background: rgba(26,127,55,.1); color: var(--down); border-radius: 999px; padding: 2px 10px; font-weight: 600; }
-.kpi-spark { margin-top: 10px; height: 32px; }
-.kpi-spark svg { width: 100%; height: 32px; display: block; }
+.kpis { display: flex; gap: 10px; margin-bottom: 14px; }
+.kpi { position: relative; flex: 1 1 0; min-width: 0; background: var(--panel);
+  border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px 9px; overflow: hidden; box-shadow: var(--shadow);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+.kpi:hover { transform: translateY(-2px); box-shadow: var(--shadow-h); }
+.kpi.kpi-idx { border-color: rgba(37,99,235,.2); background: linear-gradient(180deg, rgba(37,99,235,.05), var(--panel) 60%); }
+.kpi .k { color: var(--tx3); font-size: 11.5px; letter-spacing: .02em; line-height: 1.45;
+  margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+.kpi .v { font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+.kpi .v.kpi-name { font-size: 19px; line-height: 1.3; font-weight: 650; letter-spacing: 0; }
+.kpi .s { font-size: 11px; color: var(--tx2); margin-top: 3px; font-weight: 500;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpi .s .up-b { display: inline-block; background: rgba(215,58,73,.1); color: var(--up); border-radius: 999px; padding: 1px 8px; font-weight: 600; }
+.kpi .s .down-b { display: inline-block; background: rgba(26,127,55,.1); color: var(--down); border-radius: 999px; padding: 1px 8px; font-weight: 600; }
+.kpi-spark { margin-top: 4px; height: 20px; }
+.kpi-spark svg { width: 100%; height: 20px; display: block; }
 
 .tabs { position: relative; display: flex; gap: 4px; margin: 26px 0 20px; flex-wrap: wrap;
   border-bottom: 1px solid var(--line); width: 100%; }
@@ -126,14 +126,14 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
 .view[hidden] { display: none; }
 .view:not([hidden]) { animation: fade .28s var(--ease); }
 
-.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 28px; margin-bottom: 28px; }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-bottom: 28px; }
+.grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
 @media (max-width: 900px) { .grid, .grid3 { grid-template-columns: 1fr; } }
 .card { background: var(--panel);
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 26px; box-shadow: var(--shadow);
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
   transition: transform .28s var(--ease), box-shadow .28s var(--ease); }
 .card:hover { box-shadow: var(--shadow-h); transform: translateY(-2px); }
-.view > .card + .card, section > .card + .card { margin-top: 28px; }
+.view > .card + .card, section > .card + .card { margin-top: 20px; }
 .card h2 { font-size: 16px; font-weight: 700; letter-spacing: .01em; margin-bottom: 6px; color: var(--tx); }
 .card .note { color: var(--tx3); font-size: 12.5px; margin-bottom: 16px; line-height: 1.6; }
 
@@ -167,9 +167,11 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
 .advice-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .advice-summary > * { margin-bottom: 0 !important; }
 
-.filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
-.chip { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px;
-  font: inherit; font-size: 12.5px; color: var(--tx2); cursor: pointer; transition: all .2s; font-weight: 500; }
+.filters { display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 10px; align-items: center;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.filters::-webkit-scrollbar { display: none; }
+.chip { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+  font: inherit; font-size: 12px; color: var(--tx2); cursor: pointer; transition: all .2s; font-weight: 500; white-space: nowrap; }
 .chip b { color: var(--up); font-weight: 600; margin-left: 4px; }
 .chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 .chip.on { border-color: var(--accent); color: var(--accent); background: rgba(37,99,235,.06); font-weight: 600; }
@@ -267,7 +269,7 @@ svg text { font-family: inherit; }
 /* ---------- 三段式分区 ---------- */
 tr.sel td { background: rgba(37,99,235,.06); }
 tbody tr { cursor: pointer; }
-.sec-head { display: flex; align-items: baseline; gap: 16px; margin: 40px 0 20px; padding-bottom: 14px;
+.sec-head { display: flex; align-items: baseline; gap: 16px; margin: 22px 0 12px; padding-bottom: 10px;
   border-bottom: 2px solid var(--line2); }
 .sec-head:first-of-type { margin-top: 0; }
 .sec-head .no { font-size: 13px; font-weight: 700; color: #fff; background: var(--accent);
@@ -289,20 +291,20 @@ html { -webkit-text-size-adjust: 100%; }
 
 /* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 24px; font-weight: 700; }
-#topbar { position: sticky; top: 16px; z-index: 40; background: rgba(255,255,255,.92); border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(13,17,23,.08), 0 1px 3px rgba(13,17,23,.05); margin-bottom: 16px; overflow: hidden;
+#topbar { position: sticky; top: 8px; z-index: 40; background: rgba(255,255,255,.92); border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(13,17,23,.08), 0 1px 3px rgba(13,17,23,.05); margin-bottom: 14px; overflow: hidden;
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(139,148,158,.1); }
 [data-theme="dark"] #topbar { background: rgba(22,27,34,.92); border-color: rgba(139,148,158,.08); }
-.tb-main { display: flex; align-items: stretch; gap: 16px; padding: 6px 20px; min-height: 80px; }
-#topbar .tb-brand { display: flex; align-items: center; gap: 14px; font-size: 20px; font-weight: 800; letter-spacing: -.01em;
-  white-space: nowrap; color: var(--tx); padding-right: 20px; border-right: 1px solid var(--line); }
-#topbar .tb-brand img { width: 68px; height: 68px; border-radius: 16px; background: transparent;
+.tb-main { display: flex; align-items: center; gap: 12px; padding: 7px 18px; min-height: 46px; }
+#topbar .tb-brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 800; letter-spacing: -.01em;
+  white-space: nowrap; color: var(--tx); padding-right: 16px; border-right: 1px solid var(--line); }
+#topbar .tb-brand img { width: 32px; height: 32px; border-radius: 9px; background: transparent;
   padding: 0; box-shadow: none; }
 [data-theme="dark"] #topbar .tb-brand img { box-shadow: none; }
-#tbNav { position: relative; display: flex; gap: 6px; }
-#tbNav button { background: transparent; border: 0; font: inherit; font-size: 16px; font-weight: 600; letter-spacing: -.01em;
-  color: var(--tx2); padding: 10px 18px; cursor: pointer; border-radius: 12px; transition: color .25s, background .25s, box-shadow .25s, transform .2s; white-space: nowrap; }
+#tbNav { position: relative; display: flex; gap: 2px; }
+#tbNav button { background: transparent; border: 0; font: inherit; font-size: 14px; font-weight: 600; letter-spacing: -.01em;
+  color: var(--tx2); padding: 7px 13px; cursor: pointer; border-radius: 10px; transition: color .25s, background .25s, box-shadow .25s, transform .2s; white-space: nowrap; }
 #tbNav button:hover { color: var(--tx); background: rgba(139,148,158,.08); transform: translateY(-1px); }
 #tbNav button.on { font-weight: 700; }
 #tbNav button.on[data-pg="pano"] { color: #2563eb; background: rgba(37,99,235,.1);
@@ -338,7 +340,7 @@ html { -webkit-text-size-adjust: 100%; }
 .tb-drop .it:hover { background: rgba(37,99,235,.06); }
 .tb-drop .it .cd { color: var(--tx3); font-size: 11px; white-space: nowrap; }
 #topbar .theme-sw { margin-left: 0; align-self: center; }
-#subbar { display: flex; align-items: center; gap: 10px; padding: 8px 20px;
+#subbar { display: flex; align-items: center; gap: 8px; padding: 4px 18px;
   background: var(--panel2); border-top: 1px solid var(--line); }
 #subbar .meta { color: var(--tx3); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #subbar .sub { display: none; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -350,13 +352,13 @@ html { -webkit-text-size-adjust: 100%; }
 #subbar[data-cur="research"] #researchSub,
 #subbar[data-cur="advice"] #adviceSub { display: flex; }
 #subbar .sub button { white-space: nowrap; border: 0; background: transparent; color: var(--tx2);
-  font: inherit; font-size: 12.5px; padding: 7px 14px; border-radius: 8px; cursor: pointer;
+  font: inherit; font-size: 12px; padding: 5px 12px; border-radius: 8px; cursor: pointer;
   box-shadow: none; transition: color .2s, background .2s, transform .15s; scroll-snap-align: start; font-weight: 500; }
 #subbar .sub button:hover { color: var(--tx); background: rgba(139,148,158,.1); transform: translateY(-1px); }
 #subbar[data-cur="pano"] .sub button.on { background: #2563eb; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(37,99,235,.25); }
 #subbar[data-cur="research"] .sub button.on { background: #7c3aed; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(124,58,237,.25); }
 #subbar[data-cur="advice"] .sub button.on { background: #b8860b; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(184,134,11,.25); }
-.data-meta { min-height: 24px; padding: 3px 3px 0; color: var(--tx3); font-size: 12px;
+.data-meta { min-height: 18px; padding: 1px 3px 0; color: var(--tx3); font-size: 11.5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .01em; }
 .view, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
   scroll-margin-top: var(--sticky-offset); }
@@ -366,30 +368,31 @@ main { min-width: 0; }
 .page:not([hidden]) { animation: fade .28s var(--ease); }
 .page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .35s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
-  :root { --sticky-offset: 156px; }
+  :root { --sticky-offset: 178px; }
   html, body { max-width: 100%; }
-  body { padding: 10px 12px 36px; }
-  #topbar { top: 8px; border-radius: 14px; }
-  .tb-main { flex-wrap: wrap; gap: 8px 12px; padding: 8px 14px; min-height: 0; }
+  body { padding: 8px 10px 36px; }
+  #topbar { top: 6px; border-radius: 12px; }
+  .tb-main { flex-wrap: wrap; gap: 6px 10px; padding: 6px 12px; min-height: 0; }
   #topbar .tb-brand { border-right: 0; padding-right: 0; }
-  #topbar .tb-brand span { font-size: 16px; font-weight: 800; }
-  #topbar .tb-brand img { width: 52px; height: 52px; }
+  #topbar .tb-brand span { font-size: 15px; font-weight: 800; }
+  #topbar .tb-brand img { width: 28px; height: 28px; border-radius: 8px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
-  #tbNav button { padding: 7px 12px; font-size: 13px; }
+  #tbNav button { padding: 6px 11px; font-size: 13px; }
   .tb-search { margin-left: auto; flex: 0 1 auto; }
-  .tb-search input { width: 140px; min-width: 0; font-size: 12px; }
+  .tb-search input { width: 120px; min-width: 0; font-size: 12px; }
   #topbar .theme-sw { margin-left: 0; }
-  #subbar { padding: 6px 12px; }
+  #subbar { padding: 4px 12px; }
   #subbar .meta { display: none; }
   #subbar .sub { margin-left: 0; }
   .data-meta { display: none; }
-  .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-  .kpi { padding: 12px 14px; }
-  .kpi .v { font-size: 22px; }
-  .kpi .v.kpi-name { font-size: 18px; }
+  .kpis { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity; gap: 8px; padding-bottom: 4px; }
+  .kpi { flex: 0 0 148px; scroll-snap-align: start; padding: 9px 12px 8px; }
+  .kpi .v { font-size: 18px; }
+  .kpi .v.kpi-name { font-size: 16px; }
   .card { padding: 16px; }
-  .sec-head { margin: 24px 0 14px; flex-wrap: wrap; gap: 8px; }
-  #treemap { height: 320px !important; }
+  .sec-head { margin: 18px 0 10px; flex-wrap: wrap; gap: 8px; }
+  #treemap { height: 300px !important; }
   th, td { padding: 7px 8px; }
   .table-scroll > table { min-width: 680px; }
   .advice-summary { grid-template-columns: 1fr; }
@@ -414,10 +417,10 @@ main { min-width: 0; }
       <input id="gSearch" placeholder="搜索个券名称 / 代码" autocomplete="off">
       <div class="tb-drop" id="gSearchDrop" hidden></div>
     </div>
-    <span class="theme-sw" id="themeSw">
-      <button data-t="light" title="白天">☀️ 白天</button>
-      <button data-t="eye" title="护眼">🌿 护眼</button>
-      <button data-t="dark" title="夜晚">🌙 夜晚</button>
+    <span class="theme-sw" id="themeSw" role="group" aria-label="主题切换">
+      <button data-t="light" title="白天模式" aria-label="白天模式">☀️</button>
+      <button data-t="eye" title="护眼模式" aria-label="护眼模式">🌿</button>
+      <button data-t="dark" title="夜晚模式" aria-label="夜晚模式">🌙</button>
     </span>
   </div>
   <div id="subbar" data-cur="pano">
@@ -468,7 +471,7 @@ main { min-width: 0; }
     </div>
     <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:8px"></div>
     <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:8px"></div>
-    <div id="treemap" style="position:relative;width:100%;height:440px"></div>
+    <div id="treemap" style="position:relative;width:100%;height:340px"></div>
   </div>
 </section>
 
@@ -970,9 +973,10 @@ main { min-width: 0; }
       '<circle cx="' + (w - 1) + '" cy="' + ly.toFixed(1) + '" r="2" fill="' + color + '"/></svg>';
   }
   function kpiCard(label, valueHtml, subHtml, cls2) {
-    return '<div class="kpi' + (cls2 || "") + '"><div class="k">' + label + '</div>' +
+    var strip = function (s) { return String(s == null ? "" : s).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(); };
+    return '<div class="kpi' + (cls2 || "") + '"><div class="k" title="' + strip(label) + '">' + label + '</div>' +
       '<div class="v num">' + valueHtml + '</div>' +
-      '<div class="s num">' + subHtml + '</div></div>';
+      '<div class="s num" title="' + strip(subHtml) + '">' + subHtml + '</div></div>';
   }
   var avgCls = cls(avg);
   var sparkColor = avgCls === "up" ? "var(--up)" : avgCls === "down" ? "var(--down)" : "var(--tx2)";
@@ -983,10 +987,9 @@ main { min-width: 0; }
   var kpiCards =
     kpiCard("中证REITs全收益指数", idxClose,
       '日涨跌 ' + idxPct + ' · ' + (mktIdx && mktIdx.code ? mktIdx.code : "待 iFinD 接入"), " kpi-idx") +
-    '<div class="kpi"><div class="k">全市场等权日涨跌</div>' +
+    '<div class="kpi"><div class="k" title="全市场等权日涨跌">全市场等权日涨跌</div>' +
       '<div class="v num ' + avgCls + '">' + fmt(avg) + '</div>' +
-      '<div class="kpi-spark">' + sparklineSvg(D.series && D.series.market, sparkColor) + '</div>' +
-      '<div class="s num">' + D.count + ' 只 · 近250日等权</div></div>' +
+      '<div class="s num" title="' + D.count + ' 只 · 近250日等权">' + D.count + ' 只 · 近250日等权</div></div>' +
     kpiCard("市场宽度（涨/跌家数）", upN + " / " + downN,
       (breadth == null ? "—" : breadth + "% 上涨") + " · 平 " + flatN + " 只") +
     kpiCard("市场总成交额", fmtVol(totAmt), "全市场 " + D.count + " 只") +
