@@ -1298,19 +1298,11 @@ main { min-width: 0; }
     function buildOption(dataArr) {
       return {
         backgroundColor: "transparent",
-        tooltip: {
-          backgroundColor: th.panel, borderColor: th.line,
-          textStyle: { color: th.tx, fontSize: 12 },
-          formatter: function (p) {
-            var d = p.data || {};
-            var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "—";
-            var retTxt = d.ret != null ? fmt(d.ret) : "—";
-            return "<b>" + p.name + "</b><br/>涨跌 " + retTxt + "<br/>成交额 " + amt + (d.n ? " · " + d.n + "只" : "");
-          }
-        },
+        tooltip: { show: false },
         series: [{
           type: "treemap", roam: false, nodeClick: false,
           breadcrumb: { show: false }, leafDepth: 1,
+          left: 0, right: 0, top: 0, bottom: 0,
           label: { show: true, position: "inside" },
           itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
           data: dataArr
