@@ -282,6 +282,11 @@ tbody tr { cursor: pointer; }
 .rv-item .ds { color: var(--tx3); font-size: 12px; }
 .hidden, [hidden] { display: none !important; }
 
+/* iOS Safari 兼容性 */
+button, [role="button"] { cursor: pointer; -webkit-tap-highlight-color: rgba(0,0,0,0.05); }
+button:active, [role="button"]:active { -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+
 /* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 24px; font-weight: 700; }
 #topbar { position: sticky; top: 16px; z-index: 40; background: rgba(255,255,255,.92); border-radius: 16px;
@@ -1927,33 +1932,44 @@ main { min-width: 0; }
       console.log('[showPage] switched to', pg);
     } catch (err) { console.error('[showPage] error:', err); }
   }
-  $("subbar").addEventListener("click", function (e) {
-    var b = closestBtn(e); if (!b) return;
-    if (b.dataset.scroll) {
-      showPage(b.dataset.pg, true);
-      setActiveNav(b.parentElement.querySelectorAll("button"), b);
-      var t = document.getElementById(b.dataset.scroll);
-      if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
-      // KPI 只在行情总览与热力图 tab 显示
-      var showKpi = b.dataset.scroll === "v-heatmap";
-      $("kpis").style.display = showKpi ? "" : "none";
-      return;
+  // ---- 导航事件绑定：直接绑定到每个按钮（兼容 iOS Safari 事件委托问题） ----
+  function bindNavButton(btn) {
+    if (!btn) return;
+    function handler() {
+      try {
+        if (btn.dataset.scroll) {
+          showPage(btn.dataset.pg, true);
+          setActiveNav(btn.parentElement.querySelectorAll("button"), btn);
+          var t = document.getElementById(btn.dataset.scroll);
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+          var showKpi = btn.dataset.scroll === "v-heatmap";
+          $("kpis").style.display = showKpi ? "" : "none";
+          return;
+        }
+        if (btn.dataset.v) {
+          showPage(btn.dataset.pg || "research");
+          switchView(btn.dataset.v);
+          window.scrollTo({ top: 0, behavior: "auto" });
+          if (btn.dataset.pg === "pano") {
+            $("kpis").style.display = btn.dataset.v === "heatmap" ? "" : "none";
+          }
+          return;
+        }
+        if (btn.dataset.pg) {
+          showPage(btn.dataset.pg);
+        }
+      } catch (err) { console.error('[nav] error:', err); }
     }
-    if (b.dataset.v) {
-      showPage(b.dataset.pg || "research");
-      switchView(b.dataset.v);
-      window.scrollTo({ top: 0, behavior: "auto" });
-      // KPI 只在行情总览与热力图 tab 显示（市场全景的 data-v 分支）
-      if (b.dataset.pg === "pano") {
-        $("kpis").style.display = b.dataset.v === "heatmap" ? "" : "none";
-      }
-      return;
-    }
-  });
-  $("tbNav").addEventListener("click", function (e) {
-    var b = closestBtn(e); if (!b || !b.dataset.pg) return;
-    showPage(b.dataset.pg);
-  });
+    btn.addEventListener("click", handler);
+    // iOS Safari 有时 click 不触发，补充 touchend
+    btn.addEventListener("touchend", function(e) {
+      e.preventDefault();  // 阻止默认行为（如双击缩放）
+      handler();
+    });
+  }
+  // 绑定所有导航按钮
+  document.querySelectorAll("#tbNav > button[data-pg]").forEach(bindNavButton);
+  document.querySelectorAll("#subbar button[data-v], #subbar button[data-scroll]").forEach(bindNavButton);
   // ink 初始定位
   (function () {
     var b = document.querySelector("#tbNav > button.on"), ink = document.querySelector("#tbNav .ink");
