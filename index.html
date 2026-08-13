@@ -1252,8 +1252,8 @@ main { min-width: 0; }
     });
     var totalAmt = items.reduce(function (a, it) { return a + (it.amount || 0); }, 0) || 1;
     function tmFont(frac) {
-      var px = Math.round(11 + 26 * Math.sqrt(Math.min(frac, 1)));
-      return Math.max(11, Math.min(26, px));
+      var px = Math.round(88 * Math.sqrt(Math.min(frac, 1)));
+      return Math.max(11, Math.min(32, px));
     }
     function escTm(s) { return String(s).replace(/[{}]/g, ""); }
     var data = items.map(function (it) {
@@ -1268,10 +1268,13 @@ main { min-width: 0; }
         amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
         itemStyle: { color: tmColor(it.ret) },
         label: {
+          position: "inside",
+          align: "center",
+          verticalAlign: "middle",
           formatter: formatter,
           rich: {
-            b: { fontSize: nameFont, fontWeight: 700, color: "#fff", textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.5)" },
-            s: { fontSize: Math.max(10, Math.round(nameFont * 0.62)), color: "rgba(255,255,255,.94)", textShadowBlur: 2, textShadowColor: "rgba(0,0,0,.45)" }
+            b: { fontSize: nameFont, fontWeight: 800, color: "#fff", textShadowBlur: 4, textShadowColor: "rgba(0,0,0,.55)" },
+            s: { fontSize: Math.max(10, Math.round(nameFont * 0.56)), color: "rgba(255,255,255,.95)", textShadowBlur: 2, textShadowColor: "rgba(0,0,0,.5)" }
           }
         }
       };
