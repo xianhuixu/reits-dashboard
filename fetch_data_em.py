@@ -172,10 +172,75 @@ def indicators(s_close, s_amt):
     if len(s_amt) >= 60:
         amt20 = float(s_amt.tail(20).mean())
         amt60 = float(s_amt.tail(60).mean())
-        out["volAnn"] = round(amt20 / amt60 - 1, 3) if amt60 else None
+        out["amt20"] = round(amt20, 0)
+        out["amtRatio"] = round(amt20 / amt60, 2) if amt60 else None
+    else:
+        out["amt20"] = round(float(s_amt.mean()), 0) if len(s_amt) else None
+        out["amtRatio"] = None
+    # 上市以来累计涨跌与年化波动率
+    out["sinceIPO"] = round((last / float(s_close.iloc[0]) - 1) * 100, 2) if n > 1 else None
+    if n > 20:
+        out["volAnn"] = round(float(s_close.pct_change().dropna().std() * (244 ** 0.5) * 100), 1)
     else:
         out["volAnn"] = None
     return out
+
+
+# ---------------- 六因子信号打分 ----------------
+def score_signals(reits, fund, corr_ret, bench_ret, bond10y):
+    """六因子打分（-2 ~ +2）：流动性/情绪/资金/业绩/利差/股债联动。"""
+    amt_list = sorted([r["amt20"] for r in reits if r.get("amt20")])
+
+    def liq_score(a):
+        if a is None or not amt_list:
+            return 0
+        p = sum(1 for x in amt_list if x < a) / len(amt_list)
+        return 2 if p >= 0.8 else 1 if p >= 0.6 else 0 if p >= 0.4 else -1 if p >= 0.2 else -2
+
+    def rsi_score(v):
+        if v is None:
+            return 0
+        return 1 if v >= 70 else 2 if v >= 55 else 0 if v >= 45 else -1 if v >= 30 else -2
+
+    def flow_score(v):
+        if v is None:
+            return 0
+        return 2 if v >= 1.5 else 1 if v >= 1.1 else 0 if v >= 0.9 else -1 if v >= 0.7 else -2
+
+    def perf_score(code):
+        f = fund.get(code) if fund else None
+        if not f or f.get("achieveRate") is None:
+            return 0
+        a = f["achieveRate"]
+        return 2 if a >= 95 else 1 if a >= 90 else -1 if a >= 85 else -2
+
+    def spread_score(code):
+        f = fund.get(code) if fund else None
+        if not f or f.get("distYield") is None or bond10y is None:
+            return 0
+        sp = f["distYield"] - bond10y
+        return 2 if sp >= 4.5 else 1 if sp >= 3.5 else 0 if sp >= 2.5 else -1 if sp >= 1.5 else -2
+
+    def sb_score(code):
+        if corr_ret is None or code not in corr_ret.columns:
+            return 0
+        if "000300.SH" not in bench_ret.columns or "000012.SH" not in bench_ret.columns:
+            return 0
+        j = pd.concat([corr_ret[code], bench_ret["000300.SH"], bench_ret["000012.SH"]], axis=1).dropna()
+        if len(j) < 20:
+            return 0
+        diff = float(j.iloc[:, 0].corr(j.iloc[:, 1]) - j.iloc[:, 0].corr(j.iloc[:, 2]))
+        return 2 if diff >= 0.5 else 1 if diff >= 0.25 else 0 if diff >= -0.25 else -1 if diff >= -0.5 else -2
+
+    for r in reits:
+        f = {"liquidity": liq_score(r.get("amt20")), "sentiment": rsi_score(r.get("rsi14")),
+             "moneyflow": flow_score(r.get("amtRatio")), "performance": perf_score(r["code"]),
+             "spread": spread_score(r["code"]), "stockbond": sb_score(r["code"])}
+        total = sum(f.values())
+        avg = total / 6.0
+        r["signals"] = {**f, "total": total,
+                        "label": "偏强" if avg >= 1 else "偏弱" if avg <= -1 else "中性"}
+    return reits
 
 
 # ---------------- 信号检测与回测 ----------------
@@ -346,13 +411,10 @@ def main():
         prev = float(s_close.iloc[-2])
         pct = (last / prev - 1) * 100 if prev else 0
 
-        # 上市至今收益率
-        since_ipo = None
-        if "ipoPrice" in u and u["ipoPrice"]:
-            since_ipo = round((last / u["ipoPrice"] - 1) * 100, 2)
-
-        # 20日/60日收益率
-        ret20 = ret60 = None
+        # 5/20/60日收益率
+        ret5 = ret20 = ret60 = None
+        if len(s_close) >= 6:
+            ret5 = round((last / float(s_close.iloc[-6]) - 1) * 100, 2)
         if len(s_close) >= 21:
             ret20 = round((last / float(s_close.iloc[-21]) - 1) * 100, 2)
         if len(s_close) >= 61:
@@ -365,73 +427,96 @@ def main():
         spark = [round(float(v), 3) for v in s_close.tail(SPARK_POINTS).tolist()]
         hist_dates = [d.strftime("%Y-%m-%d") for d in s_close.tail(SPARK_POINTS).index]
 
-        # 六因子信号
-        sig_score = 0
-        signals = {
-            "momentum": " bullish" if ret20 and ret20 > 2 else " bearish" if ret20 and ret20 < -2 else "neutral",
-            "liquidity": "high" if ind.get("volAnn") and ind["volAnn"] > 0.2 else "low",
-            "volatility": "high" if ind.get("rsi14") and (ind["rsi14"] > 70 or ind["rsi14"] < 30) else "normal",
-            "valuation": "cheap" if ind.get("pctRank") and ind["pctRank"] < 30 else "expensive" if ind.get("pctRank") and ind["pctRank"] > 70 else "fair",
-            "trend": "up" if ind.get("macd") and ind["macd"]["hist"] > 0 else "down",
-            "total": 0
-        }
-        # 简单打分
-        if ret20 and ret20 > 2:
-            sig_score += 1
-        if ind.get("volAnn") and ind["volAnn"] > 0.2:
-            sig_score += 1
-        if ind.get("rsi14") and ind["rsi14"] < 30:
-            sig_score += 1
-        if ind.get("pctRank") and ind["pctRank"] < 30:
-            sig_score += 1
-        if ind.get("macd") and ind["macd"]["hist"] > 0:
-            sig_score += 1
-        signals["total"] = sig_score
-
         reits.append({
             **u,
             "close": round(last, 3),
             "pct": round(pct, 2),
             "volume": int(s_amt.iloc[-1] / last) if last else 0,  # 估算成交量
             "amount": round(float(s_amt.iloc[-1]), 2),
+            "ret5": ret5,
             "ret20": ret20,
             "ret60": ret60,
-            "sinceIPO": since_ipo,
             **ind,
             "spark": spark,
             "histDates": hist_dates,
             "histClose": spark,  # 与 spark 同步，供 update_data.py 增量更新
-            "signals": signals,
+            "signals": {},
         })
 
     print(f"[reits] 计算完成 {len(reits)}/{len(universe)}", flush=True)
+
+    # ---------- 3b. 六因子信号打分（跨截面，需全量 reits） ----------
+    fund = {}
+    try:
+        fund_raw = json.loads((ROOT / "fundamentals.json").read_text(encoding="utf-8"))
+        if isinstance(fund_raw, dict):
+            fund = {f["code"]: f for f in fund_raw.get("items", [])}
+    except Exception:
+        pass
+    bond10y = None
+    try:
+        cycle_raw = json.loads((ROOT / "cycle_judgment.json").read_text(encoding="utf-8"))
+        bond10y = cycle_raw.get("bond10y")
+    except Exception:
+        pass
+    cret_w = close.pct_change()
+    bret_w = bclose.pct_change() if bclose is not None else None
+    reits = score_signals(reits, fund, cret_w, bret_w, bond10y)
 
     # ---------- 4. 板块与策略分类 ----------
     sectors = sorted({u["sector"] for u in universe})
     strategies = ["防御型", "周期型", "扩张型"]
 
-    # ---------- 5. 相关性 ----------
-    corr_payload = {}
+    # ---------- 5. 大类资产相关性（板块×基准矩阵 + 股性债性散点 + 板块对照） ----------
+    corr_payload = None
     try:
-        recent_close = close.tail(CORR_WINDOW)
-        corr = recent_close.pct_change().corr()
-        for c in codes:
-            if c not in corr.columns:
+        cret_w = close.tail(CORR_WINDOW).pct_change()
+        bret_w = bclose.tail(CORR_WINDOW).pct_change() if bclose is not None else None
+        if bret_w is None:
+            raise RuntimeError("无基准数据")
+        groups = {"全市场": codes}
+        for st in strategies:
+            groups[st] = [u["code"] for u in universe if u["strategy"] == st]
+        for sec in sectors:
+            groups[sec] = [u["code"] for u in universe if u["sector"] == sec]
+
+        def port_ret(code_list):
+            cols = [c for c in code_list if c in cret_w.columns]
+            return cret_w[cols].mean(axis=1) if cols else pd.Series(dtype=float)
+
+        def pearson(a, b):
+            j = pd.concat([a, b], axis=1).dropna()
+            if len(j) < 20:
+                return None
+            return round(float(j.iloc[:, 0].corr(j.iloc[:, 1])), 2)
+
+        bcodes = [c for c in BENCHMARKS if c in bret_w.columns]
+        benchmarks_meta = [{"code": c, **BENCHMARKS[c]} for c in bcodes]
+        matrix = {}
+        for gname, gcodes in groups.items():
+            pr = port_ret(gcodes)
+            matrix[gname] = {bc: pearson(pr, bret_w[bc]) for bc in bcodes}
+        scatter = []
+        if "000012.SH" in bret_w.columns and "000300.SH" in bret_w.columns:
+            for sec in sectors:
+                pr = port_ret(groups[sec])
+                scatter.append({"sector": sec, "bond": pearson(pr, bret_w["000012.SH"]),
+                                "equity": pearson(pr, bret_w["000300.SH"])})
+        peers = []
+        for sec, bc in SECTOR_PEER.items():
+            if bc not in bret_w.columns:
                 continue
-            peers = []
-            for pc in codes:
-                if pc != c and pc in corr.columns:
-                    v = corr.loc[c, pc]
-                    if pd.notna(v):
-                        peers.append({"code": pc, "r": round(float(v), 2)})
-            peers.sort(key=lambda x: abs(x["r"]), reverse=True)
-            # 板块基准
-            sec = next((u["sector"] for u in universe if u["code"] == c), None)
-            bench = SECTOR_PEER.get(sec)
-            bench_r = None
-            if bench and bench in corr.columns:
-                bench_r = round(float(corr.loc[c, bench]), 2)
-            corr_payload[c] = {"peers": peers[:5], "sectorPeer": bench_r}
+            pr = port_ret(groups.get(sec, []))
+            bser = bclose[bc].dropna().tail(CORR_WINDOW)
+            peers.append({
+                "sector": sec, "peerCode": bc, "peerName": BENCHMARKS[bc]["name"],
+                "corr": pearson(pr, bret_w[bc]),
+                "reitRet": round(float((pr.dropna().add(1).prod() - 1) * 100), 2) if len(pr.dropna()) else None,
+                "peerRet": round(float((bser.iloc[-1] / bser.iloc[0] - 1) * 100), 2) if len(bser) > 1 else None,
+            })
+        corr_payload = {"benchmarks": benchmarks_meta, "matrix": matrix,
+                        "scatter": scatter, "peers": peers}
+        print(f"[corr] 基准 {len(benchmarks_meta)} 个", flush=True)
     except Exception as e:
         print(f"[corr] 计算失败: {e}", flush=True)
 
@@ -532,6 +617,18 @@ def main():
     except Exception:
         pass
 
+    # ---------- 10b. 海外静态数据（美国长期走势 / 周期耦合矩阵） ----------
+    us_long = None
+    try:
+        us_long = json.loads((ROOT / "us_long_static.json").read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    overseas_static = None
+    try:
+        overseas_static = json.loads((ROOT / "overseas_static.json").read_text(encoding="utf-8"))
+    except Exception:
+        pass
+
     # 读取已有 data.json 中的 marketIndex（避免覆盖）
     old_market_index = None
     try:
@@ -555,6 +652,8 @@ def main():
         "backtest": backtest,
         "cycle": cycle or None,
         "fundamentals": fund_raw.get("items", []) if isinstance(fund_raw, dict) else [],
+        "usLong": us_long,
+        "overseasStatic": overseas_static,
         "series": {
             "dates": wdates,
             "market": eq_index(codes),
