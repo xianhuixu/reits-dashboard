@@ -119,9 +119,7 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
 
 .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 24px; }
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
-.news-projects-grid { display: grid; grid-template-columns: 1.12fr 1fr; gap: 20px; margin-top: 14px; align-items: start; }
-#projectCard .table-scroll table { min-width: 560px; }
-@media (max-width: 900px) { .grid, .grid3, .news-projects-grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .grid, .grid3 { grid-template-columns: 1fr; } }
 .card { background: var(--panel);
   border: none; border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
@@ -340,7 +338,7 @@ tbody tr { cursor: pointer; }
 #subbar[data-cur="advice"] .sub button.on { background: var(--gold); color: #fff; font-weight: 650; }
 .data-meta { min-height: 24px; padding: 2px 2px 0; color: var(--tx3); font-size: 11.5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#v-heatmap, #newsCard, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
+.view, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
   scroll-margin-top: var(--sticky-offset); }
 main { min-width: 0; }
 .page, .view, .card { min-width: 0; }
@@ -404,8 +402,11 @@ main { min-width: 0; }
   </div>
   <div id="subbar" data-cur="pano">
     <div class="sub" id="panoSub">
-      <button data-pg="pano" data-scroll="v-heatmap" class="on" aria-current="page">行情总览与热力图</button>
-      <button data-pg="pano" data-scroll="newsCard">重点事件信息流</button>
+      <button data-pg="pano" data-v="heatmap" class="on" aria-current="page">行情总览与热力图</button>
+      <button data-pg="pano" data-v="news">重点事件信息流</button>
+      <button data-pg="pano" data-v="proj-ndrc">发改委推荐项目清单</button>
+      <button data-pg="pano" data-v="proj-sse">上交所受理项目清单</button>
+      <button data-pg="pano" data-v="proj-szse">深交所项目清单</button>
     </div>
     <div class="sub" id="researchSub">
       <button data-v="review" class="on" aria-current="page">市场阶段复盘</button>
@@ -431,10 +432,10 @@ main { min-width: 0; }
 
 <div class="kpis" id="kpis"></div>
 
-<div class="sec-head"><span class="no">①</span><span class="t">市场全景</span><span class="d">全量行情总览 · 资产类别热力图</span></div>
+<div class="sec-head"><span class="no">①</span><span class="t">市场全景</span><span class="d">在顶部二级菜单切换：行情总览 · 事件信息流 · 项目申报动态</span></div>
 
 <!-- ============ 第一段：全景热力图 ============ -->
-<section id="v-heatmap">
+<section class="view" id="v-heatmap">
   <div class="card">
     <h2>资产类别全景热力图</h2>
     <p class="note">色块大小 ∝ 板块成交额 · 颜色 = 板块成交额加权涨跌幅（红涨绿跌）· 区间：<span id="hmRangeLabel">日涨跌</span></p>
@@ -450,31 +451,56 @@ main { min-width: 0; }
   </div>
 </section>
 
-<div class="news-projects-grid">
+<section class="view" id="v-news" hidden>
   <div class="card" id="newsCard">
     <h2>近期重点事件信息流</h2>
     <p class="note">政策监管 · 机构间REITs · 招投标 · 拟上市与申报 · 上市项目公告 · 扩募动态 · 市场观点 · 来源：东方财富新闻检索 / 微信公众号（搜狗微信）/ 中国招标投标公共服务平台，每日更新 · 近 30 日</p>
     <div class="filters" id="newsFilter"></div>
     <div id="newsFeed" style="max-height:520px;overflow:auto"></div>
   </div>
+</section>
 
-  <div class="card" id="projectCard">
-    <h2>项目申报与推荐动态（2026 年以来）</h2>
-    <p class="note">国家发改委基础设施 REITs 推荐项目清单 · 上交所 / 深交所受理项目 · 点击项目名称跳转交易所详情页 · 每日更新</p>
-    <div class="filters" id="projectTabs">
-      <button class="range-btn on" data-t="ndrc">发改委推荐清单</button>
-      <button class="range-btn" data-t="sse">上交所受理</button>
-      <button class="range-btn" data-t="szse">深交所受理</button>
-    </div>
-    <div class="table-scroll" style="max-height:520px;overflow:auto">
-      <table class="matrix" id="projectTable">
+<section class="view" id="v-proj-ndrc" hidden>
+  <div class="card">
+    <h2>发改委基础设施 REITs 推荐项目清单（2026 年以来）</h2>
+    <p class="note">来源：全国投资项目在线审批监管平台 · 每日更新</p>
+    <div class="table-scroll" style="max-height:560px;overflow:auto">
+      <table class="matrix" id="projectTableNdrc">
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <div class="note" id="projectMeta" style="margin:10px 0 0"></div>
+    <div class="note" id="projectMetaNdrc" style="margin:10px 0 0"></div>
   </div>
-</div>
+</section>
+
+<section class="view" id="v-proj-sse" hidden>
+  <div class="card">
+    <h2>上交所 REITs 受理项目清单（2026 年以来）</h2>
+    <p class="note">来源：上海证券交易所 REITs 项目动态 · 点击项目名称跳转交易所详情页 · 每日更新</p>
+    <div class="table-scroll" style="max-height:560px;overflow:auto">
+      <table class="matrix" id="projectTableSse">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="note" id="projectMetaSse" style="margin:10px 0 0"></div>
+  </div>
+</section>
+
+<section class="view" id="v-proj-szse" hidden>
+  <div class="card">
+    <h2>深交所 REITs 受理项目清单（2026 年以来）</h2>
+    <p class="note">来源：深交所公募 REITs 信息平台 · 点击项目名称跳转交易所详情页 · 每日更新</p>
+    <div class="table-scroll" style="max-height:560px;overflow:auto">
+      <table class="matrix" id="projectTableSzse">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="note" id="projectMetaSzse" style="margin:10px 0 0"></div>
+  </div>
+</section>
 </div><!-- /pg-pano -->
 
 <div class="page" id="pg-research" hidden>
@@ -1681,10 +1707,9 @@ main { min-width: 0; }
     render();
   })();
 
-  // ---- 项目申报与推荐动态（发改委 / 上交所 / 深交所 三源 tab） ----
+  // ---- 项目申报与推荐动态（发改委 / 上交所 / 深交所 三个独立二级视图） ----
   (function () {
     var P = window.REITS_PROJECTS;
-    var tab = "ndrc";
     function esc(s) {
       return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
@@ -1701,50 +1726,50 @@ main { min-width: 0; }
       else if (/未通过|终止/.test(s)) c = "var(--up)";
       return '<span class="sec-tag" style="color:' + c + '">' + esc(s) + "</span>";
     }
-    function render() {
-      var thead = "", rows = "", meta = "", list = [];
-      if (tab === "ndrc") {
-        thead = '<tr><th class="l">项目名称</th><th class="l">行业</th><th class="l">申报地区</th><th>募集规模(亿元)</th><th class="l">推荐时间</th></tr>';
-        list = P.ndrc || [];
-        rows = list.map(function (p) {
-          return '<tr><td class="l">' + nameCell(p) + "</td><td class='l'>" + esc(p.industry) + "</td><td class='l'>" + esc(p.region) +
-            '</td><td class="num">' + money(p.fundMoney) + "</td><td class='l'>" + esc(p.date) + "</td></tr>";
-        }).join("");
-        meta = "发改委推荐 " + list.length + " 个 · 2026 年以来";
-      } else if (tab === "sse") {
-        thead = '<tr><th class="l">项目名称</th><th class="l">管理人</th><th class="l">状态</th><th class="l">受理日期</th><th class="l">更新日期</th></tr>';
-        list = P.sse || [];
-        rows = list.map(function (p) {
-          return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.manager) + "</td><td class='l'>" + stTag(p.status) +
-            "</td><td class='l'>" + esc(p.acceptDate) + "</td><td class='l'>" + esc(p.updateDate) + "</td></tr>";
-        }).join("");
-        meta = "上交所受理 " + list.length + " 个项目 · 2026 年以来";
-      } else {
-        thead = '<tr><th class="l">项目名称</th><th class="l">申报类型</th><th class="l">状态</th><th class="l">原始权益人</th><th class="l">受理日期</th></tr>';
-        list = P.szse || [];
-        rows = list.map(function (p) {
-          return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.type) + "</td><td class='l'>" + stTag(p.status) +
-            "</td><td class='l'>" + esc(p.originator) + "</td><td class='l'>" + esc(p.acceptDate) + "</td></tr>";
-        }).join("");
-        meta = "深交所受理 " + list.length + " 个项目 · 2026 年以来";
-      }
-      document.querySelector("#projectTable thead").innerHTML = thead;
-      document.querySelector("#projectTable tbody").innerHTML =
+    function fillTable(tableId, metaId, thead, rows, meta) {
+      document.querySelector(tableId + " thead").innerHTML = thead;
+      document.querySelector(tableId + " tbody").innerHTML =
         rows || '<tr><td colspan="5" class="l" style="color:var(--tx3)">暂无数据</td></tr>';
-      document.querySelector("#projectMeta").textContent =
+      document.querySelector(metaId).textContent =
         (P && P.updated ? "更新 " + P.updated + " · " : "") + meta;
     }
-    if (!P || (!(P.ndrc || []).length && !(P.sse || []).length && !(P.szse || []).length)) {
-      document.querySelector("#projectMeta").textContent = "项目动态数据未生成，请运行 fetch_projects.py";
+    function renderNdrc() {
+      var list = P.ndrc || [];
+      var thead = '<tr><th class="l">项目名称</th><th class="l">行业</th><th class="l">申报地区</th><th>募集规模(亿元)</th><th class="l">推荐时间</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p) + "</td><td class='l'>" + esc(p.industry) + "</td><td class='l'>" + esc(p.region) +
+          '</td><td class="num">' + money(p.fundMoney) + "</td><td class='l'>" + esc(p.date) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableNdrc", "#projectMetaNdrc", thead, rows, "发改委推荐 " + list.length + " 个 · 2026 年以来");
+    }
+    function renderSse() {
+      var list = P.sse || [];
+      var thead = '<tr><th class="l">项目名称</th><th class="l">管理人</th><th class="l">状态</th><th class="l">受理日期</th><th class="l">更新日期</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.manager) + "</td><td class='l'>" + stTag(p.status) +
+          "</td><td class='l'>" + esc(p.acceptDate) + "</td><td class='l'>" + esc(p.updateDate) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableSse", "#projectMetaSse", thead, rows, "上交所受理 " + list.length + " 个项目 · 2026 年以来");
+    }
+    function renderSzse() {
+      var list = P.szse || [];
+      var thead = '<tr><th class="l">项目名称</th><th class="l">申报类型</th><th class="l">状态</th><th class="l">原始权益人</th><th class="l">受理日期</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.type) + "</td><td class='l'>" + stTag(p.status) +
+          "</td><td class='l'>" + esc(p.originator) + "</td><td class='l'>" + esc(p.acceptDate) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableSzse", "#projectMetaSzse", thead, rows, "深交所受理 " + list.length + " 个项目 · 2026 年以来");
+    }
+    if (!P) {
+      ["#projectMetaNdrc", "#projectMetaSse", "#projectMetaSzse"].forEach(function (id) {
+        var el = document.querySelector(id);
+        if (el) el.textContent = "项目动态数据未生成，请运行 fetch_projects.py";
+      });
       return;
     }
-    document.querySelector("#projectTabs").addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
-      tab = b.dataset.t;
-      document.querySelectorAll("#projectTabs button").forEach(function (x) { x.classList.toggle("on", x === b); });
-      render();
-    });
-    render();
+    renderNdrc();
+    renderSse();
+    renderSzse();
   })();
 
   // ---- 主题切换（白天 / 护眼 / 夜晚） ----
@@ -1796,10 +1821,14 @@ main { min-width: 0; }
     });
   }
   function switchView(v) {
-    document.querySelectorAll(".view").forEach(function (x) { x.hidden = x.id !== "v-" + v; });
-    var active = document.querySelector('#researchSub button[data-v="' + v + '"]');
-    setActiveNav(document.querySelectorAll("#researchSub button"), active);
-    stagger($("v-" + v));
+    var target = document.getElementById("v-" + v);
+    if (!target) return;
+    var page = target.closest(".page");
+    if (page) page.querySelectorAll(".view").forEach(function (x) { x.hidden = x.id !== "v-" + v; });
+    var subId = page && page.id === "pg-pano" ? "#panoSub" : "#researchSub";
+    var active = document.querySelector(subId + ' button[data-v="' + v + '"]');
+    setActiveNav(document.querySelectorAll(subId + " button"), active);
+    stagger(target);
     requestAnimationFrame(echResizeAll);
   }
   function showPage(pg, keepScroll) {
@@ -1829,7 +1858,12 @@ main { min-width: 0; }
       if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
-    if (b.dataset.v) { showPage("research"); switchView(b.dataset.v); return; }
+    if (b.dataset.v) {
+      showPage(b.dataset.pg || "research");
+      switchView(b.dataset.v);
+      window.scrollTo({ top: 0, behavior: "auto" });
+      return;
+    }
   });
   $("tbNav").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b || !b.dataset.pg) return;
