@@ -1250,10 +1250,12 @@ main { min-width: 0; }
     document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) {
       x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
     });
+    var totalAmt = items.reduce(function (a, it) { return a + (it.amount || 0); }, 0) || 1;
     var data = items.map(function (it) {
       return {
         name: it.sector, value: Math.max(it.amount || 0, 1),
         amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
+        showSub: (it.amount || 0) >= totalAmt * 0.05,
         itemStyle: { color: tmColor(it.ret) }
       };
     });
@@ -1276,15 +1278,17 @@ main { min-width: 0; }
           show: true, position: "inside",
           formatter: function (p) {
             var d = p.data || {};
-            if (!p.rect || p.rect.width < 56 || p.rect.height < 34) return "";
-            var s = d.name;
-            if (p.rect.width > 92 && p.rect.height > 60) {
+            if (d.showSub) {
               var amt = d.amount != null ? Math.round(d.amount / 1e4).toLocaleString() + "万" : "";
-              s += "\n" + (d.ret != null ? fmt(d.ret) : "") + (amt ? " · " + amt : "") + (d.n ? " · " + d.n + "只" : "");
+              var sub = (d.ret != null ? fmt(d.ret) : "") + (amt ? " · " + amt : "") + (d.n ? " · " + d.n + "只" : "");
+              return "{b|" + d.name + "}\n{s|" + sub + "}";
             }
-            return s;
+            return "{b|" + d.name + "}";
           },
-          textStyle: { color: "#fff", fontSize: 12, fontWeight: 600, textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.4)" }
+          rich: {
+            b: { fontSize: 12, fontWeight: 700, color: "#fff", textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.45)" },
+            s: { fontSize: 10, color: "rgba(255,255,255,.9)", textShadowBlur: 2, textShadowColor: "rgba(0,0,0,.4)" }
+          }
         },
         itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
         data: data
