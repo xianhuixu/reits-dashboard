@@ -1263,9 +1263,11 @@ main { min-width: 0; }
     // 依据色块实际宽高 + 文字长度，计算能完整显示的最大字号（优先两行，放不下退化为单行标题）
     function tmFit(w, h, name, sub) {
       var aw = Math.max(w - 14, 16), ah = Math.max(h - 10, 16);
+      var LH = 1.6;
       function fontFor(lines) {
         var maxU = Math.max(tmTextUnits(name), lines >= 2 ? tmTextUnits(sub) : 0);
-        var byW = aw / maxU, byH = ah / (lines * 1.65);
+        var byW = aw / maxU;
+        var byH = ah / ((lines - 1) * LH + 1.15);
         return Math.max(10, Math.min(30, Math.floor(Math.min(byW, byH))));
       }
       if (sub) {
@@ -1287,7 +1289,7 @@ main { min-width: 0; }
             position: "inside", align: "center", verticalAlign: "middle",
             color: "#fff", fontWeight: 700,
             textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.5)",
-            lineHeight: 1.65,
+            lineHeight: Math.round(fit.fontSize * 1.6),
             formatter: fit.formatter, fontSize: fit.fontSize
           }
         };
