@@ -1846,6 +1846,13 @@ main { min-width: 0; }
     ink.style.left = btn.offsetLeft + "px"; ink.style.width = btn.offsetWidth + "px";
     $("topbar").classList.toggle("adv", pg === "advice");
     document.querySelectorAll(".page").forEach(function (p) { p.hidden = p.id !== "pg-" + pg; });
+    // 切换回市场全景时，根据当前二级 tab 更新 KPI 显示
+    if (pg === "pano") {
+      var activeSub = document.querySelector('#panoSub button.on');
+      if (activeSub) {
+        $("kpis").style.display = activeSub.dataset.scroll === "v-heatmap" ? "" : "none";
+      }
+    }
     if (switching && !keepScroll) restorePageScroll(pg);
     requestAnimationFrame(echResizeAll);
   }
@@ -1876,6 +1883,14 @@ main { min-width: 0; }
   (function () {
     var b = document.querySelector("#tbNav > button.on"), ink = document.querySelector("#tbNav .ink");
     if (b && ink) { ink.style.left = b.offsetLeft + "px"; ink.style.width = b.offsetWidth + "px"; }
+  })();
+
+  // KPI 初始显示状态：只在行情总览与热力图 tab 显示
+  (function () {
+    var activeSub = document.querySelector('#panoSub button.on');
+    if (activeSub) {
+      $("kpis").style.display = activeSub.dataset.scroll === "v-heatmap" ? "" : "none";
+    }
   })();
 
   // ---- 全局资产搜索 ----
