@@ -850,6 +850,21 @@ main { min-width: 0; }
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" crossorigin="anonymous"></script>
 <script>
 (function () {
+  // ---- iOS 旧版兼容性 Polyfill ----
+  // NodeList.forEach (iOS 9- 不支持)
+  if (!NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
+  // classList.toggle(token, force) (iOS 9- 不支持第二个参数)
+  var _origToggle = DOMTokenList.prototype.toggle;
+  DOMTokenList.prototype.toggle = function(token, force) {
+    if (arguments.length >= 2) {
+      if (force) { this.add(token); return true; }
+      else { this.remove(token); return false; }
+    }
+    return _origToggle.call(this, token);
+  };
+
   var D = window.REITS_DATA;
   var $ = function (id) { return document.getElementById(id); };
   // 安全获取事件目标元素（兼容文本节点）
@@ -1885,7 +1900,7 @@ main { min-width: 0; }
       if (!btn) { console.warn('[showPage] no button for', pg); return; }
       var switching = pg !== currentPage;
       if (switching) {
-        pageScroll[currentPage] = window.scrollY;
+        pageScroll[currentPage] = window.pageYOffset || window.scrollY || 0;
         currentPage = pg;
       }
       $("subbar").dataset.cur = pg;
