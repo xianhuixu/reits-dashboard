@@ -8,9 +8,17 @@
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
-<meta name="theme-color" content="#f5f6fa">
+<meta name="theme-color" content="#0a0e14">
 <script>
-(function(){var t=localStorage.getItem("rd-theme")||"light";document.documentElement.dataset.theme=t;})();
+(function(){
+  var t = localStorage.getItem("rd-theme");
+  if (!t) {
+    // 未手动选择过主题：跟随系统偏好；系统无偏好时默认深色（投研场景）
+    var sysLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+    t = sysLight ? "light" : "dark";
+  }
+  document.documentElement.dataset.theme = t;
+})();
 </script>
 <style>
 :root {
