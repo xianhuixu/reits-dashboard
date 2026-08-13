@@ -280,6 +280,8 @@ tbody tr { cursor: pointer; }
 .rv-item .nm { min-width: 120px; font-weight: 600; }
 .rv-item .vl { color: var(--tx2); min-width: 180px; }
 .rv-item .ds { color: var(--tx3); font-size: 12px; }
+.hidden, [hidden] { display: none !important; }
+
 /* ---------- 顶部全局导航（TopBar）+ 页面骨架 ---------- */
 .rv-stage { font-size: 24px; font-weight: 700; }
 #topbar { position: sticky; top: 16px; z-index: 40; background: rgba(255,255,255,.92); border-radius: 16px;
@@ -850,6 +852,31 @@ main { min-width: 0; }
 (function () {
   var D = window.REITS_DATA;
   var $ = function (id) { return document.getElementById(id); };
+  // 安全获取事件目标元素（兼容文本节点）
+  function eventEl(e) {
+    var t = e.target;
+    while (t && t.nodeType !== 1) t = t.parentNode;
+    return t || null;
+  }
+  // 安全的 closest 方法（兼容旧浏览器）
+  function closest(el, selector) {
+    if (!el) return null;
+    if (el.closest) return el.closest(selector);
+    while (el && el.nodeType === 1) {
+      if (el.matches && el.matches(selector)) return el;
+      if (el.msMatchesSelector && el.msMatchesSelector(selector)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+  function closestBtn(e) {
+    var el = eventEl(e);
+    return closest(el, "button");
+  }
+  function closestTr(e) {
+    var el = eventEl(e);
+    return closest(el, "tr");
+  }
   if (!D || !D.reits || !D.reits.length) {
     $("meta").textContent = "暂无数据 — 请先运行 fetch_data.py";
     return;
@@ -1161,7 +1188,7 @@ main { min-width: 0; }
     });
   }
   document.querySelector("#tbl tbody").addEventListener("click", function (e) {
-    var tr = e.target.closest("tr"); if (!tr) return;
+    var tr = closestTr(e); if (!tr) return;
     selCode = tr.dataset.code;
     renderTbl();
     renderDetail(selCode);
@@ -1284,7 +1311,7 @@ main { min-width: 0; }
       secs.map(function (s) { return '<button class="chip" data-s="' + s + '">' + s + "<b>" + cnt[s] + "</b></button>"; }).join("");
   })();
   $("hmSectorChips").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
+    var b = closestBtn(e); if (!b) return;
     hmSector = "";
     hmDrill = b.dataset.s;   // 板块 chip 直接下钻为该板块全部个券组成的热力图
     renderTreemap();
@@ -1399,12 +1426,12 @@ main { min-width: 0; }
   }
   registerChart(renderTreemap);
   $("hmCrumb").addEventListener("click", function (e) {
-    if (!e.target.closest("#hmBack")) return;
+    if (!closest(eventEl(e), "#hmBack")) return;
     hmDrill = "";
     renderTreemap();
   });
   $("hmRange").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
+    var b = closestBtn(e); if (!b) return;
     hmRange = b.dataset.r;
     document.querySelectorAll("#hmRange button").forEach(function (x) { x.classList.toggle("on", x === b); });
     $("hmRangeLabel").textContent = b.textContent;
@@ -1681,7 +1708,7 @@ main { min-width: 0; }
       }).join("") : '<div class="empty">该分类下暂无事件</div>';
     }
     $("newsFilter").addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
+      var b = closestBtn(e); if (!b) return;
       tag = b.dataset.t;
       document.querySelectorAll("#newsFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
       render();
@@ -1712,7 +1739,7 @@ main { min-width: 0; }
       }).join("") : '<div class="empty">该分类下近30日暂无相关公告</div>';
     }
     $("corpActionFilter").addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
+      var b = closestBtn(e); if (!b) return;
       tag = b.dataset.t;
       document.querySelectorAll("#corpActionFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
       render();
@@ -1796,7 +1823,7 @@ main { min-width: 0; }
       renderAllCharts();
     }
     $("themeSw").addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
+      var b = closestBtn(e); if (!b) return;
       apply(b.dataset.t);
     });
     apply(document.documentElement.dataset.theme || "light");
@@ -1837,12 +1864,12 @@ main { min-width: 0; }
     try {
       var target = document.getElementById("v-" + v);
       if (!target) { console.warn('[switchView] no target for', v); return; }
-      var page = target.closest(".page");
+      var page = closest(target, ".page");
       if (page) {
         page.querySelectorAll(".view").forEach(function (x) {
           var shouldHide = x.id !== "v-" + v;
           x.hidden = shouldHide;
-          if (shouldHide) x.style.display = 'none'; else x.style.display = '';
+          x.classList.toggle("hidden", shouldHide);
         });
       }
       var subId = page && page.id === "pg-pano" ? "#panoSub" : "#researchSub";
@@ -1870,7 +1897,7 @@ main { min-width: 0; }
       document.querySelectorAll(".page").forEach(function (p) {
         var shouldHide = p.id !== "pg-" + pg;
         p.hidden = shouldHide;
-        p.style.display = shouldHide ? 'none' : '';
+        p.classList.toggle("hidden", shouldHide);
       });
       if (pg === "pano") {
         var activeSub = document.querySelector('#panoSub button.on');
@@ -1886,7 +1913,7 @@ main { min-width: 0; }
     } catch (err) { console.error('[showPage] error:', err); }
   }
   $("subbar").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
+    var b = closestBtn(e); if (!b) return;
     if (b.dataset.scroll) {
       showPage(b.dataset.pg, true);
       setActiveNav(b.parentElement.querySelectorAll("button"), b);
@@ -1909,7 +1936,7 @@ main { min-width: 0; }
     }
   });
   $("tbNav").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b || !b.dataset.pg) return;
+    var b = closestBtn(e); if (!b || !b.dataset.pg) return;
     showPage(b.dataset.pg);
   });
   // ink 初始定位
@@ -1955,7 +1982,7 @@ main { min-width: 0; }
       var exact = hits.filter(function (r) { return r.code.toLowerCase() === q; })[0];
       go(exact || hits[0]);
     });
-    document.addEventListener("click", function (e) { if (!e.target.closest(".tb-search")) close(); });
+    document.addEventListener("click", function (e) { if (!closest(eventEl(e), ".tb-search")) close(); });
   })();
 
   // ---- 周期耦合分析 ----
@@ -2317,7 +2344,7 @@ main { min-width: 0; }
       }).join("") : '<div class="empty">近 120 日无该类信号事件</div>';
     }
     $("evFilter").addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
+      var b = closestBtn(e); if (!b) return;
       evType = b.dataset.t;
       document.querySelectorAll("#evFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
       renderEvents();
