@@ -53,13 +53,29 @@ if ! git pull origin main >> "$LOG_FILE" 2>&1; then
     exit 1
 fi
 
-# 5. 更新行情数据（基于本地 hist_cache 数据生成 data.js）
-log "[3/4] Updating market data from local cache..."
-if timeout 120 python3 fetch_data_server_v2.py >> "$LOG_FILE" 2>&1; then
-    log "Market data processed successfully"
+# 5. 更新行情数据
+# 主路径：fetch_data_em.py 直连腾讯行情（增量更新 hist_cache + 单位自愈 + 生成 data.js/data.json）
+# 兜底：fetch_data_server_v2.py 基于现有 hist_cache 生成（腾讯直连失败时使用）
+log "[3/4] Updating market data (tencent direct, cache fallback)..."
+if timeout 600 python3 fetch_data_em.py >> "$LOG_FILE" 2>&1; then
+    log "Market data updated via fetch_data_em.py (tencent direct)"
 else
     exit_code=$?
-    log "WARNING: fetch_data_server_v2.py exited with code ${exit_code}"
+    log "WARNING: fetch_data_em.py exited with code ${exit_code}, falling back to cache-based server_v2"
+    if timeout 120 python3 fetch_data_server_v2.py >> "$LOG_FILE" 2>&1; then
+        log "Market data processed from hist_cache (server_v2)"
+    else
+        log "ERROR: both market data scripts failed"
+    fi
+fi
+
+# 5b. 数据质量闸门：data.js 校验不通过则不推送（保护线上数据）
+log "[3b/4] Validating data quality..."
+if python3 check_data.py >> "$LOG_FILE" 2>&1; then
+    log "Data quality check passed"
+else
+    log "ERROR: Data quality check FAILED - skipping push to protect live site"
+    exit 1
 fi
 
 # 6. 更新信息流（东方财富新闻 + 搜狗微信 + 招标投标平台）
