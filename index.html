@@ -1633,7 +1633,7 @@ main { min-width: 0; }
           itemStyle: { color: tmColor(it.ret, cap) },
           label: Object.assign({
             position: "inside", align: "center", verticalAlign: "middle",
-            fontFamily: "inherit", padding: [4, 6]
+            fontFamily: "inherit", padding: [4, 6], offset: [0, fit.oy || 0]
           }, tmLabel(fit, escTm(it.sector), escTm(sub)))
         };
       });
@@ -1646,7 +1646,7 @@ main { min-width: 0; }
           type: "treemap", roam: false, nodeClick: false,
           breadcrumb: { show: false }, leafDepth: 1,
           left: 0, right: 0, top: 0, bottom: 0,
-          label: { show: true, position: "inside" },
+          label: { show: true, position: "inside", align: "center", verticalAlign: "middle" },
           itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 3, borderRadius: 7 },
           emphasis: {
             label: { fontWeight: 800 },
@@ -1675,6 +1675,10 @@ main { min-width: 0; }
           for (var j = 0; j < items.length; j++) if (items[j].sector === nm) { it = items[j]; break; }
           if (!it) continue;
           fits[nm] = tmFit(layout.width, layout.height, escTm(nm), tmSub(it));
+          // 计算垂直居中偏移：treemap 标签默认锚定在色块顶部，offset 下移到视觉中心
+          var f0 = fits[nm];
+          var blockH = f0.two ? f0.nf * 1.3 + f0.sf * 1.45 : f0.nf * 1.3;
+          f0.oy = Math.max(0, Math.round(layout.height / 2 - blockH / 2 - 4));
         }
         inst.setOption(buildOption(buildData(fits)), true);
       } catch (e) { /* 测量失败时保留初版字号 */ }
