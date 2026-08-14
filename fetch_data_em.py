@@ -315,9 +315,15 @@ def detect_events(code, name, s_close, s_amt):
     return events
 
 
+BT_TYPE_MAP = [("goldenCross", "MACD金叉"), ("deathCross", "MACD死叉"),
+               ("rsiOver", "RSI超买"), ("rsiBounce", "RSI超卖"),
+               ("volumeSpike", "成交异动"), ("break20", "突破250日线"),
+               ("quiet", "价稳量缩"), ("drop3", "单日大跌")]
+
+
 def backtest_events(events, close_map):
-    """简单回测：信号后5日收益率。"""
-    results = []
+    """回测聚合：按信号类型输出 5/20 日均值与胜率（直接给前端小体积聚合结果，不再输出逐样本明细）。"""
+    agg = {}
     for e in events:
         c = close_map.get(e["code"])
         if c is None:
@@ -326,11 +332,21 @@ def backtest_events(events, close_map):
             idx = c.index.get_loc(e["date"])
         except KeyError:
             continue
-        if idx + 5 >= len(c):
-            continue
-        ret = (c.iloc[idx + 5] / c.iloc[idx] - 1) * 100
-        results.append({"event": e, "ret5": round(float(ret), 2)})
-    return results
+        types = [t for f, t in BT_TYPE_MAP if e.get(f)] or ["信号"]
+        for t in types:
+            b = agg.setdefault(t, {"r5": [], "r20": []})
+            if idx + 5 < len(c):
+                b["r5"].append(float(c.iloc[idx + 5] / c.iloc[idx] - 1))
+            if idx + 20 < len(c):
+                b["r20"].append(float(c.iloc[idx + 20] / c.iloc[idx] - 1))
+
+    def stat(x):
+        if not x:
+            return None
+        return {"n": len(x), "avg": round(sum(x) / len(x) * 100, 2),
+                "win": round(sum(1 for v in x if v > 0) / len(x) * 100, 1)}
+
+    return {t: {"d5": stat(b["r5"]), "d20": stat(b["r20"])} for t, b in agg.items()}
 
 
 # ---------------- 主流程 ----------------

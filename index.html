@@ -407,29 +407,30 @@ main { min-width: 0; }
 .page:not([hidden]) { animation: fade .28s var(--ease); }
 .page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .35s var(--ease) forwards; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
-  :root { --sticky-offset: 186px; }
+  :root { --sticky-offset: 214px; }
   html, body { max-width: 100%; }
   body { padding: 10px 12px 36px; }
   #topbar { top: 8px; border-radius: 14px; }
-  .tb-main { flex-wrap: wrap; gap: 8px 12px; padding: 8px 14px; min-height: 0; }
-  #topbar .tb-brand { border-right: 0; padding-right: 0; }
-  #topbar .tb-brand span { font-size: 16px; font-weight: 800; }
+  .tb-main { flex-wrap: wrap; gap: 8px 10px; padding: 8px 12px; min-height: 0; }
+  #topbar .tb-brand { border-right: 0; padding-right: 0; order: 1; }
+  #topbar .tb-brand span { font-size: 15px; font-weight: 800; }
   #topbar .tb-brand img { width: 52px; height: 52px; border-radius: 10px; }
+  #topbar .theme-sw { margin-left: auto; order: 2; align-self: center; }
+  .theme-sw button { padding: 5px 9px; font-size: 13px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
   #tbNav button { padding: 8px 14px; font-size: 14px; }
-  .tb-search { margin-left: auto; flex: 0 1 auto; }
-  .tb-search input { width: 120px; min-width: 0; font-size: 12px; }
-  #topbar .theme-sw { margin-left: 0; }
+  .tb-search { order: 4; flex: 1 1 100%; margin-left: 0; }
+  .tb-search input { width: 100%; min-width: 0; font-size: 12px; }
   #subbar { padding: 4px 12px; }
   #subbar .meta { display: none; }
   #subbar .sub { margin-left: 0; }
   /* 触控目标加大（Apple HIG 建议 ≥44px 高） */
   #subbar .sub button { padding: 9px 12px; }
   #tbNav button { padding: 9px 0; }
-  .theme-sw button { padding: 6px 11px; font-size: 15px; }
+  .theme-sw button { padding: 5px 9px; font-size: 13px; }
   .chip { padding: 7px 13px; }
   .range-btn { padding: 8px 15px; }
-  .tb-search input { padding: 9px 12px; font-size: 15px; }
+  .tb-search input { padding: 8px 12px; font-size: 13px; }
   .data-meta { display: none; }
   .kpis { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch;
     scroll-snap-type: x proximity; gap: 8px; padding-bottom: 6px;
@@ -1193,14 +1194,21 @@ main { min-width: 0; }
   }
   function renderAllCharts() {
     disposeAllCharts();
-    CHART_RENDERERS.forEach(function (fn) { try { fn(); } catch (e) { console.error("[chart] renderer failed:", e && e.message, e && e.stack); } });
+    CHART_RENDERERS.forEach(function (r) { try { r.fn(); } catch (e) { console.error("[chart] renderer failed:", e && e.message, e && e.stack); } });
   }
-  // 切换页面/视图时调用：渲染所有“已可见但未初始化”的图表，并触发暂存的重渲染
+  // 切换页面/视图时调用：只渲染“已可见但尚未初始化”的图表（已渲染的跳过，避免重复 setOption 卡顿），并触发暂存的重渲染
   function ensureCharts() {
-    CHART_RENDERERS.forEach(function (fn) { try { fn(); } catch (e) { /* 忽略单项失败 */ } });
+    CHART_RENDERERS.forEach(function (r) {
+      if (r.id) {
+        var el = document.getElementById(r.id);
+        // 已有非零尺寸 canvas = 已正常渲染，跳过
+        if (!el || (el.querySelector("canvas") && el.querySelector("canvas").width > 0)) return;
+      }
+      try { r.fn(); } catch (e) { /* 忽略单项失败 */ }
+    });
     echResizeAll();
   }
-  function registerChart(fn) { CHART_RENDERERS.push(fn); }
+  function registerChart(fn, id) { CHART_RENDERERS.push({ fn: fn, id: id || "" }); }
 
   // ---- 通用折线图（ECharts） ----
   function lineChartOption(dates, series, opts) {
@@ -1262,7 +1270,7 @@ main { min-width: 0; }
   D.strategies.forEach(function (st) {
     stSeries.push({ label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
   });
-  registerChart(function () { renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false}); });
+  registerChart(function () { renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false}); }, "chartStrategy");
   renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false});
 
   // 产权/经营权走势
@@ -1270,7 +1278,7 @@ main { min-width: 0; }
     { label: "产权 REITs", color: "#3b82f6", data: D.series.byRight["产权"] },
     { label: "经营权 REITs", color: "#10b981", data: D.series.byRight["经营权"] }
   ];
-  registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); });
+  registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); }, "chartRight");
   renderLineChart("chartRight", D.series.dates, rtSeries, {area: false});
 
   // ---- 策略×板块矩阵 ----
@@ -1300,7 +1308,7 @@ main { min-width: 0; }
   D.sectors.forEach(function (s, i) {
     secSeries.push({ label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s], off: true });
   });
-  registerChart(function () { renderLineChart("chartSector", D.series.dates, secSeries, {area: false}); });
+  registerChart(function () { renderLineChart("chartSector", D.series.dates, secSeries, {area: false}); }, "chartSector");
   renderLineChart("chartSector", D.series.dates, secSeries, {area: false});
 
   var secMap = {};
@@ -1690,7 +1698,7 @@ main { min-width: 0; }
       });
     }
   }
-  registerChart(renderTreemap);
+  registerChart(renderTreemap, "treemap");
   $("hmCrumb").addEventListener("click", function (e) {
     if (!closest(eventEl(e), "#hmBack")) return;
     hmDrill = "";
@@ -1784,7 +1792,7 @@ main { min-width: 0; }
           ]
         });
       }
-      registerChart(renderDonut);
+      registerChart(renderDonut, "allocDonutChart");
       renderDonut();
     })();
 
@@ -1825,7 +1833,7 @@ main { min-width: 0; }
           }]
         });
       }
-      registerChart(renderScatter);
+      registerChart(renderScatter, "corrScatter");
       renderScatter();
     })();
 
@@ -2487,7 +2495,7 @@ main { min-width: 0; }
           })
         });
       }
-      registerChart(renderUsLong);
+      registerChart(renderUsLong, "chartUsLong");
       renderUsLong();
       $("legendUsLong").innerHTML = cats.map(function (c) {
         return '<span><i style="background:' + cols[c] + '"></i>' + c + "</span>";
@@ -2579,7 +2587,7 @@ main { min-width: 0; }
           })
         });
       }
-      registerChart(renderUsMembers);
+      registerChart(renderUsMembers, "chartUsMembers");
       renderUsMembers();
       $("legendUsMembers").innerHTML = codes.map(function (c) {
         return '<span><i style="background:' + mCols[c] + '"></i>' + labelOf(c) + "</span>";
