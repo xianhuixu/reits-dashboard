@@ -466,9 +466,9 @@ main { min-width: 0; }
       <button class="range-btn" data-r="ret5">5日</button>
       <button class="range-btn" data-r="ret20">20日</button>
     </div>
-    <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);margin-bottom:8px"></div>
-    <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:8px"></div>
-    <div id="treemap" style="position:relative;width:100%;height:440px"></div>
+    <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2);margin-bottom:10px;font-variant-numeric:tabular-nums"></div>
+    <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:10px"></div>
+    <div id="treemap" style="position:relative;width:100%;height:480px"></div>
   </div>
 </section>
 
@@ -550,6 +550,13 @@ main { min-width: 0; }
     <div id="chartUsLong" style="height:400px"></div>
     <div class="table-scroll" id="usCoupleStats" style="margin-top:14px"></div>
     <p id="usCoupleText" style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:10px"></p>
+  </div>
+  <div class="card">
+    <h2>美国 REITs 代表标的个体长期走势（对数轴 · 各自上市起点=100）</h2>
+    <p class="note">7 只代表标的：Prologis（工业物流）· Realty Income（净租赁）· American Tower（通信铁塔）· Equinix（数据中心）· AvalonBay（住宅）· Welltower（医疗）· Simon Property（购物中心）· 颜色对应三大资产类别 · 灰带 = NBER 衰退期 · 数据自 1990 年起，iFinD 每日更新 · Equinix 2005-2009 年 iFinD 行情缺失，以断线如实呈现</p>
+    <div class="legend" id="legendUsMembers"></div>
+    <div id="chartUsMembers" style="height:380px"></div>
+    <div class="table-scroll" id="usMemberStats" style="margin-top:14px"></div>
   </div>
   <div class="grid">
     <div class="card">
@@ -1356,11 +1363,19 @@ main { min-width: 0; }
     hmDrill = b.dataset.s;   // 板块 chip 直接下钻为该板块全部个券组成的热力图
     renderTreemap();
   });
-  function tmColor(ret) {
-    if (ret == null) return "rgba(138,147,160,.45)";
-    if (ret > 0.0001) return "#c2413d";      // 涨：砖红（深色以保证白字可读）
-    if (ret < -0.0001) return "#1f7a5c";     // 跌：墨绿
-    return "#7a8494";                        // 平
+  // 连续发散色阶：涨幅越大红色越饱和，跌幅越大绿色越饱和；|ret| 超过 cap 后达到最深色
+  function tmMix(hexA, hexB, t) {
+    var a = hexToRgb(hexA), b = hexToRgb(hexB);
+    return "rgb(" + Math.round(a.r + (b.r - a.r) * t) + "," + Math.round(a.g + (b.g - a.g) * t) + "," + Math.round(a.b + (b.b - a.b) * t) + ")";
+  }
+  function tmColor(ret, cap) {
+    if (ret == null) return "rgba(138,147,160,.38)";
+    cap = cap || 0.03;   // 默认 ±3% 达到最深色
+    var t = Math.min(Math.abs(ret) / cap, 1);
+    t = 0.25 + 0.75 * Math.pow(t, 0.6);   // 低幅区间也保留可辨识的色相
+    if (ret > 0.0001) return tmMix("#d98884", "#b03a35", t);   // 涨：浅砖红 → 深砖红
+    if (ret < -0.0001) return tmMix("#5aa88f", "#14624c", t);   // 跌：浅墨绿 → 深墨绿
+    return "#8a93a0";                                            // 平：中性灰
   }
   function renderTreemap() {
     var items = hmData();
@@ -1388,38 +1403,72 @@ main { min-width: 0; }
       var amt = it.amount != null ? Math.round(it.amount / 1e4).toLocaleString() + "万" : "";
       return (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "");
     }
-    // 依据色块实际宽高 + 文字长度，计算能完整显示的最大字号（优先两行，放不下退化为单行标题）
+    // 两级排版：标题字号大、粗；副行（涨跌幅/成交额）字号小、轻
+    // 依据色块实际宽高 + 文字长度，分别计算两级能完整显示的最大字号（优先两行，放不下退化为单行标题）
     function tmFit(w, h, name, sub) {
-      var aw = Math.max(w - 14, 16), ah = Math.max(h - 10, 16);
-      var LH = 1.6;
-      function fontFor(lines) {
-        var maxU = Math.max(tmTextUnits(name), lines >= 2 ? tmTextUnits(sub) : 0);
-        var byW = aw / maxU;
-        var byH = ah / ((lines - 1) * LH + 1.15);
-        return Math.max(10, Math.min(30, Math.floor(Math.min(byW, byH))));
+      var aw = Math.max(w - 20, 20), ah = Math.max(h - 14, 18);
+      function sizes(twoLine) {
+        // 标题字号由标题宽度约束；副行字号 = 标题 × 0.78，同时受副行宽度约束
+        var nByW = aw / tmTextUnits(name);
+        var nByH = twoLine ? ah * 0.58 : ah * 0.72;
+        var nf = Math.max(11, Math.min(30, Math.floor(Math.min(nByW, nByH))));
+        if (!twoLine) return { nf: nf, sf: 0 };
+        var sf = Math.max(9, Math.min(15, Math.floor(Math.min(nf * 0.78, aw / tmTextUnits(sub)))));
+        // 两行总高：nf*1.25 + sf*1.35，超出则整体缩
+        var need = nf * 1.25 + sf * 1.35;
+        if (need > ah) { var k = ah / need; nf = Math.floor(nf * k); sf = Math.max(9, Math.floor(sf * k)); }
+        return { nf: nf, sf: sf };
       }
       if (sub) {
-        var f2 = fontFor(2);
-        if (f2 >= 11) return { formatter: name + "\n" + sub, fontSize: f2 };
+        var s2 = sizes(true);
+        if (s2.nf >= 12 && s2.sf >= 9) return { two: true, nf: s2.nf, sf: s2.sf };
       }
-      return { formatter: name, fontSize: fontFor(1) };
+      var s1 = sizes(false);
+      return { two: false, nf: s1.nf, sf: 0 };
+    }
+    function tmLabel(fit, name, sub) {
+      if (fit.two) {
+        return {
+          formatter: "{t|" + name + "}\n{s|" + sub + "}",
+          rich: {
+            t: {
+              color: "#fff", fontSize: fit.nf, fontWeight: 700, lineHeight: Math.round(fit.nf * 1.3),
+              textShadowBlur: 4, textShadowColor: "rgba(0,0,0,.55)", textShadowOffsetY: 1
+            },
+            s: {
+              color: "rgba(255,255,255,.92)", fontSize: fit.sf, fontWeight: 500, lineHeight: Math.round(fit.sf * 1.45),
+              textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.45)"
+            }
+          }
+        };
+      }
+      return {
+        formatter: name, fontSize: fit.nf, fontWeight: 700, color: "#fff",
+        lineHeight: Math.round(fit.nf * 1.3),
+        textShadowBlur: 4, textShadowColor: "rgba(0,0,0,.55)", textShadowOffsetY: 1
+      };
+    }
+    // 当前区间色阶上限：取本批数据 |ret| 的 90 分位，避免极端值压平色阶
+    function tmCap() {
+      var vals = items.map(function (x) { return Math.abs(x.ret || 0); }).sort(function (a, b) { return a - b; });
+      if (!vals.length) return 0.03;
+      var p = vals[Math.min(vals.length - 1, Math.floor(vals.length * 0.9))];
+      return Math.max(p, 0.005);
     }
     function buildData(fits) {
+      var cap = tmCap();
       return items.map(function (it) {
         var key = it.sector;
         var sub = tmSub(it);
-        var fit = (fits && fits[key]) ? fits[key] : { formatter: escTm(it.sector), fontSize: 14 };
+        var fit = (fits && fits[key]) ? fits[key] : { two: true, nf: 15, sf: 11 };
         return {
           name: it.sector, value: Math.max(it.amount || 0, 1),
           amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
-          itemStyle: { color: tmColor(it.ret) },
-          label: {
+          itemStyle: { color: tmColor(it.ret, cap) },
+          label: Object.assign({
             position: "inside", align: "center", verticalAlign: "middle",
-            color: "#fff", fontWeight: 700,
-            textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.5)",
-            lineHeight: Math.round(fit.fontSize * 1.6),
-            formatter: fit.formatter, fontSize: fit.fontSize
-          }
+            fontFamily: "inherit", padding: [4, 6]
+          }, tmLabel(fit, escTm(it.sector), escTm(sub)))
         };
       });
     }
@@ -1432,7 +1481,11 @@ main { min-width: 0; }
           breadcrumb: { show: false }, leafDepth: 1,
           left: 0, right: 0, top: 0, bottom: 0,
           label: { show: true, position: "inside" },
-          itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 2, borderRadius: 3 },
+          itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 3, borderRadius: 7 },
+          emphasis: {
+            label: { fontWeight: 800 },
+            itemStyle: { borderColor: "rgba(255,255,255,.65)", borderWidth: 1.5, shadowBlur: 10, shadowColor: "rgba(0,0,0,.25)" }
+          },
           data: dataArr
         }]
       };
@@ -2278,7 +2331,90 @@ main { min-width: 0; }
       }
     })();
 
-    // 耦合矩阵
+    // 美国 REITs 代表标的个体长期走势（对数轴 + NBER 衰退带 + 个券统计）
+    (function () {
+      var U = D.usLong;
+      if (!U || !U.memberSeries || !U.dates || !U.dates.length) {
+        if ($("chartUsMembers")) $("chartUsMembers").innerHTML = '<div class="empty">代表标的个体序列未生成 — 请运行 scripts/build_us_long.py</div>';
+        return;
+      }
+      // 类别配色：防御=绿、周期=琥珀、扩张=紫；同类别多只时用色阶区分
+      var catBase = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+      var catShades = {
+        "防御型": ["#0d9e6e", "#34d399", "#059669"],
+        "周期型": ["#f59e0b", "#d97706", "#fbbf24"],
+        "扩张型": ["#8b5cf6", "#a78bfa", "#7c3aed"]
+      };
+      var order = ["WELL.N", "O.N", "AVB.N", "PLD.N", "SPG.N", "AMT.N", "EQIX.O"];
+      var codes = order.filter(function (c) { return U.memberSeries[c]; })
+        .concat(Object.keys(U.memberSeries).filter(function (c) { return order.indexOf(c) < 0; }));
+      var shadeIdx = {};
+      var mCols = {};
+      codes.forEach(function (c) {
+        var cat = (U.members[c] || {}).cat || "";
+        var i = shadeIdx[cat] = (shadeIdx[cat] || 0);
+        var pal = catShades[cat] || [catBase[cat] || "#7a8494"];
+        mCols[c] = pal[i % pal.length];
+        shadeIdx[cat] = i + 1;
+      });
+      function labelOf(c) {
+        var m = U.members[c] || {};
+        return (m.name || c) + "（" + (m.type || "") + "）";
+      }
+      var markAreaData = (U.recessions || []).filter(function (r) {
+        return !(r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]);
+      }).map(function (r) { return [{ xAxis: r[0] }, { xAxis: r[1] }]; });
+      function renderUsMembers() {
+        var th = chartTheme();
+        echSet("chartUsMembers", {
+          backgroundColor: "transparent",
+          grid: { left: 52, right: 16, top: 18, bottom: 30 },
+          tooltip: {
+            trigger: "axis", backgroundColor: th.panel, borderColor: th.line,
+            textStyle: { color: th.tx, fontSize: 12 },
+            axisPointer: { type: "line", lineStyle: { color: th.tx3, type: "dashed" } },
+            valueFormatter: function (v) { return v == null ? "—" : Number(v).toFixed(0); }
+          },
+          xAxis: {
+            type: "category", data: U.dates, boundaryGap: false,
+            axisLine: { lineStyle: { color: th.line } }, axisTick: { show: false },
+            axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true },
+            splitLine: { show: false }
+          },
+          yAxis: {
+            type: "log",
+            axisLabel: { color: th.tx3, fontSize: 10 },
+            splitLine: { lineStyle: { color: th.grid } }
+          },
+          series: codes.map(function (c, i) {
+            var data = (U.memberSeries[c] || []).map(function (v) { return (v == null || v <= 0) ? null : v; });
+            return {
+              name: labelOf(c), type: "line", data: data, showSymbol: false, connectNulls: false,
+              lineStyle: { width: 1.8, color: mCols[c] },
+              emphasis: { focus: "series", lineStyle: { width: 3 } },
+              markArea: i === 0 ? { silent: true, itemStyle: { color: "rgba(100,116,139,.16)" }, data: markAreaData } : undefined
+            };
+          })
+        });
+      }
+      registerChart(renderUsMembers);
+      renderUsMembers();
+      $("legendUsMembers").innerHTML = codes.map(function (c) {
+        return '<span><i style="background:' + mCols[c] + '"></i>' + labelOf(c) + "</span>";
+      }).join("") + '<span><i style="background:rgba(100,116,139,.35);border-radius:2px"></i>NBER 衰退期</span>';
+
+      // 个券长期统计表
+      var MS = U.memberStats || {};
+      function pf2(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "%"; }
+      $("usMemberStats").innerHTML = '<table class="matrix"><thead><tr><th class="l">标的</th><th class="l">类型</th><th>类别</th><th>起始年</th><th>全期年化</th><th>2008 金融危机最大回撤</th><th>2020 新冠回撤</th><th>近10年年化</th></tr></thead><tbody>' +
+        codes.map(function (c) {
+          var m = U.members[c] || {}, s = MS[c]; if (!s) return "";
+          return "<tr><td class='l'><b>" + (m.name || c) + "</b> <span style='color:var(--tx3);font-size:11px'>" + c + "</span></td><td class='l'>" + (m.type || "") +
+            "</td><td><span class='st-tag st-" + (m.cat || "") + "'>" + (m.cat || "") + "</span></td><td class='num'>" + s.start.slice(0, 4) +
+            "</td><td class='num'>" + pf2(s.cagr) + "</td><td class='num'>" + pf2(s.dd0809) +
+            "</td><td class='num'>" + pf2(s.dd2020) + "</td><td class='num'>" + pf2(s.cagr10) + "</td></tr>";
+        }).join("") + "</tbody></table>";
+    })();
     var OS = D.overseasStatic;
     if (OS && OS.matrix) {
       $("osMatrixNote").textContent = (OS.placeholder ? "⚠️ 占位示例值，待 Nareit/NBER 研究数据核实替换 · " : "") + (OS.source || "") + " · 更新 " + (OS.updated || "");
