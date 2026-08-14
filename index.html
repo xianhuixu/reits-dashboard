@@ -421,15 +421,25 @@ main { min-width: 0; }
   #subbar { padding: 4px 12px; }
   #subbar .meta { display: none; }
   #subbar .sub { margin-left: 0; }
+  /* 触控目标加大（Apple HIG 建议 ≥44px 高） */
+  #subbar .sub button { padding: 9px 12px; }
+  #tbNav button { padding: 9px 0; }
+  .theme-sw button { padding: 6px 11px; font-size: 15px; }
+  .chip { padding: 7px 13px; }
+  .range-btn { padding: 8px 15px; }
+  .tb-search input { padding: 9px 12px; font-size: 15px; }
   .data-meta { display: none; }
   .kpis { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity; gap: 8px; padding-bottom: 4px; }
+    scroll-snap-type: x proximity; gap: 8px; padding-bottom: 6px;
+    scrollbar-width: none; }
+  .kpis::-webkit-scrollbar { display: none; }
   .kpi { flex: 0 0 148px; scroll-snap-align: start; padding: 9px 12px 8px; }
   .kpi .v { font-size: 18px; }
   .kpi .v.kpi-name { font-size: 16px; }
   .card { padding: 16px; }
+  .card .note { font-size: 12px; }
   .sec-head { margin: 18px 0 10px; flex-wrap: wrap; gap: 8px; }
-  #treemap { height: 300px !important; }
+  #treemap { height: 340px !important; }
   th, td { padding: 7px 8px; }
   .table-scroll > table { min-width: 680px; }
   .advice-summary { grid-template-columns: 1fr; }
@@ -1052,6 +1062,7 @@ main { min-width: 0; }
   // ---- ECharts 基础设施 ----
   var CHART = {};            // id -> echarts 实例
   var CHART_RENDERERS = [];  // 主题切换时重渲染的回调
+  var PENDING_RENDER = {};   // 容器隐藏时暂存的重渲染回调（显示后自动执行）
   function ech() { return window.echarts; }
   function cssVal(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "";
@@ -1092,6 +1103,10 @@ main { min-width: 0; }
     return inst;
   }
   function echSet(id, option) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    // 容器不可见（display:none 时为 0×0）时先不渲染，等可见后由 echResizeAll 触发重渲染
+    if (el.offsetWidth === 0 || el.offsetHeight === 0) return null;
     var inst = echInit(id);
     if (inst) { inst.setOption(option, true); inst.resize(); }
     return inst;
@@ -1099,6 +1114,15 @@ main { min-width: 0; }
   function echResizeAll() {
     Object.keys(CHART).forEach(function (id) {
       if (CHART[id] && !CHART[id].isDisposed()) CHART[id].resize();
+    });
+    // 容器已可见时，执行暂存的重渲染（修复切换 tab / 深链 / 主题切换时隐藏容器中创建的空白图表）
+    Object.keys(PENDING_RENDER).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
+        var fn = PENDING_RENDER[id];
+        delete PENDING_RENDER[id];
+        try { fn(); } catch (e) { /* 忽略 */ }
+      }
     });
   }
   function disposeAllCharts() {
@@ -1524,6 +1548,7 @@ main { min-width: 0; }
       };
     }
     var inst = echSet("treemap", buildOption(buildData(null)));
+    if (!inst) { PENDING_RENDER.treemap = renderTreemap; return; }
     if (inst) {
       // 首次渲染后读取每个色块的真实宽高，回填「完全显示」的字号
       try {
@@ -2026,6 +2051,11 @@ main { min-width: 0; }
       if (active) setActiveNav(document.querySelectorAll(subId + " button"), active);
       stagger(target);
       requestAnimationFrame(echResizeAll);
+      // 移动端切换偶发图表空白：延迟二次 resize + 热力图整图重绘兜底
+      setTimeout(echResizeAll, 160);
+      if (v === "heatmap") {
+        setTimeout(function () { try { renderTreemap(); } catch (e) { /* 忽略 */ } }, 220);
+      }
     } catch (err) { console.error('[switchView] error:', err); }
   }
   function showPage(pg, keepScroll) {
@@ -2058,6 +2088,7 @@ main { min-width: 0; }
       }
       if (switching && !keepScroll) restorePageScroll(pg);
       requestAnimationFrame(echResizeAll);
+      setTimeout(echResizeAll, 160);
       console.log('[showPage] switched to', pg);
     } catch (err) { console.error('[showPage] error:', err); }
   }
