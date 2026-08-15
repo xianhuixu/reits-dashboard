@@ -183,6 +183,10 @@ svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s 
 .chip b { color: var(--up); font-weight: 600; margin-left: 4px; }
 .chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 .chip.on { border-color: var(--accent); color: var(--accent); background: rgba(37,99,235,.06); font-weight: 600; }
+#instStatusFilter button { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 5px 13px;
+  font: inherit; font-size: 12px; color: var(--tx2); cursor: pointer; transition: all .2s; font-weight: 500; white-space: nowrap; }
+#instStatusFilter button:hover { border-color: #0d9488; color: #0d9488; }
+#instStatusFilter button.on { border-color: #0d9488; color: #0d9488; background: rgba(13,148,136,.1); font-weight: 600; }
 .filters select, .filters input { background: var(--panel2); color: var(--tx); border: 1px solid var(--line);
   border-radius: 10px; padding: 7px 12px; font: inherit; font-size: 13px; transition: border-color .2s, box-shadow .2s; }
 .filters select:focus, .filters input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
@@ -235,6 +239,12 @@ svg text { font-family: inherit; }
 .sig-偏强 { background: rgba(215,58,73,.1); color: var(--up); }
 .sig-中性 { background: rgba(110,119,129,.12); color: var(--tx2); }
 .sig-偏弱 { background: rgba(26,127,55,.1); color: var(--down); }
+.ist { font-size: 10.5px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.ist-run { background: rgba(37,99,235,.1); color: var(--accent); }
+.ist-fb { background: rgba(212,160,23,.12); color: var(--gold); }
+.ist-ok { background: rgba(26,127,55,.12); color: var(--up); }
+.ist-bad { background: rgba(215,58,73,.12); color: var(--down); }
+.ist-stop { background: rgba(100,116,139,.15); color: var(--tx3); }
 .ev-item { display: flex; gap: 10px; align-items: baseline; padding: 7px 4px; border-bottom: 1px solid var(--line); font-size: 12px; }
 .ev-item .d { color: var(--tx3); font-size: 11px; min-width: 74px; }
 .ev-type { font-size: 10.5px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
@@ -352,20 +362,26 @@ html { -webkit-text-size-adjust: 100%; }
   box-shadow: 0 2px 12px rgba(124,58,237,.12), inset 0 0 0 1px rgba(124,58,237,.2); }
 #tbNav button.on[data-pg="advice"] { color: #b8860b; background: rgba(184,134,11,.1);
   box-shadow: 0 2px 12px rgba(184,134,11,.12), inset 0 0 0 1px rgba(184,134,11,.2); }
+#tbNav button.on[data-pg="inst"] { color: #0d9488; background: rgba(13,148,136,.1);
+  box-shadow: 0 2px 12px rgba(13,148,136,.12), inset 0 0 0 1px rgba(13,148,136,.2); }
 [data-theme="dark"] #tbNav button.on[data-pg="pano"] { background: rgba(37,99,235,.16);
   box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 0 0 1px rgba(37,99,235,.35); }
 [data-theme="dark"] #tbNav button.on[data-pg="research"] { background: rgba(124,58,237,.16);
   box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 0 0 1px rgba(124,58,237,.35); }
 [data-theme="dark"] #tbNav button.on[data-pg="advice"] { background: rgba(184,134,11,.16);
   box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 0 0 1px rgba(184,134,11,.35); }
+[data-theme="dark"] #tbNav button.on[data-pg="inst"] { background: rgba(13,148,136,.16);
+  box-shadow: 0 2px 12px rgba(0,0,0,.5), inset 0 0 0 1px rgba(13,148,136,.35); }
 [data-theme="eye"] #tbNav button.on[data-pg="pano"] { background: rgba(37,99,235,.1); }
 [data-theme="eye"] #tbNav button.on[data-pg="research"] { background: rgba(124,58,237,.11); }
 [data-theme="eye"] #tbNav button.on[data-pg="advice"] { background: rgba(184,134,11,.12); }
+[data-theme="eye"] #tbNav button.on[data-pg="inst"] { background: rgba(13,148,136,.12); }
 #tbNav .ink { position: absolute; bottom: 0; left: 0; width: 0; height: 3px; border-radius: 2px 2px 0 0;
   background: #2563eb; transition: left .35s var(--ease), width .35s var(--ease), background .3s; pointer-events: none; }
 #topbar[data-cur="pano"] #tbNav .ink { background: #2563eb; }
 #topbar[data-cur="research"] #tbNav .ink { background: #7c3aed; }
 #topbar[data-cur="advice"] #tbNav .ink { background: #b8860b; }
+#topbar[data-cur="inst"] #tbNav .ink { background: #0d9488; }
 .tb-search { position: relative; margin-left: auto; flex: 0 1 216px; align-self: center; }
 .tb-search input { width: 100%; min-width: 150px; background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px;
   font: inherit; font-size: 13px; color: var(--tx); transition: box-shadow .2s, border-color .2s; }
@@ -389,7 +405,8 @@ html { -webkit-text-size-adjust: 100%; }
 #subbar .sub::-webkit-scrollbar { display: none; }
 #subbar[data-cur="pano"] #panoSub,
 #subbar[data-cur="research"] #researchSub,
-#subbar[data-cur="advice"] #adviceSub { display: flex; }
+#subbar[data-cur="advice"] #adviceSub,
+#subbar[data-cur="inst"] #instSub { display: flex; }
 #subbar .sub button { white-space: nowrap; border: 0; background: transparent; color: var(--tx2);
   font: inherit; font-size: 12.5px; padding: 7px 14px; border-radius: 8px; cursor: pointer;
   box-shadow: none; transition: color .2s, background .2s, transform .15s; scroll-snap-align: start; font-weight: 500; }
@@ -397,6 +414,7 @@ html { -webkit-text-size-adjust: 100%; }
 #subbar[data-cur="pano"] .sub button.on { background: #2563eb; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(37,99,235,.25); }
 #subbar[data-cur="research"] .sub button.on { background: #7c3aed; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(124,58,237,.25); }
 #subbar[data-cur="advice"] .sub button.on { background: #b8860b; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(184,134,11,.25); }
+#subbar[data-cur="inst"] .sub button.on { background: #0d9488; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(13,148,136,.25); }
 .data-meta { min-height: 18px; padding: 1px 3px 0; color: var(--tx3); font-size: 11.5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .01em; }
 .view, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
@@ -419,6 +437,10 @@ main { min-width: 0; }
   .theme-sw button { padding: 5px 9px; font-size: 13px; }
   #tbNav { order: 3; width: 100%; overflow-x: auto; }
   #tbNav button { padding: 8px 14px; font-size: 14px; }
+  @media (max-width: 420px) {
+    #tbNav { gap: 4px; }
+    #tbNav button { padding: 8px 0; font-size: 12.5px; white-space: nowrap; }
+  }
   .tb-search { order: 4; flex: 1 1 100%; margin-left: 0; }
   .tb-search input { width: 100%; min-width: 0; font-size: 12px; }
   #subbar { padding: 4px 12px; }
@@ -426,7 +448,8 @@ main { min-width: 0; }
   #subbar .sub { margin-left: 0; }
   /* 触控目标加大（Apple HIG 建议 ≥44px 高） */
   #subbar .sub button { padding: 9px 12px; }
-  #tbNav button { padding: 9px 0; }
+  #tbNav button { padding: 9px 0; flex: 1 1 0; text-align: center; }
+  @media (max-width: 420px) { #tbNav button { font-size: 12.5px; } }
   .theme-sw button { padding: 5px 9px; font-size: 13px; }
   .chip { padding: 7px 13px; }
   .range-btn { padding: 8px 15px; }
@@ -461,6 +484,7 @@ main { min-width: 0; }
       <button data-pg="pano" class="on">市场全景信息</button>
       <button data-pg="research">多维研究分析</button>
       <button data-pg="advice">配置建议与风险</button>
+      <button data-pg="inst">机构间REITs</button>
       <span class="ink"></span>
     </div>
     <div class="tb-search">
@@ -497,6 +521,14 @@ main { min-width: 0; }
       <button data-pg="advice" data-scroll="advTactic">短期交易战术</button>
       <button data-pg="advice" data-scroll="advPerf">中长期配置建议</button>
       <button data-pg="advice" data-scroll="advRisk">风险提示</button>
+    </div>
+    <div class="sub" id="instSub">
+      <button data-inst-ex="" class="on" aria-current="page">全部交易所</button>
+      <button data-inst-ex="上交所">上交所</button>
+      <button data-inst-ex="深交所">深交所</button>
+      <button data-inst-type="" class="on">全部类型</button>
+      <button data-inst-type="产权类">产权类</button>
+      <button data-inst-type="经营权类">经营权类</button>
     </div>
   </div>
 </nav>
@@ -593,7 +625,7 @@ main { min-width: 0; }
 </div><!-- /pg-pano -->
 
 <div class="page" id="pg-research" hidden>
-<div class="sec-head"><span class="no">②</span><span class="t">多维研究分析</span><span class="d">在左侧二级菜单中切换研究视角</span></div>
+<div class="sec-head"><span class="no">②</span><span class="t">多维研究分析</span><span class="d">在顶部二级菜单中切换研究视角</span></div>
 
 <!-- ============ 周期耦合分析 ============ -->
 <section class="view" id="v-cycle" hidden>
@@ -913,6 +945,31 @@ main { min-width: 0; }
   </div>
 </section>
 </div><!-- /pg-advice -->
+
+<div class="page" id="pg-inst" hidden>
+<div class="sec-head"><span class="no">④</span><span class="t">机构间REITs（不动产ABS）</span><span class="d">沪深交易所不动产ABS专项计划项目 · 顶部二级菜单筛选交易所与类型</span></div>
+<section class="view" id="v-inst">
+  <div class="kpis" id="instKpis"></div>
+  <div class="card">
+    <h2 style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">项目清单 <span class="note" id="instCount" style="font-weight:400"></span>
+      <input id="instSearch" placeholder="搜索项目名称 / 计划管理人 / 原始权益人" autocomplete="off"
+        style="margin-left:auto;width:260px;max-width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:7px 14px;font:inherit;font-size:12.5px;font-weight:400;color:var(--tx)"></h2>
+    <p class="note">来源：上交所债券项目信息平台 / 深交所固定收益信息平台（公开数据整理，感谢 tingdall/reits-dashboard 数据模型）· 点击表头排序 · 状态每日更新</p>
+    <div class="filters" id="instStatusFilter" style="margin-bottom:8px"></div>
+    <div class="table-scroll" style="max-height:620px;overflow:auto">
+      <table class="matrix" id="instTbl">
+        <thead><tr>
+          <th class="l">项目名称</th><th>交易所</th><th class="l">计划管理人</th>
+          <th data-k="amt">规模(亿)</th><th>类型</th><th>二级分类</th>
+          <th>状态</th><th data-k="acc">受理日期</th><th data-k="up">更新日期</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="note" id="instMeta" style="margin:10px 0 0"></div>
+  </div>
+</section>
+</div><!-- /pg-inst -->
 </main>
 
 <footer id="foot">
@@ -947,6 +1004,7 @@ main { min-width: 0; }
   };
 
   var D = window.REITS_DATA;
+  function normalizeResearchData() {
   // 兼容：若相关性数据为“按个券 peers”的新结构（缺少旧版 matrix/benchmarks/scatter），
   // 则置空以让下游相关性视图安全降级，避免 undefined 访问导致整页崩溃。
   if (D && D.correlation && !D.correlation.matrix) {
@@ -1003,6 +1061,34 @@ main { min-width: 0; }
       D.backtest = bt;
     }
   }
+  }
+  normalizeResearchData();
+
+  // ---- 按需加载框架：研究/建议数据与视图在点按后才加载初始化，首屏只载核心数据 ----
+  var LAZY = { research: [], advice: [], news: [], proj: [] };
+  var LAZY_DONE = {};
+  function runLazy(key) {
+    if (LAZY_DONE[key]) return;
+    LAZY_DONE[key] = true;
+    (LAZY[key] || []).forEach(function (fn) { try { fn(); } catch (e) { console.error("[lazy:" + key + "]", e && e.message); } });
+  }
+  var _rdataCbs = null;
+  function withResearchData(cb) {
+    if (D.series) { cb(); return; }
+    if (_rdataCbs) { _rdataCbs.push(cb); return; }
+    _rdataCbs = [cb];
+    var sc = document.createElement("script");
+    sc.src = "data_research.js";
+    sc.onload = function () {
+      if (window.REITS_DATA_R) Object.assign(D, window.REITS_DATA_R);
+      normalizeResearchData();
+      var cbs = _rdataCbs; _rdataCbs = null;
+      cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[rdata]", e && e.message); } });
+    };
+    sc.onerror = function () { _rdataCbs = null; console.error("data_research.js 加载失败"); };
+    document.head.appendChild(sc);
+  }
+
   var $ = function (id) { return document.getElementById(id); };
   // 安全获取事件目标元素（兼容文本节点）
   function eventEl(e) {
@@ -1107,6 +1193,7 @@ main { min-width: 0; }
     kpiCard("资产重估状态", rv.stage || "—", (rv.score != null ? rv.score : "—") + "/4 项成立 · 每日更新");
   $("kpis").innerHTML = kpiCards;
 
+LAZY.research.push(function () {
   // ---- 策略卡片 ----
   $("stratCards").innerHTML = D.strategies.map(function (st) {
     var list = D.reits.filter(function (r) { return r.strategy === st; });
@@ -1119,6 +1206,11 @@ main { min-width: 0; }
       '<div class="num" style="font-size:12px;color:var(--tx2)">20日 ' + fmt(a20) + ' · ' + list.length + ' 只</div>' +
       '<ul><li>' + ST_DESC[st][1] + '</li><li>' + ST_DESC[st][2] + '</li></ul></div>';
   }).join("");
+
+});
+
+  function sigLabel(l) { return '<span class="sig-label sig-' + l + '">' + l + '</span>'; }
+  var SEC_PALETTE = ["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316"];
 
   // ---- ECharts 基础设施 ----
   var CHART = {};            // id -> echarts 实例
@@ -1265,6 +1357,7 @@ main { min-width: 0; }
     echSet(id, lineChartOption(dates, series, opts));
   }
 
+LAZY.research.push(function () {
   // 策略走势
   var stSeries = [{ label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.strategies.forEach(function (st) {
@@ -1281,8 +1374,10 @@ main { min-width: 0; }
   registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); }, "chartRight");
   renderLineChart("chartRight", D.series.dates, rtSeries, {area: false});
 
+});
+
   // ---- 策略×板块矩阵 ----
-  (function () {
+  LAZY.research.push(function () {
     var secs = D.sectors;
     var html = '<table class="matrix"><thead><tr><th class="l">策略 \\ 板块</th>' +
       secs.map(function (s) { return "<th>" + s + "</th>"; }).join("") + "<th>合计</th></tr></thead><tbody>";
@@ -1300,10 +1395,10 @@ main { min-width: 0; }
       html += "<tr>" + row + "</tr>";
     });
     $("matrix").innerHTML = html + "</tbody></table>";
-  })();
+  });
 
+LAZY.research.push(function () {
   // ---- 板块视图 ----
-  var SEC_PALETTE = ["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316"];
   var secSeries = [{ label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
   D.sectors.forEach(function (s, i) {
     secSeries.push({ label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s], off: true });
@@ -1325,13 +1420,15 @@ main { min-width: 0; }
       '<span class="val num ' + cls(x.v) + '">' + fmt(x.v) + "</span></div>";
   }).join("");
 
+});
+
+LAZY.research.push(function () {
   // ---- 个券透视：信号总表 ----
   $("fStrategy").innerHTML = '<option value="">全部策略</option>' +
     D.strategies.map(function (s) { return "<option>" + s + "</option>"; }).join("");
   $("fSector").innerHTML = '<option value="">全部板块</option>' +
     D.sectors.map(function (s) { return "<option>" + s + "</option>"; }).join("");
   var sortKey = "pct", sortDir = -1, selCode = null;
-  function sigLabel(l) { return '<span class="sig-label sig-' + l + '">' + l + '</span>'; }
   function renderTbl() {
     var fs = $("fStrategy").value, fc = $("fSector").value, fr = $("fRight").value, fl = $("fSignal").value;
     var q = $("fSearch").value.trim().toLowerCase();
@@ -1382,6 +1479,8 @@ main { min-width: 0; }
     });
   });
   renderTbl();
+
+});
 
   // ---- 个券详情（历史 / 当前 / 前瞻） ----
   var RADAR_FACTORS = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"],
@@ -1714,7 +1813,7 @@ main { min-width: 0; }
   renderTreemap();
 
   // ---- 大类资产相关性 ----
-  (function () {
+  LAZY.research.push(function () {
     var C = D.correlation;
     if (!C || !C.matrix || !C.benchmarks || !C.scatter) {
       $("corrCards").innerHTML = '<div class="card"><div class="empty">相关性矩阵数据未生成（数据结构已更新），请重跑数据脚本</div></div>';
@@ -1845,10 +1944,10 @@ main { min-width: 0; }
           '<td class="num ' + cls(p.reitRet) + '">' + fmt(p.reitRet) + "</td>" +
           '<td class="num ' + cls(p.peerRet) + '">' + fmt(p.peerRet) + "</td></tr>";
       }).join("") + "</tbody></table>";
-  })();
+  });
 
   // ---- 配置建议：三策略表现 + 交叉验证建议 ----
-  (function () {
+  LAZY.advice.push(function () {
     function stAvg(st, k) {
       var vs = D.reits.filter(function (r) { return r.strategy === st && r[k] != null; }).map(function (r) { return r[k]; });
       return vs.length ? avgOf(vs) : null;
@@ -1884,10 +1983,10 @@ main { min-width: 0; }
         '<b>' + it.st + ' · <span style="color:' + it.color + '">' + it.pos + "</span></b>" +
         '<p style="color:var(--tx2);font-size:12px;margin-top:4px;line-height:1.7">' + it.text + "</p></div>";
     }).join("");
-  })();
+  });
 
   // ---- 短期交易战术（月/季/年 · 数据驱动自动生成） ----
-  (function () {
+  LAZY.advice.push(function () {
     function avgSec(sec, k) {
       var vs = D.reits.filter(function (r) { return r.sector === sec && r[k] != null; }).map(function (r) { return r[k]; });
       return vs.length ? avgOf(vs) : null;
@@ -1961,10 +2060,10 @@ main { min-width: 0; }
       "</div>";
 
     $("tacticGrid").innerHTML = monthHtml + quarterHtml + yearHtml;
-  })();
+  });
 
   // ---- 重点事件信息流（问财范式） ----
-  (function () {
+  LAZY.news.push(function () {
     var N = window.REITS_NEWS;
     if (!N || !N.items || !N.items.length) {
       $("newsFeed").innerHTML = '<div class="empty">暂无事件数据 — 请先运行 fetch_news.py</div>';
@@ -1991,10 +2090,10 @@ main { min-width: 0; }
       render();
     });
     render();
-  })();
+  });
 
   // ---- 分红/解禁/扩募战配公告监测 ----
-  (function () {
+  LAZY.research.push(function () {
     var A = window.REITS_ACTIONS;
     if (!A || !A.items || !A.items.length) {
       $("corpActions").innerHTML = '<div class="empty">暂无公告数据 — 请先运行 fetch_news.py</div>';
@@ -2022,10 +2121,10 @@ main { min-width: 0; }
       render();
     });
     render();
-  })();
+  });
 
   // ---- 项目申报与推荐动态（发改委 / 上交所 / 深交所 三个独立二级视图） ----
-  (function () {
+  LAZY.proj.push(function () {
     var P = window.REITS_PROJECTS;
     function esc(s) {
       return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -2104,7 +2203,7 @@ main { min-width: 0; }
     renderSse();
     renderSzse();
     renderCommercial();
-  })();
+  });
 
   // ---- 主题切换（白天 / 护眼 / 夜晚） ----
   (function () {
@@ -2125,6 +2224,9 @@ main { min-width: 0; }
 
   // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
   function openReitDetail(code, updateHash) {
+    withResearchData(function () { openReitDetailInner(code, updateHash); });
+  }
+  function openReitDetailInner(code, updateHash) {
     var r = null;
     for (var i = 0; i < D.reits.length; i++) if (D.reits[i].code === code) { r = D.reits[i]; break; }
     if (!r) return;
@@ -2143,7 +2245,7 @@ main { min-width: 0; }
 
   // ---- 左侧导航：三大板块 + 研究二级菜单 ----
   var currentPage = "pano";
-  var pageScroll = { pano: 0, research: 0, advice: 0 };
+  var pageScroll = { pano: 0, research: 0, advice: 0, inst: 0 };
   function restorePageScroll(page) {
     requestAnimationFrame(function () {
       window.scrollTo({ top: pageScroll[page] || 0, behavior: "auto" });
@@ -2173,6 +2275,8 @@ main { min-width: 0; }
       var active = document.querySelector(subId + ' button[data-v="' + v + '"]');
       if (active) setActiveNav(document.querySelectorAll(subId + " button"), active);
       stagger(target);
+      if (v === "news") runLazy("news");
+      else if (v.indexOf("proj-") === 0) runLazy("proj");
       requestAnimationFrame(ensureCharts);
       // 移动端切换偶发图表空白：延迟二次 resize + 热力图整图重绘兜底
       setTimeout(echResizeAll, 160);
@@ -2208,6 +2312,11 @@ main { min-width: 0; }
         }
       } else {
         $("kpis").style.display = "none";
+      }
+      if (pg === "research" || pg === "advice") {
+        withResearchData(function () { runLazy(pg); ensureCharts(); });
+      } else if (pg === "inst") {
+        initInstPage();
       }
       if (switching && !keepScroll) restorePageScroll(pg);
       requestAnimationFrame(ensureCharts);
@@ -2300,7 +2409,7 @@ main { min-width: 0; }
   })();
 
   // ---- 周期耦合分析 ----
-  (function () {
+  LAZY.research.push(function () {
     // 资产重估状态仪
     var RV = D.revaluation;
     if (RV) {
@@ -2634,10 +2743,10 @@ main { min-width: 0; }
           '<div style="font-size:11px;color:var(--tx3);margin-top:4px">置信度：' + d2.confidence + "</div></div>";
       }).join("");
     }
-  })();
+  });
 
   // ---- 赛道透视 ----
-  (function () {
+  LAZY.research.push(function () {
     var TRACKS = [
       { sector: "高速公路", metrics: ["车流量", "通行费收入", "路网分流"], redline: "流量低于预测 >10% 预警" },
       { sector: "能源", metrics: ["电价", "发电量/出力率", "补贴回款"], redline: "出力率低于预测 >10% 预警" },
@@ -2694,10 +2803,10 @@ main { min-width: 0; }
             "<td class='l' style='color:var(--tx3);font-size:11px'>" + (f.note || "") + "</td></tr>";
         }).join("") + "</tbody></table>";
     }
-  })();
+  });
 
   // ---- 策略信号中心 ----
-  (function () {
+  LAZY.research.push(function () {
     // 重估因子映射
     var RV = D.revaluation;
     if (RV) {
@@ -2762,10 +2871,10 @@ main { min-width: 0; }
           '<td class="num ' + cl(b.d20) + '">' + cell(b.d20, "avg") + "</td>" +
           '<td class="num">' + cell(b.d20, "win") + "</td></tr>";
       }).join("") + "</tbody></table>";
-  })();
+  });
 
   // ---- 配置建议升级：周期徽标 + 长期方向 ----
-  (function () {
+  LAZY.advice.push(function () {
     if (D.cycle) {
       $("adviceCycleBadges").innerHTML = (D.cycle.cycles || []).map(function (c) {
         return '<span class="cycle-badge">' + c.name.split("（")[0] + "：<b>" + c.stage + "</b></span>";
@@ -2807,7 +2916,139 @@ main { min-width: 0; }
       $("macroBond").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率（' + monthLabel + dayLabel + '）</div>' + bondHtml +
         '<div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div>';
     }
-  })();
+  });
+
+  // ---- 机构间REITs（不动产ABS）页面 ----
+  var INST = { loaded: false, loading: false, data: [], ex: "", type: "", status: "", q: "", sortKey: "up", sortDir: -1 };
+  var INST_STATUS_LABEL = { "0": "已申报", "1": "已受理", "2": "已反馈", "3": "已接收反馈意见", "4": "通过", "5": "未通过", "8": "终止", "9": "中止", "10": "已回复交易所意见", "11": "提交注册", "12": "注册生效" };
+  var INST_STATUS_ORDER = ["1", "0", "2", "3", "10", "11", "12", "4", "9", "8", "5"];
+  function instStatusCls(s) {
+    s = String(s);
+    if (s === "4" || s === "12") return "ist ist-ok";
+    if (s === "5") return "ist ist-bad";
+    if (s === "8" || s === "9") return "ist ist-stop";
+    if (s === "2" || s === "3" || s === "10") return "ist ist-fb";
+    return "ist ist-run";
+  }
+  function escH(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function initInstPage() {
+    if (INST.loaded || INST.loading) return;
+    INST.loading = true;
+    function ready() {
+      INST.data = (window.__REITS_SNAPSHOT__ || []).slice();
+      INST.loaded = true; INST.loading = false;
+      bindInstControls();
+      renderInstAll();
+    }
+    if (window.__REITS_SNAPSHOT__) { ready(); return; }
+    var s = document.createElement("script");
+    s.src = "inst_reits.js";
+    s.onload = ready;
+    s.onerror = function () {
+      INST.loading = false;
+      $("instKpis").innerHTML = '<div class="card" style="padding:14px">机构间REITs数据加载失败，请刷新重试</div>';
+    };
+    document.head.appendChild(s);
+  }
+  function bindInstControls() {
+    var sub = $("instSub");
+    sub.addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      if (b.dataset.instEx !== undefined) {
+        INST.ex = b.dataset.instEx;
+        sub.querySelectorAll("[data-inst-ex]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      } else if (b.dataset.instType !== undefined) {
+        INST.type = b.dataset.instType;
+        sub.querySelectorAll("[data-inst-type]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      }
+      renderInstAll();
+    });
+    $("instStatusFilter").addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      INST.status = b.dataset.istStatus || "";
+      $("instStatusFilter").querySelectorAll("button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      renderInstAll();
+    });
+    $("instSearch").addEventListener("input", function () { INST.q = this.value.trim(); renderInstAll(); });
+    $("instTbl").querySelector("thead").addEventListener("click", function (e) {
+      var th = e.target.closest ? e.target.closest("th[data-k]") : null; if (!th) return;
+      var k = th.dataset.k;
+      if (INST.sortKey === k) INST.sortDir = -INST.sortDir;
+      else { INST.sortKey = k; INST.sortDir = -1; }
+      renderInstAll();
+    });
+  }
+  function instFiltered() {
+    return INST.data.filter(function (p) {
+      if (INST.ex && p.ex !== INST.ex) return false;
+      if (INST.type && p.ptype !== INST.type) return false;
+      if (INST.status !== "" && String(p.status) !== INST.status) return false;
+      if (INST.q) {
+        var q = INST.q.toLowerCase();
+        var hay = (p.name + " " + (p.mgr || "") + " " + (p.origin || "")).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+  }
+  function renderInstAll() {
+    var data = INST.data;
+    // 二级tab（交易所/类型）筛选后的子集：KPI 与状态 chips 同步联动
+    var base = data.filter(function (p) {
+      if (INST.ex && p.ex !== INST.ex) return false;
+      if (INST.type && p.ptype !== INST.type) return false;
+      return true;
+    });
+    var scopeTxt = (INST.ex || "沪深两所") + (INST.type ? " · " + INST.type : "");
+    var totalAmt = 0, passed = 0, reviewing = 0;
+    base.forEach(function (p) {
+      totalAmt += Number(p.amt) || 0;
+      var s = String(p.status);
+      if (s === "4" || s === "12") passed++;
+      else if (s !== "5" && s !== "8" && s !== "9") reviewing++;
+    });
+    $("instKpis").innerHTML =
+      kpiCard("项目总数", base.length + " 单", scopeTxt + "在册不动产ABS") +
+      kpiCard("合计规模", totalAmt.toFixed(1) + " 亿元", scopeTxt + "申报口径合计") +
+      kpiCard("通过/注册生效", passed + " 单", scopeTxt + "已获准发行") +
+      kpiCard("在审项目", reviewing + " 单", scopeTxt + "申报/受理/反馈等流程中");
+    // 状态筛选 chips（随交易所/类型联动）
+    var counts = {};
+    base.forEach(function (p) { var s = String(p.status); counts[s] = (counts[s] || 0) + 1; });
+    var chips = '<button data-ist-status="" class="' + (INST.status === "" ? "on" : "") + '">全部 ' + base.length + '</button>';
+    INST_STATUS_ORDER.forEach(function (s) {
+      if (!counts[s]) return;
+      chips += '<button data-ist-status="' + s + '" class="' + (INST.status === s ? "on" : "") + '">' +
+        (INST_STATUS_LABEL[s] || s) + " " + counts[s] + "</button>";
+    });
+    $("instStatusFilter").innerHTML = chips;
+    // 表格
+    var rows = instFiltered();
+    rows.sort(function (a, b) {
+      var va = a[INST.sortKey], vb = b[INST.sortKey];
+      if (INST.sortKey === "amt") { va = Number(va) || 0; vb = Number(vb) || 0; }
+      else { va = String(va || ""); vb = String(vb || ""); }
+      if (va < vb) return -1 * INST.sortDir;
+      if (va > vb) return 1 * INST.sortDir;
+      return 0;
+    });
+    $("instCount").textContent = "（当前筛选 " + rows.length + " / " + base.length + " 单）";
+    $("instTbl").querySelector("tbody").innerHTML = rows.map(function (p) {
+      return "<tr>" +
+        '<td class="l"><b>' + escH(p.name) + "</b>" + (p.pnote ? '<div class="note">' + escH(p.pnote) + "</div>" : "") + "</td>" +
+        "<td>" + escH(p.ex) + "</td>" +
+        '<td class="l">' + escH(p.mgr || "—") + "</td>" +
+        '<td style="text-align:right">' + (p.amt != null ? Number(p.amt).toFixed(2) : "—") + "</td>" +
+        "<td>" + escH(p.ptype || "—") + "</td>" +
+        "<td>" + escH(p.psub || "—") + "</td>" +
+        '<td><span class="' + instStatusCls(p.status) + '">' + escH(INST_STATUS_LABEL[String(p.status)] || p.status) + "</span></td>" +
+        "<td>" + escH(p.acc || "—") + "</td>" +
+        "<td>" + escH(p.up || "—") + "</td>" +
+        "</tr>";
+    }).join("");
+    $("instMeta").textContent = "数据截至 " + (window.__REITS_SNAPSHOT_DATE__ || "—") + " · 排序：" +
+      ({ amt: "规模", acc: "受理日期", up: "更新日期" })[INST.sortKey] + (INST.sortDir < 0 ? "（降序）" : "（升序）");
+  }
 
   // ---- Tab 切换 ----
   // ---- 研究二级菜单切换已并入左侧导航 ----

@@ -721,9 +721,19 @@ def main():
         },
     }
 
-    js = "window.REITS_DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n"
+    # 拆分首屏核心数据与研究数据（前端按需加载，提升首屏速度）
+    CORE_KEYS = ["updated", "lastTradeDate", "count", "sectors", "strategies", "reits",
+                 "marketIndex", "cycle", "revaluation", "stratSignals"]
+    core = {k: payload[k] for k in CORE_KEYS if k in payload}
+    rest = {k: v for k, v in payload.items() if k not in CORE_KEYS}
+    js = "window.REITS_DATA = " + json.dumps(core, ensure_ascii=False) + ";\n"
     DATA_JS.write_text(js, encoding="utf-8")
-    DATA_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    DATA_JSON.write_text(json.dumps(core, ensure_ascii=False, indent=1), encoding="utf-8")
+    jsr = "window.REITS_DATA_R = " + json.dumps(rest, ensure_ascii=False) + ";\n"
+    (ROOT / "data_research.js").write_text(jsr, encoding="utf-8")
+    (ROOT / "data_research.json").write_text(json.dumps(rest, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[done] {len(reits)} 只，截至 {last_date}，"
+          f"data.js {len(js) / 1e6:.1f}MB + research {len(jsr) / 1e6:.1f}MB", flush=True)
     missing = [u["name"] for u in universe if u["code"] not in fetched]
     print(f"[done] {len(reits)}/{len(universe)} 只，截至 {payload['lastTradeDate']}，"
           f"data.js {len(js) / 1e6:.1f}MB", flush=True)
