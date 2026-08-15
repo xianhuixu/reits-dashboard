@@ -265,67 +265,88 @@ def score_signals(reits, fund, corr_ret, bench_ret, bond10y):
 
 
 # ---------------- 信号检测与回测 ----------------
-def detect_events(code, name, s_close, s_amt, days=120):
-    """检测 MACD 交叉 / RSI 超买超卖 / 成交异动 / 突破250日线。
-    输出含 type 字段的事件（与前端事件流/筛选/回测格式一致）。"""
+def detect_events(code, name, s_close, s_amt):
+    """检测六类信号事件。"""
     events = []
     n = len(s_close)
-    if n < 40:
+    if n < 60:
         return events
-    dif = ema(s_close, 12) - ema(s_close, 26)
-    dea = ema(dif, 9)
-    diff = dif - dea
-    r = rsi(s_close)
-    amt60 = s_amt.rolling(60).mean()
-    ma250 = s_close.rolling(250).mean()
-    dates = s_close.index
-    for i in range(1, n):
-        dt = dates[i].strftime("%Y-%m-%d")
-        if diff.iloc[i - 1] <= 0 < diff.iloc[i]:
-            events.append({"code": code, "name": name, "date": dt, "type": "MACD金叉", "i": i})
-        elif diff.iloc[i - 1] >= 0 > diff.iloc[i]:
-            events.append({"code": code, "name": name, "date": dt, "type": "MACD死叉", "i": i})
-        rv = r.iloc[i]
-        if pd.notna(rv) and pd.notna(r.iloc[i - 1]):
-            if r.iloc[i - 1] <= 70 < rv:
-                events.append({"code": code, "name": name, "date": dt, "type": "RSI超买",
-                               "value": round(float(rv), 1), "i": i})
-            elif r.iloc[i - 1] >= 30 > rv:
-                events.append({"code": code, "name": name, "date": dt, "type": "RSI超卖",
-                               "value": round(float(rv), 1), "i": i})
-        a6 = amt60.iloc[i]
-        if pd.notna(a6) and a6 > 0 and s_amt.iloc[i] > 2 * a6:
-            events.append({"code": code, "name": name, "date": dt, "type": "成交异动",
-                           "value": round(float(s_amt.iloc[i] / a6), 1), "i": i})
-        m2 = ma250.iloc[i]
-        if pd.notna(m2) and pd.notna(ma250.iloc[i - 1]):
-            if s_close.iloc[i - 1] <= ma250.iloc[i - 1] and s_close.iloc[i] > m2:
-                events.append({"code": code, "name": name, "date": dt, "type": "突破250日线", "i": i})
+    close = s_close.values
+    amt = s_amt.values
+    dates = s_close.index.strftime("%Y-%m-%d").tolist()
+
+    def sig(i):
+        c, a = close[:i+1], amt[:i+1]
+        out = {"i": i}
+        # 1 突破20日高
+        if i >= 20 and c[i] == max(c[i-20:i+1]):
+            out["break20"] = True
+        # 2 放量
+        if i >= 20 and a[i] > a[i-20:i].mean() * 1.5:
+            out["volumeSpike"] = True
+        # 3 价稳量缩（近10日振幅<3%且成交额<20日均值80%）
+        if i >= 10:
+            rng = (max(c[i-10:i+1]) - min(c[i-10:i+1])) / c[i] * 100 if c[i] else 0
+            if rng < 3 and a[i] < a[i-10:i].mean() * 0.8:
+                out["quiet"] = True
+        # 4 RSI超卖反弹
+        if i >= 14:
+            dc = pd.Series(c)
+            r = rsi(dc, 14)
+            if r.iloc[i-1] < 30 and r.iloc[i] >= 30:
+                out["rsiBounce"] = True
+        # 5 金叉
+        if i >= 26:
+            dc = pd.Series(c)
+            dif = ema(dc, 12) - ema(dc, 26)
+            dea = ema(dif, 9)
+            if len(dif) > i and len(dea) > i and i > 0:
+                if float(dif.iloc[i-1]) <= float(dea.iloc[i-1]) and float(dif.iloc[i]) > float(dea.iloc[i]):
+                    out["goldenCross"] = True
+        # 6 跌幅>3%
+        if i > 0 and (c[i] / c[i-1] - 1) * 100 < -3:
+            out["drop3"] = True
+        return out
+
+    for i in range(60, n):
+        s = sig(i)
+        if len(s) > 1:
+            events.append({"code": code, "name": name, "date": dates[i], **s})
     return events
 
 
-def backtest_events(all_events, close_map):
-    """每类事件：出现后 5/20 交易日的平均收益与胜率（与前端回测表格式一致）。"""
-    bt = {}
-    for etype in ["MACD金叉", "MACD死叉", "RSI超买", "RSI超卖", "成交异动", "突破250日线"]:
-        rets5, rets20 = [], []
-        for e in all_events:
-            if e.get("type") != etype or e["code"] not in close_map:
-                continue
-            s = close_map[e["code"]]
-            i = e["i"]
-            if i + 5 < len(s):
-                rets5.append(float(s.iloc[i + 5] / s.iloc[i] - 1))
-            if i + 20 < len(s):
-                rets20.append(float(s.iloc[i + 20] / s.iloc[i] - 1))
+BT_TYPE_MAP = [("goldenCross", "MACD金叉"), ("deathCross", "MACD死叉"),
+               ("rsiOver", "RSI超买"), ("rsiBounce", "RSI超卖"),
+               ("volumeSpike", "成交异动"), ("break20", "突破250日线"),
+               ("quiet", "价稳量缩"), ("drop3", "单日大跌")]
 
-        def stat(x):
-            if not x:
-                return None
-            return {"n": len(x), "avg": round(sum(x) / len(x) * 100, 2),
-                    "win": round(sum(1 for v in x if v > 0) / len(x) * 100, 1)}
-        bt[etype] = {"d5": stat(rets5), "d20": stat(rets20)}
-    return bt
+
+def backtest_events(events, close_map):
+    """回测聚合：按信号类型输出 5/20 日均值与胜率（直接给前端小体积聚合结果，不再输出逐样本明细）。"""
+    agg = {}
+    for e in events:
+        c = close_map.get(e["code"])
+        if c is None:
+            continue
+        try:
+            idx = c.index.get_loc(e["date"])
+        except KeyError:
+            continue
+        types = [t for f, t in BT_TYPE_MAP if e.get(f)] or ["信号"]
+        for t in types:
+            b = agg.setdefault(t, {"r5": [], "r20": []})
+            if idx + 5 < len(c):
+                b["r5"].append(float(c.iloc[idx + 5] / c.iloc[idx] - 1))
+            if idx + 20 < len(c):
+                b["r20"].append(float(c.iloc[idx + 20] / c.iloc[idx] - 1))
+
+    def stat(x):
+        if not x:
+            return None
+        return {"n": len(x), "avg": round(sum(x) / len(x) * 100, 2),
+                "win": round(sum(1 for v in x if v > 0) / len(x) * 100, 1)}
+
+    return {t: {"d5": stat(b["r5"]), "d20": stat(b["r20"])} for t, b in agg.items()}
 
 
 # ---------------- 主流程 ----------------
@@ -455,7 +476,7 @@ def main():
             "ret60": ret60,
             **ind,
             "histDates": hist_dates,
-            "histClose": spark,
+            "histClose": spark,  # 与 spark 同步，供 update_data.py 增量更新
             "listDays": int(len(s_close)),
             "signals": {},
         })
@@ -699,14 +720,47 @@ def main():
         },
     }
 
-    js = "window.REITS_DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n"
+    # 拆分首屏核心数据与研究数据（前端按需加载，提升首屏速度）
+    CORE_KEYS = ["updated", "lastTradeDate", "count", "sectors", "strategies", "reits",
+                 "marketIndex", "cycle", "revaluation", "stratSignals"]
+    core = {k: payload[k] for k in CORE_KEYS if k in payload}
+    rest = {k: v for k, v in payload.items() if k not in CORE_KEYS}
+    js = "window.REITS_DATA = " + json.dumps(core, ensure_ascii=False) + ";\n"
     DATA_JS.write_text(js, encoding="utf-8")
-    DATA_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    DATA_JSON.write_text(json.dumps(core, ensure_ascii=False, indent=1), encoding="utf-8")
+    jsr = "window.REITS_DATA_R = " + json.dumps(rest, ensure_ascii=False) + ";\n"
+    (ROOT / "data_research.js").write_text(jsr, encoding="utf-8")
+    (ROOT / "data_research.json").write_text(json.dumps(rest, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"[done] {len(reits)} 只，截至 {last_date}，"
+          f"data.js {len(js) / 1e6:.1f}MB + research {len(jsr) / 1e6:.1f}MB", flush=True)
     missing = [u["name"] for u in universe if u["code"] not in fetched]
     print(f"[done] {len(reits)}/{len(universe)} 只，截至 {payload['lastTradeDate']}，"
           f"data.js {len(js) / 1e6:.1f}MB", flush=True)
     if missing:
         print("[miss] " + "、".join(missing))
+    sync_inst_reits()
+
+
+def sync_inst_reits():
+    """机构间REITs（不动产ABS）快照与主站数据同步更新。
+    调用 inst_reits_update.py（源自 tingdall/reits-dashboard，抓取沪深交易所项目），
+    成功则刷新前端加载的 inst_reits.js；失败沿用旧快照，不影响主流程。"""
+    import shutil
+    import subprocess
+    import sys
+    script = ROOT / "inst_reits_update.py"
+    snapshot = ROOT / "reits_snapshot.js"
+    target = ROOT / "inst_reits.js"
+    try:
+        r = subprocess.run([sys.executable, str(script)], cwd=str(ROOT),
+                           timeout=300, capture_output=True, text=True)
+        if r.returncode == 0 and snapshot.exists():
+            shutil.copyfile(snapshot, target)
+            print("[done] 机构间REITs快照已同步 → inst_reits.js", flush=True)
+        else:
+            print(f"[warn] 机构间REITs抓取返回非零，沿用旧快照：{r.stderr.strip()[:200]}", flush=True)
+    except Exception as e:
+        print(f"[warn] 机构间REITs同步失败（沿用旧快照）：{e}", flush=True)
 
 
 if __name__ == "__main__":

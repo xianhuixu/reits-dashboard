@@ -473,6 +473,34 @@ def main():
                 "dd2020": maxdd("2020-02-01", "2020-04-30"),
                 "cagr10": round(cagr10, 1) if cagr10 is not None else None,
             }
+        # 代表标的个体序列（各自首个有效观测 = 100，与 cats 同一周频时间轴）
+        norm_all = weekly.copy()
+        for c in norm_all.columns:
+            v0 = norm_all[c].dropna()
+            if len(v0):
+                norm_all[c] = norm_all[c] / v0.iloc[0] * 100.0
+
+        member_stats = {}
+        for oc in norm_all.columns:
+            s = norm_all[oc].dropna()
+            if len(s) < 60:
+                continue
+            years = (s.index[-1] - s.index[0]).days / 365.25
+            cagr_m = ((s.iloc[-1] / s.iloc[0]) ** (1 / years) - 1) * 100 if years > 0 else None
+
+            def maxdd_m(a, b, _s=s):
+                w = _s[(_s.index >= a) & (_s.index <= b)]
+                return round(float((w / w.cummax() - 1).min() * 100), 1) if len(w) > 5 else None
+            s10m = s[s.index >= s.index[-1] - pd.Timedelta(days=3652)]
+            y10m = (s10m.index[-1] - s10m.index[0]).days / 365.25
+            cagr10m = ((s10m.iloc[-1] / s10m.iloc[0]) ** (1 / y10m) - 1) * 100 if len(s10m) > 60 and y10m > 0 else None
+            member_stats[oc] = {
+                "start": s.index[0].strftime("%Y-%m-%d"),
+                "cagr": round(cagr_m, 1) if cagr_m is not None else None,
+                "dd0809": maxdd_m("2007-12-01", "2009-06-30"),
+                "dd2020": maxdd_m("2020-02-01", "2020-04-30"),
+                "cagr10": round(cagr10m, 1) if cagr10m is not None else None,
+            }
         us_long = {
             "dates": [d.strftime("%Y-%m-%d") for d in weekly.index],
             "cats": {c: [round(float(v), 2) if pd.notna(v) else None for v in idx] for c, idx in cats.items()},
@@ -480,6 +508,9 @@ def main():
             "stats": stats,
             "members": {oc: {"name": m["name"], "type": m["type"], "cat": m["cat"]}
                         for oc, m in OVERSEAS.items() if oc in us_series},
+            "memberSeries": {oc: [round(float(v), 2) if pd.notna(v) else None for v in norm_all[oc]]
+                             for oc in norm_all.columns},
+            "memberStats": member_stats,
         }
 
     # ---------- 4. 个券指标 ----------

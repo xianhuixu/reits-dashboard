@@ -45,7 +45,7 @@ test("generated charts expose accessible SVG titles", () => {
 });
 
 test("primary navigation preserves page scroll positions", () => {
-  assert.match(html, /var pageScroll = \{ pano: 0, research: 0, advice: 0 \}/);
+  assert.match(html, /var pageScroll = \{ pano: 0, research: 0, advice: 0, inst: 0 \}/);
   assert.match(html, /pageScroll\[currentPage\] = window\.(?:pageYOffset \|\| window\.)?scrollY/);
   assert.match(html, /behavior: "auto"/);
 });
