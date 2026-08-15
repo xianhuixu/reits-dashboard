@@ -5,6 +5,11 @@
     return Number.isFinite(value) ? value.toFixed(1) + "%" : "—";
   }
 
+  function escHtml(value) {
+    return String(value == null ? "" : value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  }
+
   function averagePercentile(values) {
     if (!Array.isArray(values)) return null;
 
@@ -21,6 +26,7 @@
 
   var api = {
     averagePercentile: averagePercentile,
+    escHtml: escHtml,
     formatPercentile: formatPercentile
   };
 
@@ -30,6 +36,7 @@
 
   if (root) {
     root.averagePercentile = averagePercentile;
+    root.escHtml = escHtml;
     root.formatPercentile = formatPercentile;
   }
 })(typeof window === "undefined" ? null : window);

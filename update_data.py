@@ -234,10 +234,6 @@ def update_reits_data(data, tencent_data):
             r['volume'] = td['volume']
             r['amount'] = round(td['amount'], 0)
         
-        # 更新 spark（最近60天）
-        spark_len = 60
-        r['spark'] = [round(float(x), 3) for x in hist_close[-spark_len:]]
-        
         updated_count += 1
     
     # 更新时间戳

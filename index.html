@@ -1258,7 +1258,7 @@ main { min-width: 0; }
   $("fSector").innerHTML = '<option value="">全部板块</option>' +
     D.sectors.map(function (s) { return "<option>" + s + "</option>"; }).join("");
   var sortKey = "pct", sortDir = -1, selCode = null;
-  function sigLabel(l) { return '<span class="sig-label sig-' + l + '">' + l + '</span>'; }
+  function sigLabel(l) { return l ? '<span class="sig-label sig-' + l + '">' + l + '</span>' : ''; }
   function renderTbl() {
     var fs = $("fStrategy").value, fc = $("fSector").value, fr = $("fRight").value, fl = $("fSignal").value;
     var q = $("fSearch").value.trim().toLowerCase();
@@ -1847,16 +1847,17 @@ main { min-width: 0; }
       $("newsFeed").innerHTML = '<div class="empty">暂无事件数据 — 请先运行 fetch_news.py</div>';
       return;
     }
+    var escHtml = window.escHtml || function (v) { return String(v == null ? "" : v); };
     var tag = "全部";
     $("newsFilter").innerHTML = N.tags.map(function (t) {
-      return '<button class="range-btn' + (t === "全部" ? " on" : "") + '" data-t="' + t + '">' + t + "</button>";
+      return '<button class="range-btn' + (t === "全部" ? " on" : "") + '" data-t="' + escHtml(t) + '">' + escHtml(t) + "</button>";
     }).join("");
     function render() {
       var list = N.items.filter(function (x) { return tag === "全部" || x.tag === tag; });
       $("newsFeed").innerHTML = list.length ? list.map(function (x) {
-        return '<div class="news-item"><div class="nt"><span class="nt-' + x.tag + '">' + x.tag + "</span></div>" +
-          '<div class="nb"><div class="nh"><a href="' + x.url + '" target="_blank" rel="noopener">' + x.title + "</a></div>" +
-          '<div class="ns">' + x.summary + "</div>" +
+        return '<div class="news-item"><div class="nt"><span class="nt-' + escHtml(x.tag) + '">' + escHtml(x.tag) + "</span></div>" +
+          '<div class="nb"><div class="nh"><a href="' + escHtml(x.url) + '" target="_blank" rel="noopener">' + escHtml(x.title) + "</a></div>" +
+          '<div class="ns">' + escHtml(x.summary) + "</div>" +
           '<div class="nm">' + x.media + "</div></div>" +
           '<div class="nd num">' + x.date.slice(5) + "</div></div>";
       }).join("") : '<div class="empty">该分类下暂无事件</div>';
@@ -1872,6 +1873,7 @@ main { min-width: 0; }
 
   // ---- 分红/解禁/扩募战配公告监测 ----
   (function () {
+    var escHtml = window.escHtml || function (v) { return String(v == null ? "" : v); };
     var A = window.REITS_ACTIONS;
     if (!A || !A.items || !A.items.length) {
       $("corpActions").innerHTML = '<div class="empty">暂无公告数据 — 请先运行 fetch_news.py</div>';
@@ -1888,7 +1890,7 @@ main { min-width: 0; }
       $("corpActions").innerHTML = list.length ? list.map(function (x) {
         return '<div class="news-item"><div class="nt"><span class="nt-' + x.tag + '">' + x.tag + "</span></div>" +
           '<div class="nb"><span class="act-name">' + x.name + " · " + x.code + "</span>" +
-          '<div class="nh"><a href="' + x.url + '" target="_blank" rel="noopener">' + x.title + "</a></div></div>" +
+          '<div class="nh"><a href="' + escHtml(x.url) + '" target="_blank" rel="noopener">' + escHtml(x.title) + "</a></div></div>" +
           '<div class="nd num">' + x.date.slice(5) + "</div></div>";
       }).join("") : '<div class="empty">该分类下近30日暂无相关公告</div>';
     }
