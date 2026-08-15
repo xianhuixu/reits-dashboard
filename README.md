@@ -58,3 +58,14 @@ python3 scripts/repair_volume_units.py
 ```
 
 本机（Mac）更新：`python3 fetch_data_em.py`（需 pandas，直连腾讯 + 增量缓存 + 自愈），提交推送即上线。
+
+### ECharts 定制构建（减小首屏体积）
+
+`lib/echarts.min.js` 为定制构建（595KB vs 官方全量 1MB），仅包含站点用到的图表/组件。修改入口后重建：
+
+```bash
+cd /tmp && mkdir -p echarts-build && cd echarts-build && npm init -y
+npm i echarts@5.6.0 esbuild
+cp <仓库>/scripts/echarts-custom-entry.js entry.js
+npx esbuild entry.js --bundle --minify --format=iife --outfile=lib/echarts.min.js
+```

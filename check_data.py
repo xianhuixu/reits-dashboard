@@ -8,10 +8,12 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 os.chdir(ROOT)
 
 try:
-    with open('data.json', encoding='utf-8') as f:
-        d = json.load(f)
+    with open('data.js', encoding='utf-8') as f:
+        raw = f.read()
+    prefix = 'window.REITS_DATA = '
+    d = json.loads(raw[raw.index(prefix) + len(prefix):].strip().rstrip(';'))
 except Exception as e:
-    print(f"[check] data.json 读取失败: {e}")
+    print(f"[check] data.js 读取失败: {e}")
     sys.exit(1)
 
 reits = d.get('reits') or []
