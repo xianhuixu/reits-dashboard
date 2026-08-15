@@ -739,6 +739,29 @@ def main():
           f"data.js {len(js) / 1e6:.1f}MB", flush=True)
     if missing:
         print("[miss] " + "、".join(missing))
+    sync_inst_reits()
+
+
+def sync_inst_reits():
+    """机构间REITs（不动产ABS）快照与主站数据同步更新。
+    调用 inst_reits_update.py（源自 tingdall/reits-dashboard，抓取沪深交易所项目），
+    成功则刷新前端加载的 inst_reits.js；失败沿用旧快照，不影响主流程。"""
+    import shutil
+    import subprocess
+    import sys
+    script = ROOT / "inst_reits_update.py"
+    snapshot = ROOT / "reits_snapshot.js"
+    target = ROOT / "inst_reits.js"
+    try:
+        r = subprocess.run([sys.executable, str(script)], cwd=str(ROOT),
+                           timeout=300, capture_output=True, text=True)
+        if r.returncode == 0 and snapshot.exists():
+            shutil.copyfile(snapshot, target)
+            print("[done] 机构间REITs快照已同步 → inst_reits.js", flush=True)
+        else:
+            print(f"[warn] 机构间REITs抓取返回非零，沿用旧快照：{r.stderr.strip()[:200]}", flush=True)
+    except Exception as e:
+        print(f"[warn] 机构间REITs同步失败（沿用旧快照）：{e}", flush=True)
 
 
 if __name__ == "__main__":

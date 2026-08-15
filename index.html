@@ -1479,6 +1479,10 @@ LAZY.research.push(function () {
     });
   });
   renderTbl();
+  // 暴露给闭包外的下钻入口（openReitDetailInner / 主题切换重渲染）
+  window.__renderTbl = renderTbl;
+  window.__setSelCode = function (c) { selCode = c; };
+  window.__getSelCode = function () { return selCode; };
 
 });
 
@@ -2229,6 +2233,10 @@ LAZY.research.push(function () {
   function openReitDetailInner(code, updateHash) {
     var r = null;
     for (var i = 0; i < D.reits.length; i++) if (D.reits[i].code === code) { r = D.reits[i]; break; }
+    if (!r) { // 后缀不匹配时按代码数字部分兜底（如 180402.SH ↔ 180402.SZ）
+      var num = String(code).split(".")[0];
+      for (var j = 0; j < D.reits.length; j++) if (D.reits[j].code.split(".")[0] === num) { r = D.reits[j]; break; }
+    }
     if (!r) return;
     if (updateHash !== false) {
       try { history.replaceState(null, "", "#/detail/" + code); } catch (e) {}
@@ -2236,8 +2244,8 @@ LAZY.research.push(function () {
     showPage("research"); switchView("detail");
     ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
     $("fSearch").value = r.code;
-    selCode = r.code;
-    renderTbl();
+    if (window.__setSelCode) window.__setSelCode(r.code);
+    if (window.__renderTbl) window.__renderTbl();
     renderDetail(r.code);
     window.scrollTo({ top: 0, behavior: "instant" });
     setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
@@ -3063,9 +3071,10 @@ LAZY.research.push(function () {
 
   // 主题切换时，若个券详情已展开则同步重渲染其图表
   registerChart(function () {
-    if (typeof selCode !== "undefined" && selCode &&
+    var sc = window.__getSelCode ? window.__getSelCode() : null;
+    if (sc &&
         document.getElementById("detailPanel") && document.getElementById("detailPanel").innerHTML) {
-      renderDetail(selCode);
+      renderDetail(sc);
     }
   });
 
