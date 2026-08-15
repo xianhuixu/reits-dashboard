@@ -1266,7 +1266,12 @@ LAZY.research.push(function () {
   }
   function echResizeAll() {
     Object.keys(CHART).forEach(function (id) {
-      if (CHART[id] && !CHART[id].isDisposed()) CHART[id].resize();
+      var inst = CHART[id];
+      if (!inst || inst.isDisposed()) return;
+      var dom = inst.getDom();
+      var w = dom.offsetWidth, h = dom.offsetHeight;
+      // 尺寸未变化时跳过 resize：resize 会重放动画，造成切换 tab 闪烁
+      if (w > 0 && h > 0 && (inst.getWidth() !== w || inst.getHeight() !== h)) inst.resize();
     });
     // 容器已可见时，执行暂存的重渲染（修复切换 tab / 深链 / 主题切换时隐藏容器中创建的空白图表）
     Object.keys(PENDING_RENDER).forEach(function (id) {
@@ -2289,7 +2294,18 @@ LAZY.research.push(function () {
       // 移动端切换偶发图表空白：延迟二次 resize + 热力图整图重绘兜底
       setTimeout(echResizeAll, 160);
       if (v === "heatmap") {
-        setTimeout(function () { try { renderTreemap(); } catch (e) { /* 忽略 */ } }, 220);
+        // 仅在画布缺失/尺寸异常（移动端偶发空白）时才整图重绘，避免每次切换都重放动画造成闪烁
+        setTimeout(function () {
+          try {
+            var hmEl = document.getElementById("treemap");
+            var hmCv = hmEl && hmEl.querySelector("canvas");
+            if (!hmCv || !hmCv.width) renderTreemap();
+            else if (CHART.treemap && !CHART.treemap.isDisposed()) {
+              var hmW = hmEl.offsetWidth, hmH = hmEl.offsetHeight;
+              if (CHART.treemap.getWidth() !== hmW || CHART.treemap.getHeight() !== hmH) CHART.treemap.resize();
+            }
+          } catch (e) { /* 忽略 */ }
+        }, 220);
       }
     } catch (err) { console.error('[switchView] error:', err); }
   }
