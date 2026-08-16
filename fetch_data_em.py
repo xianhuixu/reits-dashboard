@@ -190,6 +190,7 @@ def indicators(s_close, s_amt):
     else:
         out["devMA250"] = None
     # 流动性
+    out["amt5"] = round(float(s_amt.tail(5).mean()), 0) if len(s_amt) else None
     if len(s_amt) >= 60:
         amt20 = float(s_amt.tail(20).mean())
         amt60 = float(s_amt.tail(60).mean())

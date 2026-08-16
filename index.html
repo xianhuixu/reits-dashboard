@@ -547,7 +547,7 @@ main { min-width: 0; }
 <section class="view" id="v-heatmap">
   <div class="card">
     <h2>资产类别全景热力图</h2>
-    <p class="note">色块大小 ∝ 板块成交额 · 颜色 = 板块成交额加权涨跌幅 · 区间：<span id="hmRangeLabel">日涨跌</span></p>
+    <p class="note">色块大小 ∝ 成交额（日涨跌=当日，5日/20日=区间日均）· 颜色 = 成交额加权区间涨跌幅 · 区间：<span id="hmRangeLabel">日涨跌</span></p>
     <div class="filters" id="hmSectorChips" style="margin-bottom:8px"></div>
     <div class="filters" id="hmRange" style="margin-bottom:8px">
       <button class="range-btn on" data-r="pct">日涨跌</button>
@@ -1630,23 +1630,30 @@ LAZY.research.push(function () {
   var hmRange = "pct";
   var hmSector = "";
   var hmDrill = "";
+  // 区间成交额口径：日涨跌=当日成交额，5日/20日=对应区间日均成交额（面积与加权同步切换）
+  function hmAmt(r) {
+    if (hmRange === "ret5") return r.amt5 != null ? r.amt5 : r.amount;
+    if (hmRange === "ret20") return r.amt20 != null ? r.amt20 : r.amount;
+    return r.amount;
+  }
   function hmData() {
     if (hmDrill) {   // 下钻：该板块全部个券
       return D.reits.filter(function (r) { return r.sector === hmDrill && r.amount != null; })
         .map(function (r) {
           var ret = hmRange === "pct" ? r.pct : r[hmRange];
-          return { sector: r.name, amount: r.amount, ret: ret, n: 0, code: r.code };
-        }).filter(function (x) { return x.ret != null; })
+          return { sector: r.name, amount: hmAmt(r), ret: ret, n: 0, code: r.code };
+        }).filter(function (x) { return x.ret != null && x.amount != null; })
         .sort(function (a, b) { return b.amount - a.amount; });
     }
     var bySec = {};
     D.reits.forEach(function (r) {
-      if (r.amount == null) return;
+      var amt = hmAmt(r);
+      if (amt == null) return;
       if (hmSector && r.sector !== hmSector) return;
       var b = bySec[r.sector] = bySec[r.sector] || { amount: 0, wsum: 0, n: 0 };
       var ret = hmRange === "pct" ? r.pct : r[hmRange];
       if (ret == null) return;
-      b.amount += r.amount; b.wsum += r.amount * ret; b.n++;
+      b.amount += amt; b.wsum += amt * ret; b.n++;
     });
     return Object.keys(bySec).map(function (s) {
       return { sector: s, amount: bySec[s].amount, ret: bySec[s].wsum / bySec[s].amount, n: bySec[s].n };
