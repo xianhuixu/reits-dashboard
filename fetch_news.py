@@ -120,18 +120,24 @@ def fetch_sogou_weixin(days=30):
 
 
 def fetch_cebpubservice(days=30):
-    """中国招标投标公共服务平台：REITs 相关招投标公告"""
+    """中国招标投标公共服务平台：REITs 相关招投标公告
+    源站间歇性超时（代理链路不稳定），每次请求带 3 次重试"""
     out = []
     cutoff = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d")
     for page in (1, 2):
         url = ("http://bulletin.cebpubservice.com/xxfbcmses/search/bulletin.html"
                "?searchDate=1994-06-24&dates=30&word=REITs&categoryId=&industryName=&area=&status=&page="
                + str(page))
-        try:
-            req = urllib.request.Request(url, headers=UA)
-            html = urllib.request.urlopen(req, timeout=45).read().decode("utf-8", "ignore")
-        except Exception as e:
-            print(f"[ceb] p{page} 失败: {e}", flush=True)
+        html = ""
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(url, headers=UA)
+                html = urllib.request.urlopen(req, timeout=45).read().decode("utf-8", "ignore")
+                break
+            except Exception as e:
+                print(f"[ceb] p{page} 第{attempt + 1}次失败: {e}", flush=True)
+                time.sleep(5)
+        if not html:
             continue
         rows = re.findall(r"<tr[^>]*>(.*?)</tr>", html, re.S)
         n = 0
