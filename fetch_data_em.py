@@ -725,6 +725,10 @@ def main():
                  "marketIndex", "cycle", "revaluation", "stratSignals"]
     core = {k: payload[k] for k in CORE_KEYS if k in payload}
     rest = {k: v for k, v in payload.items() if k not in CORE_KEYS}
+    # 个券历史序列（histDates/histClose）体积占 reits 的 ~85%，且仅研究视图使用 → 移入研究包按需加载
+    core["reits"] = [{k: v for k, v in r.items() if k not in ("histDates", "histClose")}
+                     for r in payload["reits"]]
+    rest["reits"] = payload["reits"]
     js = "window.REITS_DATA = " + json.dumps(core, ensure_ascii=False) + ";\n"
     DATA_JS.write_text(js, encoding="utf-8")
     DATA_JSON.write_text(json.dumps(core, ensure_ascii=False, indent=1), encoding="utf-8")

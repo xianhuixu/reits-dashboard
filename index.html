@@ -981,9 +981,6 @@ main { min-width: 0; }
 </footer>
 
 <script src="data.js"></script>
-<script src="news.js"></script>
-<script src="corp_actions.js"></script>
-<script src="projects.js"></script>
 <script src="ui-utils.js"></script>
 <script src="lib/echarts.min.js"></script>
 <script>
@@ -1087,6 +1084,21 @@ main { min-width: 0; }
     };
     sc.onerror = function () { _rdataCbs = null; console.error("data_research.js 加载失败"); };
     document.head.appendChild(sc);
+  }
+  // 通用按需脚本加载器（信息流/公告/项目申报数据在点按对应 tab 时才加载）
+  var _srcLoads = {};
+  function withScript(src, key, cb) {
+    if (key && window[key]) { cb(); return; }
+    if (_srcLoads[src]) { _srcLoads[src].push(cb); return; }
+    _srcLoads[src] = [cb];
+    var s = document.createElement("script");
+    s.src = src;
+    s.onload = function () {
+      var cbs = _srcLoads[src] || []; delete _srcLoads[src];
+      cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[lazy-src]", e && e.message); } });
+    };
+    s.onerror = function () { delete _srcLoads[src]; console.error(src + " 加载失败"); };
+    document.head.appendChild(s);
   }
 
   var $ = function (id) { return document.getElementById(id); };
@@ -2290,8 +2302,8 @@ LAZY.research.push(function () {
       var active = document.querySelector(subId + ' button[data-v="' + v + '"]');
       if (active) setActiveNav(document.querySelectorAll(subId + " button"), active);
       stagger(target);
-      if (v === "news") runLazy("news");
-      else if (v.indexOf("proj-") === 0) runLazy("proj");
+      if (v === "news") withScript("news.js", "REITS_NEWS", function () { runLazy("news"); });
+      else if (v.indexOf("proj-") === 0) withScript("projects.js", "REITS_PROJECTS", function () { runLazy("proj"); });
       requestAnimationFrame(ensureCharts);
       // 移动端切换偶发图表空白：延迟二次 resize + 热力图整图重绘兜底
       setTimeout(echResizeAll, 160);
@@ -2340,7 +2352,9 @@ LAZY.research.push(function () {
         $("kpis").style.display = "none";
       }
       if (pg === "research" || pg === "advice") {
-        withResearchData(function () { runLazy(pg); ensureCharts(); });
+        withResearchData(function () {
+          withScript("corp_actions.js", "REITS_ACTIONS", function () { runLazy(pg); ensureCharts(); });
+        });
       } else if (pg === "inst") {
         initInstPage();
       }
