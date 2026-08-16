@@ -129,7 +129,7 @@ def fetch_cebpubservice(days=30):
                + str(page))
         try:
             req = urllib.request.Request(url, headers=UA)
-            html = urllib.request.urlopen(req, timeout=20).read().decode("utf-8", "ignore")
+            html = urllib.request.urlopen(req, timeout=45).read().decode("utf-8", "ignore")
         except Exception as e:
             print(f"[ceb] p{page} 失败: {e}", flush=True)
             continue

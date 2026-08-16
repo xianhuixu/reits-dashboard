@@ -731,11 +731,9 @@ def main():
     jsr = "window.REITS_DATA_R = " + json.dumps(rest, ensure_ascii=False) + ";\n"
     (ROOT / "data_research.js").write_text(jsr, encoding="utf-8")
     (ROOT / "data_research.json").write_text(json.dumps(rest, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"[done] {len(reits)} 只，截至 {last_date}，"
-          f"data.js {len(js) / 1e6:.1f}MB + research {len(jsr) / 1e6:.1f}MB", flush=True)
     missing = [u["name"] for u in universe if u["code"] not in fetched]
     print(f"[done] {len(reits)}/{len(universe)} 只，截至 {payload['lastTradeDate']}，"
-          f"data.js {len(js) / 1e6:.1f}MB", flush=True)
+          f"data.js {len(js) / 1e6:.1f}MB + research {len(jsr) / 1e6:.1f}MB", flush=True)
     if missing:
         print("[miss] " + "、".join(missing))
     sync_inst_reits()
