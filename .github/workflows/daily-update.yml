@@ -1,0 +1,51 @@
+name: 每日数据更新
+
+on:
+  schedule:
+    # 每个工作日 17:05（Asia/Shanghai = UTC+8，即 UTC 09:05）
+    - cron: '5 9 * * 1-5'
+  workflow_dispatch:  # 允许手动触发
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-data-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 安装依赖
+        run: pip install pandas
+
+      - name: 更新行情与机构间REITs数据
+        run: python fetch_data_em.py
+
+      - name: 更新信息流与分红解禁公告
+        run: python fetch_news.py
+
+      - name: 更新项目申报清单
+        run: python fetch_projects.py
+
+      - name: 提交并推送数据变更
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.js data_research.js news.js corp_actions.js projects.js inst_reits.js reits_snapshot.js reits_snapshot.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "无数据变化，跳过提交"
+          else
+            LAST=$(python -c "import json,re; s=open('data.js',encoding='utf-8').read(); m=re.search(r'\"lastTradeDate\":\s*\"([^\"]+)\"', s); print(m.group(1) if m else 'unknown')")
+            git commit -m "data: 每日数据更新至${LAST}（GitHub Actions）"
+            git pull --rebase origin main || true
+            git push origin main
+          fi
