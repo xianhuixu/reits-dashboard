@@ -85,10 +85,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible
 @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes dash { to { stroke-dashoffset: 0; } }
-.anim { opacity: 0; animation: rise .35s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-.view:not([hidden]) .card { opacity: 0; animation: rise .35s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-#v-heatmap .card, #v-advice .card { opacity: 0; animation: rise .35s var(--ease) forwards; animation-delay: var(--d, 0ms); }
-#treemap > div { opacity: 0; animation: pop .4s var(--ease) forwards; animation-delay: var(--d, 0ms); transition: filter .2s ease, transform .2s ease; }
+.anim { animation: rise .35s var(--ease) both; animation-delay: var(--d, 0ms); }
+.view:not([hidden]) .card { animation: rise .35s var(--ease) both; animation-delay: var(--d, 0ms); }
+#v-heatmap .card, #v-advice .card { animation: rise .35s var(--ease) both; animation-delay: var(--d, 0ms); }
+#treemap > div { animation: pop .4s var(--ease) both; animation-delay: var(--d, 0ms); transition: filter .2s ease, transform .2s ease; }
 #treemap > div:hover { filter: brightness(1.06); transform: scale(1.012); z-index: 2; }
 svg path.line { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dash 1.1s var(--ease) forwards; }
 @media (prefers-reduced-motion: reduce) {
@@ -423,7 +423,7 @@ main { min-width: 0; }
 .page, .view, .card { min-width: 0; }
 .page[hidden] { display: none; }
 .page:not([hidden]) { animation: fade .28s var(--ease); }
-.page:not([hidden]) .card, .page:not([hidden]) .kpi { opacity: 0; animation: rise .35s var(--ease) forwards; animation-delay: var(--d, 0ms); }
+.page:not([hidden]) .card, .page:not([hidden]) .kpi { animation: rise .35s var(--ease) both; animation-delay: var(--d, 0ms); }
 @media (max-width: 860px) {
   :root { --sticky-offset: 214px; }
   html, body { max-width: 100%; }
