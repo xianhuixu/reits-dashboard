@@ -129,16 +129,16 @@ def fetch_cebpubservice(days=30):
                "?searchDate=1994-06-24&dates=30&word=REITs&categoryId=&industryName=&area=&status=&page="
                + str(page))
         html = ""
-        for attempt in range(3):
+        for attempt in range(2):
             try:
                 req = urllib.request.Request(url, headers=UA)
-                html = urllib.request.urlopen(req, timeout=45).read().decode("utf-8", "ignore")
+                html = urllib.request.urlopen(req, timeout=25).read().decode("utf-8", "ignore")
                 break
             except Exception as e:
                 print(f"[ceb] p{page} 第{attempt + 1}次失败: {e}", flush=True)
-                time.sleep(5)
+                time.sleep(4)
         if not html:
-            continue
+            break  # 第1页都拿不到就不再试第2页
         rows = re.findall(r"<tr[^>]*>(.*?)</tr>", html, re.S)
         n = 0
         for r in rows:
@@ -194,16 +194,16 @@ def main():
         seen.add(extra["code"])
         items.append(extra)
     cutoff = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
-    # 保留手工补录的 ctbpsp 门户公告（code 前缀 ctb_），防止云端抓取失败时被冲掉
+    # 保留历史招投标条目（ceb_/ctb_ 前缀）：源站间歇不可达，避免抓取失败时已有公告被冲掉
     try:
         old = json.loads((ROOT / "news.js").read_text(encoding="utf-8")
                          .replace("window.REITS_NEWS = ", "").rstrip().rstrip(";"))
         for x in old.get("items", []):
-            if x.get("code", "").startswith("ctb_") and x["code"] not in seen and x.get("date", "") >= cutoff:
+            if x.get("code", "").startswith(("ceb_", "ctb_")) and x["code"] not in seen and x.get("date", "") >= cutoff:
                 seen.add(x["code"])
                 items.append(x)
     except Exception as e:
-        print(f"[news] 旧文件 ctb_ 条目合并跳过: {e}", flush=True)
+        print(f"[news] 旧文件招投标条目合并跳过: {e}", flush=True)
     items = sorted([x for x in items if x["date"] >= cutoff],
                    key=lambda x: x["date"], reverse=True)
     # 保证招投标类不被截断，其余按日期取前 70 条
