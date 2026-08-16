@@ -194,6 +194,16 @@ def main():
         seen.add(extra["code"])
         items.append(extra)
     cutoff = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+    # 保留手工补录的 ctbpsp 门户公告（code 前缀 ctb_），防止云端抓取失败时被冲掉
+    try:
+        old = json.loads((ROOT / "news.js").read_text(encoding="utf-8")
+                         .replace("window.REITS_NEWS = ", "").rstrip().rstrip(";"))
+        for x in old.get("items", []):
+            if x.get("code", "").startswith("ctb_") and x["code"] not in seen and x.get("date", "") >= cutoff:
+                seen.add(x["code"])
+                items.append(x)
+    except Exception as e:
+        print(f"[news] 旧文件 ctb_ 条目合并跳过: {e}", flush=True)
     items = sorted([x for x in items if x["date"] >= cutoff],
                    key=lambda x: x["date"], reverse=True)
     # 保证招投标类不被截断，其余按日期取前 70 条
