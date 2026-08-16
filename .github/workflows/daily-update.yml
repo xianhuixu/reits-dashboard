@@ -51,3 +51,20 @@ jobs:
             git pull --rebase origin main || true
             git push origin main
           fi
+
+      - name: 同步部署到 Cloudflare Pages
+        # 无论本日数据是否有变化都同步一次，保证两个站点内容一致
+        if: always()
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "未配置 CLOUDFLARE_API_TOKEN，跳过 Cloudflare 同步"
+            exit 0
+          fi
+          rm -rf .cf-deploy && mkdir .cf-deploy
+          cp index.html data.js data_research.js news.js corp_actions.js projects.js inst_reits.js ui-utils.js .cf-deploy/
+          cp -r lib icons .cf-deploy/
+          npm i -D wrangler --no-save
+          npx wrangler pages deploy .cf-deploy --project-name=reits-dashboard --branch=main --commit-dirty=true
