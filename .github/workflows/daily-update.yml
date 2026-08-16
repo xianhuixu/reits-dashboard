@@ -34,6 +34,8 @@ jobs:
         run: python fetch_news.py
 
       - name: 更新项目申报清单
+        # 上交所 query.sse.com.cn 对海外 IP 不可达，失败时跳过（由本地每日任务兜底）
+        continue-on-error: true
         run: python fetch_projects.py
 
       - name: 提交并推送数据变更
