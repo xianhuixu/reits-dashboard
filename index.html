@@ -1075,7 +1075,7 @@ main { min-width: 0; }
     if (_rdataCbs) { _rdataCbs.push(cb); return; }
     _rdataCbs = [cb];
     var sc = document.createElement("script");
-    sc.src = "data_research.js";
+    sc.src = verUrl("data_research.js");
     sc.onload = function () {
       if (window.REITS_DATA_R) Object.assign(D, window.REITS_DATA_R);
       normalizeResearchData();
@@ -1086,13 +1086,17 @@ main { min-width: 0; }
     document.head.appendChild(sc);
   }
   // 通用按需脚本加载器（信息流/公告/项目申报数据在点按对应 tab 时才加载）
+  // 以核心数据的 updated 时间戳作缓存指纹：浏览器缓存新旧不一致时（如旧 research 包无历史序列字段）
+  // 指纹不同会强制回源拉取与当前核心数据匹配的版本，避免结构性缓存错乱
+  var DATA_VER = (window.REITS_DATA && window.REITS_DATA.updated) || "1";
+  function verUrl(src) { return src + (src.indexOf("?") < 0 ? "?" : "&") + "v=" + encodeURIComponent(DATA_VER); }
   var _srcLoads = {};
   function withScript(src, key, cb) {
     if (key && window[key]) { cb(); return; }
     if (_srcLoads[src]) { _srcLoads[src].push(cb); return; }
     _srcLoads[src] = [cb];
     var s = document.createElement("script");
-    s.src = src;
+    s.src = verUrl(src);
     s.onload = function () {
       var cbs = _srcLoads[src] || []; delete _srcLoads[src];
       cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[lazy-src]", e && e.message); } });
@@ -1532,6 +1536,7 @@ LAZY.research.push(function () {
   function renderDetail(code) {
     var r = D.reits.find(function (x) { return x.code === code; });
     if (!r) return;
+    if (!r.histClose) { r.histClose = []; r.histDates = []; } // 兜底：历史序列缺失时不致整卡渲染失败
     var evs = (D.events || []).filter(function (e) { return e.code === code; }).slice(0, 8);
     var corr = (D.reitPeers && D.reitPeers[code]) || {};
     var peers = (corr.peers || []).slice(0, 6);
@@ -2261,13 +2266,17 @@ LAZY.research.push(function () {
       try { history.replaceState(null, "", "#/detail/" + code); } catch (e) {}
     }
     showPage("research"); switchView("detail");
-    ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
-    $("fSearch").value = r.code;
-    if (window.__setSelCode) window.__setSelCode(r.code);
-    if (window.__renderTbl) window.__renderTbl();
-    renderDetail(r.code);
-    window.scrollTo({ top: 0, behavior: "instant" });
-    setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+    // 历史行情序列在研究数据包中（按需加载），必须等数据合并完成后再渲染详情，
+    // 否则热力图下钻 / hash 深链时 histClose 尚未就绪导致走势图空白
+    withResearchData(function () {
+      ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
+      $("fSearch").value = r.code;
+      if (window.__setSelCode) window.__setSelCode(r.code);
+      if (window.__renderTbl) window.__renderTbl();
+      renderDetail(r.code);
+      window.scrollTo({ top: 0, behavior: "instant" });
+      setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+    });
   }
 
   // ---- 左侧导航：三大板块 + 研究二级菜单 ----
