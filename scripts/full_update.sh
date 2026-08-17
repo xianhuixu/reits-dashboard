@@ -34,14 +34,8 @@ else
     echo "⚠ 信息流更新失败"
 fi
 
-# 4. 更新 index.html 缓存版本号（强制浏览器刷新 data.js）
-echo "[4/5] 更新 index.html 缓存版本号..."
-TODAY=$(date +%Y%m%d)
-sed -i "s/data.js?v=VERSION/data.js?v=${TODAY}/g" index.html
-echo "✓ 缓存版本号已更新为 ${TODAY}"
-
-# 5. 数据质量校验
-echo "[4/5] 数据质量校验 (check_data.py)..."
+# 4. 数据质量校验
+echo "[4/4] 数据质量校验 (check_data.py)..."
 if python3 check_data.py; then
     echo "✓ 数据校验通过"
 else
