@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#0a0e14">
 <!-- echarts 与核心数据是首屏关键资源：提前并行下载，不必等 HTML 解析到尾部才发起请求 -->
 <link rel="preload" href="lib/echarts-custom.min.js" as="script">
-<link rel="preload" href="data.js?v=20260817" as="script">
+<!-- data.js 动态加载：按日期自动刷新缓存，避免 CDN/浏览器缓存导致数据不同步 -->
 <script>
 (function(){
   var t = localStorage.getItem("rd-theme");
@@ -984,7 +984,15 @@ main { min-width: 0; }
   </div>
 </footer>
 
-<script src="data.js?v=20260817"></script>
+<script>
+  (function() {
+    var d = new Date();
+    var v = '' + d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+    var s = document.createElement('script');
+    s.src = 'data.js?v=' + v;
+    document.head.appendChild(s);
+  })();
+</script>
 <script src="ui-utils.js"></script>
 <script src="lib/echarts-custom.min.js"></script>
 <script>
