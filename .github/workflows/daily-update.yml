@@ -5,6 +5,8 @@ on:
     # 每个工作日 17:05（Asia/Shanghai = UTC+8，即 UTC 09:05）
     - cron: '5 9 * * 1-5'
   workflow_dispatch:  # 允许手动触发
+  push:               # push 时触发，保证两个站点实时同步
+    branches: [main, master]
 
 permissions:
   contents: write
