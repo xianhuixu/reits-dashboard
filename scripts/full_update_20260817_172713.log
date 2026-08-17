@@ -1,0 +1,62 @@
+=== REITs Dashboard 全量数据更新 ===
+开始时间: 2026-08-17 17:27:13
+[1/5] 更新行情数据 (fetch_data_em.py)...
+[reits 10/88] 已获取 10
+[reits 20/88] 已获取 20
+[reits 30/88] 已获取 30
+[reits 40/88] 已获取 40
+[reits 50/88] 已获取 50
+[reits 60/88] 已获取 60
+[reits 70/88] 已获取 70
+[reits 80/88] 已获取 80
+[reits 88/88] 已获取 88
+[heal] 399324.SZ 修复 489 行 手→份
+[heal] 000012.SH 修复 490 行 手→份
+[heal] 000300.SH 修复 489 行 手→份
+[heal] 399393.SZ 修复 490 行 手→份
+[heal] 399995.SZ 修复 489 行 手→份
+[heal] 399808.SZ 修复 490 行 手→份
+[heal] 399437.SZ 修复 489 行 手→份
+[heal] 399353.SZ 修复 489 行 手→份
+[heal] 399935.SZ 修复 489 行 手→份
+[heal] 000932.SH 修复 489 行 手→份
+[marketIndex] 东方财富获取失败: Remote end closed connection without response
+[marketIndex] 932047.CSI 无数据，置空
+[reits] 计算完成 88/88
+[corr] 基准 10 个
+[reitPeers] 计算完成 86 只
+[reval] 重估暂停 (1/4)
+[events] 近120日 200 条，回测 6 类
+[done] 88/88 只，截至 2026-08-17，data.js 0.1MB + research 0.7MB
+[done] 机构间REITs快照已同步 → inst_reits.js
+✓ 行情数据更新成功
+[2/5] 更新周期判断数据 (update_cycle_data.py)...
+[info] 新浪债券数据: 2026-08-14 收盘 1.677%
+[info] bond10y: 1.68% -> 1.68% (数据日期: 2026-08-14)
+[info] 已更新 /root/.openclaw/workspace/cycle_judgment.json
+✓ 周期判断数据更新成功
+[3/5] 更新信息流 (fetch_news.py)...
+[wx] 微信公众号 39 条
+[ceb] 招标投标平台 26 条
+[news] 90 条，截至 2026-08-17
+[actions] 35 条个券公告（近30日），截至 2026-08-14
+✓ 信息流更新成功
+[4/5] 数据质量校验 (check_data.py)...
+[check] 通过：88 只 · 截至 2026-08-17 · 更新 2026-08-17 17:29:01
+[check] 抽查 508056.SH 中金普洛斯仓储物流REIT: close=2.241, pct=-1.28, amount=7499730.6
+✓ 数据校验通过
+[5/5] 提交并推送...
+warning: adding embedded git repository: reits-dashboard
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint: 
+hint: 	git submodule add <url> reits-dashboard
+hint: 
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint: 
+hint: 	git rm --cached reits-dashboard
+hint: 
+hint: See "git help submodule" for more information.
