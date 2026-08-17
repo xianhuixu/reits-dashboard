@@ -431,6 +431,20 @@ def main():
         print(f"[marketIndex] 东方财富获取失败: {e}", flush=True)
 
     if market_index is None:
+        # 备用：保留旧数据
+        try:
+            old_data_js = open("data.js", encoding="utf-8").read()
+            import re as re_mod
+            m = re_mod.search(r'"marketIndex":\s*(\{[^}]*\}|null)', old_data_js)
+            if m and m.group(1) != "null":
+                old_mi = json.loads(m.group(1))
+                if old_mi and old_mi.get("close"):
+                    market_index = old_mi
+                    print(f"[marketIndex] 保留旧数据: {market_index}", flush=True)
+        except Exception as e2:
+            pass
+
+    if market_index is None:
         print(f"[marketIndex] {MARKET_INDEX_CODE} 无数据，置空", flush=True)
 
     # ---------- 3. 单只指标与信号 ----------
