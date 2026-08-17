@@ -431,16 +431,55 @@ def main():
         print(f"[marketIndex] 东方财富获取失败: {e}", flush=True)
 
     if market_index is None:
-        # 备用：保留旧数据
+        # 备用1：从 GitHub Pages CDN 获取上一个成功版本（CDN 可能有缓存的旧数据）
+        try:
+            ctx = ssl._create_unverified_context()
+            gh_url = "https://xianhuixu.github.io/reits-dashboard/data.js"
+            req = urllib.request.Request(gh_url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
+                gh_data = resp.read().decode("utf-8")
+                m = re.search(r'"marketIndex":\s*(\{[^}]*\})', gh_data)
+                if m:
+                    old_mi = json.loads(m.group(1))
+                    if old_mi and old_mi.get("close"):
+                        market_index = old_mi.copy()
+                        market_index["stale"] = True
+                        market_index["staleNote"] = "实时数据获取失败，显示为最近一次成功数据"
+                        print(f"[marketIndex] 从 GitHub Pages CDN 缓存恢复: {market_index}", flush=True)
+        except Exception as e2:
+            print(f"[marketIndex] GitHub Pages CDN 获取失败: {e2}", flush=True)
+
+    if market_index is None:
+        # 备用2：从 Cloudflare Pages 获取
+        try:
+            ctx = ssl._create_unverified_context()
+            cf_url = "https://reits-dashboard.pages.dev/data.js"
+            req = urllib.request.Request(cf_url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
+                cf_data = resp.read().decode("utf-8")
+                m = re.search(r'"marketIndex":\s*(\{[^}]*\})', cf_data)
+                if m:
+                    old_mi = json.loads(m.group(1))
+                    if old_mi and old_mi.get("close"):
+                        market_index = old_mi.copy()
+                        market_index["stale"] = True
+                        market_index["staleNote"] = "实时数据获取失败，显示为最近一次成功数据"
+                        print(f"[marketIndex] 从 Cloudflare Pages 恢复: {market_index}", flush=True)
+        except Exception as e2:
+            print(f"[marketIndex] Cloudflare Pages 获取失败: {e2}", flush=True)
+
+    if market_index is None:
+        # 备用3：本地 data.js 中的旧数据
         try:
             old_data_js = open("data.js", encoding="utf-8").read()
-            import re as re_mod
-            m = re_mod.search(r'"marketIndex":\s*(\{[^}]*\}|null)', old_data_js)
+            m = re.search(r'"marketIndex":\s*(\{[^}]*\}|null)', old_data_js)
             if m and m.group(1) != "null":
                 old_mi = json.loads(m.group(1))
                 if old_mi and old_mi.get("close"):
-                    market_index = old_mi
-                    print(f"[marketIndex] 保留旧数据: {market_index}", flush=True)
+                    market_index = old_mi.copy()
+                    market_index["stale"] = True
+                    market_index["staleNote"] = "实时数据获取失败，显示为历史数据"
+                    print(f"[marketIndex] 保留本地旧数据: {market_index}", flush=True)
         except Exception as e2:
             pass
 
