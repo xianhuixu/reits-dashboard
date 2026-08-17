@@ -433,12 +433,13 @@ def main():
     if market_index is None:
         # 备用1：从 GitHub Pages CDN 获取上一个成功版本（CDN 可能有缓存的旧数据）
         try:
+            import re as re_mod
             ctx = ssl._create_unverified_context()
             gh_url = "https://xianhuixu.github.io/reits-dashboard/data.js"
             req = urllib.request.Request(gh_url, headers={"User-Agent": "Mozilla/5.0"})
             with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
                 gh_data = resp.read().decode("utf-8")
-                m = re.search(r'"marketIndex":\s*(\{[^}]*\})', gh_data)
+                m = re_mod.search(r'"marketIndex":\s*(\{[^}]*\})', gh_data)
                 if m:
                     old_mi = json.loads(m.group(1))
                     if old_mi and old_mi.get("close"):
@@ -452,12 +453,13 @@ def main():
     if market_index is None:
         # 备用2：从 Cloudflare Pages 获取
         try:
+            import re as re_mod
             ctx = ssl._create_unverified_context()
             cf_url = "https://reits-dashboard.pages.dev/data.js"
             req = urllib.request.Request(cf_url, headers={"User-Agent": "Mozilla/5.0"})
             with urllib.request.urlopen(req, timeout=10, context=ctx) as resp:
                 cf_data = resp.read().decode("utf-8")
-                m = re.search(r'"marketIndex":\s*(\{[^}]*\})', cf_data)
+                m = re_mod.search(r'"marketIndex":\s*(\{[^}]*\})', cf_data)
                 if m:
                     old_mi = json.loads(m.group(1))
                     if old_mi and old_mi.get("close"):
@@ -471,8 +473,9 @@ def main():
     if market_index is None:
         # 备用3：本地 data.js 中的旧数据
         try:
+            import re as re_mod
             old_data_js = open("data.js", encoding="utf-8").read()
-            m = re.search(r'"marketIndex":\s*(\{[^}]*\}|null)', old_data_js)
+            m = re_mod.search(r'"marketIndex":\s*(\{[^}]*\}|null)', old_data_js)
             if m and m.group(1) != "null":
                 old_mi = json.loads(m.group(1))
                 if old_mi and old_mi.get("close"):
