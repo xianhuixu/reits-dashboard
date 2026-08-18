@@ -16,6 +16,9 @@ const root = __dirname;
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".css": "text/css; charset=utf-8",
   ".svg": "image/svg+xml", ".png": "image/png", ".csv": "text/csv; charset=utf-8" };
+// 静态资源（echarts、图标、缓存数据）允许短时缓存；HTML 始终 no-cache 以便开发刷新
+const CACHEABLE_EXTS = new Set([".js", ".css", ".svg", ".png", ".json", ".csv"]);
+const CACHE_HEADER = "public, max-age=3600, must-revalidate";
 
 http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split("?")[0]);
@@ -24,7 +27,9 @@ http.createServer((req, res) => {
   if (!file.startsWith(root)) { res.writeHead(403); return res.end(); }
   fs.readFile(file, (err, data) => {
     if (err) { res.writeHead(404); return res.end("Not found"); }
-    res.writeHead(200, { "Content-Type": MIME[path.extname(file)] || "application/octet-stream", "Cache-Control": "no-store" });
+    const ext = path.extname(file);
+    const cache = (ext === ".html" || !CACHEABLE_EXTS.has(ext)) ? "no-store" : CACHE_HEADER;
+    res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream", "Cache-Control": cache });
     res.end(data);
   });
 }).listen(port, host, () => console.log(`REITs dashboard: http://${host}:${port}/`));

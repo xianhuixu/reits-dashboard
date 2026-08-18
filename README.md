@@ -43,13 +43,34 @@ https://xianhuixu.github.io/reits-dashboard/
 
 ### 自动更新（服务器 cron）
 
-`scripts/auto_update.sh` 已实现全流程自动化，在服务器上以 cron 调度（建议每交易日 15:30 后，收盘数据完整）：
+`scripts/auto_update.sh` 已实现全流程自动化。脚本自适配 `SCRIPT_DIR`/`WORK_DIR`，不再硬编码 `/root/.openclaw/workspace`，可在任意部署路径运行。
+
+每个交易日 15:30 后（收盘数据完整）由 cron 调度：
 
 ```cron
-30 15 * * 1-5 cd /root/.openclaw/workspace && ./scripts/auto_update.sh >> scripts/auto_update.log 2>&1
+30 15 * * 1-5 <仓库路径>/scripts/auto_update.sh >> <仓库路径>/scripts/auto_update.log 2>&1
 ```
 
-脚本流程：交易日/节假日判断 → `git pull` → 行情数据（`fetch_data_em.py` 直连腾讯，失败自动回退 `fetch_data_server_v2.py` 缓存版）→ **数据质量闸门 `check_data.py`**（个券数/收盘价/成交额校验，不通过则放弃推送保护线上）→ 信息流 → 项目申报 → `git commit & push` → GitHub Pages 自动部署。
+脚本流程（6 步骤）：交易日/节假日判断 → `git pull` → 行情数据（`fetch_data_em.py` 直连腾讯，失败自动回退 `fetch_data_server_v2.py` 缓存版）→ **数据质量闸门 `check_data.py`**（个券数/收盘价/成交额校验，不通过立即 `exit 1` 放弃推送保护线上）→ 信息流 → 项目申报 → `git commit & push` → GitHub Pages 自动部署。
+
+`full_update.sh` 是同等的全量版本（行情 → 周期判断 → 信息流 → 质量闸门 → 推送），适合手动一次性补跑。
+
+### 首次克隆后初始化
+
+`data.json` / `data_research.json` / `data_research.js` 等数据文件已 gitignore，首次克隆后仓库不含实际数据，请本地先运行一次生成：
+
+```bash
+python3 fetch_data_em.py   # 直连腾讯生成 data.js/data.json（约 1-2 分钟）
+python3 fetch_news.py      # 抓取新闻与公告
+python3 verify_data.py     # 校验产物文件
+```
+
+随后 `npm run dev` 即可在 http://127.0.0.1:7100 访问。
+
+### 已弃用脚本
+
+- `fetch_data_fast.py` / `fetch_data_patched.py` — iFinD 旧版本迭代残留，已停止使用并加入 `.gitignore`
+- `fetch_data_server.py` — 服务器版未完工(mock 模式),请改用 `fetch_data_server_v2.py` (基于 hist_cache 兜底)
 
 `fetch_data_em.py` 的 `fetch_history` 自带**成交量单位自愈**（腾讯"手"与 iFinD"份"混用会自动归一）；若服务器 hist_cache 从未修复过，可先跑一次：
 
