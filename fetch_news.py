@@ -287,6 +287,10 @@ def fetch_actions():
     print(f"[actions] {len(items)} 条个券公告（近30日），截至 {items[0]['date'] if items else '—'}", flush=True)
 
 
-if __name__ == "__main__":
+def _run_all():
     main()
     fetch_actions()
+
+
+if __name__ == "__main__":
+    _run_all()

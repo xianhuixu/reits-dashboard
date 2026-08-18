@@ -1,82 +1,134 @@
-import json, os
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""data.js / news.js / corp_actions.js 文件级校验（读取真实产物，不输出硬编码假数据）。
+
+修复记录:
+- 修复前用 datetime(2026, 7, 30) 硬编码 today，导致任何时间运行都"通过"
+- 修复假打印 "✓ [done] 87/87 只" 等无意义文案
+- 不会运行 fetch_data.py / fetch_news.py，只是读取其已落盘的产物
+"""
+import json
+import os
+import re
+import sys
 from datetime import datetime, timedelta
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 os.chdir(ROOT)
 
-print("=" * 50)
-print("【数据校验报告】")
-print("=" * 50)
 
-# 1. data.json 校验
-with open('data.json') as f:
-    d = json.load(f)
+def load_js_payload(path, prefix):
+    """从 window.<NAME> = {...} 风格的 .js 文件里提取 JSON 部分。"""
+    with open(path, encoding="utf-8") as f:
+        raw = f.read()
+    i = raw.find(prefix)
+    if i < 0:
+        raise ValueError(f"{path} 缺少 {prefix!r}")
+    s = raw[i + len(prefix):].strip()
+    if s.endswith(";"):
+        s = s[:-1]
+    s = s.strip()
+    return json.loads(s)
 
-updated = d.get('updated')
-lastTradeDate = d.get('lastTradeDate')
-count = d.get('count')
 
-print(f"\n[data.json]")
-print(f"  updated: {updated}")
-print(f"  lastTradeDate: {lastTradeDate}")
-print(f"  count: {count}")
+def check_data_js():
+    d = load_js_payload("data.js", "window.REITS_DATA = ")
+    reits = d.get("reits") or []
+    problems = []
+    if len(reits) < 80:
+        problems.append(f"reits 数量过少 {len(reits)} (<80)")
+    close_bad = sum(1 for r in reits if not r.get("close") or r["close"] <= 0)
+    if close_bad > 3:
+        problems.append(f"{close_bad} 只 close 无效")
+    if not d.get("updated") or not d.get("lastTradeDate"):
+        problems.append("updated / lastTradeDate 缺失")
+    return d, problems
 
-# 抽查更多REITs
-reits = d.get('reits', [])
-print(f"  抽查价格合理性:")
-for r in reits[:5]:
-    close = r.get('close')
-    pct = r.get('pct')
-    status = "✓" if close and isinstance(close, (int, float)) and close > 0 else "✗"
-    print(f"    {status} {r['code']} {r['name']}: close={close}, pct={pct}%")
 
-# 涨跌家数统计
-up = sum(1 for r in reits if r.get('pct', 0) > 0)
-down = sum(1 for r in reits if r.get('pct', 0) < 0)
-flat = sum(1 for r in reits if r.get('pct', 0) == 0)
-print(f"  涨跌统计: 涨{up}只 / 跌{down}只 / 平{flat}只")
+def check_news_js():
+    n = load_js_payload("news.js", "window.REITS_NEWS = ")
+    items = n.get("items") or []
+    problems = []
+    today = datetime.now().date()
+    cutoff = today - timedelta(days=30)
+    out = [i for i in items if datetime.strptime(i["date"], "%Y-%m-%d").date() < cutoff]
+    if out:
+        problems.append(f"{len(out)} 条新闻超出 30 天范围")
+    return n, problems
 
-# 2. news.json 校验
-with open('news.json') as f:
-    news = json.load(f)
-items = news.get('items', [])
-print(f"\n[news.json]")
-print(f"  items: {len(items)} 条")
-if items:
-    dates = [i['date'] for i in items]
-    print(f"  日期范围: {min(dates)} ~ {max(dates)}")
-    # 检查是否近30天
-    latest = datetime.strptime(max(dates), '%Y-%m-%d')
-    today = datetime(2026, 7, 30)
-    delta = (today - latest).days
-    print(f"  最新新闻距今天数: {delta}天 {'✓' if delta <= 30 else '✗'}")
 
-# 3. corp_actions.json 校验
-with open('corp_actions.json') as f:
-    ca = json.load(f)
-items2 = ca.get('items', [])
-print(f"\n[corp_actions.json]")
-print(f"  items: {len(items2)} 条")
-if items2:
-    dates2 = [i['date'] for i in items2]
-    print(f"  日期范围: {min(dates2)} ~ {max(dates2)}")
-    latest2 = datetime.strptime(max(dates2), '%Y-%m-%d')
-    delta2 = (today - latest2).days
-    print(f"  最新公告距今天数: {delta2}天 {'✓' if delta2 <= 30 else '✗'}")
-else:
-    print(f"  注: 公告列表为空（属正常情况）")
+def check_corp_actions_js():
+    c = load_js_payload("corp_actions.js", "window.REITS_ACTIONS = ")
+    items = c.get("items") or []
+    return c, []  # 公告列表允许为空
 
-# 4. fetch_data.py 输出检查
-print(f"\n[fetch_data.py 输出检查]")
-print(f"  ✓ [done] 87/87 只")
-print(f"  ✓ 无 [miss] 列表")
 
-# 5. fetch_news.py 输出检查
-print(f"\n[fetch_news.py 输出检查]")
-print(f"  ✓ [news] {len(items)} 条")
-print(f"  ✓ [actions] {len(items2)} 条")
-print(f"  ✓ 无 [miss] 列表")
+def main():
+    print("=" * 50)
+    print("【数据校验报告】", datetime.now().isoformat(timespec="seconds"))
+    print("=" * 50)
 
-print(f"\n{'=' * 50}")
-print("【校验结论】全部通过 ✓")
-print("=" * 50)
+    summary = []
+    overall_ok = True
+
+    # 1. data.js
+    try:
+        d, p = check_data_js()
+        verdict = "✓" if not p else "✗"
+        summary.append((verdict, "data.js", f"{len(d.get('reits', []))} 只 · 截至 {d.get('lastTradeDate')} · 更新 {d.get('updated')}", p))
+        if p:
+            overall_ok = False
+    except Exception as e:
+        summary.append(("✗", "data.js", f"读取失败: {e}", [str(e)]))
+        overall_ok = False
+
+    # 2. news.js
+    try:
+        n, p = check_news_js()
+        items = n.get("items", [])
+        verdict = "✓" if not p else "✗"
+        summary.append((verdict, "news.js", f"{len(items)} 条", p))
+        if p:
+            overall_ok = False
+    except Exception as e:
+        summary.append(("✗", "news.js", f"读取失败: {e}", [str(e)]))
+        overall_ok = False
+
+    # 3. corp_actions.js
+    try:
+        c, p = check_corp_actions_js()
+        summary.append(("✓" if not p else "✗", "corp_actions.js", f"{len(c.get('items', []))} 条", p))
+    except Exception as e:
+        summary.append(("✗", "corp_actions.js", f"读取失败: {e}", [str(e)]))
+        overall_ok = False
+
+    # 4. 抽查
+    try:
+        d = load_js_payload("data.js", "window.REITS_DATA = ")
+        reits = d.get("reits", [])
+        if reits:
+            head = reits[0]
+            tail = reits[-1]
+            print(f"\n[抽查] 首只 {head['code']} {head['name']}: close={head.get('close')}, pct={head.get('pct')}%")
+            print(f"[抽查] 末只 {tail['code']} {tail['name']}: close={tail.get('close')}, pct={tail.get('pct')}%")
+    except Exception:
+        pass
+
+    # 输出汇总
+    print()
+    for verdict, name, info, problems in summary:
+        print(f"[{verdict}] {name}: {info}")
+        for prob in problems:
+            print(f"        - {prob}")
+
+    print()
+    if overall_ok:
+        print("【校验结论】全部通过 ✓")
+        sys.exit(0)
+    else:
+        print("【校验结论】存在问题 ✗,请检查")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

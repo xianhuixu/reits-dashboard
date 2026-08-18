@@ -92,14 +92,14 @@ def fetch_tencent(codes):
                         # 处理复合字段如 "2.251/25690/5785391"
                         s = str(s).split('/')[0]
                         return float(s) if s else None
-                    except:
+                    except (ValueError, TypeError):
                         return None
-                
+
                 def safe_int(s):
                     try:
                         s = str(s).split('/')[0]
                         return int(s) if s else 0
-                    except:
+                    except (ValueError, TypeError):
                         return 0
                 
                 if len(parts) > 3:
@@ -326,7 +326,14 @@ def main():
     # 5. 保存
     save_data(data)
     
-    # 6. 自动提交到 GitHub
+    # 6. 数据质量闸门（与 auto_update.sh 保持一致：不通过则不推送，保护线上）
+    print("[info] 数据质量校验...")
+    rc = subprocess.run([sys.executable, str(ROOT / "check_data.py")], cwd=ROOT)
+    if rc.returncode != 0:
+        print("[error] 数据质量校验未通过，已放弃推送。请检查数据源后重试。", file=sys.stderr)
+        sys.exit(1)
+
+    # 7. 自动提交到 GitHub
     print("[info] 正在推送到 GitHub...")
     git_commit_push()
     

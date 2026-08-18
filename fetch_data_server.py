@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+⚠️ DEPRECATED — 此脚本已不再使用，请改用 fetch_data_server_v2.py。
+
 公募REITs 全量投研面板数据抓取脚本 - 服务器版本 (方案B)
 数据源：stock_finance_data (同花顺) via OpenClaw 工具 / akshare / yfinance
+
+本脚本默认 DATA_SOURCE="mock" 直接返回 None，仅作为占位实现。
+实际服务器端数据生成见 fetch_data_server_v2.py(基于 hist_cache 离线生成)。
+保留此文件仅供历史参考，预计在下一个大版本移除。
+"""
 覆盖：universe.json 全部上市公募 REITs + 大类资产基准 + 海外 REITs 代表标的
 能力：上市以来全历史日线、MACD/RSI/分位/流动性指标、六因子信号打分、
      信号事件流与历史回测、海外 REITs 走势

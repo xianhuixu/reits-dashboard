@@ -23,6 +23,23 @@ skills/
 node_modules/
 data.json
 data_research.json
+data_research.js
+scripts/full_update_*.log
 .cf-deploy/
 reits-dashboard/
+/reits_dashboard/
 .wrangler/
+
+# 历史版本抓取脚本（已弃用，见 README）
+fetch_data_fast.py
+fetch_data_patched.py
+
+# OpenClaw workspace 临时产物（不入库）
+make_report_charts.py
+make_report_docx.py
+test_api.py
+test_api2.py
+test_batch.py
+validate.py
+report_tmp/
+icons/lion-v3-preview*.png
