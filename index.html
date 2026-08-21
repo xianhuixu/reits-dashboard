@@ -2207,7 +2207,7 @@ LAZY.research.push(function () {
       document.querySelector(tableId + " tbody").innerHTML =
         rows || '<tr><td colspan="5" class="l" style="color:var(--tx3)">暂无数据</td></tr>';
       document.querySelector(metaId).textContent =
-        (P && P.updated ? "更新 " + P.updated + " · " : "") + meta;
+        (P && P.updated ? "每日自动巡检 · 最近检查 " + P.updated + " · " : "") + meta;
     }
     function renderNdrc() {
       var list = P.ndrc || [];
