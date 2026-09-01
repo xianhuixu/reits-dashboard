@@ -167,6 +167,19 @@ def fetch_cebpubservice(days=30):
     return out
 
 
+def fetch_ctbpsp_webbridge(days=30):
+    """中国招标投标公共服务平台新站（ctbpsp.com）：阿里云WAF动态挑战反爬
+    （与掘金 6886689669891751943 所述两段式加密 cookie 同类），纯 HTTP/无头浏览器均无法通过，
+    改走本机 Kimi WebBridge 驱动真实 Chrome 提取。CI/浏览器离线时返回空，
+    历史招投标条目由 main() 的合并逻辑保留（ceb_/ctb_ 前缀）。"""
+    try:
+        import fetch_bids_ctbpsp
+        return fetch_bids_ctbpsp.fetch(days)
+    except Exception as e:
+        print(f"[ctb] WebBridge 模块调用失败: {e}", flush=True)
+        return []
+
+
 def main():
     seen, items = set(), []
     for kw in KEYWORDS:
@@ -187,8 +200,8 @@ def main():
                 "url": a.get("url", ""),
                 "tag": classify(title, content),
             })
-    # 并入微信公众号文章与招标投标平台公告
-    for extra in fetch_sogou_weixin(30) + fetch_cebpubservice(30):
+    # 并入微信公众号文章与招标投标平台公告（新站 WebBridge 优先，旧站接口兜底）
+    for extra in fetch_sogou_weixin(30) + fetch_ctbpsp_webbridge(30) + fetch_cebpubservice(30):
         if extra["code"] in seen:
             continue
         seen.add(extra["code"])
