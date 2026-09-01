@@ -707,7 +707,7 @@ LAZY.research.push(function () {
     var fl = pool.length - up - dn;
     $("hmSummary").innerHTML = "<span>下跌 <b class='down'>" + dn + "</b></span><span>平 <b>" + fl + "</b></span><span>上涨 <b class='up'>" + up + "</b></span>";
     $("hmCrumb").innerHTML = hmDrill
-      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 个券详情请用顶部搜索或「个券透视」</span>'
+      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 点击个券色块直达「个券透视」</span>'
       : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
     document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) {
       x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
@@ -838,9 +838,10 @@ LAZY.research.push(function () {
       inst.off("click");
       inst.on("click", function (p) {
         var d = p.data || {};
-        // 个券叶子节点不再跳转个券透视（避免首页被动加载 620KB 研究包）；
-        // 个券透视改为按需入口：顶部全局搜索 / 研究页表格 / hash 深链
-        if (d.code) { return; }
+        // 下钻到个券层后，点击个券色块 → 跳转「个券透视」。
+        // 研究数据包（约 1MB）是点击后才 fetch 的按需加载，首页首屏不受影响；
+        // ETag 条件下同一份研究包一天内只需下载一次
+        if (d.code) { openReitDetail(d.code); return; }
         if (!hmDrill && d.name) { hmDrill = d.name; renderTreemap(); }
       });
     }
