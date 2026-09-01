@@ -17,9 +17,18 @@ echo "工作目录: $WORK_DIR"
 echo "日志: $LOG_FILE"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-# 1. 行情数据
+# 1. 周期判断数据（须在行情之前：fetch_data_em 读取 cycle_judgment.json）
 echo ""
-echo "[1/5] 更新行情数据 (fetch_data_em.py)..."
+echo "[1/5] 更新周期判断数据 (update_cycle_data.py)..."
+if python3 update_cycle_data.py; then
+    echo "[ok] 周期判断数据更新成功"
+else
+    echo "[warn] 周期判断数据更新失败，继续执行后续步骤"
+fi
+
+# 2. 行情数据
+echo ""
+echo "[2/5] 更新行情数据 (fetch_data_em.py)..."
 if python3 fetch_data_em.py; then
     echo "[ok] 行情数据更新成功"
 else
@@ -29,15 +38,6 @@ else
         exit 1
     fi
     echo "[ok] 行情数据由 hist_cache 兜底生成"
-fi
-
-# 2. 周期判断数据
-echo ""
-echo "[2/5] 更新周期判断数据 (update_cycle_data.py)..."
-if python3 update_cycle_data.py; then
-    echo "[ok] 周期判断数据更新成功"
-else
-    echo "[warn] 周期判断数据更新失败，继续执行后续步骤"
 fi
 
 # 3. 信息流（公告 + 新闻）

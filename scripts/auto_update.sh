@@ -52,6 +52,14 @@ if ! git pull origin main >> "$LOG_FILE" 2>&1; then
     exit 1
 fi
 
+# 1.5 宏观周期数据（10Y国债收益率，须在行情脚本之前：fetch_data_em 读取 cycle_judgment.json）
+log "[1.5/6] Updating cycle macro data (bond10y)..."
+if timeout 60 python3 update_cycle_data.py >> "$LOG_FILE" 2>&1; then
+    log "Cycle data updated"
+else
+    log "WARNING: update_cycle_data.py failed, keep previous cycle data"
+fi
+
 # 2. 行情数据（主路径腾讯直连，兜底 hist_cache）
 log "[2/6] Updating market data (tencent direct, cache fallback)..."
 if timeout 600 python3 fetch_data_em.py >> "$LOG_FILE" 2>&1; then

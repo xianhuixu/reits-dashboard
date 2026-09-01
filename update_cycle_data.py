@@ -1,32 +1,40 @@
 #!/usr/bin/env python3
 """
 自动更新周期判断宏观数据
-- 10年期国债收益率（从 akshare 新浪财经接口获取）
+- 10年期国债收益率（东方财富数据中心「中美国债收益率」接口，纯 urllib，无第三方依赖）
 - PMI、CPI 等月度数据（保留手动维护）
 """
 import json
 import sys
+import urllib.request
 from datetime import date
 from pathlib import Path
-
-import akshare as ak
 
 ROOT = Path(__file__).resolve().parent
 CYCLE_JSON = ROOT / "cycle_judgment.json"
 
+# 东财字段：EMM00166466 = 中国国债收益率10年
+URL = ("https://datacenter.eastmoney.com/api/data/get?type=RPTA_WEB_TREASURYYIELD"
+       "&sty=ALL&st=SOLAR_DATE&sr=-1&p=1&ps=5&source=WEB")
+
 
 def fetch_bond10y():
-    """从新浪财经获取10年期国债收益率"""
+    """从东方财富数据中心获取最新10年期国债收益率"""
     try:
-        df = ak.bond_gb_zh_sina(symbol="中国10年期国债")
-        if df is not None and not df.empty:
-            latest = df.iloc[-1]
-            close = float(latest["close"])
-            date_str = str(latest["date"])
-            print(f"[info] 新浪债券数据: {date_str} 收盘 {close}%")
-            return round(close, 2), date_str
+        req = urllib.request.Request(URL, headers={
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://data.eastmoney.com/",
+        })
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            rows = json.loads(resp.read().decode("utf-8")).get("result", {}).get("data") or []
+        for row in rows:  # 倒序返回，取第一条非空的
+            v = row.get("EMM00166466")
+            if v is not None:
+                date_str = str(row.get("SOLAR_DATE", ""))[:10]
+                print(f"[info] 东财国债数据: {date_str} 10Y收盘 {v}%")
+                return round(float(v), 2), date_str
     except Exception as e:
-        print(f"[warn] akshare 获取国债收益率失败: {e}")
+        print(f"[warn] 东财获取国债收益率失败: {e}")
     return None, None
 
 
