@@ -29,6 +29,12 @@ jobs:
       - name: 安装依赖
         run: pip install pandas
 
+      - name: 安装 Scrapling 反爬组件（招投标 ctbpsp 抓取，失败则自动走兜底源）
+        continue-on-error: true
+        run: |
+          pip install "scrapling[all]"
+          scrapling install || true
+
       - name: 更新宏观周期数据（10Y国债收益率）
         continue-on-error: true
         run: python update_cycle_data.py

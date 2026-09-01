@@ -208,11 +208,14 @@ def main():
         items.append(extra)
     cutoff = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
     # 保留历史招投标条目（ceb_/ctb_ 前缀）：源站间歇不可达，避免抓取失败时已有公告被冲掉
+    # 同时按 (日期, 标题前20字) 去重：不同抓取通道（旧接口 uuid / Scrapling 标题哈希）code 不同但可能是同一条公告
+    seen_tt = {(x["date"], x["title"][:20]) for x in items}
     try:
         old = json.loads((ROOT / "news.js").read_text(encoding="utf-8")
                          .replace("window.REITS_NEWS = ", "").rstrip().rstrip(";"))
         for x in old.get("items", []):
-            if x.get("code", "").startswith(("ceb_", "ctb_")) and x["code"] not in seen and x.get("date", "") >= cutoff:
+            if (x.get("code", "").startswith(("ceb_", "ctb_")) and x["code"] not in seen
+                    and (x["date"], x["title"][:20]) not in seen_tt and x.get("date", "") >= cutoff):
                 seen.add(x["code"])
                 items.append(x)
     except Exception as e:
@@ -223,6 +226,15 @@ def main():
     tenders = [x for x in items if x["tag"] == "招投标"]
     others = [x for x in items if x["tag"] != "招投标"][:70]
     items = sorted(tenders + others, key=lambda x: x["date"], reverse=True)
+    # 全局按 (日期, 标题) 去重：多渠道（东财/微信/ceb/ctbpsp）可能抓到同一条公告
+    _seen2, _dedup = set(), []
+    for x in items:
+        k = (x["date"], x["title"][:25])
+        if k in _seen2:
+            continue
+        _seen2.add(k)
+        _dedup.append(x)
+    items = _dedup
     payload = {
         "updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "tags": ["全部", "政策监管", "机构间REITs", "招投标", "拟上市", "申报动态", "上市公告", "扩募动态", "市场观点"],
