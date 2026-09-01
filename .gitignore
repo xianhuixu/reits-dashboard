@@ -21,8 +21,6 @@ skills/
 
 # 构建与本地生成物（不入库、不随站部署）
 node_modules/
-data.json
-data_research.json
 data_research.js
 scripts/full_update_*.log
 .cf-deploy/
