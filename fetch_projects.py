@@ -16,6 +16,7 @@ from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parent
 OUT_JS = ROOT / "projects.js"
+OUT_JSON = ROOT / "projects.json"
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36")
@@ -153,6 +154,8 @@ def main() -> None:
     }
     js = "window.REITS_PROJECTS = " + json.dumps(payload, ensure_ascii=False) + ";\n"
     OUT_JS.write_text(js, encoding="utf-8")
+    # 同步输出 JSON 版：前端 fetch + ETag 条件请求使用
+    OUT_JSON.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"[done] ndrc={len(payload['ndrc'])} sse={len(payload['sse'])} "
           f"szse={len(payload['szse'])} -> {OUT_JS.name}", flush=True)
 

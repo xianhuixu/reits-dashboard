@@ -1,0 +1,2208 @@
+// 等核心数据就绪后再启动应用：data.json 与 app.js 并行下载，启动只等数据
+window.__DATA_READY.then(function () {
+(function () {
+  // ---- iOS 旧版兼容性 Polyfill ----
+  // NodeList.forEach (iOS 9- 不支持)
+  if (!NodeList.prototype.forEach) {
+    NodeList.prototype.forEach = Array.prototype.forEach;
+  }
+  // classList.toggle(token, force) (iOS 9- 不支持第二个参数)
+  var _origToggle = DOMTokenList.prototype.toggle;
+  DOMTokenList.prototype.toggle = function(token, force) {
+    if (arguments.length >= 2) {
+      if (force) { this.add(token); return true; }
+      else { this.remove(token); return false; }
+    }
+    return _origToggle.call(this, token);
+  };
+
+  var D = window.REITS_DATA;
+  function normalizeResearchData() {
+  // 兼容：若相关性数据为“按个券 peers”的新结构（缺少旧版 matrix/benchmarks/scatter），
+  // 则置空以让下游相关性视图安全降级，避免 undefined 访问导致整页崩溃。
+  if (D && D.correlation && !D.correlation.matrix) {
+    D.correlation = null;
+  }
+  // 兼容：fetch_data_em.py 生成的“布尔标记事件 + 数组回测” → 前端所需的 type 结构
+  if (D && D.events && D.events.length && !D.events[0].type) {
+    var EV_FLAG_MAP = [
+      ["goldenCross", "MACD金叉"], ["deathCross", "MACD死叉"],
+      ["rsiOver", "RSI超买"], ["rsiBounce", "RSI超卖"],
+      ["volumeSpike", "成交异动"], ["break20", "突破250日线"],
+      ["quiet", "价稳量缩"], ["drop3", "单日大跌"]
+    ];
+    function expandEvent(e) {
+      var out = [];
+      EV_FLAG_MAP.forEach(function (m) {
+        if (e[m[0]]) out.push({ code: e.code, name: e.name, date: e.date, type: m[1] });
+      });
+      if (!out.length) out.push({ code: e.code, name: e.name, date: e.date, type: "信号" });
+      return out;
+    }
+    var expanded = [];
+    D.events.forEach(function (e) { expanded = expanded.concat(expandEvent(e)); });
+    D.events = expanded;
+
+    // 回测：数组样本 → 按类型聚合 5/20 日均值与胜率（用个券历史收盘价补全）
+    if (Array.isArray(D.backtest)) {
+      var closeMap = {};
+      (D.reits || []).forEach(function (r) {
+        if (r.histDates && r.histClose) closeMap[r.code] = { dates: r.histDates, close: r.histClose };
+      });
+      var agg = {};
+      D.backtest.forEach(function (s) {
+        var e = s.event || {};
+        var cm = closeMap[e.code];
+        var idx = cm ? cm.dates.indexOf(e.date) : -1;
+        expandEvent(e).forEach(function (ev) {
+          var b = agg[ev.type] || (agg[ev.type] = { r5: [], r20: [] });
+          if (idx >= 0 && idx + 5 < cm.close.length) b.r5.push((cm.close[idx + 5] / cm.close[idx] - 1) * 100);
+          else if (s.ret5 != null) b.r5.push(s.ret5);
+          if (idx >= 0 && idx + 20 < cm.close.length) b.r20.push((cm.close[idx + 20] / cm.close[idx] - 1) * 100);
+        });
+      });
+      var bt = {};
+      Object.keys(agg).forEach(function (t) {
+        function stat(a) {
+          if (!a.length) return null;
+          return { n: a.length,
+            avg: Math.round(a.reduce(function (x, y) { return x + y; }, 0) / a.length * 100) / 100,
+            win: Math.round(a.filter(function (v) { return v > 0; }).length / a.length * 1000) / 10 };
+        }
+        bt[t] = { d5: stat(agg[t].r5), d20: stat(agg[t].r20) };
+      });
+      D.backtest = bt;
+    }
+  }
+  }
+  normalizeResearchData();
+
+  // ---- 按需加载框架：研究/建议数据与视图在点按后才加载初始化，首屏只载核心数据 ----
+  var LAZY = { research: [], advice: [], news: [], proj: [] };
+  var LAZY_DONE = {};
+  function runLazy(key) {
+    if (LAZY_DONE[key]) return;
+    LAZY_DONE[key] = true;
+    (LAZY[key] || []).forEach(function (fn) { try { fn(); } catch (e) { console.error("[lazy:" + key + "]", e && e.message); } });
+  }
+  var _rdataCbs = null;
+  function withResearchData(cb) {
+    if (D.series) { cb(); return; }
+    if (_rdataCbs) { _rdataCbs.push(cb); return; }
+    _rdataCbs = [cb];
+    fetch("data_research.json").then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).then(function (j) {
+      if (j) Object.assign(D, j);
+      normalizeResearchData();
+      var cbs = _rdataCbs; _rdataCbs = null;
+      cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[rdata]", e && e.message); } });
+    }).catch(function (e) { _rdataCbs = null; console.error("data_research.json 加载失败", e); });
+  }
+  // 通用按需数据加载器（信息流/公告/项目申报数据在点按对应 tab 时才加载）
+  // 统一走 fetch + JSON：浏览器/CDN 用 ETag 做条件请求，数据未变时仅一次 304 往返，几乎零流量
+  var _srcLoads = {};
+  function withScript(src, key, cb) {
+    if (key && window[key]) { cb(); return; }
+    if (_srcLoads[src]) { _srcLoads[src].push(cb); return; }
+    _srcLoads[src] = [cb];
+    var url = src.replace(/\.js$/, ".json");
+    fetch(url).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).then(function (j) {
+      if (key) window[key] = j;
+      var cbs = _srcLoads[src] || []; delete _srcLoads[src];
+      cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[lazy-src]", e && e.message); } });
+    }).catch(function (e) { delete _srcLoads[src]; console.error(url + " 加载失败", e); });
+  }
+
+  var $ = function (id) { return document.getElementById(id); };
+  // 安全获取事件目标元素（兼容文本节点）
+  function eventEl(e) {
+    var t = e.target;
+    while (t && t.nodeType !== 1) t = t.parentNode;
+    return t || null;
+  }
+  // 安全的 closest 方法（兼容旧浏览器）
+  function closest(el, selector) {
+    if (!el) return null;
+    if (el.closest) return el.closest(selector);
+    while (el && el.nodeType === 1) {
+      if (el.matches && el.matches(selector)) return el;
+      if (el.msMatchesSelector && el.msMatchesSelector(selector)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+  function closestBtn(e) {
+    var el = eventEl(e);
+    return closest(el, "button");
+  }
+  function closestTr(e) {
+    var el = eventEl(e);
+    return closest(el, "tr");
+  }
+  if (!D || !D.reits || !D.reits.length) {
+    $("meta").textContent = "暂无数据 — 请先运行 fetch_data.py";
+    return;
+  }
+  $("meta").textContent = "更新 " + D.updated + " · 最新交易日 " + D.lastTradeDate +
+    " · 全覆盖 " + D.count + " 只 · 来源 iFinD";
+
+  var ST_COLOR = { "防御型": "var(--def)", "周期型": "var(--cyc)", "扩张型": "var(--gro)" };
+  var ST_DESC = {
+    "防御型": ["保租房 / 市政公用环保 / 医疗养老 / 新能源", "需求刚性 + 收入可预期，出租率租金受经济下行扰动小", "估值靠分派率支撑，走势类债；2022-2023 回调期回撤最小、最先修复"],
+    "周期型": ["产业园 / 消费及商业不动产 / 物流仓储 / 收费公路 / 文旅景区", "收入与宏观景气直接挂钩，出租率、租金、RevPAR 弹性波动", "估值含顺周期期权；景气期园区物流领涨，下行期跌幅最深"],
+    "扩张型": ["数据中心、通信铁塔等新型基础设施", "短期受周期扰动，底层动力是渗透率提升与量的扩张", "市场给予成长溢价；关注长租约、上架率与解禁节奏"]
+  };
+  function cls(v) { return v > 0 ? "up" : v < 0 ? "down" : "flat"; }
+  function fmt(v, suf) { return v == null ? "—" : (v > 0 ? "+" : "") + v.toFixed(2) + (suf || "%"); }
+  function fmtVol(v) { return v == null ? "—" : v >= 1e8 ? (v/1e8).toFixed(2)+"亿" : v >= 1e4 ? (v/1e4).toFixed(0)+"万" : String(v); }
+  function avgOf(list) { return list.length ? list.reduce(function (a, b) { return a + b; }, 0) / list.length : null; }
+  function svgTitle(title) {
+    return "<title>" + String(title).replace(/[&<>]/g, function (ch) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[ch];
+    }) + "</title>";
+  }
+
+  // ---- KPI ----
+  var pcts = D.reits.map(function (r) { return r.pct; });
+  var avg = avgOf(pcts);
+  var upN = pcts.filter(function (v) { return v > 0; }).length;
+  var downN = pcts.filter(function (v) { return v < 0; }).length;
+  var flatN = pcts.length - upN - downN;
+  var breadth = pcts.length ? Math.round(upN / pcts.length * 100) : null;
+  var totAmt = D.reits.reduce(function (a, r) { return a + (r.amount || 0); }, 0);
+  var pctRanks = D.reits.map(function (r) { return r.pctRank; }).filter(function (v) { return v != null; });
+  var avgRank = avgOf(pctRanks);
+  var bond10y = (D.cycle && D.cycle.bond10y != null) ? D.cycle.bond10y : null;
+  var rv = D.revaluation || {};
+  var mktIdx = D.marketIndex || null;
+
+  function sparklineSvg(series, color) {
+    if (!series || series.length < 2) return "";
+    var w = 120, h = 30, lo = Math.min.apply(null, series), hi = Math.max.apply(null, series);
+    var span = (hi - lo) || 1;
+    var pts = series.map(function (v, i) {
+      var x = 1 + i / (series.length - 1) * (w - 2);
+      var y = h - 2 - (v - lo) / span * (h - 4);
+      return x.toFixed(1) + "," + y.toFixed(1);
+    }).join(" ");
+    var last = series[series.length - 1];
+    var ly = h - 2 - (last - lo) / span * (h - 4);
+    return '<svg viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<polyline points="' + pts + '" fill="none" stroke="' + color + '" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>' +
+      '<circle cx="' + (w - 1) + '" cy="' + ly.toFixed(1) + '" r="2" fill="' + color + '"/></svg>';
+  }
+  function kpiCard(label, valueHtml, subHtml, cls2) {
+    var strip = function (s) { return String(s == null ? "" : s).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(); };
+    return '<div class="kpi' + (cls2 || "") + '"><div class="k" title="' + strip(label) + '">' + label + '</div>' +
+      '<div class="v num">' + valueHtml + '</div>' +
+      '<div class="s num" title="' + strip(subHtml) + '">' + subHtml + '</div></div>';
+  }
+  var avgCls = cls(avg);
+  var sparkColor = avgCls === "up" ? "var(--up)" : avgCls === "down" ? "var(--down)" : "var(--tx2)";
+  var idxClose = (mktIdx && mktIdx.close != null) ? mktIdx.close.toFixed(2) : "—";
+  var idxPct = (mktIdx && mktIdx.pct != null)
+    ? '<span class="' + cls(mktIdx.pct) + '">' + fmt(mktIdx.pct) + '</span>'
+    : '<span style="color:var(--tx3)">待更新</span>';
+  var kpiCards =
+    kpiCard("中证REITs全收益指数", idxClose,
+      '日涨跌 ' + idxPct + ' · ' + (mktIdx && mktIdx.code ? mktIdx.code : "待 iFinD 接入"), " kpi-idx") +
+    '<div class="kpi"><div class="k" title="全市场等权日涨跌">全市场等权日涨跌</div>' +
+      '<div class="v num ' + avgCls + '">' + fmt(avg) + '</div>' +
+      '<div class="s num" title="' + D.count + ' 只 · 近250日等权">' + D.count + ' 只 · 近250日等权</div></div>' +
+    kpiCard("市场宽度（涨/跌家数）", upN + " / " + downN,
+      (breadth == null ? "—" : breadth + "% 上涨") + " · 平 " + flatN + " 只") +
+    kpiCard("市场总成交额", fmtVol(totAmt), "全市场 " + D.count + " 只") +
+    kpiCard("平均历史价格分位", avgRank == null ? "—" : formatPercentile(avgRank), "价格位置 · 低=相对便宜") +
+    kpiCard("10Y 国债收益率", bond10y == null ? "—" : bond10y.toFixed(2) + "%", "无风险利率锚（债性定价分母）") +
+    kpiCard("资产重估状态", rv.stage || "—", (rv.score != null ? rv.score : "—") + "/4 项成立 · 每日更新");
+  $("kpis").innerHTML = kpiCards;
+
+LAZY.research.push(function () {
+  // ---- 策略卡片 ----
+  $("stratCards").innerHTML = D.strategies.map(function (st) {
+    var list = D.reits.filter(function (r) { return r.strategy === st; });
+    var a = avgOf(list.map(function (r) { return r.pct; }));
+    var a20 = avgOf(list.map(function (r) { return r.ret20; }).filter(function (v) { return v != null; }));
+    var color = ST_COLOR[st];
+    return '<div class="card strat-card" style="border-top-color:' + color + '">' +
+      '<span class="tag">' + ST_DESC[st][0] + '</span>' +
+      '<div class="big num ' + cls(a) + '">' + fmt(a) + ' <span style="font-size:12px;color:var(--tx3)">今日</span></div>' +
+      '<div class="num" style="font-size:12px;color:var(--tx2)">20日 ' + fmt(a20) + ' · ' + list.length + ' 只</div>' +
+      '<ul><li>' + ST_DESC[st][1] + '</li><li>' + ST_DESC[st][2] + '</li></ul></div>';
+  }).join("");
+
+});
+
+  function sigLabel(l) { return l ? '<span class="sig-label sig-' + l + '">' + l + '</span>' : ''; }
+  var SEC_PALETTE = ["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316"];
+
+  // ---- ECharts 基础设施 ----
+  var CHART = {};            // id -> echarts 实例
+  var CHART_RENDERERS = [];  // 主题切换时重渲染的回调
+  var PENDING_RENDER = {};   // 容器隐藏时暂存的重渲染回调（显示后自动执行）
+  function ech() { return window.echarts; }
+  function cssVal(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "";
+  }
+  function chartTheme() {
+    return {
+      tx: cssVal('--tx'), tx2: cssVal('--tx2'), tx3: cssVal('--tx3'),
+      up: cssVal('--up'), down: cssVal('--down'), accent: cssVal('--accent'),
+      gold: cssVal('--gold'), grid: cssVal('--grid'), line: cssVal('--line'),
+      panel: cssVal('--panel'), panel2: cssVal('--panel2'), bg: cssVal('--bg'),
+      def: cssVal('--def'), cyc: cssVal('--cyc'), gro: cssVal('--gro')
+    };
+  }
+  function resolveColor(c) {
+    var m = /var\((--[\w-]+)\)/.exec(c || "");
+    if (!m) return c;
+    return cssVal(m[1]) || c;
+  }
+  function hexToRgb(hex) {
+    var h = (hex || "").replace("#", "");
+    if (h.length === 3) h = h.split("").map(function (x) { return x + x; }).join("");
+    var n = parseInt(h, 16);
+    if (isNaN(n)) return { r: 138, g: 147, b: 160 };
+    return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+  }
+  function rgba(hex, a) {
+    var c = hexToRgb(hex);
+    return "rgba(" + c.r + "," + c.g + "," + c.b + "," + a + ")";
+  }
+  function echInit(id) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    var inst = CHART[id];
+    if (inst && (inst.isDisposed() || inst.getDom() !== el)) {
+      inst.dispose(); delete CHART[id]; inst = null;
+    }
+    if (!inst) { inst = ech().init(el, null, { renderer: "canvas" }); CHART[id] = inst; }
+    return inst;
+  }
+  function echSet(id, option) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    // 容器不可见（display:none 时为 0×0）时先不渲染，等可见后由 echResizeAll 触发重渲染
+    if (el.offsetWidth === 0 || el.offsetHeight === 0) return null;
+    var inst = echInit(id);
+    if (inst) { inst.setOption(option, true); inst.resize(); }
+    return inst;
+  }
+  function echResizeAll() {
+    Object.keys(CHART).forEach(function (id) {
+      var inst = CHART[id];
+      if (!inst || inst.isDisposed()) return;
+      var dom = inst.getDom();
+      var w = dom.offsetWidth, h = dom.offsetHeight;
+      // 尺寸未变化时跳过 resize：resize 会重放动画，造成切换 tab 闪烁
+      if (w > 0 && h > 0 && (inst.getWidth() !== w || inst.getHeight() !== h)) inst.resize();
+    });
+    // 容器已可见时，执行暂存的重渲染（修复切换 tab / 深链 / 主题切换时隐藏容器中创建的空白图表）
+    Object.keys(PENDING_RENDER).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
+        var fn = PENDING_RENDER[id];
+        delete PENDING_RENDER[id];
+        try { fn(); } catch (e) { /* 忽略 */ }
+      }
+    });
+  }
+  function disposeAllCharts() {
+    Object.keys(CHART).forEach(function (id) {
+      if (CHART[id] && !CHART[id].isDisposed()) CHART[id].dispose();
+    });
+    CHART = {};
+  }
+  function renderAllCharts() {
+    disposeAllCharts();
+    CHART_RENDERERS.forEach(function (r) { try { r.fn(); } catch (e) { console.error("[chart] renderer failed:", e && e.message, e && e.stack); } });
+  }
+  // 切换页面/视图时调用：只渲染“已可见但尚未初始化”的图表（已渲染的跳过，避免重复 setOption 卡顿），并触发暂存的重渲染
+  function ensureCharts() {
+    CHART_RENDERERS.forEach(function (r) {
+      if (r.id) {
+        var el = document.getElementById(r.id);
+        // 已有非零尺寸 canvas = 已正常渲染，跳过
+        if (!el || (el.querySelector("canvas") && el.querySelector("canvas").width > 0)) return;
+      }
+      try { r.fn(); } catch (e) { /* 忽略单项失败 */ }
+    });
+    echResizeAll();
+  }
+  function registerChart(fn, id) { CHART_RENDERERS.push({ fn: fn, id: id || "" }); }
+
+  // ---- 通用折线图（ECharts） ----
+  function lineChartOption(dates, series, opts) {
+    var th = chartTheme();
+    var selected = null;
+    var hasOff = series.some(function (s) { return s.off; });
+    if (hasOff) {
+      selected = {};
+      series.forEach(function (s) { if (s.off) selected[s.label] = false; });
+    }
+    return {
+      backgroundColor: "transparent",
+      color: series.map(function (s) { return resolveColor(s.color); }),
+      grid: { left: 46, right: 14, top: 34, bottom: 28 },
+      tooltip: {
+        trigger: "axis",
+        backgroundColor: th.panel, borderColor: th.line,
+        textStyle: { color: th.tx, fontSize: 12 },
+        axisPointer: { type: "line", lineStyle: { color: th.tx3, type: "dashed" } },
+        valueFormatter: function (v) { return v == null ? "—" : Number(v).toFixed(2); }
+      },
+      legend: {
+        data: series.map(function (s) { return s.label; }),
+        selected: selected, top: 0, left: "center", icon: "roundRect",
+        itemWidth: 12, itemHeight: 4, itemGap: 14,
+        textStyle: { color: th.tx2, fontSize: 11 }
+      },
+      xAxis: {
+        type: "category", data: dates, boundaryGap: false,
+        axisLine: { lineStyle: { color: th.line } }, axisTick: { show: false },
+        axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true },
+        splitLine: { show: false }
+      },
+      yAxis: {
+        type: "value", scale: true,
+        axisLabel: { color: th.tx3, fontSize: 10 },
+        splitLine: { lineStyle: { color: th.grid } }
+      },
+      series: series.map(function (s) {
+        return {
+          name: s.label, type: "line", data: s.data, smooth: false,
+          showSymbol: false, connectNulls: true,
+          lineStyle: { width: s.w || 1.8 },
+          areaStyle: (opts && opts.area === false) ? null : { opacity: 0.07 },
+          emphasis: { focus: "series" }
+        };
+      })
+    };
+  }
+  function renderLineChart(id, dates, series, opts) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (!series.length || !dates || !dates.length) { el.innerHTML = '<div class="empty">暂无数据</div>'; return; }
+    echSet(id, lineChartOption(dates, series, opts));
+  }
+
+LAZY.research.push(function () {
+  // 策略走势
+  var stSeries = [{ label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
+  D.strategies.forEach(function (st) {
+    stSeries.push({ label: st, color: ST_COLOR[st], data: D.series.byStrategy[st] });
+  });
+  registerChart(function () { renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false}); }, "chartStrategy");
+  renderLineChart("chartStrategy", D.series.dates, stSeries, {area: false});
+
+  // 产权/经营权走势
+  var rtSeries = [
+    { label: "产权 REITs", color: "#3b82f6", data: D.series.byRight["产权"] },
+    { label: "经营权 REITs", color: "#10b981", data: D.series.byRight["经营权"] }
+  ];
+  registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); }, "chartRight");
+  renderLineChart("chartRight", D.series.dates, rtSeries, {area: false});
+
+});
+
+  // ---- 策略×板块矩阵 ----
+  LAZY.research.push(function () {
+    var secs = D.sectors;
+    var html = '<table class="matrix"><thead><tr><th class="l">策略 \\ 板块</th>' +
+      secs.map(function (s) { return "<th>" + s + "</th>"; }).join("") + "<th>合计</th></tr></thead><tbody>";
+    D.strategies.forEach(function (st) {
+      var row = "<td class='l'><span class='st-tag st-" + st + "'>" + st + "</span></td>", allList = [];
+      secs.forEach(function (sec) {
+        var list = D.reits.filter(function (r) { return r.strategy === st && r.sector === sec; });
+        allList = allList.concat(list);
+        if (!list.length) { row += "<td style='color:var(--tx3)'>·</td>"; return; }
+        var a = avgOf(list.map(function (r) { return r.pct; }));
+        row += '<td class="num ' + cls(a) + '">' + fmt(a) + ' <span style="color:var(--tx3);font-size:10px">(' + list.length + ")</span></td>";
+      });
+      var aa = avgOf(allList.map(function (r) { return r.pct; }));
+      row += '<td class="num ' + cls(aa) + '" style="font-weight:600">' + fmt(aa) + "</td>";
+      html += "<tr>" + row + "</tr>";
+    });
+    $("matrix").innerHTML = html + "</tbody></table>";
+  });
+
+LAZY.research.push(function () {
+  // ---- 板块视图 ----
+  var secSeries = [{ label: "全市场", color: "var(--tx)", w: 2.2, data: D.series.market }];
+  D.sectors.forEach(function (s, i) {
+    secSeries.push({ label: s, color: SEC_PALETTE[i % SEC_PALETTE.length], data: D.series.bySector[s], off: true });
+  });
+  registerChart(function () { renderLineChart("chartSector", D.series.dates, secSeries, {area: false}); }, "chartSector");
+  renderLineChart("chartSector", D.series.dates, secSeries, {area: false});
+
+  var secMap = {};
+  D.reits.forEach(function (r) { (secMap[r.sector] = secMap[r.sector] || []).push(r.pct); });
+  var secs2 = Object.keys(secMap).map(function (s) {
+    return { s: s, v: avgOf(secMap[s]), n: secMap[s].length };
+  }).sort(function (a, b) { return b.v - a.v; });
+  var maxAbs = Math.max.apply(null, secs2.map(function (x) { return Math.abs(x.v); }).concat([0.2]));
+  $("sectorBars").innerHTML = secs2.map(function (x) {
+    var w = Math.abs(x.v) / maxAbs * 50, l = x.v < 0 ? 50 - w : 50;
+    return '<div class="sbar"><span class="n">' + x.s + '</span>' +
+      '<div class="track"><div class="zero"></div><div class="fill" style="left:' + l + '%;width:' + w +
+      '%;background:' + (x.v < 0 ? "var(--down)" : "var(--up)") + '"></div></div>' +
+      '<span class="val num ' + cls(x.v) + '">' + fmt(x.v) + "</span></div>";
+  }).join("");
+
+});
+
+LAZY.research.push(function () {
+  // ---- 个券透视：信号总表 ----
+  $("fStrategy").innerHTML = '<option value="">全部策略</option>' +
+    D.strategies.map(function (s) { return "<option>" + s + "</option>"; }).join("");
+  $("fSector").innerHTML = '<option value="">全部板块</option>' +
+    D.sectors.map(function (s) { return "<option>" + s + "</option>"; }).join("");
+  var sortKey = "pct", sortDir = -1, selCode = null;
+  function renderTbl() {
+    var fs = $("fStrategy").value, fc = $("fSector").value, fr = $("fRight").value, fl = $("fSignal").value;
+    var q = $("fSearch").value.trim().toLowerCase();
+    var list = D.reits.filter(function (r) {
+      return (!fs || r.strategy === fs) && (!fc || r.sector === fc) && (!fr || r.right === fr) &&
+        (!fl || r.signals.label === fl) &&
+        (!q || r.name.toLowerCase().includes(q) || r.code.toLowerCase().includes(q));
+    }).sort(function (a, b) {
+      var k = sortKey === "sigTotal" ? "signals" : null;
+      var x = k ? a.signals.total : a[sortKey], y = k ? b.signals.total : b[sortKey];
+      if (x == null) return 1; if (y == null) return -1;
+      return (x > y ? 1 : x < y ? -1 : 0) * sortDir;
+    });
+    $("fCount").textContent = "共 " + list.length + " 只";
+    document.querySelector("#tbl tbody").innerHTML = list.map(function (r) {
+      return '<tr data-code="' + r.code + '" class="' + (r.code === selCode ? "sel" : "") + '">' +
+        '<td class="l">' + r.name + '</td>' +
+        '<td class="l"><span class="st-tag st-' + r.strategy + '">' + r.strategy + "</span></td>" +
+        '<td class="num">' + r.close.toFixed(3) + "</td>" +
+        '<td class="num ' + cls(r.pct) + '">' + fmt(r.pct) + "</td>" +
+        '<td class="num ' + cls(r.ret20) + '">' + fmt(r.ret20) + "</td>" +
+        '<td class="num ' + cls(r.sinceIPO) + '">' + fmt(r.sinceIPO) + "</td>" +
+        '<td class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</td>" +
+        '<td class="num">' + formatPercentile(r.pctRank) + "</td>" +
+        '<td class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</td>" +
+        '<td class="num" style="font-weight:600">' + (r.signals.total > 0 ? "+" : "") + r.signals.total + "</td>" +
+        "<td>" + sigLabel(r.signals.label) + "</td></tr>";
+    }).join("");
+    document.querySelectorAll("#tbl th[data-k]").forEach(function (th) {
+      th.classList.remove("sorted-asc", "sorted-desc");
+      if (th.dataset.k === sortKey) th.classList.add(sortDir > 0 ? "sorted-asc" : "sorted-desc");
+    });
+  }
+  document.querySelector("#tbl tbody").addEventListener("click", function (e) {
+    var tr = closestTr(e); if (!tr) return;
+    selCode = tr.dataset.code;
+    renderTbl();
+    renderDetail(selCode);
+    $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).addEventListener("change", renderTbl); });
+  $("fSearch").addEventListener("input", renderTbl);
+  document.querySelectorAll("#tbl th[data-k]").forEach(function (th) {
+    th.addEventListener("click", function () {
+      var k = th.dataset.k;
+      if (sortKey === k) sortDir = -sortDir; else { sortKey = k; sortDir = -1; }
+      renderTbl();
+    });
+  });
+  renderTbl();
+  // 暴露给闭包外的下钻入口（openReitDetailInner / 主题切换重渲染）
+  window.__renderTbl = renderTbl;
+  window.__setSelCode = function (c) { selCode = c; };
+  window.__getSelCode = function () { return selCode; };
+
+});
+
+  // ---- 个券详情（历史 / 当前 / 前瞻） ----
+  var RADAR_FACTORS = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"],
+                        ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
+  function renderRadar(signals) {
+    var th = chartTheme();
+    var option = {
+      radar: {
+        indicator: RADAR_FACTORS.map(function (f) { return { name: f[1], min: -2, max: 2 }; }),
+        radius: "64%", center: ["50%", "54%"], splitNumber: 4,
+        axisName: { color: th.tx2, fontSize: 10 },
+        splitLine: { lineStyle: { color: th.grid } },
+        splitArea: { show: false },
+        axisLine: { lineStyle: { color: th.grid } }
+      },
+      series: [{
+        type: "radar", symbolSize: 5,
+        data: [{
+          value: RADAR_FACTORS.map(function (f) { return signals[f[0]]; }),
+          areaStyle: { color: "rgba(59,130,246,.16)" },
+          lineStyle: { color: th.accent, width: 1.6 },
+          itemStyle: { color: th.accent }
+        }]
+      }]
+    };
+    echSet("detailRadar", option);
+  }
+  function renderDetail(code) {
+    var r = D.reits.find(function (x) { return x.code === code; });
+    if (!r) return;
+    if (!r.histClose) { r.histClose = []; r.histDates = []; } // 兜底：历史序列缺失时不致整卡渲染失败
+    var evs = (D.events || []).filter(function (e) { return e.code === code; }).slice(0, 8);
+    var corr = (D.reitPeers && D.reitPeers[code]) || {};
+    var peers = (corr.peers || []).slice(0, 6);
+    var macd = r.macd || {};
+    var sig = r.signals || {};
+    var sparkColor = (r.sinceIPO || 0) >= 0 ? "var(--up)" : "var(--down)";
+    var histChartId = "detailChart";
+    var peerHtml = peers.length ? peers.map(function (p) {
+      var pr = D.reits.find(function (x) { return x.code === p.code; });
+      if (!pr) return "";
+      return '<button class="peer-it" data-code="' + p.code + '">' +
+        '<span class="nm" title="' + pr.name + '">' + pr.name + '</span>' +
+        '<span class="cd">' + p.code + " · " + pr.sector + '</span>' +
+        '<span class="rv num">r = ' + p.r.toFixed(2) + '</span></button>';
+    }).join("") : '<div class="empty" style="padding:14px 0">暂无相似券数据</div>';
+    $("detailPanel").innerHTML =
+      '<div class="card detail-hero">' +
+        '<div class="dh-main">' +
+          '<div class="dh-id">' +
+            '<h2>' + r.name + '<span class="dh-code">' + r.code + '</span></h2>' +
+            '<div class="dh-tags">' +
+              '<span class="sec-tag">' + r.sector + '</span>' +
+              '<span class="sec-tag">' + r.right + '</span>' +
+              '<span class="st-tag st-' + r.strategy + '">' + r.strategy + '</span>' +
+              sigLabel(sig.label) +
+            '</div>' +
+          '</div>' +
+          '<div class="dh-quote">' +
+            '<div class="dh-close num">' + (r.close != null ? r.close.toFixed(3) : "—") + '</div>' +
+            '<div class="dh-pct num ' + cls(r.pct) + '">' + fmt(r.pct) + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dh-stats num">' +
+          '<span><i>今日成交额</i>' + fmtVol(r.amount) + '</span>' +
+          '<span><i>量比20/60</i>' + (r.amtRatio == null ? "—" : r.amtRatio) + '</span>' +
+          '<span><i>历史分位</i>' + formatPercentile(r.pctRank) + '</span>' +
+          '<span><i>250日乖离</i><b class="' + cls(r.devMA250) + '">' + fmt(r.devMA250) + '</b></span>' +
+          '<span><i>上市天数</i>' + (r.listDays || r.histClose.length) + '日</span>' +
+          '<span><i>年化波动</i>' + (r.volAnn == null ? "—" : r.volAnn + "%") + '</span>' +
+        '</div>' +
+        '<div class="dh-spark">' + sparklineSvg(r.histClose, sparkColor) + '</div>' +
+      '</div>' +
+      '<div class="grid3" style="margin-top:14px">' +
+      // 历史
+      '<div><h3 style="font-size:12.5px;margin-bottom:8px">📈 历史表现（上市以来）</h3><div class="kv">' +
+      '<span class="k">累计涨跌幅</span><span class="num ' + cls(r.sinceIPO) + '">' + fmt(r.sinceIPO) + "</span>" +
+      '<span class="k">年化波动率</span><span class="num">' + (r.volAnn == null ? "—" : r.volAnn + "%") + "</span>" +
+      '<span class="k">上市天数</span><span class="num">' + (r.listDays || r.histClose.length) + " 交易日</span>" +
+      '<span class="k">20日均成交额</span><span class="num">' + fmtVol(r.amt20) + "</span></div>" +
+      '<div id="' + histChartId + '" style="margin-top:8px;height:230px"></div></div>' +
+      // 当前
+      '<div><h3 style="font-size:12.5px;margin-bottom:8px">🎯 当前点位</h3><div class="kv">' +
+      '<span class="k">MACD</span><span class="num">' + (macd.dif == null ? "—" : macd.dif + " / " + macd.dea) +
+      (macd.cross === "golden" ? ' <span class="up">金叉</span>' : macd.cross === "death" ? ' <span class="down">死叉</span>' : "") + "</span>" +
+      '<span class="k">RSI14</span><span class="num">' + (r.rsi14 == null ? "—" : r.rsi14) + "</span>" +
+      '<span class="k">历史分位</span><span class="num">' + formatPercentile(r.pctRank) + "</span>" +
+      '<span class="k">250日线乖离</span><span class="num ' + cls(r.devMA250) + '">' + fmt(r.devMA250) + "</span>" +
+      '<span class="k">量比(20/60)</span><span class="num">' + (r.amtRatio == null ? "—" : r.amtRatio) + "</span></div>" +
+      '<div class="radar-wrap" style="margin-top:6px;height:210px"><div id="detailRadar" style="width:100%;height:200px"></div></div></div>' +
+      // 前瞻
+      '<div><h3 style="font-size:12.5px;margin-bottom:8px">🔮 信号与前瞻</h3>' +
+      '<div style="font-size:12px;margin-bottom:8px">信号总分 <b class="num" style="font-size:18px">' +
+      (sig.total > 0 ? "+" : "") + sig.total + "</b> / ±12</div>" +
+      '<div class="kv">' +
+      ["liquidity|流动性", "sentiment|市场情绪", "moneyflow|资金面", "performance|业绩达成", "spread|利差", "stockbond|股债联动"]
+        .map(function (x) {
+          var k = x.split("|"), v = sig[k[0]];
+          return '<span class="k">' + k[1] + '</span><span class="num ' + (v > 0 ? "up" : v < 0 ? "down" : "") + '">' +
+            (v > 0 ? "+" : "") + v + "</span>";
+        }).join("") + "</div>" +
+      (evs.length ? '<div style="margin-top:8px;font-size:11.5px;color:var(--tx2)">近期事件：</div>' +
+        evs.map(function (e) {
+          return '<div class="ev-item"><span class="d">' + e.date + '</span><span class="ev-type ev-' + e.type + '">' + e.type + "</span></div>";
+        }).join("") : '<div style="margin-top:8px;font-size:11.5px;color:var(--tx3)">近 120 日无信号事件</div>') +
+      "</div></div></div>" +
+      (peers.length ?
+        '<div class="card" style="margin-top:14px"><h2>相似个券 · 近130日收益率相关性 Top ' + peers.length + '</h2>' +
+        '<p class="note">与当前个券同涨同跌程度最高的标的 · 点击切换查看</p>' +
+        '<div class="peer-list">' + peerHtml + '</div></div>' : "");
+    renderLineChart(histChartId, r.histDates, [{ label: "收盘", color: "#165dff", data: r.histClose }], { area: true });
+    renderRadar(sig);
+    document.querySelectorAll("#detailPanel .peer-it").forEach(function (b) {
+      b.addEventListener("click", function () { openReitDetail(b.dataset.code); });
+    });
+  }
+
+  // ---- 全景热力图（squarified treemap，成交额加权） ----
+  var hmRange = "pct";
+  var hmSector = "";
+  var hmDrill = "";
+  // 区间成交额口径：日涨跌=当日成交额，5日/20日=对应区间日均成交额（面积与加权同步切换）
+  function hmAmt(r) {
+    if (hmRange === "ret5") return r.amt5 != null ? r.amt5 : r.amount;
+    if (hmRange === "ret20") return r.amt20 != null ? r.amt20 : r.amount;
+    return r.amount;
+  }
+  function hmData() {
+    if (hmDrill) {   // 下钻：该板块全部个券
+      return D.reits.filter(function (r) { return r.sector === hmDrill && r.amount != null; })
+        .map(function (r) {
+          var ret = hmRange === "pct" ? r.pct : r[hmRange];
+          return { sector: r.name, amount: hmAmt(r), ret: ret, n: 0, code: r.code };
+        }).filter(function (x) { return x.ret != null && x.amount != null; })
+        .sort(function (a, b) { return b.amount - a.amount; });
+    }
+    var bySec = {};
+    D.reits.forEach(function (r) {
+      var amt = hmAmt(r);
+      if (amt == null) return;
+      if (hmSector && r.sector !== hmSector) return;
+      var b = bySec[r.sector] = bySec[r.sector] || { amount: 0, wsum: 0, n: 0 };
+      var ret = hmRange === "pct" ? r.pct : r[hmRange];
+      if (ret == null) return;
+      b.amount += amt; b.wsum += amt * ret; b.n++;
+    });
+    return Object.keys(bySec).map(function (s) {
+      return { sector: s, amount: bySec[s].amount, ret: bySec[s].wsum / bySec[s].amount, n: bySec[s].n };
+    }).sort(function (a, b) { return b.amount - a.amount; });
+  }
+  (function buildHmChips() {
+    var cnt = {};
+    D.reits.forEach(function (r) { cnt[r.sector] = (cnt[r.sector] || 0) + 1; });
+    var secs = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; });
+    $("hmSectorChips").innerHTML = '<button class="chip on" data-s="">全部板块<b>' + D.reits.length + "</b></button>" +
+      secs.map(function (s) { return '<button class="chip" data-s="' + s + '">' + s + "<b>" + cnt[s] + "</b></button>"; }).join("");
+  })();
+  $("hmSectorChips").addEventListener("click", function (e) {
+    var b = closestBtn(e); if (!b) return;
+    hmSector = "";
+    hmDrill = b.dataset.s;   // 板块 chip 直接下钻为该板块全部个券组成的热力图
+    renderTreemap();
+  });
+  // 连续发散色阶：涨幅越大红色越饱和，跌幅越大绿色越饱和；|ret| 超过 cap 后达到最深色
+  function tmMix(hexA, hexB, t) {
+    var a = hexToRgb(hexA), b = hexToRgb(hexB);
+    return "rgb(" + Math.round(a.r + (b.r - a.r) * t) + "," + Math.round(a.g + (b.g - a.g) * t) + "," + Math.round(a.b + (b.b - a.b) * t) + ")";
+  }
+  function tmColor(ret, cap) {
+    if (ret == null) return "rgba(138,147,160,.38)";
+    cap = cap || 0.03;   // 默认 ±3% 达到最深色
+    var t = Math.min(Math.abs(ret) / cap, 1);
+    t = 0.25 + 0.75 * Math.pow(t, 0.6);   // 低幅区间也保留可辨识的色相
+    if (ret > 0.0001) return tmMix("#d98884", "#b03a35", t);   // 涨：浅砖红 → 深砖红
+    if (ret < -0.0001) return tmMix("#5aa88f", "#14624c", t);   // 跌：浅墨绿 → 深墨绿
+    return "#8a93a0";                                            // 平：中性灰
+  }
+  function renderTreemap() {
+    var items = hmData();
+    var th = chartTheme();
+    var pool = hmDrill
+      ? D.reits.filter(function (r) { return r.sector === hmDrill; })
+      : D.reits.filter(function (r) { return !hmSector || r.sector === hmSector; });
+    var up = pool.filter(function (r) { return r.pct > 0; }).length;
+    var dn = pool.filter(function (r) { return r.pct < 0; }).length;
+    var fl = pool.length - up - dn;
+    $("hmSummary").innerHTML = "<span>下跌 <b class='down'>" + dn + "</b></span><span>平 <b>" + fl + "</b></span><span>上涨 <b class='up'>" + up + "</b></span>";
+    $("hmCrumb").innerHTML = hmDrill
+      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 个券详情请用顶部搜索或「个券透视」</span>'
+      : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
+    document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) {
+      x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
+    });
+    function escTm(s) { return String(s).replace(/[\n\r{}]/g, " "); }
+    function tmTextUnits(s) {
+      var u = 0;
+      for (var i = 0; i < s.length; i++) u += (s.charCodeAt(i) >= 0x2E80) ? 1 : 0.62;
+      return u || 1;
+    }
+    function tmSub(it) {
+      var amt = it.amount != null ? Math.round(it.amount / 1e4).toLocaleString() + "万" : "";
+      return (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "");
+    }
+    // 两级排版：标题字号大、粗；副行（涨跌幅/成交额）字号小、轻
+    // 依据色块实际宽高 + 文字长度，分别计算两级能完整显示的最大字号（优先两行，放不下退化为单行标题）
+    function tmFit(w, h, name, sub) {
+      var aw = Math.max(w - 20, 20), ah = Math.max(h - 14, 18);
+      function sizes(twoLine) {
+        // 标题字号由标题宽度约束；副行字号 = 标题 × 0.78，同时受副行宽度约束
+        var nByW = aw / tmTextUnits(name);
+        var nByH = twoLine ? ah * 0.58 : ah * 0.72;
+        var nf = Math.max(11, Math.min(30, Math.floor(Math.min(nByW, nByH))));
+        if (!twoLine) return { nf: nf, sf: 0 };
+        var sf = Math.max(9, Math.min(15, Math.floor(Math.min(nf * 0.78, aw / tmTextUnits(sub)))));
+        // 两行总高：nf*1.25 + sf*1.35，超出则整体缩
+        var need = nf * 1.25 + sf * 1.35;
+        if (need > ah) { var k = ah / need; nf = Math.floor(nf * k); sf = Math.max(9, Math.floor(sf * k)); }
+        return { nf: nf, sf: sf };
+      }
+      if (sub) {
+        var s2 = sizes(true);
+        if (s2.nf >= 12 && s2.sf >= 9) return { two: true, nf: s2.nf, sf: s2.sf };
+      }
+      var s1 = sizes(false);
+      return { two: false, nf: s1.nf, sf: 0 };
+    }
+    function tmLabel(fit, name, sub) {
+      if (fit.two) {
+        return {
+          formatter: "{t|" + name + "}\n{s|" + sub + "}",
+          rich: {
+            t: {
+              color: "#fff", fontSize: fit.nf, fontWeight: 700, lineHeight: Math.round(fit.nf * 1.3),
+              textShadowBlur: 4, textShadowColor: "rgba(0,0,0,.55)", textShadowOffsetY: 1
+            },
+            s: {
+              color: "rgba(255,255,255,.92)", fontSize: fit.sf, fontWeight: 500, lineHeight: Math.round(fit.sf * 1.45),
+              textShadowBlur: 3, textShadowColor: "rgba(0,0,0,.45)"
+            }
+          }
+        };
+      }
+      return {
+        formatter: name, fontSize: fit.nf, fontWeight: 700, color: "#fff",
+        lineHeight: Math.round(fit.nf * 1.3),
+        textShadowBlur: 4, textShadowColor: "rgba(0,0,0,.55)", textShadowOffsetY: 1
+      };
+    }
+    // 当前区间色阶上限：取本批数据 |ret| 的 90 分位，避免极端值压平色阶
+    function tmCap() {
+      var vals = items.map(function (x) { return Math.abs(x.ret || 0); }).sort(function (a, b) { return a - b; });
+      if (!vals.length) return 0.03;
+      var p = vals[Math.min(vals.length - 1, Math.floor(vals.length * 0.9))];
+      return Math.max(p, 0.005);
+    }
+    function buildData(fits) {
+      var cap = tmCap();
+      return items.map(function (it) {
+        var key = it.sector;
+        var sub = tmSub(it);
+        var fit = (fits && fits[key]) ? fits[key] : { two: true, nf: 15, sf: 11 };
+        return {
+          name: it.sector, value: Math.max(it.amount || 0, 1),
+          amount: it.amount, ret: it.ret, n: it.n, code: it.code || "",
+          itemStyle: { color: tmColor(it.ret, cap) },
+          label: Object.assign({
+            position: "inside", align: "center", verticalAlign: "middle",
+            fontFamily: "inherit", padding: [4, 6], offset: [0, fit.oy || 0]
+          }, tmLabel(fit, escTm(it.sector), escTm(sub)))
+        };
+      });
+    }
+    function buildOption(dataArr) {
+      return {
+        backgroundColor: "transparent",
+        tooltip: { show: false },
+        series: [{
+          type: "treemap", roam: false, nodeClick: false,
+          breadcrumb: { show: false }, leafDepth: 1,
+          left: 0, right: 0, top: 0, bottom: 0,
+          label: { show: true, position: "inside", align: "center", verticalAlign: "middle" },
+          itemStyle: { borderColor: th.panel, borderWidth: 2, gapWidth: 3, borderRadius: 7 },
+          emphasis: {
+            label: { fontWeight: 800 },
+            itemStyle: { borderColor: "rgba(255,255,255,.65)", borderWidth: 1.5, shadowBlur: 10, shadowColor: "rgba(0,0,0,.25)" }
+          },
+          animationDuration: 450, animationEasing: "cubicOut",
+          animationDurationUpdate: 0, animationEasingUpdate: "cubicOut",
+          data: dataArr
+        }]
+      };
+    }
+    var inst = echSet("treemap", buildOption(buildData(null)));
+    if (!inst) { PENDING_RENDER.treemap = renderTreemap; return; }
+    if (inst) {
+      // 首次渲染后读取每个色块的真实宽高，回填「完全显示」的字号
+      try {
+        var fits = {};
+        var series = inst.getModel().getSeriesByIndex(0);
+        var dd = series.getData();
+        for (var i = 0; i < dd.count(); i++) {
+          var nm = dd.getName(i);
+          if (!nm) continue;
+          var layout = dd.getItemLayout(i);
+          if (!layout || !layout.width || !layout.height) continue;
+          var it = null;
+          for (var j = 0; j < items.length; j++) if (items[j].sector === nm) { it = items[j]; break; }
+          if (!it) continue;
+          fits[nm] = tmFit(layout.width, layout.height, escTm(nm), tmSub(it));
+          // 计算垂直居中偏移：treemap 标签默认锚定在色块顶部，offset 下移到视觉中心
+          var f0 = fits[nm];
+          var blockH = f0.two ? f0.nf * 1.3 + f0.sf * 1.45 : f0.nf * 1.3;
+          f0.oy = Math.max(0, Math.round(layout.height / 2 - blockH / 2 - 4));
+        }
+        inst.setOption(buildOption(buildData(fits)), true);
+      } catch (e) { /* 测量失败时保留初版字号 */ }
+      inst.off("click");
+      inst.on("click", function (p) {
+        var d = p.data || {};
+        // 个券叶子节点不再跳转个券透视（避免首页被动加载 620KB 研究包）；
+        // 个券透视改为按需入口：顶部全局搜索 / 研究页表格 / hash 深链
+        if (d.code) { return; }
+        if (!hmDrill && d.name) { hmDrill = d.name; renderTreemap(); }
+      });
+    }
+  }
+  registerChart(renderTreemap, "treemap");
+  $("hmCrumb").addEventListener("click", function (e) {
+    if (!closest(eventEl(e), "#hmBack")) return;
+    hmDrill = "";
+    renderTreemap();
+  });
+  $("hmRange").addEventListener("click", function (e) {
+    var b = closestBtn(e); if (!b) return;
+    hmRange = b.dataset.r;
+    document.querySelectorAll("#hmRange button").forEach(function (x) { x.classList.toggle("on", x === b); });
+    $("hmRangeLabel").textContent = b.textContent;
+    renderTreemap();
+  });
+  renderTreemap();
+
+  // ---- 大类资产相关性 ----
+  LAZY.research.push(function () {
+    var C = D.correlation;
+    if (!C || !C.matrix || !C.benchmarks || !C.scatter) {
+      $("corrCards").innerHTML = '<div class="card"><div class="empty">相关性矩阵数据未生成（数据结构已更新），请重跑数据脚本</div></div>';
+      return;
+    }
+    var BONDS = "000012.SH", DIV = "399324.SZ", HS300 = "000300.SH";
+    var m = C.matrix["全市场"] || {};
+    function corrText(v) { return v == null ? "—" : v.toFixed(2); }
+    $("corrCards").innerHTML = [
+      ["与国债指数（债性）", m[BONDS], "PPT 框架参考：与中债综合全价 -0.30（静态弱关联）"],
+      ["与红利指数（红利属性）", m[DIV], "高股息红利资产属性的联动程度"],
+      ["与沪深300（股性）", m[HS300], "PPT 框架参考：与万得全A +0.56（弱相关）"]
+    ].map(function (x) {
+      var v = x[1], strength = v == null ? "—" : Math.abs(v) < 0.3 ? "弱相关" : Math.abs(v) < 0.6 ? "中等相关" : "强相关";
+      return '<div class="card"><div class="k" style="color:var(--tx3);font-size:11.5px">' + x[0] + '</div>' +
+        '<div class="big num" style="font-size:26px;font-weight:600;margin:4px 0">' + corrText(v) +
+        ' <span style="font-size:12px;color:var(--tx2)">' + strength + '</span></div>' +
+        '<div style="font-size:11px;color:var(--tx3)">' + x[2] + "</div></div>";
+    }).join("");
+
+    // 矩阵
+    var rowOrder = ["全市场"].concat(D.strategies, D.sectors);
+    var cols = C.benchmarks;
+    function cellColor(v) {
+      if (v == null) return "var(--panel2)";
+      var t = Math.min(Math.abs(v), 1);
+      return v >= 0 ? "rgba(198,40,40," + (0.06 + 0.6 * t) + ")" : "rgba(16,185,129," + (0.06 + 0.6 * t) + ")";
+    }
+    var html = '<table class="matrix"><thead><tr><th class="l">组合 \\ 基准</th>' +
+      cols.map(function (b) { return '<th title="' + b.note + '">' + b.name + "</th>"; }).join("") + "</tr></thead><tbody>";
+    rowOrder.forEach(function (g) {
+      if (!C.matrix[g]) return;
+      html += "<tr><td class='l'>" + g + "</td>" + cols.map(function (b) {
+        var v = C.matrix[g][b.code];
+        return '<td class="num" style="background:' + cellColor(v) + '">' + corrText(v) + "</td>";
+      }).join("") + "</tr>";
+    });
+    $("corrMatrix").innerHTML = html + "</tbody></table>";
+
+    // 板块成交额分布环形图
+    (function () {
+      var bySec = {};
+      D.reits.forEach(function (r) {
+        if (r.amount == null) return;
+        bySec[r.sector] = (bySec[r.sector] || 0) + r.amount;
+      });
+      var arr = Object.keys(bySec).map(function (k) { return { s: k, v: bySec[k] }; })
+        .sort(function (a, b) { return b.v - a.v; });
+      var total = arr.reduce(function (a, b) { return a + b.v; }, 0);
+      if (!total) { $("allocDonut").innerHTML = ""; return; }
+      arr.forEach(function (a, i) { a.color = SEC_PALETTE[i % SEC_PALETTE.length]; a.frac = a.v / total; });
+      var totalTxt = total / 1e4 >= 10000 ? (total / 1e8).toFixed(1) + "亿" : Math.round(total / 1e4).toLocaleString() + "万";
+      var legend = '<div style="flex:1;min-width:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:3px 10px;font-size:11px;color:var(--tx2)">' +
+        arr.map(function (a) {
+          return '<span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><i style="display:inline-block;width:8px;height:8px;border-radius:2px;background:' +
+            a.color + ';margin-right:5px"></i>' + a.s + ' <b class="num">' + (a.frac * 100).toFixed(1) + "%</b></span>";
+        }).join("") + "</div>";
+      $("allocDonut").innerHTML =
+        '<div style="font-size:11.5px;color:var(--tx3);margin-bottom:6px">板块成交额分布（今日）</div>' +
+        '<div style="display:flex;align-items:center;gap:16px">' +
+        '<div id="allocDonutChart" style="width:124px;height:124px;flex:0 0 auto"></div>' + legend + "</div>";
+      function renderDonut() {
+        var th = chartTheme();
+        echSet("allocDonutChart", {
+          tooltip: { trigger: "item", backgroundColor: th.panel, borderColor: th.line, textStyle: { color: th.tx, fontSize: 12 }, formatter: function (p) { return p.name + " " + p.percent + "%"; } },
+          series: [{
+            type: "pie", radius: ["58%", "82%"], center: ["50%", "50%"],
+            label: { show: false }, labelLine: { show: false },
+            itemStyle: { borderColor: th.panel, borderWidth: 2 },
+            data: arr.map(function (a) { return { name: a.s, value: a.v, itemStyle: { color: a.color } }; })
+          }],
+          graphic: [
+            { type: "text", left: "center", top: "36%", style: { text: totalTxt, textAlign: "center", fill: th.tx, fontSize: 14, fontWeight: 700 } },
+            { type: "text", left: "center", top: "54%", style: { text: "今日总成交额", textAlign: "center", fill: th.tx3, fontSize: 9 } }
+          ]
+        });
+      }
+      registerChart(renderDonut, "allocDonutChart");
+      renderDonut();
+    })();
+
+    // 散点：股性-债性
+    (function () {
+      function renderScatter() {
+        var th = chartTheme();
+        var pts = C.scatter.filter(function (p) { return p.bond != null && p.equity != null; });
+        var data = pts.map(function (p) { return { value: [p.bond, p.equity], name: p.sector }; });
+        var xs = pts.map(function (p) { return p.bond; });
+        var ys = pts.map(function (p) { return p.equity; });
+        var xMin = Math.min.apply(null, xs), xMax = Math.max.apply(null, xs);
+        var yMin = Math.min.apply(null, ys), yMax = Math.max.apply(null, ys);
+        // 收缩坐标轴到数据实际范围（留边距），避免气泡挤在一起
+        function axisRange(lo, hi) {
+          var span = hi - lo; if (!span) span = 0.2;
+          var pad = Math.max(span * 0.3, 0.08);
+          var a = Math.floor((lo - pad) * 20) / 20;
+          var b = Math.ceil((hi + pad) * 20) / 20;
+          if (a > -0.02) a = Math.min(a, 0);
+          if (b < 0.02) b = Math.max(b, 0);
+          return [a, b];
+        }
+        var xr = axisRange(xMin, xMax), yr = axisRange(yMin, yMax);
+        echSet("corrScatter", {
+          grid: { left: 44, right: 20, top: 24, bottom: 40 },
+          tooltip: {
+            trigger: "item", backgroundColor: th.panel, borderColor: th.line,
+            textStyle: { color: th.tx, fontSize: 12 },
+            formatter: function (p) { return p.name + "<br/>债性 " + p.value[0].toFixed(2) + "<br/>股性 " + p.value[1].toFixed(2); }
+          },
+          xAxis: { type: "value", min: xr[0], max: xr[1], name: "债性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+          yAxis: { type: "value", min: yr[0], max: yr[1], name: "股性 →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+          series: [{
+            type: "scatter", symbolSize: 9, data: data,
+            itemStyle: { color: th.accent, opacity: 0.9 },
+            label: { show: true, position: "top", distance: 5, color: th.tx, fontSize: 9, formatter: "{b}" }
+          }]
+        });
+      }
+      registerChart(renderScatter, "corrScatter");
+      renderScatter();
+    })();
+
+    // 板块 vs A股对应板块
+    $("peerBars").innerHTML = '<table class="matrix"><thead><tr><th class="l">REITs 板块</th><th class="l">A股对应板块</th><th>相关系数</th><th>REITs 区间涨跌</th><th>A股区间涨跌</th></tr></thead><tbody>' +
+      C.peers.map(function (p) {
+        return "<tr><td class='l'>" + p.sector + "</td><td class='l' style='color:var(--tx2)'>" + p.peerName + "</td>" +
+          '<td class="num" style="background:' + cellColor(p.corr) + '">' + corrText(p.corr) + "</td>" +
+          '<td class="num ' + cls(p.reitRet) + '">' + fmt(p.reitRet) + "</td>" +
+          '<td class="num ' + cls(p.peerRet) + '">' + fmt(p.peerRet) + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  });
+
+  // ---- 配置建议：三策略表现 + 交叉验证建议 ----
+  LAZY.advice.push(function () {
+    function stAvg(st, k) {
+      var vs = D.reits.filter(function (r) { return r.strategy === st && r[k] != null; }).map(function (r) { return r[k]; });
+      return vs.length ? avgOf(vs) : null;
+    }
+    // 表现表
+    var html = '<table class="matrix"><thead><tr><th class="l">策略</th><th>日涨跌</th><th>5日</th><th>20日</th><th>60日</th><th>信号分</th><th>与国债相关性</th><th>与红利相关性</th><th>与沪深300</th></tr></thead><tbody>';
+    D.strategies.forEach(function (st) {
+      var m = (D.correlation && D.correlation.matrix[st]) || {};
+      var ss = (D.stratSignals || {})[st] || {};
+      function c(v) { return v == null ? "—" : v.toFixed(2); }
+      html += "<tr><td class='l'><span class='st-tag st-" + st + "'>" + st + "</span></td>" +
+        '<td class="num ' + cls(stAvg(st, "pct")) + '">' + fmt(stAvg(st, "pct")) + "</td>" +
+        '<td class="num ' + cls(stAvg(st, "ret5")) + '">' + fmt(stAvg(st, "ret5")) + "</td>" +
+        '<td class="num ' + cls(stAvg(st, "ret20")) + '">' + fmt(stAvg(st, "ret20")) + "</td>" +
+        '<td class="num ' + cls(stAvg(st, "ret60")) + '">' + fmt(stAvg(st, "ret60")) + "</td>" +
+        '<td class="num" style="font-weight:600">' + (ss.avg != null ? (ss.avg > 0 ? "+" : "") + ss.avg : "—") + "（" + (ss.label || "—") + "）</td>" +
+        '<td class="num">' + c(m["000012.SH"]) + "</td><td class='num'>" + c(m["399324.SZ"]) + "</td><td class='num'>" + c(m["000300.SH"]) + "</td></tr>";
+    });
+    $("advicePerf").innerHTML = html + "</tbody></table>";
+
+    // 交叉验证建议（规则由数据驱动：弱市抗跌性 + 债性强弱 + 周期定位）
+    var def60 = stAvg("防御型", "ret60"), cyc60 = stAvg("周期型", "ret60"), gro20 = stAvg("扩张型", "ret20");
+    var items = [
+      { st: "防御型", pos: "超配（底仓）", color: "var(--def)",
+        text: "近 60 日 " + fmt(def60) + "，显著抗跌于周期型（" + fmt(cyc60) + "），且与国债相关性最高（债性最强）。弱复苏初期 + 利率历史低位，保租房/新能源/市政环保的需求刚性与分派率支撑凸显防御价值，作底仓持有。8-9 月分红季临近，可提前布局抢权行情。" },
+      { st: "扩张型", pos: "标配", color: "var(--gro)",
+        text: "近 20 日 " + fmt(gro20) + "，数据中心、通信铁塔等新型基础设施以渗透率提升与量的扩张为底层动力，长租约确定性获资金认可、市场给予成长溢价。但板块标的少、流动性薄，且面临解禁节奏扰动，维持标配、精选长租约头部，不追高。" },
+      { st: "周期型", pos: "低配转左侧分批", color: "var(--cyc)",
+        text: "近 60 日 " + fmt(cyc60) + " 深度回调，以价换量仍在持续。若近期下跌由资金情绪主导、与基本面趋稳背离，可左侧<b>分批</b>布局出租率连续修复的园区标的、消费复苏受益的商业不动产及路网引流受益的高速，但需以出租率连续 2 季度修复为加仓确认信号。" }
+    ];
+    $("adviceList").innerHTML = items.map(function (it) {
+      return '<div style="border-left:3px solid ' + it.color + ';padding:8px 12px;margin-bottom:10px;background:var(--panel2);border-radius:0 8px 8px 0">' +
+        '<b>' + it.st + ' · <span style="color:' + it.color + '">' + it.pos + "</span></b>" +
+        '<p style="color:var(--tx2);font-size:12px;margin-top:4px;line-height:1.7">' + it.text + "</p></div>";
+    }).join("");
+  });
+
+  // ---- 短期交易战术（月/季/年 · 数据驱动自动生成） ----
+  LAZY.advice.push(function () {
+    function avgSec(sec, k) {
+      var vs = D.reits.filter(function (r) { return r.sector === sec && r[k] != null; }).map(function (r) { return r[k]; });
+      return vs.length ? avgOf(vs) : null;
+    }
+    function stopLine(v) { return '<div style="margin-top:8px;padding-top:7px;border-top:1px dashed var(--line2);font-size:11.5px;color:var(--up)"><b>止损位：</b>' + v + "</div>"; }
+
+    // ===== 月度战术：个券级择时（信号分 + RSI + MACD + 量比） =====
+    var cands = D.reits.filter(function (r) {
+      return r.rsi14 != null && r.rsi14 >= 32 && r.rsi14 <= 62 && r.ret20 != null && r.ret20 > 0 &&
+             r.amtRatio != null && r.amtRatio >= 1 && r.signals && r.signals.total >= 2;
+    }).sort(function (a, b) { return b.signals.total - a.signals.total || b.ret20 - a.ret20; }).slice(0, 3);
+    var avoids = D.reits.filter(function (r) {
+      return (r.rsi14 != null && r.rsi14 > 72) || (r.macd && r.macd.hist < 0 && r.ret20 != null && r.ret20 < -5);
+    }).sort(function (a, b) { return a.ret20 - b.ret20; }).slice(0, 3);
+    var monthHtml = '<div class="card" style="background:var(--panel2)">' +
+      '<div style="font-size:12.5px;font-weight:650">📅 月度战术 · 个券择时</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：信号分≥2 + RSI 32-62 + 20日动量为正 + 量比≥1</div>' +
+      (cands.length ? cands.map(function (r) {
+        return '<div style="margin-bottom:9px"><span class="act-name">' + r.name + " · " + r.code + "</span>" +
+          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">信号分 <b>' + (r.signals.total > 0 ? "+" : "") + r.signals.total + "</b>（" + r.signals.label + "）· RSI " + r.rsi14.toFixed(0) +
+          " · 20日 " + fmt(r.ret20) + " · 量比 " + (r.amtRatio == null ? "—" : r.amtRatio) +
+          '<br>理由：' + (r.sector) + "板块，量价与信号因子共振，可<b>逢低分批</b>介入。" +
+          stopLine("收盘价跌破 20 日成本线约 <b class='num'>" + (r.close * 0.95).toFixed(3) + "</b>（-5%）或 MACD 红柱翻绿即离场") +
+          "</div></div>";
+      }).join("") : '<div class="empty">当前无满足全部条件的个券，建议观望</div>') +
+      (avoids.length ? '<div style="font-size:11.5px;color:var(--tx2);margin-top:6px"><b style="color:var(--down)">回避：</b>' +
+        avoids.map(function (r) { return r.name + "（" + (r.rsi14 > 72 ? "RSI " + r.rsi14.toFixed(0) + " 超买" : "20日 " + fmt(r.ret20) + " 且 MACD 走弱") + "）"; }).join("、") + "</div>" : "") +
+      "</div>";
+
+    // ===== 季度战术：行业轮动（板块动量修复 + 拥挤度） =====
+    var secStats = D.sectors.map(function (s) {
+      return { s: s, r20: avgSec(s, "ret20"), r60: avgSec(s, "ret60"),
+               rank: averagePercentile(D.reits.filter(function (r) { return r.sector === s; }).map(function (r) { return r.pctRank; })),
+               amtR: avgSec(s, "amtRatio") };
+    }).filter(function (x) { return x.r20 != null; });
+    var picks = secStats.filter(function (x) { return x.r20 > 0; }).sort(function (a, b) { return b.r20 - a.r20; }).slice(0, 3);
+    if (!picks.length) picks = secStats.sort(function (a, b) { return b.r20 - a.r20; }).slice(0, 2);
+    var weak = secStats.slice().sort(function (a, b) { return a.r20 - b.r20; })[0];
+    var quarterHtml = '<div class="card" style="background:var(--panel2)">' +
+      '<div style="font-size:12.5px;font-weight:650">📆 季度战术 · 行业轮动</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：板块 20 日动量为正且量能配合，避开拥挤（分位>85%）与动量垫底板块</div>' +
+      picks.map(function (x) {
+        var crowd = x.rank != null && x.rank > 85;
+        return '<div style="margin-bottom:9px"><span class="act-name">' + x.s + "</span>" +
+          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">20日 <b class="' + cls(x.r20) + '">' + fmt(x.r20) + "</b> · 60日 " + fmt(x.r60) +
+          " · 历史分位 " + formatPercentile(x.rank) + " · 量比 " + (x.amtR == null ? "—" : x.amtR.toFixed(1)) +
+          "<br>理由：" + (x.r60 != null && x.r60 < 0 ? "板块自 60 日回调中修复，动量反转初期，赔率较优。" : "板块趋势延续，动量与量能共振。") +
+          (crowd ? " <b style='color:var(--gold)'>注意分位偏高，只低吸不追高。</b>" : "") +
+          stopLine("板块等权 20 日涨幅回吐并转负，或板块指数自介入点回撤 <b>-8%</b>") +
+          "</div></div>";
+      }).join("") +
+      (weak ? '<div style="font-size:11.5px;color:var(--tx2)"><b style="color:var(--down)">季度回避：</b>' + weak.s + "（20日 " + fmt(weak.r20) + "，动量垫底，等待企稳信号）</div>" : "") +
+      "</div>";
+
+    // ===== 年度战术：战略底仓（周期定位 + 信号分 + 分位） =====
+    var ss = D.stratSignals || {};
+    var mktRank = averagePercentile(D.reits.map(function (r) { return r.pctRank; }));
+    var rvScore = D.revaluation ? D.revaluation.score : null;
+    var defS = ss["防御型"] || {}, cycS = ss["周期型"] || {}, groS = ss["扩张型"] || {};
+    function stLine(st, o) {
+      return '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65;margin-bottom:5px"><span class="st-tag st-' + st + '">' + st + "</span> " + o + "</div>";
+    }
+    var yearHtml = '<div class="card" style="background:var(--panel2)">' +
+      '<div style="font-size:12.5px;font-weight:650">🗓️ 年度战术 · 战略底仓</div>' +
+      '<div style="font-size:11px;color:var(--tx3);margin:2px 0 8px">规则：周期定位 + 三策略信号分 + 全市场价格分位（当前 ' + formatPercentile(mktRank) + "）" +
+      (rvScore != null ? " · 重估条件 " + rvScore + "/4" : "") + "</div>" +
+      stLine("防御型", "底仓超配 40-50%：信号分 " + (defS.avg != null ? defS.avg : "—") + "（" + (defS.label || "—") + "）。弱复苏初期 + 低利率资产荒，保租房/新能源/市政环保的需求刚性与分派率支撑最强，叠加 8-9 月分红季抢权。") +
+      stLine("扩张型", "标配 25-35%：信号分 " + (groS.avg != null ? groS.avg : "—") + "（" + (groS.label || "—") + "）。数据中心、通信铁塔等新型基础设施以渗透率提升与量的扩张为底层动力，优先长租约、高上架率标的，注意解禁节奏，逢低布局。") +
+      stLine("周期型", "左侧分批 20-30%：信号分 " + (cycS.avg != null ? cycS.avg : "—") + "（" + (cycS.label || "—") + "）。基钦周期补库启动期左侧埋伏产业园/仓储物流/消费及商业不动产/收费公路，以出租率连续 2 季修复为加仓确认。") +
+      stopLine("全市场等权价格分位升破 90% 时系统性减仓；重估条件跌破 2/4 或 10Y 国债收益率快速升破 2% 时降总仓位至 50% 以下") +
+      "</div>";
+
+    $("tacticGrid").innerHTML = monthHtml + quarterHtml + yearHtml;
+  });
+
+  // ---- 重点事件信息流（问财范式） ----
+  LAZY.news.push(function () {
+    var N = window.REITS_NEWS;
+    if (!N || !N.items || !N.items.length) {
+      $("newsFeed").innerHTML = '<div class="empty">暂无事件数据 — 请先运行 fetch_news.py</div>';
+      return;
+    }
+    var escHtml = window.escHtml || function (v) { return String(v == null ? "" : v); };
+    var tag = "全部";
+    $("newsFilter").innerHTML = N.tags.map(function (t) {
+      return '<button class="range-btn' + (t === "全部" ? " on" : "") + '" data-t="' + escHtml(t) + '">' + escHtml(t) + "</button>";
+    }).join("");
+    function render() {
+      var list = N.items.filter(function (x) { return tag === "全部" || x.tag === tag; });
+      $("newsFeed").innerHTML = list.length ? list.map(function (x) {
+        return '<div class="news-item"><div class="nt"><span class="nt-' + escHtml(x.tag) + '">' + escHtml(x.tag) + "</span></div>" +
+          '<div class="nb"><div class="nh"><a href="' + escHtml(x.url) + '" target="_blank" rel="noopener">' + escHtml(x.title) + "</a></div>" +
+          '<div class="ns">' + escHtml(x.summary) + "</div>" +
+          '<div class="nm">' + escHtml(x.media) + "</div></div>" +
+          '<div class="nd num">' + escHtml(x.date.slice(5)) + "</div></div>";
+      }).join("") : '<div class="empty">该分类下暂无事件</div>';
+    }
+    $("newsFilter").addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      tag = b.dataset.t;
+      document.querySelectorAll("#newsFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      render();
+    });
+    render();
+  });
+
+  // ---- 分红/解禁/扩募战配公告监测 ----
+  LAZY.research.push(function () {
+    var escHtml = window.escHtml || function (v) { return String(v == null ? "" : v); };
+    var A = window.REITS_ACTIONS;
+    if (!A || !A.items || !A.items.length) {
+      $("corpActions").innerHTML = '<div class="empty">暂无公告数据 — 请先运行 fetch_news.py</div>';
+      return;
+    }
+    var tag = "全部";
+    var tags = ["全部"].concat(A.groups);
+    $("corpActionFilter").innerHTML = tags.map(function (t) {
+      var n = t === "全部" ? A.items.length : A.items.filter(function (x) { return x.tag === t; }).length;
+      return '<button class="range-btn' + (t === "全部" ? " on" : "") + '" data-t="' + t + '">' + t + " " + n + "</button>";
+    }).join("");
+    function render() {
+      var list = A.items.filter(function (x) { return tag === "全部" || x.tag === tag; });
+      $("corpActions").innerHTML = list.length ? list.map(function (x) {
+        return '<div class="news-item"><div class="nt"><span class="nt-' + x.tag + '">' + x.tag + "</span></div>" +
+          '<div class="nb"><span class="act-name">' + x.name + " · " + x.code + "</span>" +
+          '<div class="nh"><a href="' + escHtml(x.url) + '" target="_blank" rel="noopener">' + escHtml(x.title) + "</a></div></div>" +
+          '<div class="nd num">' + x.date.slice(5) + "</div></div>";
+      }).join("") : '<div class="empty">该分类下近30日暂无相关公告</div>';
+    }
+    $("corpActionFilter").addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      tag = b.dataset.t;
+      document.querySelectorAll("#corpActionFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      render();
+    });
+    render();
+  });
+
+  // ---- 项目申报与推荐动态（发改委 / 上交所 / 深交所 三个独立二级视图） ----
+  LAZY.proj.push(function () {
+    var P = window.REITS_PROJECTS;
+    function esc(s) {
+      return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function money(v) { return v == null ? "—" : Number(v).toFixed(2); }
+    function nameCell(p, link) {
+      var t = esc(p.name);
+      return link ? '<a class="proj-link" href="' + esc(link) + '" target="_blank" rel="noopener">' + t + "</a>" : t;
+    }
+    function stTag(s) {
+      var c = "var(--tx2)";
+      if (/受理|申报/.test(s)) c = "var(--accent)";
+      else if (/问询|反馈/.test(s)) c = "var(--gold)";
+      else if (/通过|生效/.test(s)) c = "var(--down)";
+      else if (/未通过|终止/.test(s)) c = "var(--up)";
+      return '<span class="sec-tag" style="color:' + c + '">' + esc(s) + "</span>";
+    }
+    function fillTable(tableId, metaId, thead, rows, meta) {
+      document.querySelector(tableId + " thead").innerHTML = thead;
+      document.querySelector(tableId + " tbody").innerHTML =
+        rows || '<tr><td colspan="5" class="l" style="color:var(--tx3)">暂无数据</td></tr>';
+      document.querySelector(metaId).textContent =
+        (P && P.updated ? "每日自动巡检 · 最近检查 " + P.updated + " · " : "") + meta;
+    }
+    function renderNdrc() {
+      var list = P.ndrc || [];
+      var thead = '<tr><th class="l">项目名称</th><th class="l">行业</th><th class="l">申报地区</th><th>募集规模(亿元)</th><th class="l">推荐时间</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p) + "</td><td class='l'>" + esc(p.industry) + "</td><td class='l'>" + esc(p.region) +
+          '</td><td class="num">' + money(p.fundMoney) + "</td><td class='l'>" + esc(p.date) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableNdrc", "#projectMetaNdrc", thead, rows, "发改委推荐 " + list.length + " 个 · 2026 年以来");
+    }
+    function renderSse() {
+      var list = P.sse || [];
+      var thead = '<tr><th class="l">项目名称</th><th class="l">管理人</th><th class="l">状态</th><th class="l">受理日期</th><th class="l">更新日期</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.manager) + "</td><td class='l'>" + stTag(p.status) +
+          "</td><td class='l'>" + esc(p.acceptDate) + "</td><td class='l'>" + esc(p.updateDate) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableSse", "#projectMetaSse", thead, rows, "上交所受理 " + list.length + " 个项目 · 2026 年以来");
+    }
+    function renderSzse() {
+      var list = P.szse || [];
+      var thead = '<tr><th class="l">项目名称</th><th class="l">申报类型</th><th class="l">状态</th><th class="l">原始权益人</th><th class="l">受理日期</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.type) + "</td><td class='l'>" + stTag(p.status) +
+          "</td><td class='l'>" + esc(p.originator) + "</td><td class='l'>" + esc(p.acceptDate) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableSzse", "#projectMetaSzse", thead, rows, "深交所受理 " + list.length + " 个项目 · 2026 年以来");
+    }
+    function renderCommercial() {
+      var sse = (P.sse || []).filter(function (p) { return p.assetType === "商业不动产"; })
+        .map(function (p) { return { name: p.name, exchange: "上交所", status: p.status, acceptDate: p.acceptDate, link: p.link }; });
+      var szse = (P.szse || []).filter(function (p) { return p.assetType === "商业不动产"; })
+        .map(function (p) { return { name: p.name, exchange: "深交所", status: p.status, acceptDate: p.acceptDate, link: p.link }; });
+      var list = sse.concat(szse).sort(function (a, b) {
+        return a.acceptDate < b.acceptDate ? 1 : a.acceptDate > b.acceptDate ? -1 : 0;
+      });
+      var thead = '<tr><th class="l">项目名称</th><th class="l">交易所</th><th class="l">状态</th><th class="l">受理日期</th></tr>';
+      var rows = list.map(function (p) {
+        return '<tr><td class="l">' + nameCell(p, p.link) + "</td><td class='l'>" + esc(p.exchange) + "</td><td class='l'>" + stTag(p.status) +
+          "</td><td class='l'>" + esc(p.acceptDate) + "</td></tr>";
+      }).join("");
+      fillTable("#projectTableCommercial", "#projectMetaCommercial", thead, rows,
+        "商业不动产受理 " + list.length + " 个项目 · 上交所+深交所汇总 · 2026 年以来");
+    }
+    if (!P) {
+      ["#projectMetaNdrc", "#projectMetaSse", "#projectMetaSzse", "#projectMetaCommercial"].forEach(function (id) {
+        var el = document.querySelector(id);
+        if (el) el.textContent = "项目动态数据未生成，请运行 fetch_projects.py";
+      });
+      return;
+    }
+    renderNdrc();
+    renderSse();
+    renderSzse();
+    renderCommercial();
+  });
+
+  // ---- 主题切换（白天 / 护眼 / 夜晚） ----
+  (function () {
+    function apply(t) {
+      document.documentElement.dataset.theme = t;
+      localStorage.setItem("rd-theme", t);
+      document.querySelectorAll("#themeSw button").forEach(function (x) { x.classList.toggle("on", x.dataset.t === t); });
+      var mc = document.querySelector('meta[name="theme-color"]');
+      if (mc) mc.content = t === "dark" ? "#0a0e14" : t === "eye" ? "#e9f2e2" : "#f8fafc";
+      renderAllCharts();
+    }
+    $("themeSw").addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      apply(b.dataset.t);
+    });
+    apply(document.documentElement.dataset.theme || "light");
+  })();
+
+  // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
+  function openReitDetail(code, updateHash) {
+    withResearchData(function () { openReitDetailInner(code, updateHash); });
+  }
+  function openReitDetailInner(code, updateHash) {
+    var r = null;
+    for (var i = 0; i < D.reits.length; i++) if (D.reits[i].code === code) { r = D.reits[i]; break; }
+    if (!r) { // 后缀不匹配时按代码数字部分兜底（如 180402.SH ↔ 180402.SZ）
+      var num = String(code).split(".")[0];
+      for (var j = 0; j < D.reits.length; j++) if (D.reits[j].code.split(".")[0] === num) { r = D.reits[j]; break; }
+    }
+    if (!r) return;
+    if (updateHash !== false) {
+      try { history.replaceState(null, "", "#/detail/" + code); } catch (e) {}
+    }
+    showPage("research"); switchView("detail");
+    // 历史行情序列在研究数据包中（按需加载），必须等数据合并完成后再渲染详情，
+    // 否则热力图下钻 / hash 深链时 histClose 尚未就绪导致走势图空白
+    withResearchData(function () {
+      ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
+      $("fSearch").value = r.code;
+      if (window.__setSelCode) window.__setSelCode(r.code);
+      if (window.__renderTbl) window.__renderTbl();
+      renderDetail(r.code);
+      window.scrollTo({ top: 0, behavior: "instant" });
+      setTimeout(function () { $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+    });
+  }
+
+  // ---- 左侧导航：三大板块 + 研究二级菜单 ----
+  var currentPage = "pano";
+  var pageScroll = { pano: 0, research: 0, advice: 0, inst: 0 };
+  function restorePageScroll(page) {
+    requestAnimationFrame(function () {
+      window.scrollTo({ top: pageScroll[page] || 0, behavior: "auto" });
+    });
+  }
+  function setActiveNav(buttons, activeButton) {
+    buttons.forEach(function (button) {
+      var isActive = button === activeButton;
+      button.classList.toggle("on", isActive);
+      if (isActive) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
+  }
+  function switchView(v) {
+    try {
+      var target = document.getElementById("v-" + v);
+      if (!target) { console.warn('[switchView] no target for', v); return; }
+      var page = closest(target, ".page");
+      if (page) {
+        page.querySelectorAll(".view").forEach(function (x) {
+          var shouldHide = x.id !== "v-" + v;
+          x.hidden = shouldHide;
+          x.classList.toggle("hidden", shouldHide);
+        });
+      }
+      var subId = page && page.id === "pg-pano" ? "#panoSub" : "#researchSub";
+      var active = document.querySelector(subId + ' button[data-v="' + v + '"]');
+      if (active) setActiveNav(document.querySelectorAll(subId + " button"), active);
+      stagger(target);
+      if (v === "news") withScript("news.js", "REITS_NEWS", function () { runLazy("news"); });
+      else if (v.indexOf("proj-") === 0) withScript("projects.js", "REITS_PROJECTS", function () { runLazy("proj"); });
+      requestAnimationFrame(ensureCharts);
+      // 移动端切换偶发图表空白：延迟二次 resize + 热力图整图重绘兜底
+      setTimeout(echResizeAll, 160);
+      if (v === "heatmap") {
+        // 仅在画布缺失/尺寸异常（移动端偶发空白）时才整图重绘，避免每次切换都重放动画造成闪烁
+        setTimeout(function () {
+          try {
+            var hmEl = document.getElementById("treemap");
+            var hmCv = hmEl && hmEl.querySelector("canvas");
+            if (!hmCv || !hmCv.width) renderTreemap();
+            else if (CHART.treemap && !CHART.treemap.isDisposed()) {
+              var hmW = hmEl.offsetWidth, hmH = hmEl.offsetHeight;
+              if (CHART.treemap.getWidth() !== hmW || CHART.treemap.getHeight() !== hmH) CHART.treemap.resize();
+            }
+          } catch (e) { /* 忽略 */ }
+        }, 220);
+      }
+    } catch (err) { console.error('[switchView] error:', err); }
+  }
+  function showPage(pg, keepScroll) {
+    try {
+      var btn = document.querySelector('#tbNav > button[data-pg="' + pg + '"]');
+      if (!btn) { console.warn('[showPage] no button for', pg); return; }
+      var switching = pg !== currentPage;
+      if (switching) {
+        pageScroll[currentPage] = window.pageYOffset || window.scrollY || 0;
+        currentPage = pg;
+      }
+      $("subbar").dataset.cur = pg;
+      $("topbar").dataset.cur = pg;
+      setActiveNav(document.querySelectorAll("#tbNav > button"), btn);
+      var ink = document.querySelector("#tbNav .ink");
+      if (ink) { ink.style.left = btn.offsetLeft + "px"; ink.style.width = btn.offsetWidth + "px"; }
+      $("topbar").classList.toggle("adv", pg === "advice");
+      document.querySelectorAll(".page").forEach(function (p) {
+        var shouldHide = p.id !== "pg-" + pg;
+        p.hidden = shouldHide;
+        p.classList.toggle("hidden", shouldHide);
+      });
+      if (pg === "pano") {
+        var activeSub = document.querySelector('#panoSub button.on');
+        if (activeSub) {
+          $("kpis").style.display = activeSub.dataset.v === "heatmap" ? "" : "none";
+        }
+      } else {
+        $("kpis").style.display = "none";
+      }
+      if (pg === "research" || pg === "advice") {
+        withResearchData(function () {
+          withScript("corp_actions.js", "REITS_ACTIONS", function () { runLazy(pg); ensureCharts(); });
+        });
+      } else if (pg === "inst") {
+        initInstPage();
+      }
+      if (switching && !keepScroll) restorePageScroll(pg);
+      requestAnimationFrame(ensureCharts);
+      setTimeout(echResizeAll, 160);
+      console.log('[showPage] switched to', pg);
+    } catch (err) { console.error('[showPage] error:', err); }
+  }
+  // ---- 导航事件绑定：直接绑定到每个按钮（兼容 iOS Safari 事件委托问题） ----
+  function bindNavButton(btn) {
+    if (!btn) return;
+    function handler() {
+      try {
+        if (btn.dataset.scroll) {
+          showPage(btn.dataset.pg, true);
+          setActiveNav(btn.parentElement.querySelectorAll("button"), btn);
+          var t = document.getElementById(btn.dataset.scroll);
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+          var showKpi = btn.dataset.scroll === "v-heatmap";
+          $("kpis").style.display = showKpi ? "" : "none";
+          return;
+        }
+        if (btn.dataset.v) {
+          showPage(btn.dataset.pg || "research");
+          switchView(btn.dataset.v);
+          window.scrollTo({ top: 0, behavior: "auto" });
+          if (btn.dataset.pg === "pano") {
+            $("kpis").style.display = btn.dataset.v === "heatmap" ? "" : "none";
+          }
+          return;
+        }
+        if (btn.dataset.pg) {
+          showPage(btn.dataset.pg);
+        }
+      } catch (err) { console.error('[nav] error:', err); }
+    }
+    btn.addEventListener("click", handler);
+    // iOS Safari 有时 click 不触发，补充 touchend
+    btn.addEventListener("touchend", function(e) {
+      e.preventDefault();  // 阻止默认行为（如双击缩放）
+      handler();
+    });
+  }
+  // 绑定所有导航按钮
+  document.querySelectorAll("#tbNav > button[data-pg]").forEach(bindNavButton);
+  document.querySelectorAll("#subbar button[data-v], #subbar button[data-scroll]").forEach(bindNavButton);
+  // ink 初始定位
+  (function () {
+    var b = document.querySelector("#tbNav > button.on"), ink = document.querySelector("#tbNav .ink");
+    if (b && ink) { ink.style.left = b.offsetLeft + "px"; ink.style.width = b.offsetWidth + "px"; }
+  })();
+
+  // KPI 初始显示状态：只在行情总览与热力图 tab 显示
+  (function () {
+    var activeSub = document.querySelector('#panoSub button.on');
+    if (activeSub) {
+      $("kpis").style.display = activeSub.dataset.v === "heatmap" ? "" : "none";
+    }
+  })();
+
+  // ---- 全局资产搜索 ----
+  (function () {
+    var inp = $("gSearch"), drop = $("gSearchDrop");
+    var hits = [];
+    function close() { drop.hidden = true; }
+    function go(r) {
+      close(); inp.value = "";
+      openReitDetail(r.code);
+    }
+    inp.addEventListener("input", function () {
+      var q = inp.value.trim().toLowerCase();
+      if (!q) { close(); return; }
+      hits = D.reits.filter(function (r) {
+        return r.name.toLowerCase().indexOf(q) >= 0 || r.code.toLowerCase().indexOf(q) >= 0;
+      }).slice(0, 8);
+      drop.innerHTML = hits.length ? hits.map(function (r, i) {
+        return '<div class="it" data-i="' + i + '"><span>' + r.name + '</span><span class="cd">' + r.code + " · " + r.sector + "</span></div>";
+      }).join("") : '<div class="it" style="color:var(--tx3);cursor:default">无匹配个券</div>';
+      drop.hidden = false;
+      drop.querySelectorAll(".it[data-i]").forEach(function (el) {
+        el.addEventListener("click", function () { go(hits[+el.dataset.i]); });
+      });
+    });
+    inp.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" || !hits.length) return;
+      var q = inp.value.trim().toLowerCase();
+      var exact = hits.filter(function (r) { return r.code.toLowerCase() === q; })[0];
+      go(exact || hits[0]);
+    });
+    document.addEventListener("click", function (e) { if (!closest(eventEl(e), ".tb-search")) close(); });
+  })();
+
+  // ---- 周期耦合分析 ----
+  LAZY.research.push(function () {
+    // 资产重估状态仪
+    var RV = D.revaluation;
+    if (RV) {
+      var stageColor = RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)";
+      $("revalPanel").innerHTML =
+        '<div style="display:flex;align-items:baseline;gap:14px;margin-bottom:10px">' +
+        '<span class="rv-stage" style="color:' + stageColor + '">' + RV.stage + "</span>" +
+        '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项验证条件成立 · 每日随行情自动更新</span></div>" +
+        RV.items.map(function (it) {
+          return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
+            '<span class="vl num">' + it.value + "</span>" +
+            '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓ 成立" : "✗ 未成立") + "</span>" +
+            '<span class="ds">' + it.desc + "</span></div>";
+        }).join("");
+    } else {
+      $("revalPanel").innerHTML = '<div class="empty">重估状态数据未生成</div>';
+    }
+
+    // ---- 市场阶段复盘 ----
+    (function () {
+      var stages = [
+        { p: "2021.06–2022.02", name: "上市红利期", perf: "+35%", cls: "up",
+          logic: "首批 9 只供给稀缺 + 打新情绪，高溢价发行上市，属情绪定价而非重估",
+          f: { rate: "→", val: "↑", fund: "↑", base: "→" }, main: "资金面 · 估值" },
+        { p: "2022.03–2023.12", name: "深度调整期", perf: "−16.5%（2023 均值）", cls: "down",
+          logic: "四重叠加：过热估值消化 + 战配解禁供给冲击 + 宏观偏弱基本面证伪 + 持有人同质化抛压自我强化；2023 年 29 只仅 1 只上涨，11 月末 P/NAV 跌至 0.90、估值分位 1.2%",
+          f: { rate: "→", val: "↓", fund: "↓", base: "↓" }, main: "估值 · 基本面" },
+        { p: "2024.01–2024.12", name: "筑底回升期", perf: "+12.3%（全收益）", cls: "up",
+          logic: "OCI 会计落地缓释机构卖压 + 长端利率下移抬升估值中枢 + 约 5.2% 股息率的红利价值获认可；两波九连阳，保租房 +35.3% 领涨",
+          f: { rate: "↑", val: "↑", fund: "↑", base: "→" }, main: "利率 · 资金面" },
+        { p: "2025.01–2025.06", name: "结构性牛市", perf: "+14.2%（上半年）", cls: "up",
+          logic: "10Y 国债破 2% 历史低位 + 资产荒，利差扩至历史高分位，保险/OCI 资金入场，重估真正启动；消费（易方达华威 +70%）、供热经营权（济南能源 +66.8%）、首批数据中心领涨，产业园明显偏弱",
+          f: { rate: "↑", val: "↑", fund: "↑", base: "→" }, main: "利率 · 资金面" },
+        { p: "2025.06–2026.07", name: "利率回升估值压缩", perf: "−8%", cls: "down",
+          logic: "重估反向逻辑：10Y 自 2.1% 回升至 2.7%（分母变大）+ 估值透支（溢价仅 170BP）+ OCI 增速放缓与成长板块抽血（港股红利同期 −21.9%）+ 产业园空置率上升、车流量不及预期等基本面恶化——流动性退潮后基本面露馅",
+          f: { rate: "↓", val: "↓", fund: "↓", base: "↓" }, main: "利率 · 估值" },
+        { p: "2026 以来", name: "扩容与承压并存", perf: "年内 −3.7%（全收益）", cls: "down",
+          logic: "供给端商业不动产放量（首批募资 203 亿、在途拟募超 750 亿）与存量估值消化拉锯，指数 1030 高点回落至 928 后修复至 970；资金端指数基金（12 亿）与险资商业不动产通道次第打开；产权类分派率 4.06%、利差接近 3% 处历史高位——机构普遍认为估值已进入低位区间",
+          f: { rate: "↓", val: "↑", fund: "→", base: "→" }, main: "估值修复 · 资金通道" }
+      ];
+      var fName = { rate: "利率", val: "估值", fund: "资金", base: "基本面" };
+      var arrow = { "↑": '<b style="color:var(--up)">↑</b>', "↓": '<b style="color:var(--down)">↓</b>', "→": '<b style="color:var(--tx3)">→</b>' };
+      if ($("stageGrid")) $("stageGrid").innerHTML = stages.map(function (s, i) {
+        var chips = Object.keys(s.f).map(function (k) {
+          return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;background:var(--bg);border-radius:6px;padding:2px 7px">' + fName[k] + " " + arrow[s.f[k]] + "</span>";
+        }).join(" ");
+        return '<div class="card" style="background:var(--panel2)">' +
+          '<div style="display:flex;justify-content:space-between;align-items:baseline">' +
+          '<span style="font-size:11px;color:var(--tx3)">' + s.p + "</span>" +
+          '<span class="num" style="font-size:13.5px;font-weight:700;color:var(--' + s.cls + ')">' + s.perf + "</span></div>" +
+          '<div style="font-size:13px;font-weight:650;margin:5px 0">' + (i + 1) + ". " + s.name + "</div>" +
+          '<div style="margin-bottom:7px">' + chips + "</div>" +
+          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">' + s.logic + "</div>" +
+          '<div style="font-size:10.5px;color:var(--tx3);margin-top:7px">主导矛盾：<b style="color:var(--tx2)">' + s.main + "</b></div></div>";
+      }).join("");
+      if ($("stageMatrix")) $("stageMatrix").innerHTML =
+        '<table class="tbl"><thead><tr><th>阶段</th><th>利率中枢</th><th>估值溢价</th><th>资金面</th><th>基本面</th><th style="text-align:left">主导逻辑</th></tr></thead><tbody>' +
+        stages.map(function (s) {
+          return "<tr><td style=\"white-space:nowrap\">" + s.name + "</td>" +
+            ["rate", "val", "fund", "base"].map(function (k) { return "<td>" + arrow[s.f[k]] + "</td>"; }).join("") +
+            '<td style="text-align:left;font-size:11.5px;color:var(--tx2)">' + s.main + "</td></tr>";
+        }).join("") + "</tbody></table>";
+      if ($("spreadGauge")) {
+        // 动态计算股息率溢价
+        var bond10y = (D.cycle && D.cycle.bond10y != null) ? D.cycle.bond10y : 1.7;
+        var avgYield = (D.cycle && D.cycle.avgYield != null) ? D.cycle.avgYield : 4.5;
+        var cur = Math.round((avgYield - bond10y) * 100);
+        var zone = cur >= 250 ? "安全边际（买入区）" : cur >= 100 ? "中性区间" : "高估（减仓区）";
+        var zoneColor = cur >= 250 ? "var(--up)" : cur >= 100 ? "var(--gold)" : "var(--down)";
+        // 标尺 0–400BP：高估/减仓 0-100（绿），中性 100-250（灰），安全边际/买入 250-400（红）
+        var anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: cur, l: "当前 " + cur + "BP" }];
+        var pct = function (v) { return Math.min(100, Math.max(0, v / 400 * 100)); };
+        $("spreadGauge").innerHTML =
+          '<div style="position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex">' +
+          '<div style="width:' + pct(100) + '%;background:rgba(16,185,129,.28)"></div>' +
+          '<div style="width:' + (pct(250) - pct(100)) + '%;background:rgba(100,116,139,.18)"></div>' +
+          '<div style="flex:1;background:rgba(239,68,68,.24)"></div></div>' +
+          '<div style="position:relative;height:0">' + anchors.map(function (a, i) {
+            return '<div style="position:absolute;left:' + pct(a.v) + '%;transform:translateX(-50%);top:-32px">' +
+              '<div style="width:2.5px;height:' + (i === 2 ? 34 : 24) + 'px;background:' + (i === 2 ? "var(--accent)" : "var(--tx3)") + ';margin:0 auto"></div>' +
+              '<div style="font-size:10px;white-space:nowrap;color:' + (i === 2 ? "var(--accent);font-weight:700" : "var(--tx3)") + ';margin-top:2px">' + a.l + "</div></div>";
+          }).join("") + "</div>" +
+          '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--tx3);margin-top:30px">' +
+          "<span>0BP · 高估（减仓区）</span><span>100BP</span><span>250BP · 安全边际（买入区）</span><span>400BP</span></div>" +
+          '<div style="margin-top:12px;font-size:12.5px">当前位置：<b class="num" style="color:' + zoneColor + '">≈' + cur + 'BP（' + zone + '）</b><span style="color:var(--tx3);font-size:11.5px"> = 平均分派率约 ' + avgYield + '% − 10Y 国债约 ' + bond10y + '% · ' + (cur >= 250 ? '已进入买入区' : '距 250BP 买入区仍有 ' + (250 - cur) + 'BP 差距') + "</span></div>";
+      }
+      if ($("rvLiveStrip")) {
+        $("rvLiveStrip").innerHTML = RV ? (
+          '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px">' +
+          '<span class="rv-stage" style="color:' + (RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)") + '">' + RV.stage + "</span>" +
+          '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项成立 · 每日自动更新</span></div>" +
+          RV.items.map(function (it) {
+            return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
+              '<span class="vl num">' + it.value + "</span>" +
+              '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓" : "✗") + "</span></div>";
+          }).join("") +
+          '<p style="font-size:11.5px;color:var(--tx3);margin-top:10px">重估的利率驱动力在，资金与价格验证未跟上——仍处初期反复阶段；若条件全部成立且股息率溢价 &gt;250BP，构成右侧确认买点。</p>'
+        ) : '<div class="empty">重估状态数据未生成</div>';
+      }
+      if ($("opSteps")) $("opSteps").innerHTML = [
+        { t: "① 宏观环境扫描", d: "监测 10Y 国债趋势（核心变量）、M2 与实体回报率、保险 OCI 政策与持仓变化。利率下行=顺势而为，利率快速上行=降低暴露。" },
+        { t: "② 资产筛选", d: "分派率 >4%、分红稳定 3 年以上、负债率 <60%；优先保租房/市政环保/能源等防御型打底，周期型做弹性，扩张型做期权。" },
+        { t: "③ 估值安全边际", d: "买入：股息率溢价 >250BP；持有：>150BP；减仓：<100BP。当前约 180BP——中性，未到闭眼买入区。" },
+        { t: "④ 动态再平衡", d: "逐季验证排他性条件（本页右侧）；跟踪险资持仓、解禁与扩募事件；全市场分位升破 90% 系统性减仓；10Y 升破 2% 降总仓至 50% 以下。" }
+      ].map(function (s) {
+        return '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px">' +
+          '<h3 style="font-size:12.5px;margin-bottom:6px">' + s.t + "</h3>" +
+          '<p style="font-size:12px;color:var(--tx2);line-height:1.7">' + s.d + "</p></div>";
+      }).join("");
+    })();
+
+    var CY = D.cycle;
+    if (!CY) { $("cycleGrid").innerHTML = '<div class="empty">cycle_judgment.json 未配置</div>'; return; }
+    $("cycleUpdated").textContent = "· 更新 " + (CY.updated || "");
+    // 4 个周期：前三一行（3 列），康波周期单独一行横向加宽
+    var cycles = CY.cycles || [];
+    var firstThree = cycles.slice(0, 3).map(function (c) {
+      return '<div class="cycle-wide-card"><div style="font-size:12.5px;font-weight:600">' + c.name + "</div>" +
+        '<div style="font-size:15px;font-weight:650;margin:6px 0;color:var(--accent)">' + c.stage + "</div>" +
+        '<div style="font-size:11.5px;color:var(--tx2);line-height:1.6">' + c.evidence + "</div>" +
+        '<div class="prog"><i style="width:' + Math.round((c.progress || 0) * 100) + '%"></i></div></div>';
+    }).join("");
+    var wideCard = cycles[3] ?
+      '<div class="cycle-wide-card" style="display:flex;gap:24px;align-items:flex-start">' +
+        '<div style="flex:0 0 220px">' +
+          '<div style="font-size:13px;font-weight:600">' + cycles[3].name + "</div>" +
+          '<div style="font-size:18px;font-weight:650;margin:6px 0;color:var(--accent)">' + cycles[3].stage + "</div>" +
+          '<div class="prog" style="margin-top:8px"><i style="width:' + Math.round((cycles[3].progress || 0) * 100) + '%"></i></div>' +
+          '<div style="font-size:11px;color:var(--tx3);margin-top:4px">阶段进度 ' + Math.round((cycles[3].progress || 0) * 100) + '%</div>' +
+        '</div>' +
+        '<div style="flex:1;font-size:12px;color:var(--tx2);line-height:1.7">' + cycles[3].evidence + "</div>" +
+      "</div>" : "";
+    $("cycleGrid").innerHTML = '<div class="cycle-grid-row">' + firstThree + '</div>' + wideCard;
+
+    // 美林时钟（四象限淡彩 + 脉冲定位点）
+    var q = (CY.clock || {}).quadrant || "复苏";
+    $("clockNote").textContent = (CY.clock || {}).note || "";
+    // 美林时钟四象限表述:四象限对应资产含义 + 当前象限要点
+    var CLOCK_DESC = {
+      "复苏": "<b>复苏</b>(增长↑ 通胀↓)：股票/商品占优，债券次之。利率下行 + 盈利改善 → REITs 受益分派率稳定 + 估值修复",
+      "过热": "<b>过热</b>(增长↑ 通胀↑)：商品>股票>债券>现金。通胀抬升压制估值，但 REITs 租金端通胀传导受益",
+      "滞胀": "<b>滞胀</b>(增长↓ 通胀↑)：债券>现金>股票>商品。最差组合，REITs 估值受双重压力，应降防御型配置",
+      "衰退": "<b>衰退</b>(增长↓ 通胀↓)：债券>股票>现金>商品。利率快速下行 → 类债高股息资产占优，防御型领涨，顺周期承压"
+    };
+    $("clockDesc").innerHTML = (CLOCK_DESC[q] || "") + '<div style="margin-top:6px;color:var(--tx3)">当前位置：<b style="color:var(--accent)">' + q + '</b> · ' + ((CY.clock || {}).note || "—") + "</div>";
+    var quads = [["复苏", "增长↑ 通胀↓", "#10b981"], ["过热", "增长↑ 通胀↑", "#ef4444"],
+                 ["滞胀", "增长↓ 通胀↑", "#f59e0b"], ["衰退", "增长↓ 通胀↓", "#3b82f6"]];
+    var W = 340, H = 300, m = 30;
+    var pos = { "复苏": [1, 1], "过热": [1, 0], "滞胀": [0, 0], "衰退": [0, 1] };
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%">' + svgTitle("美林时钟周期定位图");
+    quads.forEach(function (qd) {
+      var p = pos[qd[0]], x = m + p[0] * (W - 2 * m) / 2, y = m + p[1] * (H - 2 * m) / 2;
+      var on = qd[0] === q, col = qd[2];
+      s += '<rect x="' + x + '" y="' + y + '" width="' + (W - 2 * m) / 2 + '" height="' + (H - 2 * m) / 2 +
+        '" fill="' + col + '" fill-opacity="' + (on ? ".1" : ".04") + '" stroke="#e2e8f0" stroke-width="1" rx="8"/>' +
+        '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 - 4) + '" text-anchor="middle" fill="' +
+        (on ? col : "var(--tx2)") + '" font-size="14" font-weight="600">' + qd[0] + "</text>" +
+        '<text x="' + (x + (W - 2 * m) / 4) + '" y="' + (y + (H - 2 * m) / 4 + 14) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">' + qd[1] + "</text>";
+      if (on) {
+        var cx = x + (W - 2 * m) / 4, cy = y + (H - 2 * m) / 4 + 30;
+        s += '<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="none" stroke="' + col + '" stroke-width="1.2">' +
+          '<animate attributeName="r" values="5;16" dur="1.8s" repeatCount="indefinite"/>' +
+          '<animate attributeName="stroke-opacity" values=".7;0" dur="1.8s" repeatCount="indefinite"/></circle>' +
+          '<circle cx="' + cx + '" cy="' + cy + '" r="4.5" fill="' + col + '"/>';
+      }
+    });
+    s += '<text x="' + W / 2 + '" y="' + (H - 4) + '" text-anchor="middle" fill="var(--tx3)" font-size="10">增长 →</text>' +
+         '<text x="12" y="' + H / 2 + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + H / 2 + ')">通胀 →</text>';
+    $("clockChart").innerHTML = s + "</svg>";
+
+    // 美国 REITs 长期走势（对数轴 + NBER 衰退带 + 耦合统计）
+    (function () {
+      var U = D.usLong;
+      if (!U || !U.dates || !U.dates.length) {
+        $("chartUsLong").innerHTML = '<div class="empty">美国长期序列未生成 — 请运行 fetch_data.py</div>';
+        return;
+      }
+      var W = 760, H = 400, pl = 46, pr = 10, pt = 14, pb = 26;
+      $("usLongAsOf").textContent = "当前截至 " + U.dates[U.dates.length - 1] + " 美股收盘";
+      var cats = ["防御型", "周期型", "扩张型"];
+      var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+      function renderUsLong() {
+        var th = chartTheme();
+        var markAreaData = (U.recessions || []).filter(function (r) {
+          return !(r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]);
+        }).map(function (r) { return [{ xAxis: r[0] }, { xAxis: r[1] }]; });
+        echSet("chartUsLong", {
+          backgroundColor: "transparent",
+          grid: { left: 52, right: 16, top: 18, bottom: 30 },
+          tooltip: {
+            trigger: "axis", backgroundColor: th.panel, borderColor: th.line,
+            textStyle: { color: th.tx, fontSize: 12 },
+            axisPointer: { type: "line", lineStyle: { color: th.tx3, type: "dashed" } }
+          },
+          xAxis: {
+            type: "category", data: U.dates, boundaryGap: false,
+            axisLine: { lineStyle: { color: th.line } }, axisTick: { show: false },
+            axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true },
+            splitLine: { show: false }
+          },
+          yAxis: {
+            type: "log",
+            axisLabel: { color: th.tx3, fontSize: 10 },
+            splitLine: { lineStyle: { color: th.grid } }
+          },
+          series: cats.map(function (c, i) {
+            var data = (U.cats[c] || []).map(function (v) { return (v == null || v <= 0) ? null : v; });
+            return {
+              name: c, type: "line", data: data, showSymbol: false, connectNulls: true,
+              lineStyle: { width: 2, color: cols[c] },
+              markArea: i === 0 ? { silent: true, itemStyle: { color: "rgba(100,116,139,.16)" }, data: markAreaData } : undefined
+            };
+          })
+        });
+      }
+      registerChart(renderUsLong, "chartUsLong");
+      renderUsLong();
+      $("legendUsLong").innerHTML = cats.map(function (c) {
+        return '<span><i style="background:' + cols[c] + '"></i>' + c + "</span>";
+      }).join("") + '<span><i style="background:rgba(100,116,139,.35);border-radius:2px"></i>NBER 衰退期</span>';
+
+      var S = U.stats || {};
+      function pf(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "%"; }
+      $("usCoupleStats").innerHTML = '<table class="matrix"><thead><tr><th class="l">类别</th><th>起始年</th><th>全期年化</th><th>2008 金融危机最大回撤</th><th>2020 新冠回撤</th><th>近10年年化</th></tr></thead><tbody>' +
+        cats.map(function (c) {
+          var s = S[c]; if (!s) return "";
+          return "<tr><td class='l'><span class='st-tag st-" + c + "'>" + c + "</span></td><td class='num'>" + s.start.slice(0, 4) +
+            "</td><td class='num'>" + pf(s.cagr) + "</td><td class='num'>" + pf(s.dd0809) +
+            "</td><td class='num'>" + pf(s.dd2020) + "</td><td class='num'>" + pf(s.cagr10) + "</td></tr>";
+        }).join("") + "</tbody></table>";
+
+      var sd = S["防御型"], sc = S["周期型"], sg = S["扩张型"];
+      if (sd && sc && sg) {
+        var yrs = Math.round((new Date(U.dates[U.dates.length - 1]) - new Date(sd.start)) / 3.154e10);
+        $("usCoupleText").innerHTML = "<b>长周期耦合结论（" + sd.start.slice(0, 4) + "–" + U.dates[U.dates.length - 1].slice(0, 4) + "，约 " + yrs + " 年）：</b>" +
+          "① 衰退期（灰带）三类齐跌但回撤分层清晰——<b>周期型</b> 2008 年最大回撤 <b class='up'>" + sc.dd0809 + "%</b>，深于<b>防御型</b> " + sd.dd0809 + "%，验证「周期型对衰退敏感、防御型相对抗跌」；" +
+          "② <b>扩张型</b>（数据中心/通信铁塔）全期年化 +" + sg.cagr + "%、近 10 年年化 +" + sg.cagr10 + "% 领跑，2020 年新冠衰退仅回撤 " + sg.dd2020 + "%，呈现「进攻属性 + 新基建刚需」双重特征，对应康波导入期的结构性机会；" +
+          "③ 扩张期弹性排序为 扩张 &gt; 周期 &gt; 防御——与中国 REITs「防御 / 周期 / 扩张」三分类的顺周期配置框架互为印证，<b>分类具备跨市场、跨周期的稳健性</b>。";
+      }
+    })();
+
+    // 美国 REITs 代表标的个体长期走势（对数轴 + NBER 衰退带 + 个券统计）
+    (function () {
+      var U = D.usLong;
+      if (!U || !U.memberSeries || !U.dates || !U.dates.length) {
+        if ($("chartUsMembers")) $("chartUsMembers").innerHTML = '<div class="empty">代表标的个体序列未生成 — 请运行 scripts/build_us_long.py</div>';
+        return;
+      }
+      // 类别配色：防御=绿、周期=琥珀、扩张=紫；同类别多只时用色阶区分
+      var catBase = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+      var catShades = {
+        "防御型": ["#0d9e6e", "#34d399", "#059669"],
+        "周期型": ["#f59e0b", "#d97706", "#fbbf24"],
+        "扩张型": ["#8b5cf6", "#a78bfa", "#7c3aed"]
+      };
+      var order = ["WELL.N", "O.N", "AVB.N", "PLD.N", "SPG.N", "AMT.N", "EQIX.O"];
+      var codes = order.filter(function (c) { return U.memberSeries[c]; })
+        .concat(Object.keys(U.memberSeries).filter(function (c) { return order.indexOf(c) < 0; }));
+      var shadeIdx = {};
+      var mCols = {};
+      codes.forEach(function (c) {
+        var cat = (U.members[c] || {}).cat || "";
+        var i = shadeIdx[cat] = (shadeIdx[cat] || 0);
+        var pal = catShades[cat] || [catBase[cat] || "#7a8494"];
+        mCols[c] = pal[i % pal.length];
+        shadeIdx[cat] = i + 1;
+      });
+      function labelOf(c) {
+        var m = U.members[c] || {};
+        return (m.name || c) + "（" + (m.type || "") + "）";
+      }
+      var markAreaData = (U.recessions || []).filter(function (r) {
+        return !(r[1] < U.dates[0] || r[0] > U.dates[U.dates.length - 1]);
+      }).map(function (r) { return [{ xAxis: r[0] }, { xAxis: r[1] }]; });
+      function renderUsMembers() {
+        var th = chartTheme();
+        echSet("chartUsMembers", {
+          backgroundColor: "transparent",
+          grid: { left: 52, right: 16, top: 18, bottom: 30 },
+          tooltip: {
+            trigger: "axis", backgroundColor: th.panel, borderColor: th.line,
+            textStyle: { color: th.tx, fontSize: 12 },
+            axisPointer: { type: "line", lineStyle: { color: th.tx3, type: "dashed" } },
+            valueFormatter: function (v) { return v == null ? "—" : Number(v).toFixed(0); }
+          },
+          xAxis: {
+            type: "category", data: U.dates, boundaryGap: false,
+            axisLine: { lineStyle: { color: th.line } }, axisTick: { show: false },
+            axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true },
+            splitLine: { show: false }
+          },
+          yAxis: {
+            type: "log",
+            axisLabel: { color: th.tx3, fontSize: 10 },
+            splitLine: { lineStyle: { color: th.grid } }
+          },
+          series: codes.map(function (c, i) {
+            var data = (U.memberSeries[c] || []).map(function (v) { return (v == null || v <= 0) ? null : v; });
+            return {
+              name: labelOf(c), type: "line", data: data, showSymbol: false, connectNulls: false,
+              lineStyle: { width: 1.8, color: mCols[c] },
+              emphasis: { focus: "series", lineStyle: { width: 3 } },
+              markArea: i === 0 ? { silent: true, itemStyle: { color: "rgba(100,116,139,.16)" }, data: markAreaData } : undefined
+            };
+          })
+        });
+      }
+      registerChart(renderUsMembers, "chartUsMembers");
+      renderUsMembers();
+      $("legendUsMembers").innerHTML = codes.map(function (c) {
+        return '<span><i style="background:' + mCols[c] + '"></i>' + labelOf(c) + "</span>";
+      }).join("") + '<span><i style="background:rgba(100,116,139,.35);border-radius:2px"></i>NBER 衰退期</span>';
+
+      // 个券长期统计表
+      var MS = U.memberStats || {};
+      function pf2(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "%"; }
+      $("usMemberStats").innerHTML = '<table class="matrix"><thead><tr><th class="l">标的</th><th class="l">类型</th><th>类别</th><th>起始年</th><th>全期年化</th><th>2008 金融危机最大回撤</th><th>2020 新冠回撤</th><th>近10年年化</th></tr></thead><tbody>' +
+        codes.map(function (c) {
+          var m = U.members[c] || {}, s = MS[c]; if (!s) return "";
+          return "<tr><td class='l'><b>" + (m.name || c) + "</b> <span style='color:var(--tx3);font-size:11px'>" + c + "</span></td><td class='l'>" + (m.type || "") +
+            "</td><td><span class='st-tag st-" + (m.cat || "") + "'>" + (m.cat || "") + "</span></td><td class='num'>" + s.start.slice(0, 4) +
+            "</td><td class='num'>" + pf2(s.cagr) + "</td><td class='num'>" + pf2(s.dd0809) +
+            "</td><td class='num'>" + pf2(s.dd2020) + "</td><td class='num'>" + pf2(s.cagr10) + "</td></tr>";
+        }).join("") + "</tbody></table>";
+    })();
+    var OS = D.overseasStatic;
+    if (OS && OS.matrix) {
+      $("osMatrixNote").textContent = (OS.placeholder ? "⚠️ 占位示例值，待 Nareit/NBER 研究数据核实替换 · " : "") + (OS.source || "") + " · 更新 " + (OS.updated || "");
+      var M = OS.matrix;
+      var all = M.ret.flat();
+      var mx = Math.max.apply(null, all.map(Math.abs));
+      $("osMatrix").innerHTML = '<table class="matrix"><thead><tr><th class="l">资产类型 \\ 周期阶段</th>' +
+        M.stages.map(function (s2) { return "<th>" + s2 + "</th>"; }).join("") + "</tr></thead><tbody>" +
+        M.types.map(function (t, i) {
+          return "<tr><td class='l'>" + t + "</td>" + M.ret[i].map(function (v) {
+            var a = Math.min(Math.abs(v) / mx, 1);
+            var bg = v >= 0 ? "rgba(240,79,79," + (0.08 + 0.55 * a) + ")" : "rgba(43,181,163," + (0.08 + 0.55 * a) + ")";
+            return '<td class="num" style="background:' + bg + '">' + (v > 0 ? "+" : "") + v.toFixed(1) + "</td>";
+          }).join("") + "</tr>";
+        }).join("") + "</tbody></table>";
+    } else {
+      $("osMatrix").innerHTML = '<div class="empty">overseas_static.json 未配置</div>';
+    }
+
+    // 映射结论
+    if (CY.mapping) {
+      $("mappingConclusion").textContent = CY.mapping.conclusion || "";
+      $("mappingCards").innerHTML = (CY.mapping.directions || []).map(function (d2) {
+        return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
+          '<b style="font-size:13px">' + d2.sector + '</b><span class="tag" style="font-size:11px;padding:2px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line)">' + d2.view + "</span></div>" +
+          '<p style="font-size:11.5px;color:var(--tx2);margin-top:6px;line-height:1.6">' + d2.reason + "</p>" +
+          '<div style="font-size:11px;color:var(--tx3);margin-top:4px">置信度：' + d2.confidence + "</div></div>";
+      }).join("");
+    }
+  });
+
+  // ---- 赛道透视 ----
+  LAZY.research.push(function () {
+    var TRACKS = [
+      { sector: "高速公路", metrics: ["车流量", "通行费收入", "路网分流"], redline: "流量低于预测 >10% 预警" },
+      { sector: "能源", metrics: ["电价", "发电量/出力率", "补贴回款"], redline: "出力率低于预测 >10% 预警" },
+      { sector: "保租房", metrics: ["出租率", "租金水平", "租户续租率"], redline: "出租率 <90% 预警" },
+      { sector: "产业园", metrics: ["出租率", "租金偏离", "空置率", "租户行业分散度"], redline: "空置率 >12% 或租金偏离 >15% 预警" },
+      { sector: "仓储物流", metrics: ["出租率", "WALE", "新增供给"], redline: "出租率 <90% 或租金下行 >10%" },
+      { sector: "消费", metrics: ["客流量", "销售额", "租售比"], redline: "空置率 >15% 预警" },
+      { sector: "数据中心", metrics: ["上架率", "电力成本", "算力需求", "解禁节奏"], redline: "上架率显著低于预测预警" },
+      { sector: "市政环保", metrics: ["处理量", "政府付费回款", "特许剩余年限"], redline: "剩余年限不足覆盖本金回收" },
+    ];
+    var fundMap = {};
+    (D.fundamentals || []).forEach(function (f) { fundMap[f.code] = f; });
+    $("trackGrid").innerHTML = '<div class="grid3" style="margin-bottom:0">' + TRACKS.map(function (t) {
+      var members = D.reits.filter(function (r) { return r.sector === t.sector; });
+      var pills = [];
+      members.forEach(function (r) {
+        var f = fundMap[r.code];
+        if (f && f.metrics) {
+          Object.keys(f.metrics).forEach(function (mk) {
+            var v = f.metrics[mk];
+            if (v == null) return;
+            var level = "green";
+            if (mk === "出租率" && v < 90) level = "red"; else if (mk === "出租率" && v < 92) level = "yellow";
+            if (mk === "空置率" && v > 12) level = "red"; else if (mk === "空置率" && v > 10) level = "yellow";
+            pills.push({ n: r.name.replace(/REIT.*$/, ""), m: mk, v: v, level: level });
+          });
+        }
+      });
+      var pillHtml = pills.length
+        ? pills.slice(0, 6).map(function (p) {
+            return '<span class="metric-pill ' + p.level + '">' + p.n + " " + p.m + " " + p.v + (typeof p.v === "number" ? "%" : "") + "</span>";
+          }).join("")
+        : '<span class="metric-pill gray">运营数据待季度更新</span>';
+      return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
+        '<b style="font-size:13px">' + t.sector + '</b><span style="font-size:11px;color:var(--tx3)">' + members.length + " 只</span></div>" +
+        '<div style="margin:6px 0">' + t.metrics.map(function (m2) { return '<span class="metric-pill gray">' + m2 + "</span>"; }).join("") + "</div>" +
+        '<div style="font-size:11px;color:var(--up);margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
+    }).join("") + "</div>";
+
+    // 分派达成监测
+    var funds = D.fundamentals || [];
+    if (!funds.length) {
+      $("fundTable").innerHTML = '<div class="empty">fundamentals.json 待维护：填入各券 achieveRate（达成率）与 distYield（分派率）后自动标色</div>';
+    } else {
+      $("fundTable").innerHTML = '<table class="matrix"><thead><tr><th class="l">名称</th><th>达成率</th><th>分派率</th><th>状态</th><th class="l">备注</th></tr></thead><tbody>' +
+        funds.map(function (f) {
+          var r = D.reits.find(function (x) { return x.code === f.code; });
+          var a = f.achieveRate;
+          var st = a == null ? ["待更新", "var(--tx3)"] : a >= 95 ? ["正常", "var(--down)"] : a >= 90 ? ["警戒", "var(--gold)"] : ["减持红线", "var(--up)"];
+          return "<tr><td class='l'>" + (r ? r.name : f.code) + "</td>" +
+            '<td class="num">' + (a == null ? "—" : a + "%") + "</td>" +
+            '<td class="num">' + (f.distYield == null ? "—" : f.distYield + "%") + "</td>" +
+            '<td style="color:' + st[1] + '">' + st[0] + "</td>" +
+            "<td class='l' style='color:var(--tx3);font-size:11px'>" + (f.note || "") + "</td></tr>";
+        }).join("") + "</tbody></table>";
+    }
+  });
+
+  // ---- 策略信号中心 ----
+  LAZY.research.push(function () {
+    // 重估因子映射
+    var RV = D.revaluation;
+    if (RV) {
+      var MAP = ["利差因子（spread）", "资金面因子（moneyflow）", "市场情绪因子（sentiment）", "个券历史分位（pctRank）"];
+      $("revalSignalMap").innerHTML =
+        '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px">' +
+        '<span class="rv-stage" style="color:' + (RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)") + '">' + RV.stage + "</span>" +
+        '<span class="num" style="color:var(--tx3);font-size:11.5px">' + RV.score + "/4 · 重估的利率驱动力在，资金与价格验证未跟上，仍处初期反复阶段</span></div>" +
+        RV.items.map(function (it, i) {
+          return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
+            '<span class="vl num">' + it.value + "</span>" +
+            '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓ 成立" : "✗ 未成立") + "</span>" +
+            '<span class="ds">→ ' + MAP[i] + "</span></div>";
+        }).join("");
+    }
+
+    // 三策略信号条
+    var FACTORS = [["liquidity", "流动性"], ["sentiment", "情绪"], ["moneyflow", "资金"], ["performance", "业绩"], ["spread", "利差"], ["stockbond", "股债"]];
+    $("stratSignalBars").innerHTML = D.strategies.map(function (st) {
+      var ss = (D.stratSignals || {})[st] || { avg: 0, label: "中性" };
+      var members = D.reits.filter(function (r) { return r.strategy === st; });
+      var dots = FACTORS.map(function (f) {
+        var avg = members.length ? members.reduce(function (a2, r) { return a2 + r.signals[f[0]]; }, 0) / members.length : 0;
+        var c = avg > 0.5 ? "sig-pos" : avg < -0.5 ? "sig-neg" : "sig-zero";
+        return '<span title="' + f[1] + " " + avg.toFixed(1) + '" class="sig-dot ' + c + '"></span>';
+      }).join(" ");
+      var w = Math.min(Math.abs(ss.avg) / 12 * 100, 100);
+      return '<div class="sbar" style="grid-template-columns:90px 1fr 120px">' +
+        '<span class="n"><span class="st-tag st-' + st + '">' + st + "</span></span>" +
+        '<div class="track"><div class="fill" style="left:0;width:' + w + '%;background:' + ST_COLOR[st] + '"></div></div>' +
+        '<span class="val num">' + (ss.avg > 0 ? "+" : "") + ss.avg + " " + sigLabel(ss.label) + " " + dots + "</span></div>";
+    }).join("");
+
+    // 事件流
+    var evType = "";
+    function renderEvents() {
+      var list = (D.events || []).filter(function (e) { return !evType || e.type === evType; });
+      $("eventFlow").innerHTML = list.length ? list.slice(0, 80).map(function (e) {
+        return '<div class="ev-item"><span class="d">' + e.date + '</span><span class="ev-type ev-' + e.type + '">' + e.type + "</span>" +
+          "<span>" + e.name + (e.value != null ? ' <span class="num" style="color:var(--tx3)">' + e.value + "</span>" : "") + "</span></div>";
+      }).join("") : '<div class="empty">近 120 日无该类信号事件</div>';
+    }
+    $("evFilter").addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      evType = b.dataset.t;
+      document.querySelectorAll("#evFilter button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      renderEvents();
+    });
+    renderEvents();
+
+    // 回测
+    var BT = D.backtest || {};
+    $("backtestTable").innerHTML = '<table class="matrix"><thead><tr><th class="l">信号类型</th><th>样本</th><th>5日均值</th><th>5日胜率</th><th>20日均值</th><th>20日胜率</th></tr></thead><tbody>' +
+      Object.keys(BT).map(function (t) {
+        var b = BT[t];
+        function cell(x, k, suf) { return x && x[k] != null ? (k === "avg" ? fmt(x[k]) : x[k] + "%") : "—"; }
+        function cl(x) { return x && x.avg != null ? cls(x.avg) : ""; }
+        return "<tr><td class='l'><span class='ev-type ev-" + t + "'>" + t + "</span></td>" +
+          '<td class="num">' + ((b.d20 && b.d20.n) || "—") + "</td>" +
+          '<td class="num ' + cl(b.d5) + '">' + cell(b.d5, "avg") + "</td>" +
+          '<td class="num">' + cell(b.d5, "win") + "</td>" +
+          '<td class="num ' + cl(b.d20) + '">' + cell(b.d20, "avg") + "</td>" +
+          '<td class="num">' + cell(b.d20, "win") + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  });
+
+  // ---- 配置建议升级：周期徽标 + 长期方向 ----
+  LAZY.advice.push(function () {
+    if (D.cycle) {
+      $("adviceCycleBadges").innerHTML = (D.cycle.cycles || []).map(function (c) {
+        return '<span class="cycle-badge">' + c.name.split("（")[0] + "：<b>" + c.stage + "</b></span>";
+      }).join("") + '<span class="cycle-badge">美林时钟：<b>' + ((D.cycle.clock || {}).quadrant || "—") + "</b></span>" +
+        (D.revaluation ? '<span class="cycle-badge">资产重估：<b>' + D.revaluation.stage + "（" + D.revaluation.score + "/4）</b></span>" : "");
+      if (D.cycle.mapping) {
+        $("adviceMappingNote").textContent = D.cycle.mapping.conclusion || "";
+        $("adviceMapping").innerHTML = (D.cycle.mapping.directions || []).map(function (d2) {
+          return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
+            '<b>' + d2.sector + '</b><span style="font-size:11px;color:var(--accent)">' + d2.view + "</span></div>" +
+            '<p style="font-size:11.5px;color:var(--tx2);margin-top:6px;line-height:1.6">' + d2.reason + "</p></div>";
+        }).join("");
+      }
+      // 动态渲染宏观指标卡片
+      var pm = D.cycle.pm || {};
+      var upd = D.cycle.updated || "";
+      var m = upd.match(/\d{4}-(\d{2})-(\d{2})/);
+      var monthLabel = m ? parseInt(m[1], 10) + "月" : "";
+      var dayLabel = m ? parseInt(m[2], 10) : "";
+      // PMI
+      var pmi = pm.pmi;
+      var pmiHtml = pmi != null
+        ? '<div class="big num" style="font-size:24px;font-weight:600">' + pmi + ' <span style="font-size:12px;color:' + (pmi >= 50 ? 'var(--up)' : 'var(--down)') + '">' + (pmi >= 50 ? '重回扩张' : '低于荣枯线') + '</span></div>'
+        : '<div class="big num" style="font-size:24px;font-weight:600">—</div>';
+      $("macroPmi").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI（' + monthLabel + '）</div>' + pmiHtml +
+        '<div style="font-size:11px;color:var(--tx2)">' + (pm.note ? pm.note.split('，')[0] : 'PMI数据加载中…') + '</div>';
+      // CPI
+      var cpi = pm.cpi;
+      var cpiHtml = cpi != null
+        ? '<div class="big num" style="font-size:24px;font-weight:600">' + (cpi > 0 ? '+' : '') + cpi + '%</div>'
+        : '<div class="big num" style="font-size:24px;font-weight:600">—</div>';
+      $("macroCpi").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">CPI 同比（' + monthLabel + '）</div>' + cpiHtml +
+        '<div style="font-size:11px;color:var(--tx2)">' + (cpi != null ? (cpi < 1 ? '低通胀，货币政策空间充裕' : '温和通胀') : 'CPI数据加载中…') + '</div>';
+      // Bond10y
+      var bond = D.cycle.bond10y;
+      var bondHtml = bond != null
+        ? '<div class="big num" style="font-size:24px;font-weight:600">' + bond + '%</div>'
+        : '<div class="big num" style="font-size:24px;font-weight:600">—</div>';
+      $("macroBond").innerHTML = '<div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率（' + monthLabel + dayLabel + '）</div>' + bondHtml +
+        '<div style="font-size:11px;color:var(--tx2)">历史低位，低利率 + 资产荒格局未改</div>';
+    }
+  });
+
+  // ---- 机构间REITs（不动产ABS）页面 ----
+  var INST = { loaded: false, loading: false, data: [], ex: "", type: "", status: "", q: "", sortKey: "up", sortDir: -1 };
+  var INST_STATUS_LABEL = { "0": "已申报", "1": "已受理", "2": "已反馈", "3": "已接收反馈意见", "4": "通过", "5": "未通过", "8": "终止", "9": "中止", "10": "已回复交易所意见", "11": "提交注册", "12": "注册生效" };
+  var INST_STATUS_ORDER = ["1", "0", "2", "3", "10", "11", "12", "4", "9", "8", "5"];
+  function instStatusCls(s) {
+    s = String(s);
+    if (s === "4" || s === "12") return "ist ist-ok";
+    if (s === "5") return "ist ist-bad";
+    if (s === "8" || s === "9") return "ist ist-stop";
+    if (s === "2" || s === "3" || s === "10") return "ist ist-fb";
+    return "ist ist-run";
+  }
+  function escH(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function initInstPage() {
+    if (INST.loaded || INST.loading) return;
+    INST.loading = true;
+    function ready() {
+      INST.data = (window.__REITS_SNAPSHOT__ || []).slice();
+      INST.loaded = true; INST.loading = false;
+      bindInstControls();
+      renderInstAll();
+    }
+    if (window.__REITS_SNAPSHOT__) { ready(); return; }
+    fetch("reits_snapshot.json").then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    }).then(function (j) {
+      window.__REITS_SNAPSHOT__ = j.items || j;
+      ready();
+    }).catch(function () {
+      INST.loading = false;
+      $("instKpis").innerHTML = '<div class="card" style="padding:14px">机构间REITs数据加载失败，请刷新重试</div>';
+    });
+  }
+  function bindInstControls() {
+    var sub = $("instSub");
+    sub.addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      if (b.dataset.instEx !== undefined) {
+        INST.ex = b.dataset.instEx;
+        sub.querySelectorAll("[data-inst-ex]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      } else if (b.dataset.instType !== undefined) {
+        INST.type = b.dataset.instType;
+        sub.querySelectorAll("[data-inst-type]").forEach(function (x) { x.classList.toggle("on", x === b); });
+      }
+      renderInstAll();
+    });
+    $("instStatusFilter").addEventListener("click", function (e) {
+      var b = closestBtn(e); if (!b) return;
+      INST.status = b.dataset.istStatus || "";
+      $("instStatusFilter").querySelectorAll("button").forEach(function (x) { x.classList.toggle("on", x === b); });
+      renderInstAll();
+    });
+    $("instSearch").addEventListener("input", function () { INST.q = this.value.trim(); renderInstAll(); });
+    $("instTbl").querySelector("thead").addEventListener("click", function (e) {
+      var th = e.target.closest ? e.target.closest("th[data-k]") : null; if (!th) return;
+      var k = th.dataset.k;
+      if (INST.sortKey === k) INST.sortDir = -INST.sortDir;
+      else { INST.sortKey = k; INST.sortDir = -1; }
+      renderInstAll();
+    });
+  }
+  function instFiltered() {
+    return INST.data.filter(function (p) {
+      if (INST.ex && p.ex !== INST.ex) return false;
+      if (INST.type && p.ptype !== INST.type) return false;
+      if (INST.status !== "" && String(p.status) !== INST.status) return false;
+      if (INST.q) {
+        var q = INST.q.toLowerCase();
+        var hay = (p.name + " " + (p.mgr || "") + " " + (p.origin || "")).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+  }
+  function renderInstAll() {
+    var data = INST.data;
+    // 二级tab（交易所/类型）筛选后的子集：KPI 与状态 chips 同步联动
+    var base = data.filter(function (p) {
+      if (INST.ex && p.ex !== INST.ex) return false;
+      if (INST.type && p.ptype !== INST.type) return false;
+      return true;
+    });
+    var scopeTxt = (INST.ex || "沪深两所") + (INST.type ? " · " + INST.type : "");
+    var totalAmt = 0, passed = 0, reviewing = 0;
+    base.forEach(function (p) {
+      totalAmt += Number(p.amt) || 0;
+      var s = String(p.status);
+      if (s === "4" || s === "12") passed++;
+      else if (s !== "5" && s !== "8" && s !== "9") reviewing++;
+    });
+    $("instKpis").innerHTML =
+      kpiCard("项目总数", base.length + " 单", scopeTxt + "在册不动产ABS") +
+      kpiCard("合计规模", totalAmt.toFixed(1) + " 亿元", scopeTxt + "申报口径合计") +
+      kpiCard("通过/注册生效", passed + " 单", scopeTxt + "已获准发行") +
+      kpiCard("在审项目", reviewing + " 单", scopeTxt + "申报/受理/反馈等流程中");
+    // 状态筛选 chips（随交易所/类型联动）
+    var counts = {};
+    base.forEach(function (p) { var s = String(p.status); counts[s] = (counts[s] || 0) + 1; });
+    var chips = '<button data-ist-status="" class="' + (INST.status === "" ? "on" : "") + '">全部 ' + base.length + '</button>';
+    INST_STATUS_ORDER.forEach(function (s) {
+      if (!counts[s]) return;
+      chips += '<button data-ist-status="' + s + '" class="' + (INST.status === s ? "on" : "") + '">' +
+        (INST_STATUS_LABEL[s] || s) + " " + counts[s] + "</button>";
+    });
+    $("instStatusFilter").innerHTML = chips;
+    // 表格
+    var rows = instFiltered();
+    rows.sort(function (a, b) {
+      var va = a[INST.sortKey], vb = b[INST.sortKey];
+      if (INST.sortKey === "amt") { va = Number(va) || 0; vb = Number(vb) || 0; }
+      else { va = String(va || ""); vb = String(vb || ""); }
+      if (va < vb) return -1 * INST.sortDir;
+      if (va > vb) return 1 * INST.sortDir;
+      return 0;
+    });
+    $("instCount").textContent = "（当前筛选 " + rows.length + " / " + base.length + " 单）";
+    $("instTbl").querySelector("tbody").innerHTML = rows.map(function (p) {
+      return "<tr>" +
+        '<td class="l"><b>' + escH(p.name) + "</b>" + (p.pnote ? '<div class="note">' + escH(p.pnote) + "</div>" : "") + "</td>" +
+        "<td>" + escH(p.ex) + "</td>" +
+        '<td class="l">' + escH(p.mgr || "—") + "</td>" +
+        '<td style="text-align:right">' + (p.amt != null ? Number(p.amt).toFixed(2) : "—") + "</td>" +
+        "<td>" + escH(p.ptype || "—") + "</td>" +
+        "<td>" + escH(p.psub || "—") + "</td>" +
+        '<td><span class="' + instStatusCls(p.status) + '">' + escH(INST_STATUS_LABEL[String(p.status)] || p.status) + "</span></td>" +
+        "<td>" + escH(p.acc || "—") + "</td>" +
+        "<td>" + escH(p.up || "—") + "</td>" +
+        "</tr>";
+    }).join("");
+    $("instMeta").textContent = "数据截至 " + (window.__REITS_SNAPSHOT_DATE__ || "—") + " · 排序：" +
+      ({ amt: "规模", acc: "受理日期", up: "更新日期" })[INST.sortKey] + (INST.sortDir < 0 ? "（降序）" : "（升序）");
+  }
+
+  // ---- Tab 切换 ----
+  // ---- 研究二级菜单切换已并入左侧导航 ----
+
+  // ---- 入场动画：卡片错峰 + KPI 数字滚动 ----
+  function stagger(scope) {
+    if (!scope) return;
+    scope.querySelectorAll(".card").forEach(function (c, i) { c.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); });
+  }
+  document.querySelectorAll(".view, #v-heatmap, #v-advice").forEach(function (v) { stagger(v); });
+  document.querySelectorAll(".kpi").forEach(function (k, i) { k.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); k.classList.add("anim"); });
+
+  // 主题切换时，若个券详情已展开则同步重渲染其图表
+  registerChart(function () {
+    var sc = window.__getSelCode ? window.__getSelCode() : null;
+    if (sc &&
+        document.getElementById("detailPanel") && document.getElementById("detailPanel").innerHTML) {
+      renderDetail(sc);
+    }
+  });
+
+  // 窗口尺寸变化时重排所有图表
+  var _resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(echResizeAll, 120);
+  });
+
+  // ---- hash 路由：#/detail/{code} 直达个券详情（可分享链接） ----
+  (function () {
+    function codeFromHash() {
+      var m = (location.hash || "").match(/^#\/?detail\/([0-9A-Z.]+)/i);
+      return m ? m[1] : null;
+    }
+    window.addEventListener("hashchange", function () {
+      var c = codeFromHash();
+      if (c) openReitDetail(c, false);
+    });
+    var c0 = codeFromHash();
+    if (c0) openReitDetail(c0, false);
+  })();
+
+  (function countUp() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.querySelectorAll(".kpi .v").forEach(function (el) {
+      var txt = el.textContent, mch = txt.match(/^([+-]?[\d.]+)(.*)$/);
+      if (!mch) return;
+      var target = parseFloat(mch[1]), suf = mch[2] || "";
+      var dec = (mch[1].split(".")[1] || "").length;
+      var t0 = performance.now(), dur = 550;
+      (function tick(t) {
+        var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = (target * e).toFixed(dec) + suf;
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = txt;
+      })(t0);
+    });
+  })();
+})();
+}).catch(function (e) {
+  console.error("核心数据 data.json 加载失败", e);
+  var m = document.getElementById("meta");
+  if (m) m.textContent = "核心数据加载失败，请刷新重试";
+});

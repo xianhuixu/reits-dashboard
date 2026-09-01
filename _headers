@@ -1,0 +1,30 @@
+# Cloudflare Pages 缓存策略
+# 原则：HTML 短缓存保证及时更新；数据 JSON 短缓存 + ETag 条件请求（未变仅 304 往返）；
+#       极少变动的库文件与图标长缓存。
+
+/index.html
+  Cache-Control: public, max-age=60, must-revalidate
+
+/
+  Cache-Control: public, max-age=60, must-revalidate
+
+# 数据文件：1 分钟内直接命中缓存，过期后 ETag 条件请求
+/*.json
+  Cache-Control: public, max-age=60, must-revalidate
+
+# 应用代码：5 分钟短缓存 + ETag 再验证，代码更新最多 5 分钟内全量生效
+/app.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+/styles.css
+  Cache-Control: public, max-age=300, must-revalidate
+
+/ui-utils.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+# 第三方库与图标：内容极少变动，长缓存；变更时改文件名即可强刷
+/lib/*
+  Cache-Control: public, max-age=604800, immutable
+
+/icons/*
+  Cache-Control: public, max-age=604800, immutable

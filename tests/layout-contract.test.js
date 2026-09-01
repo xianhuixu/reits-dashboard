@@ -3,7 +3,10 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+// 重构后：HTML 骨架在 index.html，样式在 styles.css，逻辑在 app.js；契约检查针对三者合集
+const html = ["index.html", "styles.css", "app.js"]
+  .map((f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8"))
+  .join("\n");
 
 test("mobile layout does not hide page-level horizontal overflow", () => {
   assert.doesNotMatch(html, /html, body\s*\{\s*overflow-x:\s*clip/);
