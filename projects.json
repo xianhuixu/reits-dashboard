@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-03 21:40:30",
+ "updated": "2026-09-07 23:10:40",
  "ndrc": [
   {
    "name": "信义能源新能源项目",
@@ -214,27 +214,27 @@
    "name": "嘉实京东仓储物流封闭式基础设施证券投资基金",
    "manager": "嘉实基金管理有限公司",
    "assetType": "基础设施",
-   "status": "已受理",
+   "status": "已反馈",
    "acceptDate": "2026-08-10",
-   "updateDate": "2026-08-10",
+   "updateDate": "2026-09-07",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=2b6853bdbec648e0821425c40f6d5b45"
   },
   {
    "name": "华安中电浦软封闭式商业不动产证券投资基金",
    "manager": "华安基金管理有限公司",
    "assetType": "商业不动产",
-   "status": "已受理",
+   "status": "已反馈",
    "acceptDate": "2026-08-07",
-   "updateDate": "2026-08-07",
+   "updateDate": "2026-09-04",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=2442d7bd13474f31972b8605ceebefdb"
   },
   {
    "name": "华泰紫金金鹰封闭式商业不动产证券投资基金",
    "manager": "华泰证券（上海）资产管理有限公司",
    "assetType": "商业不动产",
-   "status": "已受理",
+   "status": "已反馈",
    "acceptDate": "2026-08-06",
-   "updateDate": "2026-08-06",
+   "updateDate": "2026-09-03",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=a1b8c90b144d41c2bbde49c4c0a2f96f"
   },
   {
@@ -279,7 +279,7 @@
    "assetType": "商业不动产",
    "status": "已反馈",
    "acceptDate": "2026-04-30",
-   "updateDate": "2026-05-22",
+   "updateDate": "2026-09-06",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=9c0e79ff1731437c8cb7571366675723"
   },
   {
@@ -304,9 +304,9 @@
    "name": "广发新城吾悦封闭式商业不动产证券投资基金",
    "manager": "广发基金管理有限公司",
    "assetType": "商业不动产",
-   "status": "已反馈",
+   "status": "已申报",
    "acceptDate": "2026-03-06",
-   "updateDate": "2026-08-11",
+   "updateDate": "2026-09-03",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=620f9db7cc1f48b1b6531c5af02e8b34"
   },
   {
@@ -600,15 +600,6 @@
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000067"
   },
   {
-   "name": "华夏蜀道集团高速公路封闭式基础设施证券投资基金",
-   "type": "首发",
-   "assetType": "基础设施",
-   "status": "已问询",
-   "originator": "四川高速公路建设开发集团有限公司",
-   "acceptDate": "2026-05-12",
-   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000070"
-  },
-  {
    "name": "华夏华润电力燃煤发电封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
@@ -618,10 +609,19 @@
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000072"
   },
   {
-   "name": "中金杭州安居保障性租赁住房封闭式基础设施证券投资基金",
+   "name": "华夏蜀道集团高速公路封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
    "status": "已问询",
+   "originator": "四川高速公路建设开发集团有限公司",
+   "acceptDate": "2026-05-12",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000070"
+  },
+  {
+   "name": "中金杭州安居保障性租赁住房封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "注册生效",
    "originator": "杭州市安居宁巢投资有限公司",
    "acceptDate": "2026-05-06",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000071"
@@ -630,7 +630,7 @@
    "name": "中金菜鸟仓储物流封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
-   "status": "已问询",
+   "status": "注册生效",
    "originator": "杭州传欣物联网技术有限公司",
    "acceptDate": "2026-04-30",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000068"
@@ -648,7 +648,7 @@
    "name": "银华粤海水务水利封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
-   "status": "已问询",
+   "status": "注册生效",
    "originator": "广东粤海飞来峡水力发电有限公司",
    "acceptDate": "2026-04-27",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000055"
