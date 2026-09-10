@@ -401,7 +401,8 @@ html { -webkit-text-size-adjust: 100%; }
 #subbar[data-cur="inst"] .sub button.on { background: #0d9488; color: #fff; font-weight: 600; box-shadow: 0 2px 8px rgba(13,148,136,.25); }
 .data-meta { min-height: 18px; padding: 1px 3px 0; color: var(--tx3); font-size: 11.5px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .01em; }
-.view, #advCycle, #advTactic, #advPerf, #advRisk, #detailPanel {
+.view, #advOverview, #advMethod, #advGates, #advHorizons, #advRights, #advThemes,
+#advSupply, #advReval, #advSectors, #advRisk, #detailPanel {
   scroll-margin-top: var(--sticky-offset); }
 main { min-width: 0; }
 .page, .view, .card { min-width: 0; }
@@ -458,3 +459,63 @@ main { min-width: 0; }
   .rv-item .vl { min-width: 0; flex: 1; }
   .rv-item .ds { flex: 1 0 100%; }
 }
+
+/* ---- 分权破局重估学派 · 配置建议 ---- */
+.advice-asof { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.advice-headline p { font-size:14px; line-height:1.75; font-weight:600; color:var(--tx); margin:0 0 10px; }
+.advice-rating-main { font-size:13px; color:var(--gold); font-weight:650; margin-bottom:4px; }
+.advice-flag-list { margin:8px 0 0 16px; color:var(--tx2); font-size:12px; line-height:1.75; }
+.advice-motto { margin-top:12px; padding:12px 14px; border-radius:12px; background:var(--panel2); border:1px solid var(--line); }
+.school-name { font-size:14px; font-weight:700; color:var(--tx); }
+.school-motto { font-size:12.5px; color:var(--tx2); margin-top:4px; letter-spacing:.02em; }
+.spine-row { display:flex; flex-wrap:wrap; gap:8px; }
+.spine-pill { display:inline-block; padding:4px 12px; border-radius:999px; background:rgba(184,134,11,.1); color:var(--gold); font-size:12px; font-weight:600; border:1px solid rgba(184,134,11,.25); }
+.gate-grid, .supply-grid-inner, .rights-grid, .horizon-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; }
+.gate-card, .horizon-card, .rights-card, .theme-card, .risk-card { background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+.gate-card.gate-lit { border-color:rgba(26,127,55,.45); box-shadow:inset 3px 0 0 var(--up); }
+.gate-card.gate-partial { border-color:rgba(212,160,23,.45); box-shadow:inset 3px 0 0 var(--gold); }
+.gate-card.gate-dim { border-color:rgba(110,119,129,.35); box-shadow:inset 3px 0 0 var(--tx3); opacity:.92; }
+.gate-card.gate-watch { border-color:rgba(37,99,235,.35); box-shadow:inset 3px 0 0 var(--accent); }
+.gate-head { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; }
+.gate-label { font-weight:700; font-size:13px; }
+.gate-status { font-size:11px; padding:2px 8px; border-radius:999px; background:var(--bg); color:var(--tx2); font-weight:600; }
+.gate-lit .gate-status { color:var(--up); background:rgba(26,127,55,.1); }
+.gate-partial .gate-status { color:var(--gold); background:rgba(212,160,23,.12); }
+.gate-dim .gate-status { color:var(--tx3); }
+.gate-watch .gate-status { color:var(--accent); background:rgba(37,99,235,.1); }
+.gate-note { font-size:12px; color:var(--tx2); line-height:1.65; margin:0; }
+.horizon-title { font-size:13px; margin-bottom:8px; }
+.horizon-sum { font-size:12.5px; color:var(--tx2); line-height:1.7; margin:8px 0; }
+.bias-track { height:8px; border-radius:999px; background:var(--bg); border:1px solid var(--line); overflow:hidden; }
+.bias-fill { height:100%; background:linear-gradient(90deg, rgba(184,134,11,.35), var(--gold)); border-radius:999px; }
+.horizon-tags { margin-top:6px; font-size:12px; }
+.advice-chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; margin:2px 2px 0 0; border:1px solid var(--line); background:var(--bg); color:var(--tx2); }
+.advice-chip.chip-ow { background:rgba(26,127,55,.1); color:var(--up); border-color:rgba(26,127,55,.25); }
+.advice-chip.chip-sel { background:rgba(37,99,235,.08); color:var(--accent); border-color:rgba(37,99,235,.22); }
+.advice-chip.chip-uw { background:rgba(215,58,73,.08); color:var(--down); border-color:rgba(215,58,73,.22); }
+.horizon-trig { font-size:11.5px; color:var(--tx2); margin-top:6px; line-height:1.55; }
+.up-ish { color:var(--up); font-weight:600; }
+.dn-ish { color:var(--down); font-weight:600; }
+.rights-title { font-size:14px; font-weight:700; margin-bottom:6px; }
+.rights-view { font-size:12.5px; font-weight:600; color:var(--gold); margin-bottom:8px; line-height:1.55; }
+.rights-ev { font-size:11.5px; color:var(--tx2); line-height:1.65; }
+.rights-live { margin-top:10px; padding-top:8px; border-top:1px dashed var(--line2); font-size:12px; color:var(--tx2); line-height:1.65; }
+.themes-block { margin-bottom:12px; }
+.themes-grid-inner { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+.act-badge { display:inline-block; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:650; }
+.act-badge.act-ow { background:rgba(26,127,55,.12); color:var(--up); }
+.act-badge.act-uw { background:rgba(215,58,73,.1); color:var(--down); }
+.act-badge.act-sel { background:rgba(37,99,235,.1); color:var(--accent); }
+.act-badge.act-neu { background:rgba(110,119,129,.12); color:var(--tx2); }
+.advice-risks { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; }
+.risk-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.risk-lv { font-size:11px; padding:2px 8px; border-radius:999px; font-weight:700; }
+.risk-lv.risk-hi { background:rgba(215,58,73,.12); color:var(--down); }
+.risk-lv.risk-mid { background:rgba(212,160,23,.12); color:var(--gold); }
+.risk-lv.risk-lo { background:rgba(110,119,129,.12); color:var(--tx2); }
+.reval-map { margin-top:12px; padding-top:10px; border-top:1px dashed var(--line2); font-size:12px; color:var(--tx2); line-height:1.7; }
+.disclaimer-box { margin-top:14px; padding:12px 14px; border-radius:12px; border:1px solid rgba(215,58,73,.25); background:rgba(215,58,73,.06); color:var(--tx2); font-size:12.5px; line-height:1.7; }
+@media (max-width: 860px) {
+  .gate-grid, .supply-grid-inner, .rights-grid, .horizon-grid, .advice-risks, .themes-grid-inner { grid-template-columns:1fr; }
+}
+

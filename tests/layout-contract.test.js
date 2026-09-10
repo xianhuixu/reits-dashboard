@@ -29,12 +29,15 @@ test("mobile secondary navigation exposes scrollable tabs", () => {
   assert.match(html, /#subbar \.sub\s*\{[^}]*scroll-snap-type:\s*x proximity/s);
 });
 
-test("allocation conclusions precede long-term mapping detail", () => {
-  const adviceStart = html.indexOf('id="advCycle"');
-  const adviceEnd = html.indexOf('id="advTactic"');
-  const adviceSection = html.slice(adviceStart, adviceEnd);
-  assert.ok(adviceSection.indexOf('id="adviceList"') < adviceSection.indexOf('id="adviceMapping"'));
-  assert.match(html, /id="adviceList" class="advice-summary"/);
+test("school advice overview precedes gates and sector table", () => {
+  const overview = html.indexOf('id="advOverview"');
+  const gates = html.indexOf('id="advGates"');
+  const sectors = html.indexOf('id="advSectors"');
+  assert.ok(overview >= 0 && gates > overview && sectors > gates);
+  assert.match(html, /id="adviceHeadline"/);
+  assert.match(html, /id="adviceGates"/);
+  assert.match(html, /class="table-scroll" id="advicePerf"/);
+  assert.doesNotMatch(html, /弱复苏初期/);
 });
 
 test("entry motion is bounded and keyboard focus remains visible", () => {
@@ -64,8 +67,9 @@ test("secondary navigation labels do not use numeric prefixes", () => {
   const adviceStart = html.indexOf('id="adviceSub"');
   const adviceSub = html.slice(adviceStart, html.indexOf("</div>", adviceStart));
   assert.doesNotMatch(adviceSub, /[①②③④]/);
-  assert.match(adviceSub, />大类策略配置建议</);
-  assert.match(adviceSub, />风险提示</);
+  assert.match(adviceSub, />观点总览</);
+  assert.match(adviceSub, />五维闸门</);
+  assert.match(adviceSub, />风险与来源</);
 });
 
 test("navigation state and anchor offsets are accessible and header-aware", () => {
