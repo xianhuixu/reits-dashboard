@@ -81,3 +81,9 @@ test("navigation state and anchor offsets are accessible and header-aware", () =
   assert.doesNotMatch(html, /window\.scrollY - 132/);
   assert.doesNotMatch(html, /document\.querySelectorAll\("#subbar \.sub button\.on"\)/);
 });
+
+test("advice page loads advice.json without waiting on research package", () => {
+  assert.match(html, /配置建议只依赖 advice\.json/);
+  assert.match(html, /setAdviceLoadingPlaceholders/);
+  assert.match(html, /pg === "advice"/);
+});
