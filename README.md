@@ -22,7 +22,7 @@ npm test
 
 ## 配置建议（分权破局重估学派）
 
-「配置建议与风险」页由 `advice.json`（及镜像 `advice.js` → `window.REITS_ADVICE`）驱动，融合中金五维破局闸门与中信建投结构主线，并与 `data.json` 实时聚合产权/经营权量价。刷新表面：更新 `advice.json` 后同步生成 `advice.js`（`window.REITS_ADVICE = …`），提交即可随 GitHub Pages 生效。页面始终展示研究日与行情日双时间戳。
+「配置建议与风险」页由 `advice.json`（及镜像 `advice.js` → `window.REITS_ADVICE`）驱动，融合中金五维破局闸门与中信建投结构主线，并与 `data.json` 实时聚合产权/经营权量价。刷新表面：更新 `advice.json` 后同步生成 `advice.js`（`window.REITS_ADVICE = …`），提交即可随 GitHub Pages 生效。Cloudflare 镜像部署见 `deploy_cf.sh` / `daily-update.yml`，必须包含 `advice.json`（漏拷时 `advice.json` 会 200 回退成首页 HTML，配置页表现为空白）。页面始终展示研究日与行情日双时间戳。
 
 > 学派框架与 advice 节点仅供投研信息展示，**不构成投资建议**。
 

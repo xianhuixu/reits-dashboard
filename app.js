@@ -113,19 +113,40 @@ window.__DATA_READY.then(function () {
     if (_srcLoads[src]) { _srcLoads[src].push(cb); return; }
     _srcLoads[src] = [cb];
     var url = src.replace(/\.js$/, ".json");
-    fetch(url).then(function (r) {
+    // Cloudflare 镜像若漏部署 JSON，会 200 回退 HTML；配置建议回退到 GitHub Pages
+    var fallbacks = [url];
+    if (url === "advice.json") {
+      fallbacks.push("https://xianhuixu.github.io/reits-dashboard/advice.json");
+    }
+    function parseJsonResponse(r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
-      return r.json();
-    }).then(function (j) {
-      if (key) window[key] = j;
-      var cbs = _srcLoads[src] || []; delete _srcLoads[src];
-      cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[lazy-src]", e && e.message); } });
-    }).catch(function (e) {
-      var cbs = _srcLoads[src] || []; delete _srcLoads[src];
-      console.error(url + " 加载失败", e);
-      // 失败也要回调，避免依赖链把整页卡死在空白态
-      cbs.forEach(function (f) { try { f(); } catch (err) { console.error("[lazy-src]", err && err.message); } });
-    });
+      var ct = (r.headers.get("content-type") || "").toLowerCase();
+      return r.text().then(function (txt) {
+        var trimmed = (txt || "").replace(/^\uFEFF/, "").trim();
+        if (!trimmed) throw new Error("empty body");
+        if (ct.indexOf("html") >= 0 || trimmed.charAt(0) === "<") {
+          throw new Error("got HTML fallback instead of JSON");
+        }
+        return JSON.parse(trimmed);
+      });
+    }
+    function tryAt(i) {
+      if (i >= fallbacks.length) {
+        var cbsFail = _srcLoads[src] || []; delete _srcLoads[src];
+        console.error(url + " 加载失败（含回退）");
+        cbsFail.forEach(function (f) { try { f(); } catch (err) { console.error("[lazy-src]", err && err.message); } });
+        return;
+      }
+      fetch(fallbacks[i]).then(parseJsonResponse).then(function (j) {
+        if (key) window[key] = j;
+        var cbs = _srcLoads[src] || []; delete _srcLoads[src];
+        cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[lazy-src]", e && e.message); } });
+      }).catch(function (e) {
+        console.warn(fallbacks[i] + " 失败，尝试回退", e && e.message);
+        tryAt(i + 1);
+      });
+    }
+    tryAt(0);
   }
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1012,7 +1033,7 @@ LAZY.research.push(function () {
     if (!A) {
       ["adviceHeadline", "adviceGates", "adviceHorizons", "adviceRights", "adviceThemes",
        "adviceSupply", "adviceReval", "advicePerf", "adviceRisks", "adviceGaps", "adviceSources", "adviceDisclaimer"]
-        .forEach(function (id) { if ($(id)) $(id).innerHTML = '<div class="empty">advice 数据未加载 — 请确认 advice.json</div>'; });
+        .forEach(function (id) { if ($(id)) $(id).innerHTML = '<div class="empty">advice 数据未加载 — 请确认部署包含 advice.json（国内 Cloudflare 镜像曾漏拷）</div>'; });
       return;
     }
 
