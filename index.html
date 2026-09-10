@@ -72,10 +72,15 @@ window.__DATA_READY = fetch("data.json").then(function (r) {
       <button data-v="signal">策略信号</button>
     </div>
     <div class="sub" id="adviceSub">
-      <button data-pg="advice" data-scroll="advCycle" class="on" aria-current="page">大类策略配置建议</button>
-      <button data-pg="advice" data-scroll="advTactic">短期交易战术</button>
-      <button data-pg="advice" data-scroll="advPerf">中长期配置建议</button>
-      <button data-pg="advice" data-scroll="advRisk">风险提示</button>
+      <button data-pg="advice" data-scroll="advOverview" class="on" aria-current="page">观点总览</button>
+      <button data-pg="advice" data-scroll="advGates">五维闸门</button>
+      <button data-pg="advice" data-scroll="advHorizons">仓位节奏</button>
+      <button data-pg="advice" data-scroll="advRights">分权估值</button>
+      <button data-pg="advice" data-scroll="advThemes">主线策略</button>
+      <button data-pg="advice" data-scroll="advSupply">供需雷达</button>
+      <button data-pg="advice" data-scroll="advReval">重估计分</button>
+      <button data-pg="advice" data-scroll="advSectors">板块配置</button>
+      <button data-pg="advice" data-scroll="advRisk">风险与来源</button>
     </div>
     <div class="sub" id="instSub">
       <button data-inst-ex="" class="on" aria-current="page">全部交易所</button>
@@ -449,55 +454,77 @@ window.__DATA_READY = fetch("data.json").then(function (r) {
 </div><!-- /pg-research -->
 
 <div class="page" id="pg-advice" hidden>
-<!-- ============ 配置建议 ============ -->
-<div class="sec-head"><span class="no">③</span><span class="t">配置建议与风险提示</span><span class="d">周期判断 · 长期方向 · 数据交叉验证 · 触发/退出条件</span></div>
+<!-- ============ 配置建议（分权破局重估学派） ============ -->
+<div class="sec-head"><span class="no">③</span><span class="t">配置建议与风险提示</span><span class="d">分权破局重估学派 · 双时间戳 · 闸门约束 · 结构配置</span></div>
 
 <section id="v-advice">
-  <div class="card" id="advCycle">
-    <h2>① 大类策略配置建议（周期判断 → 长期方向 → 交叉验证）</h2>
-    <p class="note">来源：国家统计局、中债 · 周期判定见"周期耦合分析" · 配置方向经面板实时数据交叉验证</p>
-    <div id="adviceCycleBadges" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
-    <div class="grid3" style="margin-bottom:0" id="macroCards">
-      <div class="card" style="background:var(--panel2)" id="macroPmi"><div class="k" style="color:var(--tx3);font-size:11.5px">制造业 PMI</div>
-        <div class="big num" style="font-size:24px;font-weight:600">—</div>
-        <div style="font-size:11px;color:var(--tx2)">加载中…</div></div>
-      <div class="card" style="background:var(--panel2)" id="macroCpi"><div class="k" style="color:var(--tx3);font-size:11.5px">CPI 同比</div>
-        <div class="big num" style="font-size:24px;font-weight:600">—</div>
-        <div style="font-size:11px;color:var(--tx2)">加载中…</div></div>
-      <div class="card" style="background:var(--panel2)" id="macroBond"><div class="k" style="color:var(--tx3);font-size:11.5px">10Y 国债收益率</div>
-        <div class="big num" style="font-size:24px;font-weight:600">—</div>
-        <div style="font-size:11px;color:var(--tx2)">加载中…</div></div>
-    </div>
-    <p style="margin-top:10px;font-size:12.5px"><b>周期定位：弱复苏初期（衰退后期 → 复苏早期过渡带）</b>——PMI 重回扩张但结构分化、内需待提振、利率历史低位。按顺周期动态配置框架：此阶段以<b>防御型为底仓</b>，复苏确认信号（PMI 连续 3 个月扩张 + 内需订单持续）出现后，再逐步向周期型/扩张型切换。</p>
-    <h3 style="font-size:13px;margin:16px 0 6px">配置建议（数据交叉验证后）</h3>
-    <div id="adviceList" class="advice-summary"></div>
-    <h3 style="font-size:13px;margin:16px 0 6px">长期配置方向（周期耦合结论，3-5 年维度）</h3>
-    <p class="note" id="adviceMappingNote"></p>
-    <div id="adviceMapping" class="grid3" style="margin-bottom:0"></div>
+  <div class="card" id="advOverview">
+    <h2>观点总览与有效期</h2>
+    <p class="note">研究日 / 行情日双时间戳 · 板块动作以 advice.sectorViews 为准 · 不构成投资建议</p>
+    <div id="adviceAsOf" class="advice-asof"></div>
+    <div id="adviceHeadline" class="advice-headline"></div>
+    <div id="adviceRating" class="advice-rating"></div>
+    <div id="adviceConflictFlags" class="advice-flags"></div>
+    <div id="adviceMotto" class="advice-motto"></div>
   </div>
 
-  <div class="card" id="advTactic">
-    <h2>② 短期交易战术（月 / 季 / 年三档 · 每日随行情自动重算）</h2>
-    <p class="note">信号因子：六因子信号分（流动性/情绪/资金面/业绩/利差/股债联动）· RSI14 超买超卖 · MACD 柱线方向 · 量比 · 历史价格分位 · 偏离250日线幅度 · 均给出建议理由与止损点位，不构成投资建议</p>
-    <div id="tacticGrid" class="grid3" style="margin-bottom:0"></div>
+  <div class="card" id="advMethod">
+    <h2>学派方法脊柱（短卡）</h2>
+    <p class="note">分权定价 · 资金为先 · 五维破局 · 结构配置</p>
+    <div id="adviceSpine" class="advice-spine"></div>
   </div>
 
-  <div class="card" id="advPerf">
-    <h2>③ 中长期配置建议（三种策略分类二级市场表现交叉验证）</h2>
-    <p class="note">等权平均涨跌幅 + 信号分 + 大类资产相关性 · 防御型应在弱市中抗跌——近 60 日数据验证了框架有效性，作为中长期底仓结构依据</p>
+  <div class="card" id="advGates">
+    <h2>五维破局闸门</h2>
+    <p class="note">过闸门前禁止趋势牛叙事 · 状态灯：亮 / 偏亮 / 暗 / 观察</p>
+    <div id="adviceGates" class="gate-grid"></div>
+  </div>
+
+  <div class="card" id="advHorizons">
+    <h2>周 / 月 / 季仓位节奏</h2>
+    <p class="note">positionBias 仅为 UI 倾向条（∈[-1,1]），非杠杆建议</p>
+    <div id="adviceHorizons" class="horizon-grid"></div>
+  </div>
+
+  <div class="card" id="advRights">
+    <h2>产权 vs 经营权（分权估值）</h2>
+    <p class="note">卖方证据保留 research 日期；下方 live 聚合来自 data.json 行情日</p>
+    <div id="adviceRights" class="rights-grid"></div>
+  </div>
+
+  <div class="card" id="advThemes">
+    <h2>三条主线 / 策略</h2>
+    <p class="note">CSC 三大策略 × 学派主线；仓位结构优先于择时口号</p>
+    <div id="adviceThemes" class="themes-grid"></div>
+  </div>
+
+  <div class="card" id="advSupply">
+    <h2>供需雷达</h2>
+    <p class="note">解禁 / 新发 / 指数基金 / 债基 / 险资 · 与供给闸门联动</p>
+    <div id="adviceSupply" class="supply-grid"></div>
+  </div>
+
+  <div class="card" id="advReval">
+    <h2>重估计分卡</h2>
+    <p class="note">复用仪表盘 revaluation 四条件 · 映射至五维闸门</p>
+    <div id="adviceReval" class="advice-reval"></div>
+  </div>
+
+  <div class="card" id="advSectors">
+    <h2>板块配置表</h2>
+    <p class="note">优先 advice.sectorViews；cycle.mapping 降级为宏观注释（如有）</p>
     <div class="table-scroll" id="advicePerf"></div>
+    <p class="note" id="adviceMappingNote" style="margin-top:12px"></p>
   </div>
 
   <div class="card" id="advRisk">
-    <h2>④ 风险提示</h2>
-    <ul style="margin-left:16px;color:var(--tx2);font-size:12px;line-height:1.8">
-      <li><b>利率反转风险</b>：若长端利率超预期上行（如 10Y 快速升破 2%），REITs 债性定价逻辑受冲击，防御型高股息溢价将收窄。</li>
-      <li><b>基本面修复不及预期</b>：产业园供需未出清、仓储租金下行压力仍存，周期型左侧布局需以出租率连续 2 个季度修复为确认信号，避免过早加仓。</li>
-      <li><b>解禁与供给压力</b>：数据中心等板块临近解禁，短期卖压可能独立于基本面（参考 7 月数据中心领跌 -6.32%）。</li>
-      <li><b>政策变化</b>：收费/补贴/税收政策调整可能直接影响经营权类底层现金流。</li>
-      <li><b>数据口径局限</b>：本面板为行情量价 + 相关性口径，不含分派率、P/NAV 等估值指标；建议结合估值数据交叉确认，本内容不构成投资建议。</li>
-      <li><b>周期判定错误风险</b>：顺周期配置框架的有效性依赖周期阶段的正确判定；若基钦/朱格拉周期阶段误判（如补库未能延续），向周期型切换的节奏将失效，需以月度数据复核修正。</li>
-    </ul>
+    <h2>风险 · 数据缺口 · 来源 · 免责声明</h2>
+    <div id="adviceRisks" class="advice-risks"></div>
+    <h3 style="font-size:13px;margin:16px 0 6px">数据缺口</h3>
+    <div id="adviceGaps" class="advice-gaps"></div>
+    <h3 style="font-size:13px;margin:16px 0 6px">来源</h3>
+    <div id="adviceSources" class="advice-sources"></div>
+    <div id="adviceDisclaimer" class="advice-disclaimer"></div>
   </div>
 </section>
 </div><!-- /pg-advice -->

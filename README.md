@@ -19,6 +19,13 @@ npm test
 
 自动化测试覆盖历史分位格式、移动端布局契约、配置建议层级、动画时长上限、键盘焦点样式、SVG 图表标题及主模块滚动位置恢复。
 
+
+## 配置建议（分权破局重估学派）
+
+「配置建议与风险」页由 `advice.json`（及镜像 `advice.js` → `window.REITS_ADVICE`）驱动，融合中金五维破局闸门与中信建投结构主线，并与 `data.json` 实时聚合产权/经营权量价。刷新表面：更新 `advice.json` 后同步生成 `advice.js`（`window.REITS_ADVICE = …`），提交即可随 GitHub Pages 生效。页面始终展示研究日与行情日双时间戳。
+
+> 学派框架与 advice 节点仅供投研信息展示，**不构成投资建议**。
+
 ## 部署
 
 `main` 分支根目录为 GitHub Pages 发布源。推送后由 `pages-build-deployment` 工作流自动发布至：
@@ -35,6 +42,7 @@ https://xianhuixu.github.io/reits-dashboard/
 | `news.js` / `news.json` | 信息流（东财新闻/搜狗微信/招标网） | `fetch_news.py` | 每交易日 |
 | `corp_actions.js` / `corp_actions.json` | 公告（分红/扩募/解禁等） | `fetch_news.py` | 每交易日 |
 | `projects.js` / `projects.json` | 发改委推荐/上交所受理/深交所受理项目 | `fetch_projects.py` | 每交易日 |
+| `advice.js` / `advice.json` | 分权破局重估学派配置建议（闸门/仓位/分权/板块） | 人工维护（研究周更） | 周/事件驱动 |
 | `universe.json` | 上市个券清单 | 手动（新 REIT 上市时） | 不定期 |
 | `fundamentals.json` | 分派达成率等基本面 | 手动 | 季度 |
 | `cycle_judgment.json` | 周期判定 + 10Y 国债 | 手动 | 月度 |
