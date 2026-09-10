@@ -98,7 +98,12 @@ window.__DATA_READY.then(function () {
       normalizeResearchData();
       var cbs = _rdataCbs; _rdataCbs = null;
       cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[rdata]", e && e.message); } });
-    }).catch(function (e) { _rdataCbs = null; console.error("data_research.json 加载失败", e); });
+    }).catch(function (e) {
+      var cbs = _rdataCbs; _rdataCbs = null;
+      console.error("data_research.json 加载失败", e);
+      // 研究包失败时仍继续后续页面初始化（配置建议页不依赖 series）
+      if (cbs) cbs.forEach(function (f) { try { f(); } catch (err) { console.error("[rdata]", err && err.message); } });
+    });
   }
   // 通用按需数据加载器（信息流/公告/项目申报数据在点按对应 tab 时才加载）
   // 统一走 fetch + JSON：浏览器/CDN 用 ETag 做条件请求，数据未变时仅一次 304 往返，几乎零流量
@@ -115,7 +120,12 @@ window.__DATA_READY.then(function () {
       if (key) window[key] = j;
       var cbs = _srcLoads[src] || []; delete _srcLoads[src];
       cbs.forEach(function (f) { try { f(); } catch (e) { console.error("[lazy-src]", e && e.message); } });
-    }).catch(function (e) { delete _srcLoads[src]; console.error(url + " 加载失败", e); });
+    }).catch(function (e) {
+      var cbs = _srcLoads[src] || []; delete _srcLoads[src];
+      console.error(url + " 加载失败", e);
+      // 失败也要回调，避免依赖链把整页卡死在空白态
+      cbs.forEach(function (f) { try { f(); } catch (err) { console.error("[lazy-src]", err && err.message); } });
+    });
   }
 
   var $ = function (id) { return document.getElementById(id); };
@@ -1289,6 +1299,9 @@ LAZY.research.push(function () {
     if ($("adviceDisclaimer")) {
       $("adviceDisclaimer").innerHTML = '<p class="disclaimer-box">' + esc(A.disclaimer || "不构成投资建议") + "</p>";
     }
+    ["adviceHeadline", "adviceGates", "adviceHorizons", "adviceRights", "adviceThemes", "adviceSupply", "adviceReval", "advicePerf", "adviceRisks", "adviceGaps", "adviceSources"].forEach(function (id) {
+      var el = $(id); if (el) el.setAttribute("data-filled", "1");
+    });
   });
 
   // ---- 重点事件信息流（问财范式） ----
@@ -1535,6 +1548,16 @@ LAZY.research.push(function () {
       }
     } catch (err) { console.error('[switchView] error:', err); }
   }
+  function setAdviceLoadingPlaceholders() {
+    if (window.REITS_ADVICE || LAZY_DONE.advice) return;
+    var ids = ["adviceHeadline", "adviceGates", "adviceHorizons", "adviceRights", "adviceThemes",
+      "adviceSupply", "adviceReval", "advicePerf", "adviceRisks", "adviceGaps", "adviceSources"];
+    ids.forEach(function (id) {
+      var el = $(id);
+      if (el && !el.getAttribute("data-filled")) el.innerHTML = '<div class="empty">配置建议加载中…</div>';
+    });
+  }
+
   function showPage(pg, keepScroll) {
     try {
       var btn = document.querySelector('#tbNav > button[data-pg="' + pg + '"]');
@@ -1563,13 +1586,16 @@ LAZY.research.push(function () {
       } else {
         $("kpis").style.display = "none";
       }
-      if (pg === "research" || pg === "advice") {
+      if (pg === "advice") {
+        // 配置建议只依赖 advice.json + 核心 data.json，勿阻塞在 1MB data_research / corp_actions
+        setAdviceLoadingPlaceholders();
+        withScript("advice.js", "REITS_ADVICE", function () {
+          runLazy("advice");
+          ensureCharts();
+        });
+      } else if (pg === "research") {
         withResearchData(function () {
-          function go() {
-            withScript("corp_actions.js", "REITS_ACTIONS", function () { runLazy(pg); ensureCharts(); });
-          }
-          if (pg === "advice") withScript("advice.js", "REITS_ADVICE", go);
-          else go();
+          withScript("corp_actions.js", "REITS_ACTIONS", function () { runLazy("research"); ensureCharts(); });
         });
       } else if (pg === "inst") {
         initInstPage();
