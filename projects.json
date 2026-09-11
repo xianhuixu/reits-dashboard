@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-10 21:40:42",
+ "updated": "2026-09-11 21:40:03",
  "ndrc": [
   {
    "name": "信义能源新能源项目",
@@ -545,6 +545,15 @@
   }
  ],
  "szse": [
+  {
+   "name": "华夏中海封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已受理",
+   "originator": "中海企业发展集团有限公司",
+   "acceptDate": "2026-09-10",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000080"
+  },
   {
    "name": "中金中国绿发封闭式商业不动产证券投资基金",
    "type": "首发",
