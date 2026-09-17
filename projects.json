@@ -1,5 +1,203 @@
 {
- "updated": "2026-09-18 07:42:29",
+ "updated": "2026-09-18 07:58:42",
+ "ndrc": [
+  {
+   "name": "上海地产租赁住房新购入项目",
+   "industry": "租赁住房",
+   "region": "上海市",
+   "fundMoney": 37.37,
+   "date": "2026-09-10"
+  },
+  {
+   "name": "信义能源新能源项目",
+   "industry": "能源基础设施",
+   "region": "安徽省",
+   "fundMoney": 16.21,
+   "date": "2026-08-19"
+  },
+  {
+   "name": "南京新工产业园项目",
+   "industry": "园区基础设施",
+   "region": "江苏省",
+   "fundMoney": 11.17,
+   "date": "2026-08-10"
+  },
+  {
+   "name": "晶澳新能源项目",
+   "industry": "太阳能发电",
+   "region": "河北省",
+   "fundMoney": 13.86,
+   "date": "2026-08-10"
+  },
+  {
+   "name": "龙地仓储物流项目",
+   "industry": "仓储物流基础设施",
+   "region": "广东省",
+   "fundMoney": 15.25,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "京东仓储物流西北电子商务营业中心等新购入项目",
+   "industry": "仓储物流基础设施",
+   "region": "北京市",
+   "fundMoney": 10.3,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "温州公用水利项目",
+   "industry": "水利设施",
+   "region": "浙江省",
+   "fundMoney": 23.34,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "润泽科技数据中心润泽（廊坊）国际信息港A-7等新购入项目",
+   "industry": "新型基础设施",
+   "region": "河北省",
+   "fundMoney": 76.97,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "鹏瑞利集团消费基础设施项目",
+   "industry": "消费基础设施",
+   "region": "四川省",
+   "fundMoney": 13.14,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "江天数科数据中心项目",
+   "industry": "新型基础设施",
+   "region": "天津市",
+   "fundMoney": 14.08,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "上实租赁住房项目",
+   "industry": "租赁住房",
+   "region": "上海市",
+   "fundMoney": 12.05,
+   "date": "2026-06-25"
+  },
+  {
+   "name": "华润商业资产消费基础设施杭州萧山万象汇等新购入项目",
+   "industry": "消费基础设施",
+   "region": "深圳市",
+   "fundMoney": 54.74,
+   "date": "2026-05-06"
+  },
+  {
+   "name": "招商蛇口光明产业园及南油仓储新购入项目",
+   "industry": "园区基础设施",
+   "region": "深圳市",
+   "fundMoney": 26.05,
+   "date": "2026-04-24"
+  },
+  {
+   "name": "厦门市政集团停车场项目",
+   "industry": "市政基础设施",
+   "region": "厦门市",
+   "fundMoney": 10.7,
+   "date": "2026-04-24"
+  },
+  {
+   "name": "广州发展清洁能源项目",
+   "industry": "能源基础设施",
+   "region": "山东省",
+   "fundMoney": 24.49,
+   "date": "2026-04-15"
+  },
+  {
+   "name": "申能股份新能源项目",
+   "industry": "能源基础设施",
+   "region": "青海省",
+   "fundMoney": 16.32,
+   "date": "2026-04-15"
+  },
+  {
+   "name": "华能燃煤发电项目",
+   "industry": "能源基础设施",
+   "region": "青岛市",
+   "fundMoney": 29.58,
+   "date": "2026-04-15"
+  },
+  {
+   "name": "华润电力燃煤发电项目",
+   "industry": "能源基础设施",
+   "region": "河南省",
+   "fundMoney": 30.43,
+   "date": "2026-04-15"
+  },
+  {
+   "name": "粤海水务水利项目",
+   "industry": "水利设施",
+   "region": "广东省",
+   "fundMoney": 16.49,
+   "date": "2026-03-23"
+  },
+  {
+   "name": "菜鸟物流仓储项目",
+   "industry": "仓储物流基础设施",
+   "region": "浙江省",
+   "fundMoney": 14.83,
+   "date": "2026-03-23"
+  },
+  {
+   "name": "杭州安居保障性租赁住房项目",
+   "industry": "租赁住房",
+   "region": "浙江省",
+   "fundMoney": 8.52,
+   "date": "2026-03-23"
+  },
+  {
+   "name": "蜀道集团雅泸高速公路项目",
+   "industry": "交通基础设施",
+   "region": "四川省",
+   "fundMoney": 170.96,
+   "date": "2026-03-23"
+  },
+  {
+   "name": "中国建筑租赁住房项目",
+   "industry": "租赁住房",
+   "region": "上海市",
+   "fundMoney": 13.14,
+   "date": "2026-03-23"
+  },
+  {
+   "name": "深圳龙岗城投产业园项目",
+   "industry": "园区基础设施",
+   "region": "深圳市",
+   "fundMoney": 11.15,
+   "date": "2026-02-04"
+  },
+  {
+   "name": "首衡农副农贸市场项目",
+   "industry": "消费基础设施",
+   "region": "河北省",
+   "fundMoney": 84.16,
+   "date": "2026-01-22"
+  },
+  {
+   "name": "陶邑发展消费基础设施项目",
+   "industry": "消费基础设施",
+   "region": "江西省",
+   "fundMoney": 13.35,
+   "date": "2026-01-22"
+  },
+  {
+   "name": "鲁商集团消费基础设施项目",
+   "industry": "消费基础设施",
+   "region": "山东省",
+   "fundMoney": 18.86,
+   "date": "2026-01-22"
+  },
+  {
+   "name": "嘉泽新能新能源项目",
+   "industry": "能源基础设施",
+   "region": "宁夏回族自治区",
+   "fundMoney": 12.66,
+   "date": "2026-01-19"
+  }
+ ],
  "sse": [
   {
    "name": "广发新世界封闭式商业不动产证券投资基金",
@@ -371,5 +569,168 @@
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=21837"
   }
  ],
- "szse": []
+ "szse": [
+  {
+   "name": "华夏中海封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已受理",
+   "originator": "中海企业发展集团有限公司",
+   "acceptDate": "2026-09-10",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000080"
+  },
+  {
+   "name": "中金中国绿发封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已受理",
+   "originator": "鲁能集团有限公司;山东绿发商业管理有限公司",
+   "acceptDate": "2026-08-25",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000078"
+  },
+  {
+   "name": "华夏大悦城封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "中粮置业投资有限公司",
+   "acceptDate": "2026-07-29",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000077"
+  },
+  {
+   "name": "南方润泽科技数据中心封闭式基础设施证券投资基金",
+   "type": "新购入项目",
+   "assetType": "基础设施",
+   "status": "已问询",
+   "originator": "润泽科技发展有限公司;润泽智算科技集团股份有限公司",
+   "acceptDate": "2026-07-16",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000076"
+  },
+  {
+   "name": "广发海珠城发封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "瑶溪文化投资（广州）有限公司",
+   "acceptDate": "2026-06-26",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000074"
+  },
+  {
+   "name": "博时招商蛇口产业园封闭式基础设施证券投资基金",
+   "type": "新购入项目",
+   "assetType": "基础设施",
+   "status": "已问询",
+   "originator": "招商局蛇口工业区控股股份有限公司",
+   "acceptDate": "2026-06-22",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000057"
+  },
+  {
+   "name": "招商资管招商蛇口封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "招商局积余产业运营服务股份有限公司;深圳招商理财服务有限公司",
+   "acceptDate": "2026-06-15",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000056"
+  },
+  {
+   "name": "华夏龙岗城投产业园封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "已问询",
+   "originator": "深圳市龙岗区城市建设投资集团有限公司",
+   "acceptDate": "2026-05-27",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000067"
+  },
+  {
+   "name": "华夏华润电力燃煤发电封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "已问询",
+   "originator": "华润电力焦作有限公司",
+   "acceptDate": "2026-05-12",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000072"
+  },
+  {
+   "name": "华夏蜀道集团高速公路封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "已问询",
+   "originator": "四川高速公路建设开发集团有限公司",
+   "acceptDate": "2026-05-12",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000070"
+  },
+  {
+   "name": "中金杭州安居保障性租赁住房封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "注册生效",
+   "originator": "杭州市安居宁巢投资有限公司",
+   "acceptDate": "2026-05-06",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000071"
+  },
+  {
+   "name": "中金菜鸟仓储物流封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "注册生效",
+   "originator": "杭州传欣物联网技术有限公司",
+   "acceptDate": "2026-04-30",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000068"
+  },
+  {
+   "name": "华夏华润置地封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "华润置地控股有限公司;华润置地（成都）有限公司",
+   "acceptDate": "2026-04-30",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000069"
+  },
+  {
+   "name": "银华粤海水务水利封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "注册生效",
+   "originator": "广东粤海飞来峡水力发电有限公司",
+   "acceptDate": "2026-04-27",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000055"
+  },
+  {
+   "name": "创金合信北京国资公司封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "注册生效",
+   "originator": "北京市国有资产经营有限责任公司;北京新隆福文化投资有限公司",
+   "acceptDate": "2026-04-02",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000062"
+  },
+  {
+   "name": "红土创新星河集团封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "星河实业（深圳）有限公司",
+   "acceptDate": "2026-03-13",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000065"
+  },
+  {
+   "name": "华泰紫金华住安住封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "注册生效",
+   "originator": "上海安住此间商务信息咨询有限公司",
+   "acceptDate": "2026-02-05",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000060"
+  },
+  {
+   "name": "中航北京昌保租赁住房封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "注册生效",
+   "originator": "北京市昌平保障房建设投资管理有限公司",
+   "acceptDate": "2026-01-07",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000054"
+  }
+ ]
 }
