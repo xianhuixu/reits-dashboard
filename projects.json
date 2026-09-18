@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-18 08:14:24",
+ "updated": "2026-09-18 21:41:21",
  "ndrc": [
   {
    "name": "上海地产租赁住房新购入项目",
@@ -398,6 +398,15 @@
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=3214c881b4ed492f8eb28966d291acf8"
   },
   {
+   "name": "华夏银泰百货封闭式商业不动产证券投资基金",
+   "manager": "华夏基金管理有限公司",
+   "assetType": "商业不动产",
+   "status": "已反馈",
+   "acceptDate": "2026-01-30",
+   "updateDate": "2026-09-18",
+   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=84f8eff955614871a2e88d91891828a1"
+  },
+  {
    "name": "华夏凯德封闭式商业不动产证券投资基金",
    "manager": "华夏基金管理有限公司",
    "assetType": "商业不动产",
@@ -432,15 +441,6 @@
    "acceptDate": "2026-01-30",
    "updateDate": "2026-04-23",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=f73619d5cf6a45a883283047e5886e8d"
-  },
-  {
-   "name": "华夏银泰百货封闭式商业不动产证券投资基金",
-   "manager": "华夏基金管理有限公司",
-   "assetType": "商业不动产",
-   "status": "已反馈",
-   "acceptDate": "2026-01-30",
-   "updateDate": "2026-03-05",
-   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=84f8eff955614871a2e88d91891828a1"
   },
   {
    "name": "华安锦江封闭式商业不动产证券投资基金",
@@ -571,6 +571,24 @@
  ],
  "szse": [
   {
+   "name": "华安晶澳科技新能源封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "已受理",
+   "originator": "晶澳太阳能投资（中国）有限公司;朝阳龙盛太阳能发电有限公司",
+   "acceptDate": "2026-09-16",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000079"
+  },
+  {
+   "name": "国泰海通鹏瑞利封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已受理",
+   "originator": "鹏瑞利（四川）企业管理有限公司",
+   "acceptDate": "2026-09-16",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000082"
+  },
+  {
    "name": "华夏中海封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
@@ -583,7 +601,7 @@
    "name": "中金中国绿发封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
-   "status": "已受理",
+   "status": "已问询",
    "originator": "鲁能集团有限公司;山东绿发商业管理有限公司",
    "acceptDate": "2026-08-25",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000078"
