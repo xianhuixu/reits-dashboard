@@ -580,16 +580,39 @@ def fetch_szse_projects() -> List[dict]:
     return out
 
 
+def load_previous_projects() -> dict:
+    """读取现有 projects.json，用于 API 失败时保留旧数据。"""
+    p = ROOT / "projects.json"
+    if not p.exists():
+        return {"sse": [], "szse": []}
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+        return {"sse": d.get("sse", []), "szse": d.get("szse", [])}
+    except Exception:
+        return {"sse": [], "szse": []}
+
+
 def update_projects():
-    """更新项目申报动态。"""
+    """更新项目申报动态。API 失败时保留旧数据不清空。"""
     print("=" * 60)
     print("[4/5] 项目申报动态（上交所 + 深交所）")
     print("=" * 60)
 
+    prev = load_previous_projects()
+
     sse = fetch_sse_projects()
+    # 上交所失败（0条）且之前有数据 → 保留旧数据
+    if not sse and prev["sse"]:
+        print(f"  [sse] API 返回 0 条，保留旧数据 ({len(prev['sse'])} 条)", flush=True)
+        sse = prev["sse"]
     print(f"  [sse] {len(sse)} 条")
     time.sleep(1)
+
     szse = fetch_szse_projects()
+    # 深交所 API 可能服务端变更返回空 → 保留旧数据
+    if not szse and prev["szse"]:
+        print(f"  [szse] API 返回 0 条，保留旧数据 ({len(prev['szse'])} 条)", flush=True)
+        szse = prev["szse"]
     print(f"  [szse] {len(szse)} 条")
 
     payload = {
