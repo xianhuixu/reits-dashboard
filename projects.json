@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-18 21:41:21",
+ "updated": "2026-09-21 23:59:25",
  "ndrc": [
   {
    "name": "上海地产租赁住房新购入项目",
@@ -203,36 +203,36 @@
    "name": "广发新世界封闭式商业不动产证券投资基金",
    "manager": "广发基金管理有限公司",
    "assetType": "商业不动产",
-   "status": "已申报",
-   "acceptDate": "",
-   "updateDate": "2026-09-17",
+   "status": "已受理",
+   "acceptDate": "2026-09-19",
+   "updateDate": "2026-09-19",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=cdb91b06f7bd4b88a382d391bfdf687e"
-  },
-  {
-   "name": "国联安泰华城封闭式商业不动产证券投资基金",
-   "manager": "国联安基金管理有限公司",
-   "assetType": "商业不动产",
-   "status": "已申报",
-   "acceptDate": "",
-   "updateDate": "2026-09-15",
-   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=a9ce5e95e078472998cc47ad30846c2b"
   },
   {
    "name": "国泰海通上实租赁住房封闭式基础设施证券投资基金",
    "manager": "上海国泰海通证券资产管理有限公司",
    "assetType": "基础设施",
-   "status": "已申报",
-   "acceptDate": "",
-   "updateDate": "2026-09-10",
+   "status": "已受理",
+   "acceptDate": "2026-09-16",
+   "updateDate": "2026-09-16",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=894cbcc4623047c385444030dd83f921"
+  },
+  {
+   "name": "国联安泰华城封闭式商业不动产证券投资基金",
+   "manager": "国联安基金管理有限公司",
+   "assetType": "商业不动产",
+   "status": "已受理",
+   "acceptDate": "2026-09-16",
+   "updateDate": "2026-09-16",
+   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=a9ce5e95e078472998cc47ad30846c2b"
   },
   {
    "name": "嘉实陶邑消费封闭式基础设施证券投资基金",
    "manager": "嘉实基金管理有限公司",
    "assetType": "基础设施",
-   "status": "已受理",
+   "status": "已反馈",
    "acceptDate": "2026-08-25",
-   "updateDate": "2026-08-25",
+   "updateDate": "2026-09-21",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=39be963ffbaf493ba0744506b3f451e2"
   },
   {
@@ -293,9 +293,9 @@
    "name": "长城华能燃煤发电封闭式基础设施证券投资基金",
    "manager": "长城基金管理有限公司",
    "assetType": "基础设施",
-   "status": "已反馈",
+   "status": "已申报",
    "acceptDate": "2026-05-12",
-   "updateDate": "2026-09-03",
+   "updateDate": "2026-09-20",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=24e84189f68749109b5302f5e1e6ad29"
   },
   {
@@ -646,7 +646,7 @@
    "name": "招商资管招商蛇口封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
-   "status": "已问询",
+   "status": "注册生效",
    "originator": "招商局积余产业运营服务股份有限公司;深圳招商理财服务有限公司",
    "acceptDate": "2026-06-15",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000056"
@@ -664,7 +664,7 @@
    "name": "华夏华润电力燃煤发电封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
-   "status": "已问询",
+   "status": "注册生效",
    "originator": "华润电力焦作有限公司",
    "acceptDate": "2026-05-12",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000072"
