@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-22T14:18:02+08:00",
+  "checkedAt": "2026-09-22T22:58:50+08:00",
   "lastSuccessAt": "2026-09-15T21:39:47+08:00",
   "status": "failed",
   "schedule": "云端每日09:20/18:20；本机补充09:50/18:50（北京时间；Mac需开机联网）",
@@ -11,7 +11,7 @@
       "error": "公开列表未加载：访问验证、登录限制或源站异常；不等同于无新增公告",
       "id": "ctbpsp",
       "name": "中国招标投标公共服务平台（新站）",
-      "checkedAt": "2026-09-22T14:18:02+08:00",
+      "checkedAt": "2026-09-22T22:58:50+08:00",
       "count": 0,
       "latestBulletinDate": null,
       "lastSuccessAt": null
@@ -21,17 +21,17 @@
       "error": "405 Client Error: Not Allowed for url: https://bulletin.cebpubservice.com/xxfbcmses/search/bulletin.html?searchDate=2026-08-23&dates=30&word=REITs&page=1",
       "id": "ceb",
       "name": "中国招标投标公共服务平台（官方备用列表）",
-      "checkedAt": "2026-09-22T14:18:02+08:00",
+      "checkedAt": "2026-09-22T22:58:50+08:00",
       "count": 0,
       "latestBulletinDate": null,
       "lastSuccessAt": "2026-09-15T21:39:47+08:00"
     },
     {
-      "status": "ok",
-      "scope": "官网首页最新公告，仅作补充",
+      "status": "failed",
+      "error": "HTTPSConnectionPool(host='cg.sz-water.com.cn', port=443): Max retries exceeded with url: / (Caused by NewConnectionError(\"HTTPSConnection(host='cg.sz-water.com.cn', port=443): Failed to establish a new connection: [Errno",
       "id": "szwater",
       "name": "深圳环水集团官网采购公告（补充）",
-      "checkedAt": "2026-09-22T14:18:02+08:00",
+      "checkedAt": "2026-09-22T22:58:50+08:00",
       "count": 0,
       "latestBulletinDate": null,
       "lastSuccessAt": "2026-09-22T14:18:02+08:00"
