@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-24 22:13:36",
+ "updated": "2026-09-25 22:37:18",
  "lastTradeDate": "2026-09-24",
  "count": 88,
  "sectors": [
@@ -3455,14 +3455,12 @@
  "marketIndex": {
   "code": "932047.CSI",
   "name": "中证REITs全收益",
-  "close": 947.35,
-  "pct": 0.5,
-  "stale": true,
-  "staleNote": "实时数据获取失败，显示为最近一次成功数据"
+  "close": 948.85,
+  "pct": 0.16
  },
  "cycle": {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
-  "updated": "2026-09-24",
+  "updated": "2026-09-25",
   "bond10y": 1.67,
   "pm": {
    "pmi": 49.2,
