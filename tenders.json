@@ -1,20 +1,19 @@
 {
-  "checkedAt": "2026-09-28T08:52:41+08:00",
-  "lastSuccessAt": "2026-09-15T21:39:47+08:00",
-  "status": "failed",
-  "schedule": "云端每日09:20/18:20；本机补充09:50/18:50（北京时间；Mac需开机联网）",
+  "checkedAt": "2026-09-28T10:40:57+08:00",
+  "lastSuccessAt": "2026-09-28T10:40:57+08:00",
+  "status": "ok",
+  "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
-  "latestBulletinDate": "2026-09-14",
+  "latestBulletinDate": "2026-09-28",
   "sources": [
     {
-      "status": "failed",
-      "error": "公开列表未加载：访问验证、登录限制或源站异常；不等同于无新增公告",
       "id": "ctbpsp",
-      "name": "中国招标投标公共服务平台（新站）",
-      "checkedAt": "2026-09-28T08:52:41+08:00",
-      "count": 0,
-      "latestBulletinDate": null,
-      "lastSuccessAt": null
+      "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
+      "status": "ok",
+      "count": 9,
+      "checkedAt": "2026-09-28T10:40:57+08:00",
+      "lastSuccessAt": "2026-09-28T10:40:57+08:00",
+      "latestBulletinDate": "2026-09-28"
     },
     {
       "status": "failed",
@@ -38,6 +37,96 @@
     }
   ],
   "items": [
+    {
+      "code": "ctb_a873b75a051f",
+      "date": "2026-09-28",
+      "title": "山东发展新能源集团有限公司机构间REITs计划管理人选聘项目中标结果公示",
+      "summary": "来源：中国招标投标公共服务平台（山东省 中标结果公示 按10号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%B1%B1%E4%B8%9C%E5%8F%91%E5%B1%95%E6%96%B0%E8%83%BD%E6%BA%90%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%9C%BA%E6%9E%84%E9%97%B4REITs%E8%AE%A1%E5%88%92%E7%AE%A1%E7%90%86%E4%BA%BA%E9%80%89%E8%81%98%E9%A1%B9%E7%9B%AE",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_0a08911a8b70",
+      "date": "2026-09-24",
+      "title": "西安高新嘉会资产运营有限公司资产证券化（类REITs）选聘计划管理人及销售机构项目招标公告",
+      "summary": "来源：中国招标投标公共服务平台（陕西省 招标公告 按20号令规范发布 潜在投标人预测）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E8%A5%BF%E5%AE%89%E9%AB%98%E6%96%B0%E5%98%89%E4%BC%9A%E8%B5%84%E4%BA%A7%E8%BF%90%E8%90%A5%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E8%B5%84%E4%BA%A7%E8%AF%81%E5%88%B8%E5%8C%96%EF%BC%88%E7%B1%BBREITs%EF%BC%89%E9%80%89%E8%81%98%E8%AE%A1",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_2923222cecbc",
+      "date": "2026-09-22",
+      "title": "首钢基金公募REITs法律服务项目中标结果公告",
+      "summary": "来源：中国招标投标公共服务平台（北京市 中标结果公示 按20号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E9%A6%96%E9%92%A2%E5%9F%BA%E9%87%91%E5%85%AC%E5%8B%9FREITs%E6%B3%95%E5%BE%8B%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E5%91%8A",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_502cc547c166",
+      "date": "2026-09-22",
+      "title": "南京机电产业（集团）有限公司新工REITS2026年度财产保险项目-中选结果公告",
+      "summary": "来源：中国招标投标公共服务平台（江苏省 中标结果公示 按20号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%8D%97%E4%BA%AC%E6%9C%BA%E7%94%B5%E4%BA%A7%E4%B8%9A%EF%BC%88%E9%9B%86%E5%9B%A2%EF%BC%89%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%96%B0%E5%B7%A5REITS2026%E5%B9%B4%E5%BA%A6%E8%B4%A2%E4%BA%A7%E4%BF%9D",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_bfa680e4ab78",
+      "date": "2026-09-21",
+      "title": "山东发展新能源集团有限公司机构间REITs计划管理人选聘项目中标候选人公示",
+      "summary": "来源：中国招标投标公共服务平台（山东省 中标候选人公示 按10号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%B1%B1%E4%B8%9C%E5%8F%91%E5%B1%95%E6%96%B0%E8%83%BD%E6%BA%90%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%9C%BA%E6%9E%84%E9%97%B4REITs%E8%AE%A1%E5%88%92%E7%AE%A1%E7%90%86%E4%BA%BA%E9%80%89%E8%81%98%E9%A1%B9%E7%9B%AE",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_a7470019f04a",
+      "date": "2026-09-21",
+      "title": "中铁置业地中海酒店机构间REITs项目专项计划专项审计服务机构公开竟争性谈判成交候选人公示",
+      "summary": "来源：中国招标投标公共服务平台（北京市 中标候选人公示 按20号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E4%B8%AD%E9%93%81%E7%BD%AE%E4%B8%9A%E5%9C%B0%E4%B8%AD%E6%B5%B7%E9%85%92%E5%BA%97%E6%9C%BA%E6%9E%84%E9%97%B4REITs%E9%A1%B9%E7%9B%AE%E4%B8%93%E9%A1%B9%E8%AE%A1%E5%88%92%E4%B8%93%E9%A1%B9%E5%AE%A1%E8%AE%A1%E6%9C%8D%E5%8A%A1%E6%9C%BA",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_ee2cc28e5e02",
+      "date": "2026-09-18",
+      "title": "南京机电产业（集团）有限公司新工REITS2026年度财产保险项目-中选候选人公示 重新公示",
+      "summary": "来源：中国招标投标公共服务平台（江苏省 中标候选人公示 按20号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%8D%97%E4%BA%AC%E6%9C%BA%E7%94%B5%E4%BA%A7%E4%B8%9A%EF%BC%88%E9%9B%86%E5%9B%A2%EF%BC%89%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%96%B0%E5%B7%A5REITS2026%E5%B9%B4%E5%BA%A6%E8%B4%A2%E4%BA%A7%E4%BF%9D",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_4665d597ad30",
+      "date": "2026-09-18",
+      "title": "南京机电产业（集团）有限公司新工REITS2026年度财产保险项目-中选候选人公示",
+      "summary": "来源：中国招标投标公共服务平台（江苏省 中标候选人公示 按20号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%8D%97%E4%BA%AC%E6%9C%BA%E7%94%B5%E4%BA%A7%E4%B8%9A%EF%BC%88%E9%9B%86%E5%9B%A2%EF%BC%89%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%96%B0%E5%B7%A5REITS2026%E5%B9%B4%E5%BA%A6%E8%B4%A2%E4%BA%A7%E4%BF%9D",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_10d86eb12cc7",
+      "date": "2026-09-17",
+      "title": "REITs资源整合的股权（资产）转让评估服务项目采购公告",
+      "summary": "来源：中国招标投标公共服务平台（浙江省 招标公告 按20号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=REITs%E8%B5%84%E6%BA%90%E6%95%B4%E5%90%88%E7%9A%84%E8%82%A1%E6%9D%83%EF%BC%88%E8%B5%84%E4%BA%A7%EF%BC%89%E8%BD%AC%E8%AE%A9%E8%AF%84%E4%BC%B0%E6%9C%8D%E5%8A%A1%E9%A1%B9%E7%9B%AE%E9%87%87%E8%B4%AD%E5%85%AC%E5%91%8A",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
     {
       "code": "bid_0944a241b899cd8cdc21",
       "date": "2026-09-14",
@@ -669,6 +758,5 @@
       "media": "中国招标投标公共服务平台（官方备用列表）",
       "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
     }
-  ],
-  "runner": "本机网络补充"
+  ]
 }
