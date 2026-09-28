@@ -227,3 +227,16 @@
 ---
 
 *本文件与 `advice-seed.json` 配套；后续周更优先刷新 CICC/CSC 周报数字与 `horizons.weekly`，行情任务只改 `asOfMarket` 与 `dashboardLive`。*
+
+---
+
+## Appendix · 数据面板 L1–L7（展示层）
+
+二级投研数据面板（见 `docs/data-panel-l1l7.md` / `data_panel_l1l7.json`）是本学派 **分权属估值** 的可视化层：
+
+- L2 产权：市值加权 TTM − 10Y + 历史分位  
+- L2 经营权：市值加权中债 **IRR − 10Y** + 历史分位  
+- 统一 `cycle.avgYield` 仅作粗览，**不作**产权锚  
+
+面板数字须带 as-of；seed 快照不可替代 live 重算。
+

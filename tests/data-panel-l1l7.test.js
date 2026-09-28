@@ -1,0 +1,73 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const { spawnSync } = require("node:child_process");
+
+const root = path.join(__dirname, "..");
+const panelPath = path.join(root, "data_panel_l1l7.json");
+
+const REQUIRED = [
+  "updated",
+  "asOfTrade",
+  "bond10ySeries",
+  "propertyYieldSeries",
+  "operatingIrrSeries",
+  "benchmarksNormalized",
+  "marketLiquidity",
+  "sectorSnapshot",
+  "csiReitsMonth",
+];
+
+test("data_panel_l1l7.json has schema keys and non-empty L2 series", () => {
+  const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
+  REQUIRED.forEach((k) => assert.ok(k in panel, "missing " + k));
+  assert.ok(panel.bond10ySeries.length > 0);
+  assert.ok(panel.propertyYieldSeries.length > 0);
+  assert.ok(panel.operatingIrrSeries.length > 0);
+  assert.equal(panel.sectorSnapshot.length, 9);
+  assert.ok(Array.isArray(panel.marketLiquidity));
+  assert.ok(Array.isArray(panel.csiReitsMonth));
+  assert.ok(panel.benchmarksNormalized && Array.isArray(panel.benchmarksNormalized.dates));
+});
+
+test("operating spread is IRR-based (not TTM) in docs and last row", () => {
+  const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
+  const blob = JSON.stringify(panel.seedMeta || {}) + (panel.note || "");
+  assert.match(blob, /IRR/i);
+  assert.match(panel.seedMeta.operatingSpreadFormula || "", /IRR\s*-\s*bond10y/i);
+  assert.match(panel.seedMeta.operatingSpreadFormula || "", /NOT\s+ttm/i);
+  const last = panel.operatingIrrSeries[panel.operatingIrrSeries.length - 1];
+  assert.equal(typeof last.irr, "number");
+  assert.equal(typeof last.spread, "number");
+  const lastP = panel.propertyYieldSeries[panel.propertyYieldSeries.length - 1];
+  assert.equal(typeof lastP.ttmYield, "number");
+});
+
+test("build_data_panel.py --check exits 0", () => {
+  const r = spawnSync("python3", ["build_data_panel.py", "--check"], { cwd: root, encoding: "utf-8" });
+  assert.equal(r.status, 0, r.stderr || r.stdout);
+});
+
+test("UI mounts L2 chart containers and demotes avgYield gauge copy", () => {
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  assert.match(html, /id="chartL2Property"/);
+  assert.match(html, /id="chartL2Operating"/);
+  assert.match(html, /data_panel_l1l7\.json/);
+  assert.match(html, /非产权锚/);
+  assert.match(app, /renderL2SpreadCharts/);
+  assert.match(app, /chartL2Property/);
+  assert.match(app, /非产权锚/);
+});
+
+test("L2 renderer does not throw on seed panel (node smoke)", () => {
+  const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
+  // Minimal shape check mimicking dualSpreadOption inputs
+  function smoke(rows, yieldKey) {
+    assert.ok(rows.every((r) => r.date && typeof r[yieldKey] === "number" && typeof r.spread === "number"));
+  }
+  smoke(panel.propertyYieldSeries, "ttmYield");
+  smoke(panel.operatingIrrSeries, "irr");
+  assert.ok(panel.bond10ySeries.every((r) => r.date && typeof r.ytm === "number"));
+});

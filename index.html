@@ -17,6 +17,13 @@ window.__DATA_READY = fetch("data.json").then(function (r) {
   if (!r.ok) throw new Error("data.json HTTP " + r.status);
   return r.json();
 }).then(function (j) { window.REITS_DATA = j; });
+window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
+  if (!r.ok) throw new Error("data_panel_l1l7.json HTTP " + r.status);
+  return r.json();
+}).then(function (j) { window.REITS_DATA_PANEL = j; }).catch(function (e) {
+  console.warn("[panel] data_panel_l1l7.json load failed:", e && e.message);
+  window.REITS_DATA_PANEL = null;
+});
 </script>
 <script>
 (function(){
@@ -318,12 +325,12 @@ window.__DATA_READY = fetch("data.json").then(function (r) {
   </div>
   <div class="grid">
     <div class="card">
-      <h2>定价锚：股息率溢价标尺</h2>
-      <p class="note">股息率溢价 = 平均分派率 − 10Y 国债收益率 · &gt;250BP 具备安全边际（买入区）· 150–250BP 中性 · &lt;100BP 高估（减仓区）· 单一指标判断配置时机</p>
+      <h2>参考标尺：全市场 avgYield − 10Y（非产权锚）</h2>
+      <p class="note">仅作历史粗览 · <b>不是</b>产权估值主锚（学派：产权用市值加权 TTM−10Y，经营权用 IRR−10Y）· 请以策略分类页「L2 分权利差」双时序为准 · 见 <a href="#v-strategy" data-jump-view="strategy">产权 vs 经营权旁 L2 图</a></p>
       <div id="spreadGauge" style="margin-top:14px"></div>
       <p style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:12px">
-        <b>历史锚点</b>：2021 年初约 350BP（深度便宜，随后四年牛市 +120%）→ 2025 年中压缩至 170BP（缓冲垫不足，随后利率回升触发回调）→ 2026 年 7 月回升至约 180BP（中性，尚未到"便宜"的 250BP 以上）。<br>
-        <b>当前判断</b>：回调释放了一部分估值压力但安全边际仍不足；若利率见顶回落或分派率进一步抬升使溢价走向 250BP 以上，将打开新一轮配置窗口——与下方实时验证和第三段配置建议联动。</p>
+        <b>历史锚点（粗口径）</b>：2021 年初约 350BP → 2025 年中约 170BP → 近端随行情变动。<br>
+        <b>使用限制</b>：统一 avgYield 已被分权破局重估学派否决作为产权专用锚；经营权更不得用现金分派率冒充 IRR 利差。正式分位与走阔归因见 L2 面板。</p>
     </div>
     <div class="card">
       <h2>现在：重估状态实时验证</h2>
@@ -348,9 +355,26 @@ window.__DATA_READY = fetch("data.json").then(function (r) {
       <div id="chartStrategy" style="height:300px"></div>
     </div>
     <div class="card">
-      <h2>产权 vs 经营权</h2>
-      <p class="note">产权看分派率，经营权看中债 IRR</p>
+      <h2>产权 vs 经营权 · 等权价格</h2>
+      <p class="note">等权价格指数（区间起点 = 100）· 估值利差见下方 L2 分权双时序</p>
       <div id="chartRight" style="height:300px"></div>
+    </div>
+  </div>
+  <div class="card panel-l2" id="panelL2Spreads">
+    <h2>L2 分权利差时序 · 产权 TTM−10Y / 经营权 IRR−10Y</h2>
+    <p class="note" id="panelL2Note">市值加权分派/IRR 与 10Y 国债利差 · 面积=利差 · 虚线=历史分位 · 对齐分权破局重估学派 · 数据 as-of 见角标</p>
+    <p class="panel-l2-stamp" id="panelL2Stamp" style="font-size:11.5px;color:var(--tx3);margin:0 0 10px"></p>
+    <div class="grid">
+      <div>
+        <h3 style="font-size:13px;margin:0 0 6px">产权 · TTM 分派率 − 10Y</h3>
+        <p class="note" style="margin-bottom:8px">主轴：TTM / 10Y（%）· 右轴：利差分位 · 禁止用下方 avgYield 单点替代本图</p>
+        <div id="chartL2Property" style="height:320px"></div>
+      </div>
+      <div>
+        <h3 style="font-size:13px;margin:0 0 6px">经营权 · 中债 IRR − 10Y</h3>
+        <p class="note" style="margin-bottom:8px">经营权利差 = <b>IRR − 10Y</b>（非 TTM）· 分位通常显著低于产权</p>
+        <div id="chartL2Operating" style="height:320px"></div>
+      </div>
     </div>
   </div>
   <div class="card">
@@ -668,7 +692,7 @@ window.__DATA_READY = fetch("data.json").then(function (r) {
 <script src="lib/echarts-custom.min.js" defer></script>
 <script src="workspace.js?v=20260915-tender-1" defer></script>
 <script src="tender-feed.js?v=20260915-1" defer></script>
-<script src="app.js?v=20260915-tender-1" defer></script>
+<script src="app.js?v=20260928-l2panel" defer></script>
 <script src="allocation-tools.js?v=20260915-tender-1" defer></script>
 </body>
 </html>
