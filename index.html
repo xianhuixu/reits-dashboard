@@ -39,7 +39,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="research-layout.css?v=20260914-2">
 <link rel="stylesheet" href="workspace.css?v=20260915-tender-1">
-<link rel="stylesheet" href="geography/map.css?v=20260928-1">
+<link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
 <a class="skip-link" href="#workspaceMain">跳到主要内容</a>
@@ -120,25 +120,25 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <!-- ============ 第一段：全景热力图 ============ -->
 <section class="view" id="v-heatmap">
   <article class="card geo-panel" id="assetGeography" aria-labelledby="geoTitle">
-    <div class="geo-heading"><div><div class="geo-kicker">ASSET GEOGRAPHY</div><h2 id="geoTitle">REITs 资产地图</h2><p>从底层项目所在地，观察资产的地域分布。</p></div><span id="geoCoverage" class="geo-coverage">地理索引载入中…</span></div>
+    <div class="geo-heading"><div><div class="geo-kicker">ORIGINATOR GEOGRAPHY</div><h2 id="geoTitle">REITs 原始权益人地图</h2><p>按发起人／原始权益人注册城市定位，观察供给主体的地域分布。</p></div><span id="geoCoverage" class="geo-coverage">地理索引载入中…</span></div>
+    <div id="geoSectorLegend" class="geo-sector-legend" aria-label="资产类别图例与筛选"></div>
     <div class="geo-toolbar">
-      <label>资产类型<select id="geoSector"><option value="">全部类型</option></select></label>
       <label>省级地区<select id="geoProvince"><option value="">全部地区</option></select></label>
-      <label class="geo-search">查找资产<input id="geoSearch" type="search" placeholder="基金名称、代码、项目或城市" autocomplete="off"></label>
+      <label class="geo-search">查找主体<input id="geoSearch" type="search" placeholder="基金、原始权益人或注册城市" autocomplete="off"></label>
       <button id="geoReset" class="secondary-button">重置筛选</button>
     </div>
     <div class="geo-body"><div class="geo-map-column">
       <div id="geoStats" class="geo-stats"></div>
-      <div class="geo-map-stage"><div class="geo-map-controls"><select id="geoZoom" class="secondary-button" aria-label="地图查看区域"><option value="1">全国视图</option><option value="2">东部地区</option><option value="3">长三角放大</option><option value="4">珠三角放大</option></select></div><svg id="geoSvg" viewBox="0 0 720 490" role="group" aria-label="REITs底层项目城市分布，使用Tab选择城市，回车查看项目"></svg><p id="geoMapLoading" class="geo-map-loading">正在载入项目地图…</p></div>
-      <div class="geo-map-legend"><i></i>圆点数字 = 当地已收录基金数 · 点击查看项目</div>
-      <p class="geo-footnote">城市级示意点位，非建筑坐标或公路线路。未标记不代表没有 REITs 资产。</p>
+      <div class="geo-map-stage"><div class="geo-map-controls"><select id="geoZoom" class="secondary-button" aria-label="地图查看区域"><option value="1">全国视图</option><option value="2">东部地区</option><option value="3">长三角放大</option><option value="4">珠三角放大</option></select></div><svg id="geoSvg" viewBox="0 0 720 490" role="group" aria-label="REITs原始权益人注册城市分布，使用Tab选择城市，回车查看基金"></svg><p id="geoMapLoading" class="geo-map-loading">正在载入主体地图…</p></div>
+      <div class="geo-map-legend"><i></i>圆点数字 = 当地基金数 · 扇区颜色 = 资产类别 · 点击查看主体</div>
+      <p class="geo-footnote">点位为主体注册城市示意坐标，不是底层资产所在地。境外注册主体不设内地点位。</p>
     </div><aside class="geo-ranking" aria-label="地域分布排名">
       <div class="panel-heading"><h3>地域分布</h3><div id="geoRankMode" class="segmented"><button class="on" data-mode="city" aria-pressed="true">城市</button><button data-mode="province" aria-pressed="false">省份</button></div></div>
       <p>按当地已收录基金数 · 同基金跨地域可重复</p><div id="geoRank" class="geo-rank"></div>
     </aside></div>
     <div class="geo-selection"><h3 id="geoSelection">全部已收录地点</h3><span id="geoResultCount"></span><button id="geoClearCity" class="secondary-button" hidden>取消城市选择</button></div>
     <div id="geoProjects" class="geo-projects"></div>
-    <details class="geo-method"><summary id="geoMissingLabel">收录口径与待补充清单</summary><p>核查日期：<span id="geoChecked">—</span>。本地图为公开披露地点索引，部分覆盖；各条目来源及资产范围时点见项目卡片。首发或历史资料不代表完整当前持仓，拟扩募且未核实交割的资产不计入。二手资料已单独标注“资料来源”，仍需对照定期报告复核。昆山等县级市归入所属地级市。同一基金在同一地域计数一次，跨地域汇总不可视为基金总数，也不代表资产价值或收入占比。</p><p>底图与城市示意坐标：<a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noopener noreferrer">阿里云 DataV GeoAtlas</a>。以下基金尚未收录地点：</p><div id="geoMissing" class="geo-missing"></div></details>
+    <details class="geo-method"><summary id="geoMissingLabel">收录口径与待核验清单</summary><p>核查日期：<span id="geoChecked">—</span>。依据交易所披露的招募说明书，按原始权益人或发起人的注册地址定位；不以基金管理人、运营管理机构或资产所在地代替。部分基金有多名原始权益人，点位按主体分别列示；同一城市和省份内按基金代码去重。该分布不代表资产价值、收入或风险敞口分布。境外主体及注册地待核验者不生成内地点位。</p><p>底图与城市示意坐标：<a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noopener noreferrer">阿里云 DataV GeoAtlas</a>。</p><div id="geoMissing" class="geo-missing"></div></details>
     <span id="geoStatus" class="sr-only" role="status" aria-live="polite"></span>
   </article>
   <article class="card geo-sector-card"><div class="panel-heading"><div><h2>市场资产类型结构</h2><p>基金数量分布 · 全部站内行情样本，与地图收录范围独立</p></div><span id="geoUniverseCount" class="neutral-label"></span></div><div id="geoSectorChart" class="geo-sector-chart" aria-label="各资产类型的基金数量和占比"></div></article>
@@ -719,6 +719,6 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <script src="tender-feed.js?v=20260915-1" defer></script>
 <script src="app.js?v=20260928-l2panel" defer></script>
 <script src="allocation-tools.js?v=20260915-tender-1" defer></script>
-<script src="geography/map.js?v=20260928-1" defer></script>
+<script src="geography/map.js?v=20260928-2" defer></script>
 </body>
 </html>

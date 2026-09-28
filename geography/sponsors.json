@@ -1,0 +1,1511 @@
+{
+  "version": 1,
+  "checkedAt": "2026-09-28",
+  "coordinateSource": "https://geo.datav.aliyun.com/areas_v3/bound/100000_full_city.json",
+  "scope": "原始权益人/发起人注册城市索引。部分覆盖，不代表资产所在地、资产价值或收入分布。",
+  "cities": {
+    "上海市": {
+      "name": "上海市",
+      "province": "上海市",
+      "coordinates": [
+        121.472644,
+        31.231706
+      ],
+      "precision": "city"
+    },
+    "杭州市": {
+      "name": "杭州市",
+      "province": "浙江省",
+      "coordinates": [
+        120.153576,
+        30.287459
+      ],
+      "precision": "city"
+    },
+    "北京市": {
+      "name": "北京市",
+      "province": "北京市",
+      "coordinates": [
+        116.405285,
+        39.904989
+      ],
+      "precision": "city"
+    },
+    "济南市": {
+      "name": "济南市",
+      "province": "山东省",
+      "coordinates": [
+        117.000923,
+        36.675807
+      ],
+      "precision": "city"
+    },
+    "重庆市": {
+      "name": "重庆市",
+      "province": "重庆市",
+      "coordinates": [
+        106.504962,
+        29.533155
+      ],
+      "precision": "city"
+    },
+    "合肥市": {
+      "name": "合肥市",
+      "province": "安徽省",
+      "coordinates": [
+        117.283042,
+        31.86119
+      ],
+      "precision": "city"
+    },
+    "包头市": {
+      "name": "包头市",
+      "province": "内蒙古自治区",
+      "coordinates": [
+        109.840405,
+        40.658168
+      ],
+      "precision": "city"
+    },
+    "武汉市": {
+      "name": "武汉市",
+      "province": "湖北省",
+      "coordinates": [
+        114.298572,
+        30.584355
+      ],
+      "precision": "city"
+    },
+    "天津市": {
+      "name": "天津市",
+      "province": "天津市",
+      "coordinates": [
+        117.190182,
+        39.125596
+      ],
+      "precision": "city"
+    },
+    "成都市": {
+      "name": "成都市",
+      "province": "四川省",
+      "coordinates": [
+        104.065735,
+        30.659462
+      ],
+      "precision": "city"
+    },
+    "苏州市": {
+      "name": "苏州市",
+      "province": "江苏省",
+      "coordinates": [
+        120.619585,
+        31.299379
+      ],
+      "precision": "city"
+    },
+    "南京市": {
+      "name": "南京市",
+      "province": "江苏省",
+      "coordinates": [
+        118.767413,
+        32.041544
+      ],
+      "precision": "city"
+    },
+    "沈阳市": {
+      "name": "沈阳市",
+      "province": "辽宁省",
+      "coordinates": [
+        123.429096,
+        41.796767
+      ],
+      "precision": "city"
+    },
+    "深圳市": {
+      "name": "深圳市",
+      "province": "广东省",
+      "coordinates": [
+        114.085947,
+        22.547
+      ],
+      "precision": "city"
+    },
+    "宁波市": {
+      "name": "宁波市",
+      "province": "浙江省",
+      "coordinates": [
+        121.549792,
+        29.868388
+      ],
+      "precision": "city"
+    },
+    "乌鲁木齐市": {
+      "name": "乌鲁木齐市",
+      "province": "新疆维吾尔自治区",
+      "coordinates": [
+        87.617733,
+        43.792818
+      ],
+      "precision": "city"
+    },
+    "厦门市": {
+      "name": "厦门市",
+      "province": "福建省",
+      "coordinates": [
+        118.11022,
+        24.490474
+      ],
+      "precision": "city"
+    },
+    "石家庄市": {
+      "name": "石家庄市",
+      "province": "河北省",
+      "coordinates": [
+        114.502461,
+        38.045474
+      ],
+      "precision": "city"
+    },
+    "长沙市": {
+      "name": "长沙市",
+      "province": "湖南省",
+      "coordinates": [
+        112.982279,
+        28.19409
+      ],
+      "precision": "city"
+    },
+    "广州市": {
+      "name": "广州市",
+      "province": "广东省",
+      "coordinates": [
+        113.280637,
+        23.125178
+      ],
+      "precision": "city"
+    },
+    "南宁市": {
+      "name": "南宁市",
+      "province": "广西壮族自治区",
+      "coordinates": [
+        108.320004,
+        22.82402
+      ],
+      "precision": "city"
+    },
+    "保山市": {
+      "name": "保山市",
+      "province": "云南省",
+      "coordinates": [
+        99.167133,
+        25.111802
+      ],
+      "precision": "city"
+    },
+    "西安市": {
+      "name": "西安市",
+      "province": "陕西省",
+      "coordinates": [
+        108.948024,
+        34.263161
+      ],
+      "precision": "city"
+    },
+    "嘉兴市": {
+      "name": "嘉兴市",
+      "province": "浙江省",
+      "coordinates": [
+        120.750865,
+        30.762653
+      ],
+      "precision": "city"
+    },
+    "呼和浩特市": {
+      "name": "呼和浩特市",
+      "province": "内蒙古自治区",
+      "coordinates": [
+        111.670801,
+        40.818311
+      ],
+      "precision": "city"
+    },
+    "福州市": {
+      "name": "福州市",
+      "province": "福建省",
+      "coordinates": [
+        119.306239,
+        26.075302
+      ],
+      "precision": "city"
+    },
+    "绍兴市": {
+      "name": "绍兴市",
+      "province": "浙江省",
+      "coordinates": [
+        120.582112,
+        29.997117
+      ],
+      "precision": "city"
+    },
+    "廊坊市": {
+      "name": "廊坊市",
+      "province": "河北省",
+      "coordinates": [
+        116.704441,
+        39.523927
+      ],
+      "precision": "city"
+    }
+  },
+  "sources": {
+    "508000": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-26/508000_20260626_RB0A.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508001": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-05/508001_20260605_ZX88.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508002": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-18/508002_20260618_VVJL.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508003": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-10-21/508003_20251021_AI5M.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508005": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-08-11/508005_20260811_EDC2.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508006": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-06/508006_20260606_LZK3.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508007": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-24/508007_20260624_SFBM.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508008": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-17/508008_20260617_SL2F.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508009": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-08-19/508009_20260819_55DX.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508010": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-09-02/508010_20260902_TQ8Y.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508011": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-10-30/508011_20251030_VEUT.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508012": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-12-30/508012_20251230_R0BH.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508015": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-11-28/508015_20251128_XIRK.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508016": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-14/508016_20260714_RJU9.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508017": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-09/508017_20260709_S54L.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508018": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-08-20/508018_20260820_KP52.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508019": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-30/508019_20260630_WSLF.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508020": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-20/508020_20260320_A016.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508021": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-09-19/508021_20260919_FCFE.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508022": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-10-17/508022_20251017_L6A3.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508026": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-12-01/508026_20251201_MC2E.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508027": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-05/508027_20260605_S20X.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508028": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-05-25/508028_20260525_ABYV.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508029": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-09-24/508029_20250924_RQSS.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508030": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-05-08/508030_20260508_AQCU.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508031": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-12-26/508031_20251226_G72T.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508033": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-04-29/508033_20260429_9C0F.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508036": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-12-05/508036_20251205_NXLS.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508039": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-14/508039_20260714_0WD2.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508048": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-11-25/508048_20251125_851I.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508050": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-12-12/508050_20251212_HQQ8.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508055": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-06/508055_20260306_SDOK.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508058": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-09-03/508058_20260903_C12H.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508059": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-12/508059_20260612_EKKI.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508066": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-10-31/508066_20251031_YGBV.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508068": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-10/508068_20260610_NQ37.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508069": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-10-16/508069_20251016_FG12.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508077": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-12-03/508077_20251203_JI62.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508080": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-10/508080_20260710_N5KY.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508082": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-09-03/508082_20260903_IKIP.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508084": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-02-13/508084_20260213_8E5R.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508085": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-04-23/508085_20260423_2BA2.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508086": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-05-22/508086_20260522_3HZJ.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508087": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-09-14/508087_20260914_KF32.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508089": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-18/508089_20260618_JXRR.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508090": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-25/508090_20260625_57BV.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508091": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-09-15/508091_20260915_YKPF.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
+      "checkedAt": "2026-09-28"
+    },
+    "508092": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-08-20/508092_20260820_RD9P.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508093": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-04-17/508093_20260417_8G7P.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508096": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-06/508096_20260706_GW8D.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508097": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-11-11/508097_20251111_BYTH.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508098": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-08-27/508098_20260827_V53Y.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508099": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-18/508099_20260318_7NJC.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508600": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-19/508600_20260619_ORFK.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508601": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-28/508601_20260728_1UAI.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508602": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-05-15/508602_20260515_4423.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508603": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-05-14/508603_20260514_AK9A.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180101": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-05-25/c11ea5dd-9752-4104-9e33-844559c9938a.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180102": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-09-16/8799a73c-8ee6-4fc9-8e82-10413a83ea11.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180103": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-12-15/8a2fbf04-3643-4d71-aaeb-368935fa10bc.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180105": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-26/45d1dc1c-c8e1-46c0-8673-86f16f35cdd7.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180106": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-07-01/d385daac-a069-4fb4-a2af-bf78f1d8305f.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180201": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-05/e0e64b4a-921f-4789-a930-3ec3fe2b0995.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180202": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-11-28/a053bd11-1812-4234-a9fa-e6f40240779c.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180203": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-10-16/cd2e5062-cd48-40c3-8ebf-12e61907b19c.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180301": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-12-25/66722649-51b0-41ed-9351-53ba11920aa7.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180302": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-24/871f1277-cf25-4e13-b8f1-711fb2be3ee4.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180303": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-09-12/445ff30c-f6e4-4199-b2e4-0ab18697efe5.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180305": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-03-12/e2626969-2978-4925-9c02-094ff8b03ac7.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180401": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-05/807ffd06-35d0-4a6b-957e-2ee2fe2223f4.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180402": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-11-28/14ff7a76-f785-4cbd-a00e-8d0a3ff53a08.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180501": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-12-25/eb82afa6-9503-4fb3-8bd8-865eff5fec5c.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180502": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-09-25/55d36082-d23a-4ec9-8739-1ae987be275d.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180601": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-05-08/5b483844-f926-42d3-b04b-f9d94f6da91a.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180602": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-08-19/1057b3c3-14a3-4f29-9782-e6d0aa065055.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180603": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-09-02/e2bf2504-16b3-43d5-bd75-b5993cd2d7a3.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180605": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-03-28/5dcf1b9a-8a1d-40ed-b76d-21ed93da3886.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180606": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-25/0989d2f8-578c-4e0b-b9b7-874f7a7330f3.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180607": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-05-08/037498c5-e30a-4aa9-bd17-8054426ea0b1.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180701": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2025-10-28/b7e715dd-dc80-4a17-9d08-df88a2948dde.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180801": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-06/d51b1aac-84ab-4ed2-9148-b2d9dc0470f2.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "180901": {
+      "url": "https://disc.static.szse.cn/disc/disk03/finalpage/2026-06-25/84a42347-55c8-4b72-938b-52448f69d456.PDF",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；按所列原始权益人注册地，不代表资产所在地或当前持有人所在地。",
+      "checkedAt": "2026-09-28"
+    },
+    "508056": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-01/508056_20260701_VFJI.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
+      "checkedAt": "2026-09-28"
+    },
+    "508060": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-25/508060_20260625_43B4.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
+      "checkedAt": "2026-09-28"
+    },
+    "508078": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-18/508078_20260618_4ST2.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
+      "checkedAt": "2026-09-28"
+    },
+    "508088": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-11-05/508088_20251105_PRFD.pdf",
+      "kind": "primary",
+      "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
+      "checkedAt": "2026-09-28"
+    }
+  },
+  "locations": [
+    {
+      "code": "508000.SH",
+      "city": "上海市",
+      "organization": "上海张江（集团）有限公司",
+      "role": "原始权益人",
+      "source": "508000"
+    },
+    {
+      "code": "508001.SH",
+      "city": "杭州市",
+      "organization": "浙江沪杭甬高速公路股份有限公司",
+      "role": "原始权益人",
+      "source": "508001"
+    },
+    {
+      "code": "508002.SH",
+      "city": "上海市",
+      "organization": "上海百联集团股份有限公司",
+      "role": "原始权益人",
+      "source": "508002"
+    },
+    {
+      "code": "508003.SH",
+      "city": "北京市",
+      "organization": "北京联东金园管理科技有限公司",
+      "role": "原始权益人",
+      "source": "508003"
+    },
+    {
+      "code": "508005.SH",
+      "city": "北京市",
+      "organization": "北京首创商业管理有限公司",
+      "role": "原始权益人",
+      "source": "508005"
+    },
+    {
+      "code": "508006.SH",
+      "city": "北京市",
+      "organization": "北京首创生态环保集团股份有限公司",
+      "role": "原始权益人",
+      "source": "508006"
+    },
+    {
+      "code": "508007.SH",
+      "city": "济南市",
+      "organization": "山东高速集团有限公司",
+      "role": "原始权益人",
+      "source": "508007"
+    },
+    {
+      "code": "508008.SH",
+      "city": "重庆市",
+      "organization": "中铁建重庆投资集团有限公司",
+      "role": "原始权益人",
+      "source": "508008"
+    },
+    {
+      "code": "508008.SH",
+      "city": "重庆市",
+      "organization": "重庆高速公路股份有限公司",
+      "role": "原始权益人",
+      "source": "508008"
+    },
+    {
+      "code": "508009.SH",
+      "city": "合肥市",
+      "organization": "安徽省交通控股集团有限公司",
+      "role": "原始权益人",
+      "source": "508009"
+    },
+    {
+      "code": "508010.SH",
+      "city": "重庆市",
+      "organization": "重庆两江新区产业发展集团有限公司",
+      "role": "原始权益人",
+      "source": "508010"
+    },
+    {
+      "code": "508011.SH",
+      "city": "北京市",
+      "organization": "北京物美商业集团股份有限公司",
+      "role": "原始权益人",
+      "source": "508011"
+    },
+    {
+      "code": "508012.SH",
+      "city": "上海市",
+      "organization": "上海杨浦科技创业中心有限公司",
+      "role": "原始权益人",
+      "source": "508012"
+    },
+    {
+      "code": "508015.SH",
+      "city": "北京市",
+      "organization": "北京洁源新能投资有限公司",
+      "role": "原始权益人",
+      "source": "508015"
+    },
+    {
+      "code": "508015.SH",
+      "city": "包头市",
+      "organization": "内蒙古明阳新能源开发有限责任公司",
+      "role": "原始权益人",
+      "source": "508015"
+    },
+    {
+      "code": "508016.SH",
+      "city": "济南市",
+      "organization": "华电国际电力股份有限公司",
+      "role": "主要原始权益人",
+      "source": "508016"
+    },
+    {
+      "code": "508016.SH",
+      "city": "杭州市",
+      "organization": "杭州市燃气集团有限公司",
+      "role": "原始权益人",
+      "source": "508016"
+    },
+    {
+      "code": "508016.SH",
+      "city": "杭州市",
+      "organization": "杭州钱塘新区产业发展集团有限公司",
+      "role": "原始权益人",
+      "source": "508016"
+    },
+    {
+      "code": "508017.SH",
+      "city": "上海市",
+      "organization": "上海兴秀茂商业管理有限公司",
+      "role": "原始权益人",
+      "source": "508017"
+    },
+    {
+      "code": "508018.SH",
+      "city": "北京市",
+      "organization": "中交投资有限公司",
+      "role": "主要原始权益人",
+      "source": "508018"
+    },
+    {
+      "code": "508018.SH",
+      "city": "武汉市",
+      "organization": "中交第二航务工程局有限公司",
+      "role": "原始权益人",
+      "source": "508018"
+    },
+    {
+      "code": "508018.SH",
+      "city": "武汉市",
+      "organization": "中交第二公路勘察设计研究院有限公司",
+      "role": "原始权益人",
+      "source": "508018"
+    },
+    {
+      "code": "508019.SH",
+      "city": "武汉市",
+      "organization": "湖北省科技投资集团有限公司",
+      "role": "原始权益人",
+      "source": "508019"
+    },
+    {
+      "code": "508020.SH",
+      "city": "上海市",
+      "organization": "上海基础设施建设发展（集团）有限公司",
+      "role": "原始权益人",
+      "source": "508020"
+    },
+    {
+      "code": "508021.SH",
+      "city": "上海市",
+      "organization": "上海临港奉贤经济发展有限公司",
+      "role": "原始权益人",
+      "source": "508021"
+    },
+    {
+      "code": "508021.SH",
+      "city": "上海市",
+      "organization": "上海临港华平经济发展有限公司",
+      "role": "原始权益人",
+      "source": "508021"
+    },
+    {
+      "code": "508022.SH",
+      "city": "天津市",
+      "organization": "天津泰达科技工业园有限公司",
+      "role": "原始权益人",
+      "source": "508022"
+    },
+    {
+      "code": "508026.SH",
+      "city": "成都市",
+      "organization": "中电建水电开发集团有限公司",
+      "role": "原始权益人",
+      "source": "508026"
+    },
+    {
+      "code": "508027.SH",
+      "city": "苏州市",
+      "organization": "苏州工业园区科技发展有限公司",
+      "role": "原始权益人",
+      "source": "508027"
+    },
+    {
+      "code": "508027.SH",
+      "city": "苏州市",
+      "organization": "苏州工业园区建屋产业园开发有限公司",
+      "role": "原始权益人",
+      "source": "508027"
+    },
+    {
+      "code": "508028.SH",
+      "city": "南京市",
+      "organization": "国家电投集团江苏电力有限公司",
+      "role": "原始权益人",
+      "source": "508028"
+    },
+    {
+      "code": "508029.SH",
+      "city": "沈阳市",
+      "organization": "沈阳国际软件园产业发展有限公司",
+      "role": "原始权益人",
+      "source": "508029"
+    },
+    {
+      "code": "508030.SH",
+      "city": "北京市",
+      "organization": "中核汇能有限公司",
+      "role": "原始权益人",
+      "source": "508030"
+    },
+    {
+      "code": "508031.SH",
+      "city": "上海市",
+      "organization": "上海城投房屋租赁有限公司",
+      "role": "原始权益人",
+      "source": "508031"
+    },
+    {
+      "code": "508033.SH",
+      "city": "深圳市",
+      "organization": "深圳高速公路集团股份有限公司",
+      "role": "原始权益人",
+      "source": "508033"
+    },
+    {
+      "code": "508036.SH",
+      "city": "宁波市",
+      "organization": "宁波交通投资集团有限公司",
+      "role": "主要原始权益人",
+      "source": "508036"
+    },
+    {
+      "code": "508039.SH",
+      "city": "北京市",
+      "organization": "北京首农信息产业投资有限公司",
+      "role": "原始权益人",
+      "source": "508039"
+    },
+    {
+      "code": "508048.SH",
+      "city": "上海市",
+      "organization": "上海外高桥集团股份有限公司",
+      "role": "原始权益人",
+      "source": "508048"
+    },
+    {
+      "code": "508050.SH",
+      "city": "乌鲁木齐市",
+      "organization": "新疆新华水电投资股份有限公司",
+      "role": "原始权益人",
+      "source": "508050"
+    },
+    {
+      "code": "508055.SH",
+      "city": "上海市",
+      "organization": "上海地产房屋租赁有限公司",
+      "role": "原始权益人",
+      "source": "508055"
+    },
+    {
+      "code": "508058.SH",
+      "city": "厦门市",
+      "organization": "厦门安居集团有限公司",
+      "role": "原始权益人",
+      "source": "508058"
+    },
+    {
+      "code": "508059.SH",
+      "city": "北京市",
+      "organization": "中国三峡新能源（集团）股份有限公司",
+      "role": "原始权益人",
+      "source": "508059"
+    },
+    {
+      "code": "508066.SH",
+      "city": "南京市",
+      "organization": "江苏沿江高速公路有限公司",
+      "role": "原始权益人",
+      "source": "508066"
+    },
+    {
+      "code": "508068.SH",
+      "city": "北京市",
+      "organization": "北京保障房中心有限公司",
+      "role": "原始权益人",
+      "source": "508068"
+    },
+    {
+      "code": "508069.SH",
+      "city": "南京市",
+      "organization": "南京公路发展（集团）有限公司",
+      "role": "原始权益人",
+      "source": "508069"
+    },
+    {
+      "code": "508077.SH",
+      "city": "深圳市",
+      "organization": "有巢住房租赁（深圳）有限公司",
+      "role": "原始权益人",
+      "source": "508077"
+    },
+    {
+      "code": "508080.SH",
+      "city": "北京市",
+      "organization": "北京亦庄盛元投资开发集团有限公司",
+      "role": "原始权益人",
+      "source": "508080"
+    },
+    {
+      "code": "508082.SH",
+      "city": "宁波市",
+      "organization": "杉杉商业集团有限公司",
+      "role": "原始权益人",
+      "source": "508082"
+    },
+    {
+      "code": "508084.SH",
+      "city": "武汉市",
+      "organization": "九州通医药集团物流有限公司",
+      "role": "原始权益人",
+      "source": "508084"
+    },
+    {
+      "code": "508085.SH",
+      "city": "苏州市",
+      "organization": "苏州工业园区公租房管理有限公司",
+      "role": "原始权益人",
+      "source": "508085"
+    },
+    {
+      "code": "508086.SH",
+      "city": "石家庄市",
+      "organization": "河北高速公路集团有限公司",
+      "role": "原始权益人",
+      "source": "508086"
+    },
+    {
+      "code": "508087.SH",
+      "city": "济南市",
+      "organization": "济南热力集团有限公司",
+      "role": "原始权益人",
+      "source": "508087"
+    },
+    {
+      "code": "508089.SH",
+      "city": "乌鲁木齐市",
+      "organization": "特变电工新疆新能源股份有限公司",
+      "role": "原始权益人",
+      "source": "508089"
+    },
+    {
+      "code": "508090.SH",
+      "city": "北京市",
+      "organization": "中国外运股份有限公司",
+      "role": "原始权益人",
+      "source": "508090"
+    },
+    {
+      "code": "508091.SH",
+      "city": "长沙市",
+      "organization": "长沙凯亭咨询管理有限公司",
+      "role": "原始权益人",
+      "source": "508091"
+    },
+    {
+      "code": "508091.SH",
+      "city": "广州市",
+      "organization": "广州凯云管理咨询有限公司",
+      "role": "原始权益人",
+      "source": "508091"
+    },
+    {
+      "code": "508091.SH",
+      "city": "广州市",
+      "organization": "广州云凯商业管理有限公司",
+      "role": "原始权益人",
+      "source": "508091"
+    },
+    {
+      "code": "508092.SH",
+      "city": "北京市",
+      "organization": "北京金隅集团股份有限公司",
+      "role": "原始权益人",
+      "source": "508092"
+    },
+    {
+      "code": "508093.SH",
+      "city": "南宁市",
+      "organization": "广西北部湾投资集团有限公司",
+      "role": "原始权益人",
+      "source": "508093"
+    },
+    {
+      "code": "508096.SH",
+      "city": "北京市",
+      "organization": "京能国际能源发展（北京）有限公司",
+      "role": "原始权益人",
+      "source": "508096"
+    },
+    {
+      "code": "508096.SH",
+      "city": "保山市",
+      "organization": "云南保山槟榔江水电开发有限公司",
+      "role": "原始权益人",
+      "source": "508096"
+    },
+    {
+      "code": "508097.SH",
+      "city": "南京市",
+      "organization": "南京市建邺区高新科技投资集团有限公司",
+      "role": "原始权益人",
+      "source": "508097"
+    },
+    {
+      "code": "508098.SH",
+      "city": "北京市",
+      "organization": "北京京东世纪贸易有限公司",
+      "role": "原始权益人",
+      "source": "508098"
+    },
+    {
+      "code": "508099.SH",
+      "city": "北京市",
+      "organization": "北京中关村软件园发展有限责任公司",
+      "role": "原始权益人",
+      "source": "508099"
+    },
+    {
+      "code": "508600.SH",
+      "city": "上海市",
+      "organization": "上海世博发展（集团）有限公司",
+      "role": "原始权益人",
+      "source": "508600"
+    },
+    {
+      "code": "508601.SH",
+      "city": "北京市",
+      "organization": "北京粮食集团有限责任公司",
+      "role": "原始权益人",
+      "source": "508601"
+    },
+    {
+      "code": "508601.SH",
+      "city": "北京市",
+      "organization": "北京元创联商业企业管理中心（有限合伙）",
+      "role": "原始权益人",
+      "source": "508601"
+    },
+    {
+      "code": "508602.SH",
+      "city": "西安市",
+      "organization": "砂之船（西安）购物广场有限公司",
+      "role": "原始权益人",
+      "source": "508602"
+    },
+    {
+      "code": "508603.SH",
+      "city": "宁波市",
+      "organization": "杉杉商业集团有限公司",
+      "role": "原始权益人",
+      "source": "508603"
+    },
+    {
+      "code": "180101.SZ",
+      "city": "深圳市",
+      "organization": "招商局蛇口工业区控股股份有限公司",
+      "role": "原始权益人",
+      "source": "180101"
+    },
+    {
+      "code": "180101.SZ",
+      "city": "深圳市",
+      "organization": "招商局光明科技园有限公司",
+      "role": "原始权益人",
+      "source": "180101"
+    },
+    {
+      "code": "180102.SZ",
+      "city": "合肥市",
+      "organization": "合肥高新城市发展集团有限公司",
+      "role": "原始权益人",
+      "source": "180102"
+    },
+    {
+      "code": "180103.SZ",
+      "city": "杭州市",
+      "organization": "杭州和达高科技发展集团有限公司",
+      "role": "主要原始权益人",
+      "source": "180103"
+    },
+    {
+      "code": "180103.SZ",
+      "city": "杭州市",
+      "organization": "杭州万海投资管理有限公司",
+      "role": "原始权益人",
+      "source": "180103"
+    },
+    {
+      "code": "180105.SZ",
+      "city": "广州市",
+      "organization": "广州开发区控股集团有限公司",
+      "role": "原始权益人",
+      "source": "180105"
+    },
+    {
+      "code": "180106.SZ",
+      "city": "成都市",
+      "organization": "成都高投置业有限公司",
+      "role": "原始权益人",
+      "source": "180106"
+    },
+    {
+      "code": "180106.SZ",
+      "city": "成都市",
+      "organization": "成都高新投资集团有限公司",
+      "role": "原始权益人",
+      "source": "180106"
+    },
+    {
+      "code": "180201.SZ",
+      "city": "广州市",
+      "organization": "广州交通投资集团有限公司",
+      "role": "原始权益人",
+      "source": "180201"
+    },
+    {
+      "code": "180202.SZ",
+      "city": "广州市",
+      "organization": "越秀（中国）交通基建投资有限公司",
+      "role": "原始权益人",
+      "source": "180202"
+    },
+    {
+      "code": "180203.SZ",
+      "city": "天津市",
+      "organization": "招商局公路网络科技控股股份有限公司",
+      "role": "原始权益人",
+      "source": "180203"
+    },
+    {
+      "code": "180301.SZ",
+      "city": "深圳市",
+      "organization": "深圳市深圳港物流发展有限公司",
+      "role": "原始权益人",
+      "source": "180301"
+    },
+    {
+      "code": "180302.SZ",
+      "city": "深圳市",
+      "organization": "深圳市深国际物流发展有限公司",
+      "role": "原始权益人",
+      "source": "180302"
+    },
+    {
+      "code": "180303.SZ",
+      "city": "天津市",
+      "organization": "天津宝湾国际物流有限公司",
+      "role": "原始权益人",
+      "source": "180303"
+    },
+    {
+      "code": "180303.SZ",
+      "city": "南京市",
+      "organization": "南京宝湾国际物流有限公司",
+      "role": "原始权益人",
+      "source": "180303"
+    },
+    {
+      "code": "180303.SZ",
+      "city": "嘉兴市",
+      "organization": "嘉兴宝湾物流有限公司",
+      "role": "原始权益人",
+      "source": "180303"
+    },
+    {
+      "code": "180305.SZ",
+      "city": "深圳市",
+      "organization": "深圳嘉丰产业园管理有限公司",
+      "role": "原始权益人",
+      "source": "180305"
+    },
+    {
+      "code": "180305.SZ",
+      "city": "深圳市",
+      "organization": "深圳市丰泰电商产业园资产管理有限公司",
+      "role": "原始权益人",
+      "source": "180305"
+    },
+    {
+      "code": "180401.SZ",
+      "city": "深圳市",
+      "organization": "深圳能源集团股份有限公司",
+      "role": "原始权益人",
+      "source": "180401"
+    },
+    {
+      "code": "180402.SZ",
+      "city": "呼和浩特市",
+      "organization": "内蒙古电力勘测设计院有限责任公司",
+      "role": "原始权益人",
+      "source": "180402"
+    },
+    {
+      "code": "180501.SZ",
+      "city": "深圳市",
+      "organization": "深圳市安居集团有限公司",
+      "role": "原始权益人",
+      "source": "180501"
+    },
+    {
+      "code": "180502.SZ",
+      "city": "深圳市",
+      "organization": "深圳市招商公寓发展有限公司",
+      "role": "原始权益人",
+      "source": "180502"
+    },
+    {
+      "code": "180601.SZ",
+      "city": "深圳市",
+      "organization": "华润商业资产控股有限公司",
+      "role": "原始权益人",
+      "source": "180601"
+    },
+    {
+      "code": "180602.SZ",
+      "city": "深圳市",
+      "organization": "印力商用置业有限公司",
+      "role": "原始权益人",
+      "source": "180602"
+    },
+    {
+      "code": "180603.SZ",
+      "city": "成都市",
+      "organization": "卓远地产（成都）有限公司",
+      "role": "原始权益人",
+      "source": "180603"
+    },
+    {
+      "code": "180605.SZ",
+      "city": "福州市",
+      "organization": "福建华威农商（集团）有限公司",
+      "role": "原始权益人",
+      "source": "180605"
+    },
+    {
+      "code": "180606.SZ",
+      "city": "济南市",
+      "organization": "山东绿发商业管理有限公司",
+      "role": "原始权益人",
+      "source": "180606"
+    },
+    {
+      "code": "180607.SZ",
+      "city": "深圳市",
+      "organization": "中海环宇商业发展（深圳）有限公司",
+      "role": "原始权益人",
+      "source": "180607"
+    },
+    {
+      "code": "180701.SZ",
+      "city": "绍兴市",
+      "organization": "绍兴市原水集团有限公司",
+      "role": "原始权益人",
+      "source": "180701"
+    },
+    {
+      "code": "180801.SZ",
+      "city": "北京市",
+      "organization": "首钢环境产业有限公司",
+      "role": "原始权益人",
+      "source": "180801"
+    },
+    {
+      "code": "180901.SZ",
+      "city": "廊坊市",
+      "organization": "润泽科技发展有限公司",
+      "role": "原始权益人",
+      "source": "180901"
+    }
+  ],
+  "offshore": [
+    {
+      "code": "508056.SH",
+      "organization": "普洛斯中国控股有限公司（香港）",
+      "source": "508056"
+    },
+    {
+      "code": "508060.SH",
+      "organization": "万国数据控股有限公司（开曼群岛）",
+      "source": "508060"
+    },
+    {
+      "code": "508078.SH",
+      "organization": "易商集团（开曼群岛）",
+      "source": "508078"
+    },
+    {
+      "code": "508088.SH",
+      "organization": "FULL REGALIA LIMITED 等首发原始权益人（境外注册；详见招募说明书）",
+      "source": "508088"
+    },
+    {
+      "code": "508091.SH",
+      "organization": "CAPITALAND MALL ASIA LIMITED（主要原始权益人，新加坡；该基金的境内原始权益人另有点位）",
+      "source": "508091"
+    }
+  ],
+  "unverified": [
+    "180503.SZ",
+    "180306.SZ"
+  ]
+}
