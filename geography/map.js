@@ -1,4 +1,4 @@
-/* 底层资产地理索引：行情只读，城市级示意坐标，基金按代码去重。 */
+/* 原始权益人注册地索引：行情只读，城市级示意坐标，地域统计按基金代码去重。 */
 (function (root) {
   'use strict';
   function selectLocations(registry, funds, filters) {
@@ -6,9 +6,9 @@
     var query = (filters.query || '').trim().toLowerCase();
     return registry.locations.filter(function (r) {
       var f = byCode.get(r.code), city = registry.cities[r.city];
-      return f && city && (!filters.sector || f.sector === filters.sector) &&
+      return f && city && (!filters.sectors || filters.sectors.includes(f.sector)) &&
         (!filters.province || city.province === filters.province) &&
-        (!query || [f.name, f.code, r.asset, r.city, city.province].join(' ').toLowerCase().includes(query));
+        (!query || [f.name, f.code, r.organization, r.role, r.city, city.province].join(' ').toLowerCase().includes(query));
     }).map(function (r) { return Object.assign({}, r, {fund:byCode.get(r.code)}); });
   }
   function groupLocations(rows, registry, key) {
@@ -21,15 +21,22 @@
     return Array.from(groups.values()).map(function (g) { return {name:g.name, count:g.codes.size, rows:g.rows}; })
       .sort(function (a, b) { return b.count-a.count || a.name.localeCompare(b.name, 'zh-CN'); });
   }
-  if (typeof module !== 'undefined' && module.exports) module.exports = {selectLocations:selectLocations, groupLocations:groupLocations};
+  function sectorCounts(rows) {
+    var counts=new Map();
+    rows.forEach(function(r){ if(!counts.has(r.fund.sector))counts.set(r.fund.sector,new Set());counts.get(r.fund.sector).add(r.code); });
+    return Array.from(counts,function(entry){return {sector:entry[0],count:entry[1].size};});
+  }
+  if (typeof module !== 'undefined' && module.exports) module.exports = {selectLocations:selectLocations, groupLocations:groupLocations, sectorCounts:sectorCounts};
   if (!root.document) return;
   var doc=root.document, host=doc.getElementById('assetGeography');
   if (!host) return;
-  var registry, funds, rows=[], selected='', mode='city', geo, zoom=1;
+  var registry, funds, rows=[], selected='', mode='city', geo, zoom=1, activeSectors=new Set(), sectors=[];
   var $=function (id) { return doc.getElementById(id); };
   var esc=function (s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
   var viewports={1:[0,0,720,490],2:[340,140,330,320],3:[450,267,105,100],4:[435,370,80,65]};
   var svgNS='http://www.w3.org/2000/svg';
+  var palette=['#3159ce','#0b8c85','#be683b','#9163a8','#bd8e21','#597d50','#ae556d','#5f79a2','#756759','#394988'];
+  function sectorColor(sector){return palette[Math.max(0,sectors.indexOf(sector))%palette.length];}
   function svgEl(tag, attrs, parent) {
     var e=doc.createElementNS(svgNS,tag);
     Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k,attrs[k]); });
@@ -74,12 +81,15 @@
     var viewport=viewports[zoom], markerScale=Math.max(viewport[2]/720,viewport[3]/490);
     var cities=groupLocations(rows,registry,'city');
     // 标签避让：密集城市用编号圆点和旁边的城市排名查阅。
-    var labels=['北京市','上海市','深圳市','哈密市','重庆市','青岛市','保山市','成都市','榆林市','厦门市','武汉市','甘孜藏族自治州'];
+    var labels=['北京市','上海市','深圳市','重庆市','成都市'];
     cities.slice().reverse().forEach(function (g) {
       var p=xy(registry.cities[g.name].coordinates), r=5+Math.sqrt(g.count)*3;
       var button=svgEl('g',{transform:'translate('+p.join(',')+') scale('+markerScale+')',tabindex:0,role:'button','aria-label':g.name+'，'+g.count+'只基金，查看项目','aria-pressed':String(selected===g.name),class:'geo-marker'+(selected===g.name?' is-selected':'')},parent);
       svgEl('circle',{r:r+5,class:'geo-halo'},button);
-      svgEl('circle',{r:r,class:'geo-dot'},button);
+      var mix=sectorCounts(g.rows).sort(function(a,b){return sectors.indexOf(a.sector)-sectors.indexOf(b.sector);});
+      var circumference=2*Math.PI*r, total=mix.reduce(function(n,s){return n+s.count;},0), offset=0;
+      mix.forEach(function(s){var length=circumference*s.count/total;svgEl('circle',{r:r,fill:'none',stroke:sectorColor(s.sector),'stroke-width':r*2,'stroke-dasharray':length+' '+circumference,'stroke-dashoffset':-offset,transform:'rotate(-90)'},button);offset+=length;});
+      svgEl('circle',{r:r*.62,class:'geo-dot'},button);
       var n=svgEl('text',{'text-anchor':'middle',dy:3.5,class:'geo-number'},button);n.textContent=g.count;
       if(zoom>1 || labels.includes(g.name)) {
         var offset=g.name==='北京市'?-18:20;
@@ -87,7 +97,7 @@
         t.textContent=g.name.replace(/市$|藏族自治州$/g,'');
       }
       if(focusLabel===button.getAttribute('aria-label'))button.focus({preventScroll:true});
-      var title=svgEl('title',{},button);title.textContent=g.name+' · '+g.count+'只基金';
+      var title=svgEl('title',{},button);title.textContent=g.name+' · '+g.count+'只基金 · '+mix.map(function(s){return s.sector+s.count+'只';}).join(' / ');
       button.addEventListener('click',function () { chooseCity(g.name); });
       button.addEventListener('keydown',function (e) { if(e.key==='Enter'||e.key===' ') {e.preventDefault();chooseCity(g.name);} });
     });
@@ -105,35 +115,37 @@
   function renderProjects() {
     var visible=rows.filter(function (r) { return !selected || selected===r.city; });
     $('geoSelection').textContent=selected || '全部已收录地点';
-    $('geoResultCount').textContent=visible.length+' 条基金—城市记录';
+    $('geoResultCount').textContent=new Set(visible.map(function(r){return r.code;})).size+' 只基金 · '+visible.length+' 条主体记录';
     $('geoClearCity').hidden=!selected;
     $('geoProjects').innerHTML=visible.map(function (r) {
       var s=registry.sources[r.source], c=registry.cities[r.city];
-      return '<article class="geo-project"><div class="geo-project-top"><span>'+esc(r.city)+' · '+esc(r.fund.sector)+'</span><small>'+esc(r.code)+'</small></div><a class="geo-fund" href="#/detail/'+encodeURIComponent(r.code)+'">'+esc(r.fund.name)+' ↗</a><p>'+esc(r.asset)+'</p><div class="geo-project-source"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+(s.kind==='primary'?'披露来源':'资料来源')+' ↗</a><span>'+esc(c.province)+'</span></div><small class="geo-basis">'+esc(s.basis)+'</small></article>';
+      return '<article class="geo-project"><div class="geo-project-top"><span><i class="geo-sector-dot" style="background:'+sectorColor(r.fund.sector)+'"></i>'+esc(r.city)+' · '+esc(r.fund.sector)+'</span><small>'+esc(r.code)+'</small></div><a class="geo-fund" href="#/detail/'+encodeURIComponent(r.code)+'">'+esc(r.fund.name)+' ↗</a><p><b>'+esc(r.role)+'</b> · '+esc(r.organization)+'</p><div class="geo-project-source"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">招募说明书 ↗</a><span>注册地 · '+esc(c.province)+'</span></div></article>';
     }).join('') || '<p class="geo-empty">未找到项目。可清除筛选，或查看待补充清单。</p>';
   }
   function update() {
     selected='';
-    rows=selectLocations(registry,funds,{sector:$('geoSector').value,province:$('geoProvince').value,query:$('geoSearch').value});
+    rows=selectLocations(registry,funds,{sectors:Array.from(activeSectors),province:$('geoProvince').value,query:$('geoSearch').value});
     var covered=new Set(rows.map(function (r) { return r.code; }));
     $('geoStats').innerHTML='<span><b>'+covered.size+'</b>只基金</span><span><b>'+new Set(rows.map(function(r){return r.city;})).size+'</b>个城市 / 州</span><span><b>'+groupLocations(rows,registry,'province').length+'</b>个省级地区</span>';
-    $('geoStatus').textContent='筛选结果：'+covered.size+'只基金，'+rows.length+'条基金—城市记录。';
+    $('geoStatus').textContent='筛选结果：'+covered.size+'只基金，'+rows.length+'条原始权益人注册地记录。';
     renderMarkers();renderRank();renderProjects();
   }
   function init() {
-    var sectors=Array.from(new Set(funds.map(function(f){return f.sector;}))).sort();
+    sectors=Array.from(new Set(funds.map(function(f){return f.sector;}))).sort();
+    activeSectors=new Set(sectors);
     var provinces=Array.from(new Set(Object.values(registry.cities).map(function(c){return c.province;}))).sort(function(a,b){return a.localeCompare(b,'zh-CN');});
-    sectors.forEach(function(s){$('geoSector').add(new Option(s,s));});
+    function renderLegend(){ $('geoSectorLegend').innerHTML=sectors.map(function(s){return '<button type="button" class="geo-sector-filter'+(activeSectors.has(s)?' on':'')+'" data-sector="'+esc(s)+'" aria-pressed="'+activeSectors.has(s)+'"><i style="background:'+sectorColor(s)+'"></i>'+esc(s)+'</button>';}).join(''); $('geoSectorLegend').querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){var s=b.dataset.sector;if(activeSectors.has(s))activeSectors.delete(s);else activeSectors.add(s);renderLegend();update();});});}
+    renderLegend();
     provinces.forEach(function(s){$('geoProvince').add(new Option(s,s));});
     var covered=new Set(registry.locations.map(function(r){return r.code;}));
     var missing=funds.filter(function(f){return !covered.has(f.code);});
-    $('geoCoverage').textContent='已收录 '+(funds.length-missing.length)+' / '+funds.length+' 只基金 · 部分覆盖';
-    $('geoMissingLabel').textContent='收录口径与待补充清单（'+missing.length+'只）';
-    $('geoMissing').innerHTML=missing.map(function(f){return '<a href="#/detail/'+encodeURIComponent(f.code)+'">'+esc(f.name)+' <small>'+esc(f.code)+'</small></a>';}).join('');
+    $('geoCoverage').textContent='已定位 '+covered.size+' / '+funds.length+' 只基金 · 注册地口径';
+    $('geoMissingLabel').textContent='口径、境外主体及待核验基金（'+missing.length+'只）';
+    $('geoMissing').innerHTML='<p>未设内地点位：'+registry.offshore.filter(function(r){return !covered.has(r.code);}).map(function(r){return '<a href="'+esc(registry.sources[r.source].url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.organization)+' <small>'+esc(r.code)+'</small></a>';}).join('')+'</p><p>同基金另有境内点位：'+registry.offshore.filter(function(r){return covered.has(r.code);}).map(function(r){return '<a href="'+esc(registry.sources[r.source].url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.organization)+' <small>'+esc(r.code)+'</small></a>';}).join('')+'</p><p>注册地待核验：'+missing.filter(function(f){return !registry.offshore.some(function(r){return r.code===f.code;});}).map(function(f){return '<a href="#/detail/'+encodeURIComponent(f.code)+'">'+esc(f.name)+' <small>'+esc(f.code)+'</small></a>';}).join('')+'</p>';
     $('geoChecked').textContent=registry.checkedAt;
-    ['geoSector','geoProvince'].forEach(function(id){$(id).addEventListener('change',update);});
+    $('geoProvince').addEventListener('change',update);
     $('geoSearch').addEventListener('input',update);
-    $('geoReset').addEventListener('click',function(){ $('geoSector').value='';$('geoProvince').value='';$('geoSearch').value='';setZoom(1);update(); });
+    $('geoReset').addEventListener('click',function(){activeSectors=new Set(sectors);renderLegend();$('geoProvince').value='';$('geoSearch').value='';setZoom(1);update();});
     $('geoClearCity').addEventListener('click',function(){selected='';renderMarkers();renderRank();renderProjects();});
     $('geoZoom').addEventListener('change',function(){setZoom(Number(this.value));});
     $('geoRankMode').querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){mode=b.dataset.mode; $('geoRankMode').querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b));});renderRank();});});
@@ -144,13 +156,13 @@
     update();
   }
   function loadJson(url) { return fetch(url,{signal:AbortSignal.timeout(15000)}).then(function(r){if(!r.ok)throw new Error(url+': '+r.status);return r.json();}); }
-  Promise.all([root.__DATA_READY || Promise.resolve(),loadJson('geography/locations.json?v=20260928-1')]).then(function(results){
+  Promise.all([root.__DATA_READY || Promise.resolve(),loadJson('geography/sponsors.json?v=20260928-2')]).then(function(results){
     registry=results[1]; funds=(root.REITS_DATA||{}).reits;
     if(!Array.isArray(funds)||!funds.length) throw new Error('行情样本未加载');
     init();
     return loadJson('geography/china-provinces.json?v=1').then(function(data){geo=data;buildMap();renderMarkers();$('geoMapLoading').hidden=true;});
   }).catch(function(error){
-    console.error('资产地图加载失败',error);
+    console.error('原始权益人地图加载失败',error);
     $('geoMapLoading').hidden=false;
     $('geoMapLoading').textContent='地图加载失败，请刷新重试。已载入的城市排名和项目清单仍可使用。';
     $('geoStatus').textContent='地图未完整加载。';

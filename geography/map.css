@@ -5,6 +5,12 @@
 .geo-heading h2 {font-size:20px!important;margin:0 0 6px!important;}
 .geo-heading p,.geo-footnote {font-size:12px;color:var(--tx3);line-height:1.8;margin:0;}
 .geo-coverage {font-size:11px;border:1px solid var(--line2);padding:7px 10px;border-radius:5px;color:var(--tx2);white-space:nowrap;background:var(--panel2);}
+.geo-sector-legend {display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px;}
+.geo-sector-filter {display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);background:var(--panel);color:var(--tx2);border-radius:4px;padding:6px 9px;font:11px var(--font-body);cursor:pointer;opacity:.48;transition:opacity .15s,border-color .15s,background .15s;}
+.geo-sector-filter.on {opacity:1;background:var(--panel2);}
+.geo-sector-filter:hover,.geo-sector-filter:focus-visible {opacity:1;border-color:var(--accent);outline:none;}
+.geo-sector-filter i,.geo-sector-dot {display:inline-block;width:8px;height:8px;border-radius:50%;flex:none;}
+.geo-sector-dot {margin-right:5px;}
 .geo-toolbar {display:flex;align-items:end;gap:10px;flex-wrap:wrap;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
 .geo-toolbar label {display:grid;gap:5px;font-size:11px;color:var(--tx3);}
 .geo-toolbar select,.geo-toolbar input {min-height:38px;background:var(--panel);border:1px solid var(--line2);border-radius:5px;color:var(--tx);font:12px var(--font-body);padding:7px 10px;max-width:100%;}

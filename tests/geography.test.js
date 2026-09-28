@@ -1,45 +1,47 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {selectLocations, groupLocations} = require('../geography/map.js');
-const registry = require('../geography/locations.json');
+const {selectLocations, groupLocations, sectorCounts} = require('../geography/map.js');
+const registry = require('../geography/sponsors.json');
 const funds = require('../universe.json');
 
-test('地理条目可追溯，城市级坐标有效，基金与城市关联唯一', () => {
+test('主体注册地有交易所披露来源、合法城市坐标与唯一主体记录', () => {
   const keys = new Set();
   for (const r of registry.locations) {
     assert.ok(funds.some(f => f.code === r.code), r.code);
     const source = registry.sources[r.source], city = registry.cities[r.city];
-    assert.ok(source && /^https:\/\//.test(source.url) && source.basis && source.checkedAt);
+    assert.ok(source && /^https:\/\/(www\.sse\.com\.cn|disc\.static\.szse\.cn)\//.test(source.url) && source.basis && source.checkedAt);
+    assert.match(r.organization,/公司|合伙/);
+    assert.match(r.role,/原始权益人|发起人/);
     assert.ok(city && city.province && city.precision === 'city');
     const [lon,lat] = city.coordinates;
     assert.ok(Number.isFinite(lon) && lon >= 73 && lon <= 135);
     assert.ok(Number.isFinite(lat) && lat >= 18 && lat <= 54);
-    assert.ok(!keys.has(r.code+'|'+r.city)); keys.add(r.code+'|'+r.city);
+    const key=r.code+'|'+r.organization+'|'+r.city;
+    assert.ok(!keys.has(key)); keys.add(key);
   }
 });
 
-test('跨城市基金在省级统计只计一次，省份合计不可当作基金总数', () => {
-  const rows = selectLocations(registry, funds, {query:'508056'});
-  assert.equal(rows.length, 7);
-  const cities = groupLocations(rows,registry,'city');
-  const provinces = groupLocations(rows,registry,'province');
-  assert.equal(cities.length,7);
-  assert.equal(provinces.find(p => p.name === '广东省').count,1);
-  assert.equal(provinces.find(p => p.name === '广东省').rows.length,3);
+test('按原始权益人注册地定位，不沿用底层资产所在地', () => {
+  const rows=selectLocations(registry,funds,{});
+  assert.deepEqual(rows.filter(r=>r.code.startsWith('180203')).map(r=>r.city),['天津市']);
+  assert.deepEqual(rows.filter(r=>r.code.startsWith('508017')).map(r=>r.city),['上海市']);
+  assert.deepEqual(rows.filter(r=>r.code.startsWith('180302')).map(r=>r.city),['深圳市']);
+  assert.ok(!rows.some(r=>r.code.startsWith('508056')));
 });
 
-test('组合筛选搜索底层所在地，不把深国际的深圳品牌当作资产地点', () => {
-  const original = JSON.stringify(registry);
-  const rows = selectLocations(registry, funds, {query:'180302',sector:'仓储物流'});
-  assert.deepEqual(rows.map(r=>r.city).sort(), ['杭州市','黔南布依族苗族自治州'].sort());
-  assert.equal(selectLocations(registry,funds,{query:'180302',province:'广东省'}).length,0);
-  assert.equal(selectLocations(registry,funds,{query:'不存在的项目'}).length,0);
-  assert.equal(JSON.stringify(registry),original);
+test('多主体、多城市按基金代码去重，资产类别支持多选', () => {
+  const rows=selectLocations(registry,funds,{});
+  assert.deepEqual(new Set(rows.filter(r=>r.code.startsWith('180303')).map(r=>r.city)),new Set(['嘉兴市','南京市','天津市']));
+  assert.equal(groupLocations(rows,registry,'city').find(g=>g.name==='深圳市').count,
+    new Set(rows.filter(r=>r.city==='深圳市').map(r=>r.code)).size);
+  assert.equal(sectorCounts(rows).reduce((n,s)=>n+s.count,0),new Set(rows.map(r=>r.code)).size);
+  assert.ok(selectLocations(registry,funds,{sectors:['仓储物流']}).every(r=>r.fund.sector==='仓储物流'));
+  assert.deepEqual(selectLocations(registry,funds,{sectors:[]}),[]);
+  assert.equal(selectLocations(registry,funds,{query:'招商局公路',province:'天津市'}).length,1);
 });
 
-test('索引未收录的基金不填入默认坐标，行情不存在的代码不展示', () => {
+test('境外及待核验主体没有默认内地点位', () => {
   assert.deepEqual(selectLocations(registry,[],{}),[]);
-  const missing = funds.filter(f=>!registry.locations.some(r=>r.code===f.code));
-  assert.ok(missing.length>0);
-  assert.equal(selectLocations(registry,funds,{query:missing[0].code}).length,0);
+  const marked=new Set(registry.locations.map(r=>r.code));
+  for(const code of ['508056.SH','508060.SH','508078.SH','508088.SH','180503.SZ','180306.SZ']) assert.ok(!marked.has(code),code);
 });
