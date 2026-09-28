@@ -439,6 +439,103 @@ LAZY.research.push(function () {
   registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); }, "chartRight");
   renderLineChart("chartRight", D.series.dates, rtSeries, {area: false});
 
+  // L2 分权利差双时序（data_panel_l1l7）
+  function renderL2SpreadCharts() {
+    var P = window.REITS_DATA_PANEL;
+    var stamp = $("panelL2Stamp");
+    if (!P || !P.propertyYieldSeries || !P.operatingIrrSeries) {
+      if (stamp) stamp.textContent = "L2 面板数据未加载（data_panel_l1l7.json）";
+      ["chartL2Property", "chartL2Operating"].forEach(function (id) {
+        var el = $(id);
+        if (el) el.innerHTML = '<div class="empty">暂无 L2 利差序列</div>';
+      });
+      return;
+    }
+    if (stamp) {
+      var src = P.source || "data_panel_l1l7";
+      var seed = P.seedMeta && P.seedMeta.liveFetch === false ? " · SEED（非 live）" : "";
+      stamp.textContent = "asOfTrade " + (P.asOfTrade || "—") + " · updated " + (P.updated || "—") + " · " + src + seed;
+    }
+    var bondMap = {};
+    (P.bond10ySeries || []).forEach(function (r) { bondMap[r.date] = r.ytm; });
+
+    function dualSpreadOption(rows, yieldKey, yieldLabel, spreadColor) {
+      var th = chartTheme();
+      var dates = rows.map(function (r) { return r.date; });
+      var yld = rows.map(function (r) { return r[yieldKey]; });
+      var bond = rows.map(function (r) { return bondMap[r.date] != null ? bondMap[r.date] : null; });
+      var spread = rows.map(function (r) { return r.spread; });
+      var pctile = rows.map(function (r) { return r.pctile != null ? +(r.pctile * 100).toFixed(1) : null; });
+      var last = rows[rows.length - 1] || {};
+      var lastSpreadBp = last.spread != null ? Math.round(last.spread * 100) : "—";
+      var lastPct = last.pctile != null ? (last.pctile * 100).toFixed(1) + "%" : "—";
+      return {
+        color: [spreadColor, "#94a3b8", "#f59e0b", "#a78bfa"],
+        tooltip: {
+          trigger: "axis",
+          backgroundColor: th.tipBg,
+          borderColor: th.tipBd,
+          textStyle: { color: th.tx, fontSize: 11 },
+          formatter: function (params) {
+            if (!params || !params.length) return "";
+            var i = params[0].dataIndex;
+            var r = rows[i] || {};
+            var lines = [params[0].axisValue];
+            params.forEach(function (p) {
+              if (p.seriesName && p.data != null) lines.push(p.marker + p.seriesName + "：" + p.data);
+            });
+            if (r.spread != null) lines.push("利差：" + r.spread.toFixed(2) + "%（" + Math.round(r.spread * 100) + "BP）");
+            if (r.pctile != null) lines.push("历史分位：" + (r.pctile * 100).toFixed(1) + "%");
+            return lines.join("<br>");
+          }
+        },
+        legend: { top: 0, textStyle: { color: th.tx2, fontSize: 11 }, data: [yieldLabel, "10Y 国债", "利差", "利差分位"] },
+        grid: { left: 48, right: 52, top: 36, bottom: 28 },
+        xAxis: { type: "category", data: dates, axisLabel: { color: th.tx3, fontSize: 10, hideOverlap: true }, axisLine: { lineStyle: { color: th.grid } } },
+        yAxis: [
+          { type: "value", name: "%", scale: true, axisLabel: { color: th.tx3, fontSize: 10 }, splitLine: { lineStyle: { color: th.grid } }, nameTextStyle: { color: th.tx3, fontSize: 10 } },
+          { type: "value", name: "分位%", min: 0, max: 100, axisLabel: { color: th.tx3, fontSize: 10 }, splitLine: { show: false }, nameTextStyle: { color: th.tx3, fontSize: 10 } }
+        ],
+        series: [
+          { name: yieldLabel, type: "line", data: yld, showSymbol: false, lineStyle: { width: 2 }, itemStyle: { color: spreadColor } },
+          { name: "10Y 国债", type: "line", data: bond, showSymbol: false, lineStyle: { width: 1.6, type: "dashed" }, itemStyle: { color: "#94a3b8" } },
+          {
+            name: "利差", type: "line", data: spread, showSymbol: false, lineStyle: { width: 1.4, color: spreadColor },
+            areaStyle: { color: rgba(spreadColor, 0.18) }, z: 1
+          },
+          {
+            name: "利差分位", type: "line", yAxisIndex: 1, data: pctile, showSymbol: false,
+            lineStyle: { width: 1.2, type: "dotted", color: "#a78bfa" }, itemStyle: { color: "#a78bfa" }
+          }
+        ],
+        graphic: [{
+          type: "text", right: 56, top: 40,
+          style: { text: "近端 " + lastSpreadBp + "BP · 分位 " + lastPct, fill: th.tx2, fontSize: 11 }
+        }]
+      };
+    }
+
+    function paint(id, rows, yieldKey, yieldLabel, color) {
+      var el = $(id);
+      if (!el) return;
+      if (!rows || !rows.length) { el.innerHTML = '<div class="empty">暂无序列</div>'; return; }
+      echSet(id, dualSpreadOption(rows, yieldKey, yieldLabel, color));
+    }
+
+    paint("chartL2Property", P.propertyYieldSeries, "ttmYield", "产权 TTM", "#3b82f6");
+    paint("chartL2Operating", P.operatingIrrSeries, "irr", "经营权 IRR", "#10b981");
+  }
+
+  function scheduleL2() {
+    var run = function () { try { renderL2SpreadCharts(); } catch (e) { console.error("[L2]", e); } };
+    registerChart(run, "chartL2Property");
+    registerChart(run, "chartL2Operating");
+    if (window.REITS_DATA_PANEL) run();
+    else if (window.__PANEL_READY) window.__PANEL_READY.then(run).catch(run);
+    else run();
+  }
+  scheduleL2();
+
 });
 
   // ---- 策略×板块矩阵 ----
@@ -1479,28 +1576,28 @@ LAZY.research.push(function () {
             '<td style="text-align:left;font-size:11.5px;color:var(--tx2)">' + s.main + "</td></tr>";
         }).join("") + "</tbody></table>";
       if ($("spreadGauge")) {
-        // 动态计算股息率溢价
+        // 粗口径参考标尺（非产权锚）：学派否决统一 avgYield 作产权专用锚
         var bond10y = (D.cycle && D.cycle.bond10y != null) ? D.cycle.bond10y : 1.7;
         var avgYield = (D.cycle && D.cycle.avgYield != null) ? D.cycle.avgYield : 4.5;
         var cur = Math.round((avgYield - bond10y) * 100);
-        var zone = cur >= 250 ? "安全边际（买入区）" : cur >= 100 ? "中性区间" : "高估（减仓区）";
+        var zone = cur >= 250 ? "粗览·偏宽" : cur >= 100 ? "粗览·中性" : "粗览·偏窄";
         var zoneColor = cur >= 250 ? "var(--up)" : cur >= 100 ? "var(--gold)" : "var(--down)";
-        // 标尺 0–400BP：高估/减仓 0-100（绿），中性 100-250（灰），安全边际/买入 250-400（红）
-        var anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: cur, l: "当前 " + cur + "BP" }];
+        var anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: cur, l: "粗览 " + cur + "BP" }];
         var pct = function (v) { return Math.min(100, Math.max(0, v / 400 * 100)); };
         $("spreadGauge").innerHTML =
-          '<div style="position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex">' +
-          '<div style="width:' + pct(100) + '%;background:rgba(16,185,129,.28)"></div>' +
-          '<div style="width:' + (pct(250) - pct(100)) + '%;background:rgba(100,116,139,.18)"></div>' +
-          '<div style="flex:1;background:rgba(239,68,68,.24)"></div></div>' +
+          '<div style="position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex;opacity:.85">' +
+          '<div style="width:' + pct(100) + '%;background:rgba(16,185,129,.22)"></div>' +
+          '<div style="width:' + (pct(250) - pct(100)) + '%;background:rgba(100,116,139,.14)"></div>' +
+          '<div style="flex:1;background:rgba(239,68,68,.18)"></div></div>' +
           '<div style="position:relative;height:0">' + anchors.map(function (a, i) {
             return '<div style="position:absolute;left:' + pct(a.v) + '%;transform:translateX(-50%);top:-32px">' +
-              '<div style="width:2.5px;height:' + (i === 2 ? 34 : 24) + 'px;background:' + (i === 2 ? "var(--accent)" : "var(--tx3)") + ';margin:0 auto"></div>' +
-              '<div style="font-size:10px;white-space:nowrap;color:' + (i === 2 ? "var(--accent);font-weight:700" : "var(--tx3)") + ';margin-top:2px">' + a.l + "</div></div>";
+              '<div style="width:2.5px;height:' + (i === 2 ? 34 : 24) + 'px;background:' + (i === 2 ? "var(--tx2)" : "var(--tx3)") + ';margin:0 auto"></div>' +
+              '<div style="font-size:10px;white-space:nowrap;color:var(--tx3);margin-top:2px' + (i === 2 ? ";font-weight:600" : "") + '">' + a.l + "</div></div>";
           }).join("") + "</div>" +
           '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--tx3);margin-top:30px">' +
-          "<span>0BP · 高估（减仓区）</span><span>100BP</span><span>250BP · 安全边际（买入区）</span><span>400BP</span></div>" +
-          '<div style="margin-top:12px;font-size:12.5px">当前位置：<b class="num" style="color:' + zoneColor + '">≈' + cur + 'BP（' + zone + '）</b><span style="color:var(--tx3);font-size:11.5px"> = 平均分派率约 ' + avgYield + '% − 10Y 国债约 ' + bond10y + '% · ' + (cur >= 250 ? '已进入买入区' : '距 250BP 买入区仍有 ' + (250 - cur) + 'BP 差距') + "</span></div>";
+          "<span>0BP</span><span>100BP</span><span>250BP</span><span>400BP</span></div>" +
+          '<div style="margin-top:12px;font-size:12.5px">粗览位置：<b class="num" style="color:' + zoneColor + '">≈' + cur + 'BP（' + zone + '）</b>' +
+          '<span style="color:var(--tx3);font-size:11.5px"> = cycle.avgYield ' + avgYield + '% − 10Y ' + bond10y + '% · <b>非产权锚</b>；正式分位见策略分类「L2 分权利差」</span></div>';
       }
       if ($("rvLiveStrip")) {
         $("rvLiveStrip").innerHTML = RV ? (

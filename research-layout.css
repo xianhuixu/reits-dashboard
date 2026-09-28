@@ -118,3 +118,7 @@ body { padding: 18px 28px 44px; max-width: 1600px; }
   .scenario { padding: 16px; }
   .reference-list { columns: 1; }
 }
+
+/* L2 分权利差面板 */
+.panel-l2 h3 { color: var(--tx); font-weight: 650; }
+.panel-l2-stamp { letter-spacing: 0.01em; }

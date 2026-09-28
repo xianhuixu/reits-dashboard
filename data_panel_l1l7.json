@@ -1,0 +1,1162 @@
+{
+  "updated": "2026-09-28 09:40:00",
+  "asOfTrade": "2026-09-24",
+  "source": "PPT seed (刘伟/Shu WU 《REITs二级投研数据面板》修改日 2026-09-24)",
+  "note": "SEED ONLY — 序列由 PPT 文案锚点插值生成，供 L2 UI / QA；上线须用 Wind/中债登/中证重算并更新 asOf。经营权利差 = IRR−10Y（非 TTM）。市值加权口径。",
+  "seedMeta": {
+    "pptxModified": "2026-09-24T08:37:48",
+    "liveFetch": false,
+    "operatingSpreadFormula": "IRR - bond10y (NOT ttm)",
+    "propertySpreadFormula": "ttmYield - bond10y",
+    "weighting": "mcap-weighted (PPT); series are panel aggregates, not equal-weight",
+    "terminalAnchors": {
+      "property": {
+        "ttmYield": 4.7,
+        "spreadBps": 302,
+        "pctile": 0.973,
+        "ref": "CICC 2026-09-04 / PPT L2"
+      },
+      "operating": {
+        "irr": 5.31,
+        "spreadBps": 363,
+        "pctile": 0.598,
+        "ref": "CICC 2026-09-04 / PPT L2"
+      },
+      "bond10y": {
+        "ytm": 1.69,
+        "ref": "PPT L2 claim 2026-09"
+      }
+    }
+  },
+  "bond10ySeries": [
+    {
+      "date": "2021-06-15",
+      "ytm": 3.08
+    },
+    {
+      "date": "2021-07-15",
+      "ytm": 3.074
+    },
+    {
+      "date": "2021-08-15",
+      "ytm": 3.058
+    },
+    {
+      "date": "2021-09-15",
+      "ytm": 3.029
+    },
+    {
+      "date": "2021-10-15",
+      "ytm": 2.988
+    },
+    {
+      "date": "2021-11-15",
+      "ytm": 2.942
+    },
+    {
+      "date": "2021-12-15",
+      "ytm": 2.901
+    },
+    {
+      "date": "2022-01-15",
+      "ytm": 2.872
+    },
+    {
+      "date": "2022-02-15",
+      "ytm": 2.857
+    },
+    {
+      "date": "2022-03-15",
+      "ytm": 2.851
+    },
+    {
+      "date": "2022-04-15",
+      "ytm": 2.86
+    },
+    {
+      "date": "2022-05-15",
+      "ytm": 2.86
+    },
+    {
+      "date": "2022-06-15",
+      "ytm": 2.846
+    },
+    {
+      "date": "2022-07-15",
+      "ytm": 2.82
+    },
+    {
+      "date": "2022-08-15",
+      "ytm": 2.789
+    },
+    {
+      "date": "2022-09-15",
+      "ytm": 2.764
+    },
+    {
+      "date": "2022-10-15",
+      "ytm": 2.751
+    },
+    {
+      "date": "2022-11-15",
+      "ytm": 2.751
+    },
+    {
+      "date": "2022-12-15",
+      "ytm": 2.761
+    },
+    {
+      "date": "2023-01-15",
+      "ytm": 2.77
+    },
+    {
+      "date": "2023-02-15",
+      "ytm": 2.769
+    },
+    {
+      "date": "2023-03-15",
+      "ytm": 2.753
+    },
+    {
+      "date": "2023-04-15",
+      "ytm": 2.726
+    },
+    {
+      "date": "2023-05-15",
+      "ytm": 2.694
+    },
+    {
+      "date": "2023-06-15",
+      "ytm": 2.668
+    },
+    {
+      "date": "2023-07-15",
+      "ytm": 2.654
+    },
+    {
+      "date": "2023-08-15",
+      "ytm": 2.654
+    },
+    {
+      "date": "2023-09-15",
+      "ytm": 2.663
+    },
+    {
+      "date": "2023-10-15",
+      "ytm": 2.67
+    },
+    {
+      "date": "2023-11-15",
+      "ytm": 2.665
+    },
+    {
+      "date": "2023-12-15",
+      "ytm": 2.647
+    },
+    {
+      "date": "2024-01-15",
+      "ytm": 2.616
+    },
+    {
+      "date": "2024-02-15",
+      "ytm": 2.581
+    },
+    {
+      "date": "2024-03-15",
+      "ytm": 2.552
+    },
+    {
+      "date": "2024-04-15",
+      "ytm": 2.535
+    },
+    {
+      "date": "2024-05-15",
+      "ytm": 2.532
+    },
+    {
+      "date": "2024-06-15",
+      "ytm": 2.485
+    },
+    {
+      "date": "2024-07-15",
+      "ytm": 2.437
+    },
+    {
+      "date": "2024-08-15",
+      "ytm": 2.38
+    },
+    {
+      "date": "2024-09-15",
+      "ytm": 2.308
+    },
+    {
+      "date": "2024-10-15",
+      "ytm": 2.225
+    },
+    {
+      "date": "2024-11-15",
+      "ytm": 2.138
+    },
+    {
+      "date": "2024-12-15",
+      "ytm": 2.056
+    },
+    {
+      "date": "2025-01-15",
+      "ytm": 1.988
+    },
+    {
+      "date": "2025-02-15",
+      "ytm": 1.933
+    },
+    {
+      "date": "2025-03-15",
+      "ytm": 1.94
+    },
+    {
+      "date": "2025-04-15",
+      "ytm": 1.946
+    },
+    {
+      "date": "2025-05-15",
+      "ytm": 1.942
+    },
+    {
+      "date": "2025-06-15",
+      "ytm": 1.925
+    },
+    {
+      "date": "2025-07-15",
+      "ytm": 1.895
+    },
+    {
+      "date": "2025-08-15",
+      "ytm": 1.862
+    },
+    {
+      "date": "2025-09-15",
+      "ytm": 1.835
+    },
+    {
+      "date": "2025-10-15",
+      "ytm": 1.821
+    },
+    {
+      "date": "2025-11-15",
+      "ytm": 1.811
+    },
+    {
+      "date": "2025-12-15",
+      "ytm": 1.81
+    },
+    {
+      "date": "2026-01-15",
+      "ytm": 1.807
+    },
+    {
+      "date": "2026-02-15",
+      "ytm": 1.793
+    },
+    {
+      "date": "2026-03-15",
+      "ytm": 1.766
+    },
+    {
+      "date": "2026-04-15",
+      "ytm": 1.727
+    },
+    {
+      "date": "2026-05-15",
+      "ytm": 1.701
+    },
+    {
+      "date": "2026-06-15",
+      "ytm": 1.681
+    },
+    {
+      "date": "2026-07-15",
+      "ytm": 1.673
+    },
+    {
+      "date": "2026-08-15",
+      "ytm": 1.68
+    },
+    {
+      "date": "2026-09-15",
+      "ytm": 1.694
+    }
+  ],
+  "propertyYieldSeries": [
+    {
+      "date": "2021-06-15",
+      "ttmYield": 5.4,
+      "spread": 2.32,
+      "pctile": 0.5
+    },
+    {
+      "date": "2021-07-15",
+      "ttmYield": 5.418,
+      "spread": 2.344,
+      "pctile": 0.75
+    },
+    {
+      "date": "2021-08-15",
+      "ttmYield": 5.423,
+      "spread": 2.365,
+      "pctile": 0.8333
+    },
+    {
+      "date": "2021-09-15",
+      "ttmYield": 5.409,
+      "spread": 2.38,
+      "pctile": 0.875
+    },
+    {
+      "date": "2021-10-15",
+      "ttmYield": 5.374,
+      "spread": 2.386,
+      "pctile": 0.9
+    },
+    {
+      "date": "2021-11-15",
+      "ttmYield": 5.327,
+      "spread": 2.385,
+      "pctile": 0.75
+    },
+    {
+      "date": "2021-12-15",
+      "ttmYield": 5.278,
+      "spread": 2.377,
+      "pctile": 0.5
+    },
+    {
+      "date": "2022-01-15",
+      "ttmYield": 5.239,
+      "spread": 2.367,
+      "pctile": 0.4375
+    },
+    {
+      "date": "2022-02-15",
+      "ttmYield": 5.213,
+      "spread": 2.356,
+      "pctile": 0.2778
+    },
+    {
+      "date": "2022-03-15",
+      "ttmYield": 5.2,
+      "spread": 2.349,
+      "pctile": 0.25
+    },
+    {
+      "date": "2022-04-15",
+      "ttmYield": 5.193,
+      "spread": 2.333,
+      "pctile": 0.1364
+    },
+    {
+      "date": "2022-05-15",
+      "ttmYield": 5.185,
+      "spread": 2.325,
+      "pctile": 0.125
+    },
+    {
+      "date": "2022-06-15",
+      "ttmYield": 5.17,
+      "spread": 2.324,
+      "pctile": 0.1154
+    },
+    {
+      "date": "2022-07-15",
+      "ttmYield": 5.149,
+      "spread": 2.329,
+      "pctile": 0.25
+    },
+    {
+      "date": "2022-08-15",
+      "ttmYield": 5.127,
+      "spread": 2.338,
+      "pctile": 0.3667
+    },
+    {
+      "date": "2022-09-15",
+      "ttmYield": 5.11,
+      "spread": 2.346,
+      "pctile": 0.4688
+    },
+    {
+      "date": "2022-10-15",
+      "ttmYield": 5.102,
+      "spread": 2.351,
+      "pctile": 0.5588
+    },
+    {
+      "date": "2022-11-15",
+      "ttmYield": 5.089,
+      "spread": 2.338,
+      "pctile": 0.3333
+    },
+    {
+      "date": "2022-12-15",
+      "ttmYield": 5.077,
+      "spread": 2.316,
+      "pctile": 0.0263
+    },
+    {
+      "date": "2023-01-15",
+      "ttmYield": 5.057,
+      "spread": 2.287,
+      "pctile": 0.025
+    },
+    {
+      "date": "2023-02-15",
+      "ttmYield": 5.021,
+      "spread": 2.252,
+      "pctile": 0.0238
+    },
+    {
+      "date": "2023-03-15",
+      "ttmYield": 4.968,
+      "spread": 2.215,
+      "pctile": 0.0227
+    },
+    {
+      "date": "2023-04-15",
+      "ttmYield": 4.903,
+      "spread": 2.177,
+      "pctile": 0.0217
+    },
+    {
+      "date": "2023-05-15",
+      "ttmYield": 4.838,
+      "spread": 2.144,
+      "pctile": 0.0208
+    },
+    {
+      "date": "2023-06-15",
+      "ttmYield": 4.784,
+      "spread": 2.116,
+      "pctile": 0.02
+    },
+    {
+      "date": "2023-07-15",
+      "ttmYield": 4.751,
+      "spread": 2.097,
+      "pctile": 0.0192
+    },
+    {
+      "date": "2023-08-15",
+      "ttmYield": 4.739,
+      "spread": 2.085,
+      "pctile": 0.0185
+    },
+    {
+      "date": "2023-09-15",
+      "ttmYield": 4.742,
+      "spread": 2.079,
+      "pctile": 0.0179
+    },
+    {
+      "date": "2023-10-15",
+      "ttmYield": 4.747,
+      "spread": 2.077,
+      "pctile": 0.0172
+    },
+    {
+      "date": "2023-11-15",
+      "ttmYield": 4.742,
+      "spread": 2.077,
+      "pctile": 0.0333
+    },
+    {
+      "date": "2023-12-15",
+      "ttmYield": 4.72,
+      "spread": 2.073,
+      "pctile": 0.0161
+    },
+    {
+      "date": "2024-01-15",
+      "ttmYield": 4.679,
+      "spread": 2.063,
+      "pctile": 0.0156
+    },
+    {
+      "date": "2024-02-15",
+      "ttmYield": 4.627,
+      "spread": 2.046,
+      "pctile": 0.0152
+    },
+    {
+      "date": "2024-03-15",
+      "ttmYield": 4.583,
+      "spread": 2.031,
+      "pctile": 0.0147
+    },
+    {
+      "date": "2024-04-15",
+      "ttmYield": 4.545,
+      "spread": 2.01,
+      "pctile": 0.0143
+    },
+    {
+      "date": "2024-05-15",
+      "ttmYield": 4.518,
+      "spread": 1.986,
+      "pctile": 0.0139
+    },
+    {
+      "date": "2024-06-15",
+      "ttmYield": 4.5,
+      "spread": 2.015,
+      "pctile": 0.0676
+    },
+    {
+      "date": "2024-07-15",
+      "ttmYield": 4.484,
+      "spread": 2.047,
+      "pctile": 0.1447
+    },
+    {
+      "date": "2024-08-15",
+      "ttmYield": 4.465,
+      "spread": 2.085,
+      "pctile": 0.3077
+    },
+    {
+      "date": "2024-09-15",
+      "ttmYield": 4.44,
+      "spread": 2.132,
+      "pctile": 0.3875
+    },
+    {
+      "date": "2024-10-15",
+      "ttmYield": 4.411,
+      "spread": 2.186,
+      "pctile": 0.4512
+    },
+    {
+      "date": "2024-11-15",
+      "ttmYield": 4.385,
+      "spread": 2.247,
+      "pctile": 0.4881
+    },
+    {
+      "date": "2024-12-15",
+      "ttmYield": 4.367,
+      "spread": 2.311,
+      "pctile": 0.5465
+    },
+    {
+      "date": "2025-01-15",
+      "ttmYield": 4.361,
+      "spread": 2.373,
+      "pctile": 0.8977
+    },
+    {
+      "date": "2025-02-15",
+      "ttmYield": 4.365,
+      "spread": 2.432,
+      "pctile": 0.9889
+    },
+    {
+      "date": "2025-03-15",
+      "ttmYield": 4.412,
+      "spread": 2.472,
+      "pctile": 0.9891
+    },
+    {
+      "date": "2025-04-15",
+      "ttmYield": 4.45,
+      "spread": 2.504,
+      "pctile": 0.9894
+    },
+    {
+      "date": "2025-05-15",
+      "ttmYield": 4.47,
+      "spread": 2.528,
+      "pctile": 0.9896
+    },
+    {
+      "date": "2025-06-15",
+      "ttmYield": 4.47,
+      "spread": 2.545,
+      "pctile": 0.9898
+    },
+    {
+      "date": "2025-07-15",
+      "ttmYield": 4.455,
+      "spread": 2.56,
+      "pctile": 0.99
+    },
+    {
+      "date": "2025-08-15",
+      "ttmYield": 4.438,
+      "spread": 2.576,
+      "pctile": 0.9902
+    },
+    {
+      "date": "2025-09-15",
+      "ttmYield": 4.43,
+      "spread": 2.595,
+      "pctile": 0.9904
+    },
+    {
+      "date": "2025-10-15",
+      "ttmYield": 4.442,
+      "spread": 2.621,
+      "pctile": 0.9906
+    },
+    {
+      "date": "2025-11-15",
+      "ttmYield": 4.475,
+      "spread": 2.664,
+      "pctile": 0.9907
+    },
+    {
+      "date": "2025-12-15",
+      "ttmYield": 4.523,
+      "spread": 2.713,
+      "pctile": 0.9909
+    },
+    {
+      "date": "2026-01-15",
+      "ttmYield": 4.573,
+      "spread": 2.766,
+      "pctile": 0.9911
+    },
+    {
+      "date": "2026-02-15",
+      "ttmYield": 4.616,
+      "spread": 2.823,
+      "pctile": 0.9912
+    },
+    {
+      "date": "2026-03-15",
+      "ttmYield": 4.644,
+      "spread": 2.878,
+      "pctile": 0.9914
+    },
+    {
+      "date": "2026-04-15",
+      "ttmYield": 4.657,
+      "spread": 2.93,
+      "pctile": 0.9915
+    },
+    {
+      "date": "2026-05-15",
+      "ttmYield": 4.66,
+      "spread": 2.959,
+      "pctile": 0.9917
+    },
+    {
+      "date": "2026-06-15",
+      "ttmYield": 4.661,
+      "spread": 2.98,
+      "pctile": 0.9918
+    },
+    {
+      "date": "2026-07-15",
+      "ttmYield": 4.667,
+      "spread": 2.994,
+      "pctile": 0.9919
+    },
+    {
+      "date": "2026-08-15",
+      "ttmYield": 4.681,
+      "spread": 3.001,
+      "pctile": 0.9921
+    },
+    {
+      "date": "2026-09-15",
+      "ttmYield": 4.7,
+      "spread": 3.006,
+      "pctile": 0.973
+    }
+  ],
+  "operatingIrrSeries": [
+    {
+      "date": "2021-06-15",
+      "irr": 6.8,
+      "spread": 3.72,
+      "pctile": 0.5
+    },
+    {
+      "date": "2021-07-15",
+      "irr": 6.923,
+      "spread": 3.849,
+      "pctile": 0.75
+    },
+    {
+      "date": "2021-08-15",
+      "irr": 7.03,
+      "spread": 3.972,
+      "pctile": 0.8333
+    },
+    {
+      "date": "2021-09-15",
+      "irr": 7.109,
+      "spread": 4.08,
+      "pctile": 0.875
+    },
+    {
+      "date": "2021-10-15",
+      "irr": 7.162,
+      "spread": 4.174,
+      "pctile": 0.9
+    },
+    {
+      "date": "2021-11-15",
+      "irr": 7.197,
+      "spread": 4.255,
+      "pctile": 0.9167
+    },
+    {
+      "date": "2021-12-15",
+      "irr": 7.233,
+      "spread": 4.332,
+      "pctile": 0.9286
+    },
+    {
+      "date": "2022-01-15",
+      "irr": 7.282,
+      "spread": 4.41,
+      "pctile": 0.9375
+    },
+    {
+      "date": "2022-02-15",
+      "irr": 7.356,
+      "spread": 4.499,
+      "pctile": 0.9444
+    },
+    {
+      "date": "2022-03-15",
+      "irr": 7.452,
+      "spread": 4.601,
+      "pctile": 0.95
+    },
+    {
+      "date": "2022-04-15",
+      "irr": 7.254,
+      "spread": 4.394,
+      "pctile": 0.6818
+    },
+    {
+      "date": "2022-05-15",
+      "irr": 7.058,
+      "spread": 4.198,
+      "pctile": 0.4583
+    },
+    {
+      "date": "2022-06-15",
+      "irr": 6.851,
+      "spread": 4.005,
+      "pctile": 0.2692
+    },
+    {
+      "date": "2022-07-15",
+      "irr": 6.628,
+      "spread": 3.808,
+      "pctile": 0.1071
+    },
+    {
+      "date": "2022-08-15",
+      "irr": 6.388,
+      "spread": 3.599,
+      "pctile": 0.0333
+    },
+    {
+      "date": "2022-09-15",
+      "irr": 6.14,
+      "spread": 3.376,
+      "pctile": 0.0312
+    },
+    {
+      "date": "2022-10-15",
+      "irr": 5.89,
+      "spread": 3.139,
+      "pctile": 0.0294
+    },
+    {
+      "date": "2022-11-15",
+      "irr": 5.645,
+      "spread": 2.894,
+      "pctile": 0.0278
+    },
+    {
+      "date": "2022-12-15",
+      "irr": 5.408,
+      "spread": 2.647,
+      "pctile": 0.0263
+    },
+    {
+      "date": "2023-01-15",
+      "irr": 5.177,
+      "spread": 2.407,
+      "pctile": 0.025
+    },
+    {
+      "date": "2023-02-15",
+      "irr": 5.149,
+      "spread": 2.38,
+      "pctile": 0.0238
+    },
+    {
+      "date": "2023-03-15",
+      "irr": 5.121,
+      "spread": 2.368,
+      "pctile": 0.0227
+    },
+    {
+      "date": "2023-04-15",
+      "irr": 5.094,
+      "spread": 2.368,
+      "pctile": 0.0435
+    },
+    {
+      "date": "2023-05-15",
+      "irr": 5.07,
+      "spread": 2.376,
+      "pctile": 0.1042
+    },
+    {
+      "date": "2023-06-15",
+      "irr": 5.049,
+      "spread": 2.381,
+      "pctile": 0.18
+    },
+    {
+      "date": "2023-07-15",
+      "irr": 5.032,
+      "spread": 2.378,
+      "pctile": 0.1346
+    },
+    {
+      "date": "2023-08-15",
+      "irr": 5.016,
+      "spread": 2.362,
+      "pctile": 0.0185
+    },
+    {
+      "date": "2023-09-15",
+      "irr": 4.993,
+      "spread": 2.33,
+      "pctile": 0.0179
+    },
+    {
+      "date": "2023-10-15",
+      "irr": 4.959,
+      "spread": 2.289,
+      "pctile": 0.0172
+    },
+    {
+      "date": "2023-11-15",
+      "irr": 4.91,
+      "spread": 2.245,
+      "pctile": 0.0167
+    },
+    {
+      "date": "2023-12-15",
+      "irr": 4.851,
+      "spread": 2.204,
+      "pctile": 0.0161
+    },
+    {
+      "date": "2024-01-15",
+      "irr": 4.791,
+      "spread": 2.175,
+      "pctile": 0.0156
+    },
+    {
+      "date": "2024-02-15",
+      "irr": 4.741,
+      "spread": 2.16,
+      "pctile": 0.0152
+    },
+    {
+      "date": "2024-03-15",
+      "irr": 4.758,
+      "spread": 2.206,
+      "pctile": 0.1029
+    },
+    {
+      "date": "2024-04-15",
+      "irr": 4.797,
+      "spread": 2.262,
+      "pctile": 0.1571
+    },
+    {
+      "date": "2024-05-15",
+      "irr": 4.852,
+      "spread": 2.32,
+      "pctile": 0.2083
+    },
+    {
+      "date": "2024-06-15",
+      "irr": 4.909,
+      "spread": 2.424,
+      "pctile": 0.473
+    },
+    {
+      "date": "2024-07-15",
+      "irr": 4.954,
+      "spread": 2.517,
+      "pctile": 0.4868
+    },
+    {
+      "date": "2024-08-15",
+      "irr": 4.974,
+      "spread": 2.594,
+      "pctile": 0.5
+    },
+    {
+      "date": "2024-09-15",
+      "irr": 4.967,
+      "spread": 2.659,
+      "pctile": 0.5375
+    },
+    {
+      "date": "2024-10-15",
+      "irr": 4.941,
+      "spread": 2.716,
+      "pctile": 0.5488
+    },
+    {
+      "date": "2024-11-15",
+      "irr": 4.911,
+      "spread": 2.773,
+      "pctile": 0.5595
+    },
+    {
+      "date": "2024-12-15",
+      "irr": 4.895,
+      "spread": 2.839,
+      "pctile": 0.5698
+    },
+    {
+      "date": "2025-01-15",
+      "irr": 4.904,
+      "spread": 2.916,
+      "pctile": 0.6023
+    },
+    {
+      "date": "2025-02-15",
+      "irr": 4.943,
+      "spread": 3.01,
+      "pctile": 0.6111
+    },
+    {
+      "date": "2025-03-15",
+      "irr": 4.999,
+      "spread": 3.059,
+      "pctile": 0.6196
+    },
+    {
+      "date": "2025-04-15",
+      "irr": 5.06,
+      "spread": 3.114,
+      "pctile": 0.6277
+    },
+    {
+      "date": "2025-05-15",
+      "irr": 5.108,
+      "spread": 3.166,
+      "pctile": 0.6562
+    },
+    {
+      "date": "2025-06-15",
+      "irr": 5.132,
+      "spread": 3.207,
+      "pctile": 0.6633
+    },
+    {
+      "date": "2025-07-15",
+      "irr": 5.131,
+      "spread": 3.236,
+      "pctile": 0.67
+    },
+    {
+      "date": "2025-08-15",
+      "irr": 5.112,
+      "spread": 3.25,
+      "pctile": 0.6765
+    },
+    {
+      "date": "2025-09-15",
+      "irr": 5.089,
+      "spread": 3.254,
+      "pctile": 0.6827
+    },
+    {
+      "date": "2025-10-15",
+      "irr": 5.075,
+      "spread": 3.254,
+      "pctile": 0.6792
+    },
+    {
+      "date": "2025-11-15",
+      "irr": 5.08,
+      "spread": 3.269,
+      "pctile": 0.6944
+    },
+    {
+      "date": "2025-12-15",
+      "irr": 5.104,
+      "spread": 3.294,
+      "pctile": 0.7
+    },
+    {
+      "date": "2026-01-15",
+      "irr": 5.143,
+      "spread": 3.336,
+      "pctile": 0.7054
+    },
+    {
+      "date": "2026-02-15",
+      "irr": 5.187,
+      "spread": 3.394,
+      "pctile": 0.7281
+    },
+    {
+      "date": "2026-03-15",
+      "irr": 5.224,
+      "spread": 3.458,
+      "pctile": 0.7193
+    },
+    {
+      "date": "2026-04-15",
+      "irr": 5.252,
+      "spread": 3.525,
+      "pctile": 0.7094
+    },
+    {
+      "date": "2026-05-15",
+      "irr": 5.269,
+      "spread": 3.568,
+      "pctile": 0.6986
+    },
+    {
+      "date": "2026-06-15",
+      "irr": 5.279,
+      "spread": 3.598,
+      "pctile": 0.6867
+    },
+    {
+      "date": "2026-07-15",
+      "irr": 5.288,
+      "spread": 3.615,
+      "pctile": 0.6821
+    },
+    {
+      "date": "2026-08-15",
+      "irr": 5.298,
+      "spread": 3.618,
+      "pctile": 0.6667
+    },
+    {
+      "date": "2026-09-15",
+      "irr": 5.309,
+      "spread": 3.615,
+      "pctile": 0.598
+    }
+  ],
+  "benchmarksNormalized": {
+    "dates": [],
+    "csiReitsTR": [],
+    "csi300": [],
+    "cgbTotal": [],
+    "baseDate": null
+  },
+  "marketLiquidity": [],
+  "sectorSnapshot": [
+    {
+      "sector": "高速公路",
+      "mcapYi": 569,
+      "ytdPct": 0.1,
+      "sinceIssuePct": 1.3,
+      "divSpreadPct": 8.48,
+      "irrSpreadPct": 4.89,
+      "weekRetPct": -0.039,
+      "weekAvgTurnoverPct": 0.21
+    },
+    {
+      "sector": "消费",
+      "mcapYi": 370,
+      "ytdPct": -6.4,
+      "sinceIssuePct": 34.4,
+      "divSpreadPct": 2.52,
+      "irrSpreadPct": 1.98,
+      "weekRetPct": -0.307,
+      "weekAvgTurnoverPct": 0.29
+    },
+    {
+      "sector": "能源",
+      "mcapYi": 303,
+      "ytdPct": -1.8,
+      "sinceIssuePct": 22.6,
+      "divSpreadPct": 4.97,
+      "irrSpreadPct": 2.08,
+      "weekRetPct": -0.572,
+      "weekAvgTurnoverPct": 0.265
+    },
+    {
+      "sector": "产业园",
+      "mcapYi": 267,
+      "ytdPct": -22.4,
+      "sinceIssuePct": -12.8,
+      "divSpreadPct": 4.87,
+      "irrSpreadPct": 5.38,
+      "weekRetPct": -1.81,
+      "weekAvgTurnoverPct": 0.365
+    },
+    {
+      "sector": "商业不动产",
+      "mcapYi": 230,
+      "ytdPct": 0.4,
+      "sinceIssuePct": null,
+      "divSpreadPct": null,
+      "irrSpreadPct": 2.77,
+      "weekRetPct": -0.752,
+      "weekAvgTurnoverPct": 0.193
+    },
+    {
+      "sector": "仓储物流",
+      "mcapYi": 214,
+      "ytdPct": -16.2,
+      "sinceIssuePct": -2.1,
+      "divSpreadPct": 3.59,
+      "irrSpreadPct": 4.87,
+      "weekRetPct": -0.309,
+      "weekAvgTurnoverPct": 0.321
+    },
+    {
+      "sector": "保租房",
+      "mcapYi": 197,
+      "ytdPct": -2.5,
+      "sinceIssuePct": 44.5,
+      "divSpreadPct": 1.36,
+      "irrSpreadPct": 2.35,
+      "weekRetPct": -0.165,
+      "weekAvgTurnoverPct": 0.155
+    },
+    {
+      "sector": "数据中心",
+      "mcapYi": 85,
+      "ytdPct": -9.7,
+      "sinceIssuePct": 29.6,
+      "divSpreadPct": 4.18,
+      "irrSpreadPct": 1.97,
+      "weekRetPct": -0.209,
+      "weekAvgTurnoverPct": 0.558
+    },
+    {
+      "sector": "市政环保",
+      "mcapYi": 72,
+      "ytdPct": 1.1,
+      "sinceIssuePct": 40.9,
+      "divSpreadPct": 4.6,
+      "irrSpreadPct": 0.94,
+      "weekRetPct": -0.919,
+      "weekAvgTurnoverPct": 0.329
+    }
+  ],
+  "csiReitsMonth": []
+}

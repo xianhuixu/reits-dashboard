@@ -36,6 +36,12 @@ npm test
 
 > 学派框架与 advice 节点仅供投研信息展示，**不构成投资建议**。
 
+
+
+## 二级投研数据面板（L1–L7）
+
+研究分析 → 策略分类页展示 **L2 产权/经营权双利差时序**（TTM−10Y / IRR−10Y），数据文件 `data_panel_l1l7.json`。口径与学派框架对齐：经营权强制 IRR，统一 `avgYield` 不作产权锚。详见 [docs/data-panel-l1l7.md](docs/data-panel-l1l7.md)。
+
 ## 部署
 
 `main` 分支根目录为 GitHub Pages 发布源。推送后由 `pages-build-deployment` 工作流自动发布至：
@@ -53,6 +59,7 @@ https://xianhuixu.github.io/reits-dashboard/
 | `corp_actions.js` / `corp_actions.json` | 公告（分红/扩募/解禁等） | `fetch_news.py` | 每交易日 |
 | `projects.js` / `projects.json` | 发改委推荐/上交所受理/深交所受理项目 | `fetch_projects.py` | 每交易日 |
 | `advice.js` / `advice.json` | 分权破局重估学派配置建议（闸门/仓位/分权/板块） | 人工维护（研究周更） | 周/事件驱动 |
+| `data_panel_l1l7.json` / `data_panel.js` | L1–L7 二级投研数据面板（L2 分权利差序列等） | 当前为 PPT seed；live 见 `build_data_panel.py` | seed → 日后日/周频 |
 | `universe.json` | 上市个券清单 | 手动（新 REIT 上市时） | 不定期 |
 | `fundamentals.json` | 分派达成率等基本面 | 手动 | 季度 |
 | `cycle_judgment.json` | 周期判定 + 10Y 国债 | 手动 | 月度 |
