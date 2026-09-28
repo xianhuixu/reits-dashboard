@@ -138,7 +138,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     </aside></div>
     <div class="geo-selection"><h3 id="geoSelection">全部已收录地点</h3><span id="geoResultCount"></span><button id="geoClearCity" class="secondary-button" hidden>取消城市选择</button></div>
     <div id="geoProjects" class="geo-projects"></div>
-    <details class="geo-method"><summary id="geoMissingLabel">收录口径与待核验清单</summary><p>核查日期：<span id="geoChecked">—</span>。依据交易所披露的招募说明书，按原始权益人或发起人的注册地址定位；不以基金管理人、运营管理机构或资产所在地代替。部分基金有多名原始权益人，点位按主体分别列示；同一城市和省份内按基金代码去重。该分布不代表资产价值、收入或风险敞口分布。境外主体及注册地待核验者不生成内地点位。</p><p>底图与城市示意坐标：<a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noopener noreferrer">阿里云 DataV GeoAtlas</a>。</p><div id="geoMissing" class="geo-missing"></div></details>
+    <details class="geo-method"><summary id="geoMissingLabel">收录口径与境外注册主体</summary><p>核查日期：<span id="geoChecked">—</span>。依据交易所披露的招募说明书及相关公告，按原始权益人或发起人的注册地址定位；不以基金管理人、运营管理机构或资产所在地代替。部分基金有多名原始权益人，点位按主体分别列示；同一城市和省份内按基金代码去重。该分布不代表资产价值、收入或风险敞口分布。境外主体不生成内地点位。</p><p>底图与城市示意坐标：<a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noopener noreferrer">阿里云 DataV GeoAtlas</a>。</p><div id="geoMissing" class="geo-missing"></div></details>
     <span id="geoStatus" class="sr-only" role="status" aria-live="polite"></span>
   </article>
   <article class="card geo-sector-card"><div class="panel-heading"><div><h2>市场资产类型结构</h2><p>基金数量分布 · 全部站内行情样本，与地图收录范围独立</p></div><span id="geoUniverseCount" class="neutral-label"></span></div><div id="geoSectorChart" class="geo-sector-chart" aria-label="各资产类型的基金数量和占比"></div></article>
@@ -719,6 +719,6 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <script src="tender-feed.js?v=20260915-1" defer></script>
 <script src="app.js?v=20260928-l2panel" defer></script>
 <script src="allocation-tools.js?v=20260915-tender-1" defer></script>
-<script src="geography/map.js?v=20260928-2" defer></script>
+<script src="geography/map.js?v=20260928-3" defer></script>
 </body>
 </html>

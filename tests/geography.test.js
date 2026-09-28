@@ -26,6 +26,7 @@ test('按原始权益人注册地定位，不沿用底层资产所在地', () =>
   assert.deepEqual(rows.filter(r=>r.code.startsWith('180203')).map(r=>r.city),['天津市']);
   assert.deepEqual(rows.filter(r=>r.code.startsWith('508017')).map(r=>r.city),['上海市']);
   assert.deepEqual(rows.filter(r=>r.code.startsWith('180302')).map(r=>r.city),['深圳市']);
+  assert.deepEqual(rows.filter(r=>r.code.startsWith('180503')).map(r=>r.city),['北京市']);
   assert.ok(!rows.some(r=>r.code.startsWith('508056')));
 });
 
@@ -43,5 +44,6 @@ test('多主体、多城市按基金代码去重，资产类别支持多选', ()
 test('境外及待核验主体没有默认内地点位', () => {
   assert.deepEqual(selectLocations(registry,[],{}),[]);
   const marked=new Set(registry.locations.map(r=>r.code));
-  for(const code of ['508056.SH','508060.SH','508078.SH','508088.SH','180503.SZ','180306.SZ']) assert.ok(!marked.has(code),code);
+  for(const code of ['508056.SH','508060.SH','508078.SH','508088.SH','180306.SZ']) assert.ok(!marked.has(code),code);
+  assert.equal(registry.unverified.length,0);
 });

@@ -119,7 +119,7 @@
     $('geoClearCity').hidden=!selected;
     $('geoProjects').innerHTML=visible.map(function (r) {
       var s=registry.sources[r.source], c=registry.cities[r.city];
-      return '<article class="geo-project"><div class="geo-project-top"><span><i class="geo-sector-dot" style="background:'+sectorColor(r.fund.sector)+'"></i>'+esc(r.city)+' · '+esc(r.fund.sector)+'</span><small>'+esc(r.code)+'</small></div><a class="geo-fund" href="#/detail/'+encodeURIComponent(r.code)+'">'+esc(r.fund.name)+' ↗</a><p><b>'+esc(r.role)+'</b> · '+esc(r.organization)+'</p><div class="geo-project-source"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">招募说明书 ↗</a><span>注册地 · '+esc(c.province)+'</span></div></article>';
+      return '<article class="geo-project"><div class="geo-project-top"><span><i class="geo-sector-dot" style="background:'+sectorColor(r.fund.sector)+'"></i>'+esc(r.city)+' · '+esc(r.fund.sector)+'</span><small>'+esc(r.code)+'</small></div><a class="geo-fund" href="#/detail/'+encodeURIComponent(r.code)+'">'+esc(r.fund.name)+' ↗</a><p><b>'+esc(r.role)+'</b> · '+esc(r.organization)+'</p><div class="geo-project-source"><a href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'+esc(s.document||'招募说明书')+' ↗</a><span>注册地 · '+esc(c.province)+'</span></div></article>';
     }).join('') || '<p class="geo-empty">未找到项目。可清除筛选，或查看待补充清单。</p>';
   }
   function update() {
@@ -140,8 +140,10 @@
     var covered=new Set(registry.locations.map(function(r){return r.code;}));
     var missing=funds.filter(function(f){return !covered.has(f.code);});
     $('geoCoverage').textContent='已定位 '+covered.size+' / '+funds.length+' 只基金 · 注册地口径';
-    $('geoMissingLabel').textContent='口径、境外主体及待核验基金（'+missing.length+'只）';
-    $('geoMissing').innerHTML='<p>未设内地点位：'+registry.offshore.filter(function(r){return !covered.has(r.code);}).map(function(r){return '<a href="'+esc(registry.sources[r.source].url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.organization)+' <small>'+esc(r.code)+'</small></a>';}).join('')+'</p><p>同基金另有境内点位：'+registry.offshore.filter(function(r){return covered.has(r.code);}).map(function(r){return '<a href="'+esc(registry.sources[r.source].url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.organization)+' <small>'+esc(r.code)+'</small></a>';}).join('')+'</p><p>注册地待核验：'+missing.filter(function(f){return !registry.offshore.some(function(r){return r.code===f.code;});}).map(function(f){return '<a href="#/detail/'+encodeURIComponent(f.code)+'">'+esc(f.name)+' <small>'+esc(f.code)+'</small></a>';}).join('')+'</p>';
+    $('geoMissingLabel').textContent='口径与境外注册主体（'+missing.length+'只未设内地点位）';
+    var offshoreLink=function(r){return '<a href="'+esc(registry.sources[r.source].url)+'" target="_blank" rel="noopener noreferrer">'+esc(r.organization)+' <small>'+esc(r.code)+'</small></a>';};
+    var unverified=missing.filter(function(f){return !registry.offshore.some(function(r){return r.code===f.code;});});
+    $('geoMissing').innerHTML='<p>未设内地点位：'+registry.offshore.filter(function(r){return !covered.has(r.code);}).map(offshoreLink).join('')+'</p><p>同基金另有境内点位：'+registry.offshore.filter(function(r){return covered.has(r.code);}).map(offshoreLink).join('')+'</p>'+(unverified.length?'<p>注册地待核验：'+unverified.map(function(f){return '<a href="#/detail/'+encodeURIComponent(f.code)+'">'+esc(f.name)+' <small>'+esc(f.code)+'</small></a>';}).join('')+'</p>':'');
     $('geoChecked').textContent=registry.checkedAt;
     $('geoProvince').addEventListener('change',update);
     $('geoSearch').addEventListener('input',update);
@@ -156,7 +158,7 @@
     update();
   }
   function loadJson(url) { return fetch(url,{signal:AbortSignal.timeout(15000)}).then(function(r){if(!r.ok)throw new Error(url+': '+r.status);return r.json();}); }
-  Promise.all([root.__DATA_READY || Promise.resolve(),loadJson('geography/sponsors.json?v=20260928-2')]).then(function(results){
+  Promise.all([root.__DATA_READY || Promise.resolve(),loadJson('geography/sponsors.json?v=20260928-3')]).then(function(results){
     registry=results[1]; funds=(root.REITS_DATA||{}).reits;
     if(!Array.isArray(funds)||!funds.length) throw new Error('行情样本未加载');
     init();
