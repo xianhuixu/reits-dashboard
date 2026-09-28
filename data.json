@@ -579,18 +579,18 @@
    "ret20": -9.93,
    "ret60": -11.28,
    "macd": {
-    "dif": -0.009,
+    "dif": -0.0091,
     "dea": -0.0106,
-    "hist": 0.0031,
+    "hist": 0.003,
     "cross": null
    },
-   "rsi14": 46.6,
+   "rsi14": 46.4,
    "pctRank": 5.2,
    "devMA250": -24.64,
    "amt5": 1756080.0,
    "amt20": 3888794.0,
    "amtRatio": 0.99,
-   "sinceIPO": -47.86,
+   "sinceIPO": -47.9,
    "volAnn": 15.6,
    "listDays": 501,
    "signals": {
@@ -813,9 +813,9 @@
    "ret20": -1.22,
    "ret60": -3.55,
    "macd": {
-    "dif": -0.0003,
-    "dea": -0.0078,
-    "hist": 0.015,
+    "dif": -0.0009,
+    "dea": -0.0079,
+    "hist": 0.0141,
     "cross": null
    },
    "rsi14": 54.7,
@@ -1203,9 +1203,9 @@
    "ret20": -1.03,
    "ret60": -4.54,
    "macd": {
-    "dif": -0.0146,
-    "dea": -0.0302,
-    "hist": 0.0313,
+    "dif": -0.0159,
+    "dea": -0.0305,
+    "hist": 0.0292,
     "cross": null
    },
    "rsi14": 57.1,
@@ -1214,17 +1214,17 @@
    "amt5": 6369537.0,
    "amt20": 3991948.0,
    "amtRatio": 1.16,
-   "sinceIPO": -10.91,
+   "sinceIPO": -11.3,
    "volAnn": 15.4,
    "listDays": 307,
    "signals": {
     "liquidity": 1,
-    "sentiment": 2,
+    "sentiment": 0,
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 4,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -2490,9 +2490,9 @@
    "ret20": -5.68,
    "ret60": -7.19,
    "macd": {
-    "dif": -0.0531,
+    "dif": -0.0532,
     "dea": -0.048,
-    "hist": -0.0102,
+    "hist": -0.0103,
     "cross": null
    },
    "rsi14": 36.3,
@@ -2501,7 +2501,7 @@
    "amt5": 2957826.0,
    "amt20": 4047932.0,
    "amtRatio": 1.03,
-   "sinceIPO": -15.87,
+   "sinceIPO": -15.89,
    "volAnn": 11.3,
    "listDays": 501,
    "signals": {
@@ -3075,18 +3075,18 @@
    "ret20": -3.05,
    "ret60": -13.9,
    "macd": {
-    "dif": 0.0048,
+    "dif": 0.0045,
     "dea": 0.0095,
-    "hist": -0.0094,
+    "hist": -0.0099,
     "cross": null
    },
-   "rsi14": 52.4,
+   "rsi14": 51.6,
    "pctRank": 7.7,
    "devMA250": -19.97,
    "amt5": 1410683.0,
    "amt20": 2678467.0,
    "amtRatio": 0.91,
-   "sinceIPO": -19.08,
+   "sinceIPO": -19.23,
    "volAnn": 23.1,
    "listDays": 443,
    "signals": {
@@ -3309,12 +3309,12 @@
    "ret20": -3.35,
    "ret60": -5.18,
    "macd": {
-    "dif": -0.0235,
+    "dif": -0.0238,
     "dea": -0.0187,
-    "hist": -0.0097,
+    "hist": -0.0102,
     "cross": null
    },
-   "rsi14": 15.1,
+   "rsi14": 14.5,
    "pctRank": 0.0,
    "devMA250": null,
    "amt5": 2085024.0,
