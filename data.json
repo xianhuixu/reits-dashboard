@@ -306,9 +306,9 @@
    "ret20": -9.97,
    "ret60": -13.85,
    "macd": {
-    "dif": -0.02,
+    "dif": -0.0196,
     "dea": -0.0131,
-    "hist": -0.0136,
+    "hist": -0.013,
     "cross": null
    },
    "rsi14": 34.4,
@@ -317,7 +317,7 @@
    "amt5": 1885959.0,
    "amt20": 4817952.0,
    "amtRatio": 1.13,
-   "sinceIPO": -29.47,
+   "sinceIPO": -29.22,
    "volAnn": 14.2,
    "listDays": 501,
    "signals": {
@@ -2139,9 +2139,9 @@
    "ret20": -3.93,
    "ret60": -7.87,
    "macd": {
-    "dif": -0.0595,
-    "dea": -0.0161,
-    "hist": -0.0867,
+    "dif": -0.0568,
+    "dea": -0.0156,
+    "hist": -0.0824,
     "cross": null
    },
    "rsi14": 27.7,
@@ -2150,17 +2150,17 @@
    "amt5": 2931539.0,
    "amt20": 3154936.0,
    "amtRatio": 0.83,
-   "sinceIPO": -14.24,
+   "sinceIPO": -13.84,
    "volAnn": 13.8,
    "listDays": 426,
    "signals": {
     "liquidity": 0,
-    "sentiment": -2,
+    "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -2233,12 +2233,12 @@
    "listDays": 219,
    "signals": {
     "liquidity": -1,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -2997,9 +2997,9 @@
    "ret20": -3.34,
    "ret60": -4.39,
    "macd": {
-    "dif": -0.0032,
+    "dif": -0.0033,
     "dea": -0.0086,
-    "hist": 0.0108,
+    "hist": 0.0107,
     "cross": null
    },
    "rsi14": 52.6,
@@ -3008,7 +3008,7 @@
    "amt5": 3634062.0,
    "amt20": 3415127.0,
    "amtRatio": 0.81,
-   "sinceIPO": -20.86,
+   "sinceIPO": -20.89,
    "volAnn": 16.1,
    "listDays": 389,
    "signals": {
@@ -3052,12 +3052,12 @@
    "listDays": 88,
    "signals": {
     "liquidity": -2,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -4,
+    "total": -5,
     "label": "中性"
    }
   },
@@ -3169,12 +3169,12 @@
    "listDays": 423,
    "signals": {
     "liquidity": -1,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
