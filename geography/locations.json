@@ -1,0 +1,1199 @@
+{
+  "version": 1,
+  "checkedAt": "2026-09-28",
+  "coordinateSource": "https://geo.datav.aliyun.com/areas_v3/bound/100000_full_city.json",
+  "scope": "公开披露地点索引，部分覆盖；各来源资产范围时点不同，不代表完整当前持仓。县级市按所属地级市归并。",
+  "cities": {
+    "北京市": {
+      "name": "北京市",
+      "province": "北京市",
+      "coordinates": [
+        116.405285,
+        39.904989
+      ],
+      "precision": "city"
+    },
+    "苏州市": {
+      "name": "苏州市",
+      "province": "江苏省",
+      "coordinates": [
+        120.619585,
+        31.299379
+      ],
+      "precision": "city"
+    },
+    "广州市": {
+      "name": "广州市",
+      "province": "广东省",
+      "coordinates": [
+        113.280637,
+        23.125178
+      ],
+      "precision": "city"
+    },
+    "佛山市": {
+      "name": "佛山市",
+      "province": "广东省",
+      "coordinates": [
+        113.122717,
+        23.028762
+      ],
+      "precision": "city"
+    },
+    "青岛市": {
+      "name": "青岛市",
+      "province": "山东省",
+      "coordinates": [
+        120.355173,
+        36.082982
+      ],
+      "precision": "city"
+    },
+    "重庆市": {
+      "name": "重庆市",
+      "province": "重庆市",
+      "coordinates": [
+        106.504962,
+        29.533155
+      ],
+      "precision": "city"
+    },
+    "江门市": {
+      "name": "江门市",
+      "province": "广东省",
+      "coordinates": [
+        113.094942,
+        22.590431
+      ],
+      "precision": "city"
+    },
+    "廊坊市": {
+      "name": "廊坊市",
+      "province": "河北省",
+      "coordinates": [
+        116.704441,
+        39.523927
+      ],
+      "precision": "city"
+    },
+    "武汉市": {
+      "name": "武汉市",
+      "province": "湖北省",
+      "coordinates": [
+        114.298572,
+        30.584355
+      ],
+      "precision": "city"
+    },
+    "上海市": {
+      "name": "上海市",
+      "province": "上海市",
+      "coordinates": [
+        121.472644,
+        31.231706
+      ],
+      "precision": "city"
+    },
+    "无锡市": {
+      "name": "无锡市",
+      "province": "江苏省",
+      "coordinates": [
+        120.301663,
+        31.574729
+      ],
+      "precision": "city"
+    },
+    "常州市": {
+      "name": "常州市",
+      "province": "江苏省",
+      "coordinates": [
+        119.946973,
+        31.772752
+      ],
+      "precision": "city"
+    },
+    "南通市": {
+      "name": "南通市",
+      "province": "江苏省",
+      "coordinates": [
+        120.864608,
+        32.016212
+      ],
+      "precision": "city"
+    },
+    "合肥市": {
+      "name": "合肥市",
+      "province": "安徽省",
+      "coordinates": [
+        117.283042,
+        31.86119
+      ],
+      "precision": "city"
+    },
+    "长沙市": {
+      "name": "长沙市",
+      "province": "湖南省",
+      "coordinates": [
+        112.982279,
+        28.19409
+      ],
+      "precision": "city"
+    },
+    "榆林市": {
+      "name": "榆林市",
+      "province": "陕西省",
+      "coordinates": [
+        109.741193,
+        38.290162
+      ],
+      "precision": "city"
+    },
+    "随州市": {
+      "name": "随州市",
+      "province": "湖北省",
+      "coordinates": [
+        113.37377,
+        31.717497
+      ],
+      "precision": "city"
+    },
+    "保山市": {
+      "name": "保山市",
+      "province": "云南省",
+      "coordinates": [
+        99.167133,
+        25.111802
+      ],
+      "precision": "city"
+    },
+    "哈密市": {
+      "name": "哈密市",
+      "province": "新疆维吾尔自治区",
+      "coordinates": [
+        93.51316,
+        42.833248
+      ],
+      "precision": "city"
+    },
+    "深圳市": {
+      "name": "深圳市",
+      "province": "广东省",
+      "coordinates": [
+        114.085947,
+        22.547
+      ],
+      "precision": "city"
+    },
+    "咸宁市": {
+      "name": "咸宁市",
+      "province": "湖北省",
+      "coordinates": [
+        114.328963,
+        29.832798
+      ],
+      "precision": "city"
+    },
+    "盐城市": {
+      "name": "盐城市",
+      "province": "江苏省",
+      "coordinates": [
+        120.139998,
+        33.377631
+      ],
+      "precision": "city"
+    },
+    "成都市": {
+      "name": "成都市",
+      "province": "四川省",
+      "coordinates": [
+        104.065735,
+        30.659462
+      ],
+      "precision": "city"
+    },
+    "厦门市": {
+      "name": "厦门市",
+      "province": "福建省",
+      "coordinates": [
+        118.11022,
+        24.490474
+      ],
+      "precision": "city"
+    },
+    "甘孜藏族自治州": {
+      "name": "甘孜藏族自治州",
+      "province": "四川省",
+      "coordinates": [
+        101.963815,
+        30.050663
+      ],
+      "precision": "city"
+    },
+    "杭州市": {
+      "name": "杭州市",
+      "province": "浙江省",
+      "coordinates": [
+        120.153576,
+        30.287459
+      ],
+      "precision": "city"
+    },
+    "黔南布依族苗族自治州": {
+      "name": "黔南布依族苗族自治州",
+      "province": "贵州省",
+      "coordinates": [
+        107.517156,
+        26.258219
+      ],
+      "precision": "city"
+    },
+    "菏泽市": {
+      "name": "菏泽市",
+      "province": "山东省",
+      "coordinates": [
+        115.469381,
+        35.246531
+      ],
+      "precision": "city"
+    },
+    "益阳市": {
+      "name": "益阳市",
+      "province": "湖南省",
+      "coordinates": [
+        112.355042,
+        28.570066
+      ],
+      "precision": "city"
+    },
+    "常德市": {
+      "name": "常德市",
+      "province": "湖南省",
+      "coordinates": [
+        111.691347,
+        29.040225
+      ],
+      "precision": "city"
+    },
+    "宁波市": {
+      "name": "宁波市",
+      "province": "浙江省",
+      "coordinates": [
+        121.549792,
+        29.868388
+      ],
+      "precision": "city"
+    },
+    "嘉兴市": {
+      "name": "嘉兴市",
+      "province": "浙江省",
+      "coordinates": [
+        120.750865,
+        30.762653
+      ],
+      "precision": "city"
+    },
+    "和田地区": {
+      "name": "和田地区",
+      "province": "新疆维吾尔自治区",
+      "coordinates": [
+        79.92533,
+        37.110687
+      ],
+      "precision": "city"
+    },
+    "济南市": {
+      "name": "济南市",
+      "province": "山东省",
+      "coordinates": [
+        117.000923,
+        36.675807
+      ],
+      "precision": "city"
+    },
+    "南京市": {
+      "name": "南京市",
+      "province": "江苏省",
+      "coordinates": [
+        118.767413,
+        32.041544
+      ],
+      "precision": "city"
+    },
+    "天津市": {
+      "name": "天津市",
+      "province": "天津市",
+      "coordinates": [
+        117.190182,
+        39.125596
+      ],
+      "precision": "city"
+    },
+    "芜湖市": {
+      "name": "芜湖市",
+      "province": "安徽省",
+      "coordinates": [
+        118.376451,
+        31.326319
+      ],
+      "precision": "city"
+    },
+    "铜陵市": {
+      "name": "铜陵市",
+      "province": "安徽省",
+      "coordinates": [
+        117.816576,
+        30.929935
+      ],
+      "precision": "city"
+    },
+    "池州市": {
+      "name": "池州市",
+      "province": "安徽省",
+      "coordinates": [
+        117.489157,
+        30.656037
+      ],
+      "precision": "city"
+    },
+    "西安市": {
+      "name": "西安市",
+      "province": "陕西省",
+      "coordinates": [
+        108.948024,
+        34.263161
+      ],
+      "precision": "city"
+    }
+  },
+  "sources": {
+    "s508056": {
+      "url": "https://www.glpreit.com.cn/assets/overviews.html",
+      "title": "普洛斯 REIT · 资产概况",
+      "kind": "primary",
+      "basis": "官网列示10处资产，运营数据截至2026-03-31",
+      "checkedAt": "2026-09-28"
+    },
+    "s508098": {
+      "url": "https://jdreit.com.cn/",
+      "title": "京东 REIT · 资产详情",
+      "kind": "primary",
+      "basis": "官网首发3处资产；合肥、西安拟扩募资产未计入",
+      "checkedAt": "2026-09-28"
+    },
+    "s508088": {
+      "url": "https://www.dnereit.com/zh-hans/",
+      "title": "东久 REIT · 资产概览",
+      "kind": "primary",
+      "basis": "官网列示2025-12-26扩募后6处园区；昆山归入苏州市",
+      "checkedAt": "2026-09-28"
+    },
+    "s180102": {
+      "url": "https://www.chinaamc.com/upload/resources/file/2025/09/16/439260.pdf",
+      "title": "华夏合肥高新 REIT · 产品资料概要",
+      "kind": "primary",
+      "basis": "2025-09-16产品资料；后续扩募范围待复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180601": {
+      "url": "https://www.chinaamc.com/c/2025-03-31/827764.shtml",
+      "title": "华夏基金 · 华润商业 REIT 可持续发展报告介绍",
+      "kind": "primary",
+      "basis": "2025-03-31披露的资产范围",
+      "checkedAt": "2026-09-28"
+    },
+    "s508017": {
+      "url": "https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20240312_5736132.shtml",
+      "title": "上交所 · 消费基础设施 REITs 上市",
+      "kind": "primary",
+      "basis": "2024-03-12首发资产；后续扩募范围待复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508011": {
+      "url": "https://www.sse.com.cn/aboutus/mediacenter/hotandd/c/c_20240312_5736132.shtml",
+      "title": "上交所 · 消费基础设施 REITs 上市",
+      "kind": "primary",
+      "basis": "2024-03-12首发资产；后续扩募范围待复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508077": {
+      "url": "https://roadshow.cnstock.com/fbh/hxjjhrycreit202602",
+      "title": "华润有巢 REIT · 2026年中期业绩说明会",
+      "kind": "primary",
+      "basis": "2026年中期业绩说明会 · 基金介绍",
+      "checkedAt": "2026-09-28"
+    },
+    "s508096": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-31/508096_20260331_UYPB.pdf",
+      "title": "中航京能国际能源 REIT · 2025年年度报告",
+      "kind": "primary",
+      "basis": "2025年报§2.2，第8–9页，含扩募水电资产",
+      "checkedAt": "2026-09-28"
+    },
+    "s508089": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-18/508089_20260618_JXRR.pdf",
+      "title": "华夏特变电工 REIT · 更新招募说明书",
+      "kind": "primary",
+      "basis": "2026-06-18更新招募说明书",
+      "checkedAt": "2026-09-28"
+    },
+    "s180401": {
+      "url": "https://www.szse.cn/www/reits/announcement/news/t20220728_595073.html",
+      "title": "深交所 · 深圳能源 REIT 上市",
+      "kind": "primary",
+      "basis": "2022-07-28首发资产；后续扩募范围待复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180901": {
+      "url": "https://www.nffund.com/main/files/2025/08/04/081468030819.pdf",
+      "title": "南方润泽 REIT · 上市交易公告书",
+      "kind": "primary",
+      "basis": "2025-08-04首发资产；A-7、A-8拟扩募项目未计入",
+      "checkedAt": "2026-09-28"
+    },
+    "s508000": {
+      "url": "https://www.huaan.com.cn/news/2023-06-21/212973_1.shtml",
+      "title": "华安基金 · 张江 REIT 扩募上市",
+      "kind": "primary",
+      "basis": "2023年首次扩募资产；后续扩募资产待复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508099": {
+      "url": "https://basic.10jqka.com.cn/508099/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508027": {
+      "url": "https://basic.10jqka.com.cn/508027/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508018": {
+      "url": "https://basic.10jqka.com.cn/508018/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508028": {
+      "url": "https://basic.10jqka.com.cn/508028/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180603": {
+      "url": "https://basic.10jqka.com.cn/180603/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180301": {
+      "url": "https://basic.10jqka.com.cn/180301/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508068": {
+      "url": "https://basic.10jqka.com.cn/508068/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508058": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-24/508058_20260324_SU5N.pdf",
+      "title": "厦门安居 REIT · 扩募招募说明书草案",
+      "kind": "primary",
+      "basis": "2026-03-24草案引用的首发资产；拟扩募林边、仁和未计入",
+      "checkedAt": "2026-09-28"
+    },
+    "s180501": {
+      "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-24/508058_20260324_SU5N.pdf",
+      "title": "厦门安居 REIT · 招募说明书可比项目表",
+      "kind": "primary",
+      "basis": "2026-03-24文件引用深圳安居首发资产；扩募待复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508006": {
+      "url": "https://basic.10jqka.com.cn/508006/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508026": {
+      "url": "https://basic.10jqka.com.cn/508026/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180801": {
+      "url": "https://basic.10jqka.com.cn/180801/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508001": {
+      "url": "https://basic.10jqka.com.cn/508001/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180201": {
+      "url": "https://basic.10jqka.com.cn/180201/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508012": {
+      "url": "https://basic.10jqka.com.cn/508012/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180302": {
+      "url": "https://basic.10jqka.com.cn/180302/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180101": {
+      "url": "https://basic.10jqka.com.cn/180101/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508021": {
+      "url": "https://basic.10jqka.com.cn/508021/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180103": {
+      "url": "https://basic.10jqka.com.cn/180103/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508019": {
+      "url": "https://basic.10jqka.com.cn/508019/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508031": {
+      "url": "https://basic.10jqka.com.cn/508031/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180602": {
+      "url": "https://basic.10jqka.com.cn/180602/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508066": {
+      "url": "https://basic.10jqka.com.cn/508066/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508008": {
+      "url": "https://basic.10jqka.com.cn/508008/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180202": {
+      "url": "https://basic.10jqka.com.cn/180202/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508007": {
+      "url": "https://basic.10jqka.com.cn/508007/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508033": {
+      "url": "https://basic.10jqka.com.cn/508033/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508010": {
+      "url": "https://basic.10jqka.com.cn/508010/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508036": {
+      "url": "https://basic.10jqka.com.cn/508036/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508050": {
+      "url": "https://basic.10jqka.com.cn/508050/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508003": {
+      "url": "https://basic.10jqka.com.cn/508003/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508087": {
+      "url": "https://basic.10jqka.com.cn/508087/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s508097": {
+      "url": "https://basic.10jqka.com.cn/508097/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180106": {
+      "url": "https://basic.10jqka.com.cn/180106/index.html",
+      "title": "同花顺 F10 · 基础设施项目",
+      "kind": "secondary",
+      "basis": "公开资料页；资产范围时点未注明，待定期报告复核",
+      "checkedAt": "2026-09-28"
+    },
+    "s180303": {
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-31/1222945475.PDF",
+      "title": "华泰宝湾物流 REIT · 2024年年度报告",
+      "kind": "primary",
+      "basis": "2024年报列示3处资产；不采纳早期方案中的廊坊资产",
+      "checkedAt": "2026-09-28"
+    },
+    "s508009": {
+      "url": "https://www.zhongyinlawyer.com/Home/NewsDetail?Title=中银律所助力“中金安徽交控高速公路封闭式基础设施证券投资基金”成功上市",
+      "title": "中银律师事务所 · 安徽交控 REIT 上市",
+      "kind": "primary",
+      "basis": "项目律师披露首发资产位于芜湖、铜陵、池州；大渡口归池州",
+      "checkedAt": "2026-09-28"
+    },
+    "s508600": {
+      "url": "https://www.kingandwood.com/cn/zh/about-us/media-center/listing-of-china-universal-shanghai-real-estate-commercial-reit-on-the-sse.html",
+      "title": "金杜律师事务所 · 上海地产商业 REIT 上市",
+      "kind": "primary",
+      "basis": "2026年发行上市资产；上海黄浦区世博滨江",
+      "checkedAt": "2026-09-28"
+    },
+    "s508601": {
+      "url": "https://www.bjcag.com/Content/2026/09-11/1415391391.html",
+      "title": "北京首农食品集团 · 首农商业 REIT 上市",
+      "kind": "primary",
+      "basis": "原始权益人官网披露的首发资产",
+      "checkedAt": "2026-09-28"
+    },
+    "s508602": {
+      "url": "https://app.cnstock.com/zzb/zgzqb/html/2026-07/21/nw.D110000zgzqb_20260721_7-B033.htm",
+      "title": "国泰海通资管 · 不动产项目经营情况公告",
+      "kind": "primary",
+      "basis": "2026-07-21公告列示持有项目位于西安市浐灞国际港",
+      "checkedAt": "2026-09-28"
+    },
+    "s508055": {
+      "url": "https://yhzz.shdcjt.com/news/jtdt/20250402/2d11c5f8e6ae48e1b0497f2583956615.html",
+      "title": "上海地产集团 · 租赁住房 REIT 上市",
+      "kind": "primary",
+      "basis": "2025-04-02披露的首发资产",
+      "checkedAt": "2026-09-28"
+    }
+  },
+  "locations": [
+    {
+      "code": "508056.SH",
+      "city": "北京市",
+      "asset": "北京空港、通州光机电物流园",
+      "source": "s508056"
+    },
+    {
+      "code": "508056.SH",
+      "city": "苏州市",
+      "asset": "苏州望亭、昆山淀山湖物流园",
+      "source": "s508056"
+    },
+    {
+      "code": "508056.SH",
+      "city": "广州市",
+      "asset": "广州黄埔、增城物流园",
+      "source": "s508056"
+    },
+    {
+      "code": "508056.SH",
+      "city": "佛山市",
+      "asset": "顺德物流园",
+      "source": "s508056"
+    },
+    {
+      "code": "508056.SH",
+      "city": "青岛市",
+      "asset": "青岛前湾港国际物流园",
+      "source": "s508056"
+    },
+    {
+      "code": "508056.SH",
+      "city": "重庆市",
+      "asset": "重庆城市配送物流中心",
+      "source": "s508056"
+    },
+    {
+      "code": "508056.SH",
+      "city": "江门市",
+      "asset": "江门鹤山物流园",
+      "source": "s508056"
+    },
+    {
+      "code": "508098.SH",
+      "city": "重庆市",
+      "asset": "京东重庆电子商务基地一期",
+      "source": "s508098"
+    },
+    {
+      "code": "508098.SH",
+      "city": "廊坊市",
+      "asset": "京东亚洲一号廊坊经开物流园",
+      "source": "s508098"
+    },
+    {
+      "code": "508098.SH",
+      "city": "武汉市",
+      "asset": "京东商城亚洲1号仓储华中总部",
+      "source": "s508098"
+    },
+    {
+      "code": "508088.SH",
+      "city": "上海市",
+      "asset": "东久上海金山智造园",
+      "source": "s508088"
+    },
+    {
+      "code": "508088.SH",
+      "city": "苏州市",
+      "asset": "东久昆山智造园",
+      "source": "s508088"
+    },
+    {
+      "code": "508088.SH",
+      "city": "无锡市",
+      "asset": "东久无锡智造园",
+      "source": "s508088"
+    },
+    {
+      "code": "508088.SH",
+      "city": "常州市",
+      "asset": "东久常州智造园",
+      "source": "s508088"
+    },
+    {
+      "code": "508088.SH",
+      "city": "南通市",
+      "asset": "东久南通项目",
+      "source": "s508088"
+    },
+    {
+      "code": "508088.SH",
+      "city": "重庆市",
+      "asset": "东久重庆项目",
+      "source": "s508088"
+    },
+    {
+      "code": "180102.SZ",
+      "city": "合肥市",
+      "asset": "合肥高新创业园一期入池资产",
+      "source": "s180102"
+    },
+    {
+      "code": "180601.SZ",
+      "city": "青岛市",
+      "asset": "青岛万象城",
+      "source": "s180601"
+    },
+    {
+      "code": "508017.SH",
+      "city": "长沙市",
+      "asset": "长沙金茂览秀城",
+      "source": "s508017"
+    },
+    {
+      "code": "508011.SH",
+      "city": "北京市",
+      "asset": "物美北京社区商业入池项目",
+      "source": "s508011"
+    },
+    {
+      "code": "508077.SH",
+      "city": "上海市",
+      "asset": "有巢泗泾、东部经开区、马桥项目",
+      "source": "s508077"
+    },
+    {
+      "code": "508096.SH",
+      "city": "榆林市",
+      "asset": "榆阳区光伏发电项目",
+      "source": "s508096"
+    },
+    {
+      "code": "508096.SH",
+      "city": "随州市",
+      "asset": "湖北随州光伏发电项目",
+      "source": "s508096"
+    },
+    {
+      "code": "508096.SH",
+      "city": "保山市",
+      "asset": "腾冲苏家河口、松山河口水电站",
+      "source": "s508096"
+    },
+    {
+      "code": "508089.SH",
+      "city": "哈密市",
+      "asset": "哈密东南部山口光伏园区项目",
+      "source": "s508089"
+    },
+    {
+      "code": "180401.SZ",
+      "city": "深圳市",
+      "asset": "深圳能源东部电厂（一期）",
+      "source": "s180401"
+    },
+    {
+      "code": "180901.SZ",
+      "city": "廊坊市",
+      "asset": "润泽国际信息港A-18数据中心",
+      "source": "s180901"
+    },
+    {
+      "code": "508000.SH",
+      "city": "上海市",
+      "asset": "张江光大园、张润大厦",
+      "source": "s508000"
+    },
+    {
+      "code": "508099.SH",
+      "city": "北京市",
+      "asset": "中关村软件园互联网创新中心、协同中心、孵化加速器",
+      "source": "s508099"
+    },
+    {
+      "code": "508027.SH",
+      "city": "苏州市",
+      "asset": "国际科技园五期B区、2.5产业园一期及二期",
+      "source": "s508027"
+    },
+    {
+      "code": "508018.SH",
+      "city": "咸宁市",
+      "asset": "武深高速嘉鱼至通城段及附属设施",
+      "source": "s508018"
+    },
+    {
+      "code": "508028.SH",
+      "city": "盐城市",
+      "asset": "滨海北H1、H2海上风电及运维驿站",
+      "source": "s508028"
+    },
+    {
+      "code": "180603.SZ",
+      "city": "成都市",
+      "asset": "成都大悦城",
+      "source": "s180603"
+    },
+    {
+      "code": "180301.SZ",
+      "city": "深圳市",
+      "asset": "盐田现代物流中心项目（首发）",
+      "source": "s180301"
+    },
+    {
+      "code": "508068.SH",
+      "city": "北京市",
+      "asset": "文龙家园、熙悦尚郡（首发项目）",
+      "source": "s508068"
+    },
+    {
+      "code": "508058.SH",
+      "city": "厦门市",
+      "asset": "园博公寓、珩琦公寓（首发项目）",
+      "source": "s508058"
+    },
+    {
+      "code": "180501.SZ",
+      "city": "深圳市",
+      "asset": "安居百泉阁、安居锦园、保利香槟苑、凤凰公馆",
+      "source": "s180501"
+    },
+    {
+      "code": "508006.SH",
+      "city": "合肥市",
+      "asset": "十五里河污水处理厂PPP项目",
+      "source": "s508006"
+    },
+    {
+      "code": "508006.SH",
+      "city": "深圳市",
+      "asset": "公明、松岗、福永水质净化项目",
+      "source": "s508006"
+    },
+    {
+      "code": "508026.SH",
+      "city": "甘孜藏族自治州",
+      "asset": "九龙县五一桥水电站",
+      "source": "s508026"
+    },
+    {
+      "code": "180801.SZ",
+      "city": "北京市",
+      "asset": "首钢生物质能源、餐厨垃圾处理及残渣暂存场项目",
+      "source": "s180801"
+    },
+    {
+      "code": "508001.SH",
+      "city": "杭州市",
+      "asset": "杭徽高速公路浙江段（昌昱、汪昌、留汪段）",
+      "source": "s508001"
+    },
+    {
+      "code": "180201.SZ",
+      "city": "广州市",
+      "asset": "广河高速公路广州段",
+      "source": "s180201"
+    },
+    {
+      "code": "508012.SH",
+      "city": "上海市",
+      "asset": "杨浦科技创业中心国定路1号楼",
+      "source": "s508012"
+    },
+    {
+      "code": "180302.SZ",
+      "city": "杭州市",
+      "asset": "深国际华东智慧城一期",
+      "source": "s180302"
+    },
+    {
+      "code": "180302.SZ",
+      "city": "黔南布依族苗族自治州",
+      "asset": "龙里县深国际贵州综合物流港",
+      "source": "s180302"
+    },
+    {
+      "code": "180101.SZ",
+      "city": "深圳市",
+      "asset": "万海大厦、万融大厦、光明项目",
+      "source": "s180101"
+    },
+    {
+      "code": "508021.SH",
+      "city": "上海市",
+      "asset": "临港奉贤智造园一期、三期及康桥项目",
+      "source": "s508021"
+    },
+    {
+      "code": "180103.SZ",
+      "city": "杭州市",
+      "asset": "高科技企业孵化器、和达药谷一期",
+      "source": "s180103"
+    },
+    {
+      "code": "508019.SH",
+      "city": "武汉市",
+      "asset": "光谷软件园、互联网+项目",
+      "source": "s508019"
+    },
+    {
+      "code": "508031.SH",
+      "city": "上海市",
+      "asset": "城投宽庭光华社区、江湾社区",
+      "source": "s508031"
+    },
+    {
+      "code": "180602.SZ",
+      "city": "杭州市",
+      "asset": "杭州西溪印象城",
+      "source": "s180602"
+    },
+    {
+      "code": "508066.SH",
+      "city": "苏州市",
+      "asset": "沪苏浙高速公路吴江项目",
+      "source": "s508066"
+    },
+    {
+      "code": "508008.SH",
+      "city": "重庆市",
+      "asset": "渝遂高速重庆段",
+      "source": "s508008"
+    },
+    {
+      "code": "180202.SZ",
+      "city": "武汉市",
+      "asset": "汉孝高速武汉段、机场北连接线（其他沿线城市待复核）",
+      "source": "s180202"
+    },
+    {
+      "code": "508007.SH",
+      "city": "菏泽市",
+      "asset": "鄄菏高速公路",
+      "source": "s508007"
+    },
+    {
+      "code": "508033.SH",
+      "city": "益阳市",
+      "asset": "益常高速益阳段",
+      "source": "s508033"
+    },
+    {
+      "code": "508033.SH",
+      "city": "常德市",
+      "asset": "益常高速常德段",
+      "source": "s508033"
+    },
+    {
+      "code": "508010.SH",
+      "city": "重庆市",
+      "asset": "凤凰座、双子座、双鱼座、拓D一期D2项目",
+      "source": "s508010"
+    },
+    {
+      "code": "508036.SH",
+      "city": "宁波市",
+      "asset": "杭州湾跨海大桥宁波段",
+      "source": "s508036"
+    },
+    {
+      "code": "508036.SH",
+      "city": "嘉兴市",
+      "asset": "杭州湾跨海大桥海盐段",
+      "source": "s508036"
+    },
+    {
+      "code": "508050.SH",
+      "city": "和田地区",
+      "asset": "喀拉喀什河波波娜水电站",
+      "source": "s508050"
+    },
+    {
+      "code": "508003.SH",
+      "city": "北京市",
+      "asset": "马坡科技园一期、大兴科创产业园、房山奥得赛产业园",
+      "source": "s508003"
+    },
+    {
+      "code": "508087.SH",
+      "city": "济南市",
+      "asset": "济南长输供热管网",
+      "source": "s508087"
+    },
+    {
+      "code": "508097.SH",
+      "city": "南京市",
+      "asset": "建邺国际研发总部园",
+      "source": "s508097"
+    },
+    {
+      "code": "180106.SZ",
+      "city": "成都市",
+      "asset": "天府软件园一期、盈创动力大厦",
+      "source": "s180106"
+    },
+    {
+      "code": "180303.SZ",
+      "city": "天津市",
+      "asset": "天津宝湾物流园",
+      "source": "s180303"
+    },
+    {
+      "code": "180303.SZ",
+      "city": "南京市",
+      "asset": "南京宝湾物流园",
+      "source": "s180303"
+    },
+    {
+      "code": "180303.SZ",
+      "city": "嘉兴市",
+      "asset": "嘉兴宝湾物流园",
+      "source": "s180303"
+    },
+    {
+      "code": "508009.SH",
+      "city": "芜湖市",
+      "asset": "沿江高速芜湖段",
+      "source": "s508009"
+    },
+    {
+      "code": "508009.SH",
+      "city": "铜陵市",
+      "asset": "沿江高速铜陵段",
+      "source": "s508009"
+    },
+    {
+      "code": "508009.SH",
+      "city": "池州市",
+      "asset": "沿江高速池州段（至大渡口镇）",
+      "source": "s508009"
+    },
+    {
+      "code": "508600.SH",
+      "city": "上海市",
+      "asset": "鼎保大厦、鼎博大厦",
+      "source": "s508600"
+    },
+    {
+      "code": "508601.SH",
+      "city": "北京市",
+      "asset": "昌平区天通苑龙德广场",
+      "source": "s508601"
+    },
+    {
+      "code": "508602.SH",
+      "city": "西安市",
+      "asset": "砂之船（西安）奥特莱斯",
+      "source": "s508602"
+    },
+    {
+      "code": "508055.SH",
+      "city": "上海市",
+      "asset": "闵行区虹桥璟智、江月路项目",
+      "source": "s508055"
+    }
+  ]
+}

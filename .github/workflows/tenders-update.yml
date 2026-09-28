@@ -62,7 +62,7 @@ jobs:
           DEPLOY_DIR=$(mktemp -d)
           cp index.html app.js styles.css research-layout.css allocation-tools.js workspace.css workspace.js tender-feed.js ui-utils.js _headers "$DEPLOY_DIR/"
           cp tenders.json data.json data_research.json news.json corp_actions.json projects.json reits_snapshot.json "$DEPLOY_DIR/"
-          cp -r lib icons research "$DEPLOY_DIR/"
+          cp -r lib icons research geography "$DEPLOY_DIR/"
           npx wrangler pages deploy "$DEPLOY_DIR" --project-name=reits-dashboard --branch=main --commit-dirty=true
       - name: 全部来源失败时明确报错
         if: always() && steps.collect.outcome == 'failure'
