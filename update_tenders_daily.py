@@ -36,6 +36,8 @@ def fetch_ctbpsp(days: int) -> list[dict]:
     try:
         import fetch_bids_ctbpsp
         items = fetch_bids_ctbpsp.fetch(days)
+        for x in items:
+            x.setdefault("source", "ctbpsp")
         log(f"主源 ctbpsp: {len(items)} 条")
         return items
     except Exception as e:
@@ -80,6 +82,7 @@ def fetch_ceb_backup(days: int) -> list[dict]:
                 "media": r.get("media", "中国招标投标公共服务平台"),
                 "url": r.get("url", ""),
                 "tag": "招投标",
+                "source": "ceb",
             })
         log(f"备份源 cebpubservice: {len(out)} 条")
         return out
@@ -144,6 +147,50 @@ def write_news(payload: dict) -> None:
         json.dumps(body, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
+def update_tenders_json(new_items: list[dict]) -> None:
+    """同步刷新 tenders.json（tender-feed.js 读取的状态面板 + 合并源）。"""
+    p = ROOT / "tenders.json"
+    prev: dict = {}
+    if p.exists():
+        try:
+            prev = json.loads(p.read_text(encoding="utf-8"))
+        except Exception as e:
+            log(f"tenders.json 读取失败，重建: {e}")
+    now = datetime.now().astimezone()
+    ok = bool(new_items)
+    cutoff = (datetime.now() - timedelta(days=90)).strftime("%Y-%m-%d")
+
+    merged: dict[str, dict] = {}
+    for x in list(prev.get("items", [])) + list(new_items):
+        code = x.get("code") or (x.get("date", "") + x.get("title", ""))
+        if x.get("date", "") >= cutoff and code not in merged:
+            merged[code] = x
+    items = sorted(merged.values(), key=lambda x: (x.get("date", ""), x.get("title", "")), reverse=True)
+
+    sources = [s for s in prev.get("sources", []) if s.get("id") != "ctbpsp"]
+    sources.insert(0, {
+        "id": "ctbpsp",
+        "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
+        "status": "ok" if ok else "failed",
+        "count": len(new_items),
+        "checkedAt": now.isoformat(timespec="seconds"),
+        "lastSuccessAt": now.isoformat(timespec="seconds") if ok else None,
+        "latestBulletinDate": max((x["date"] for x in new_items), default=None),
+    })
+    payload = {
+        "checkedAt": now.isoformat(timespec="seconds"),
+        "lastSuccessAt": now.isoformat(timespec="seconds") if ok else prev.get("lastSuccessAt"),
+        "status": "ok" if ok else prev.get("status", "failed"),
+        "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
+        "retentionDays": 90,
+        "latestBulletinDate": max((x.get("date", "") for x in items), default=None),
+        "sources": sources,
+        "items": items,
+    }
+    p.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    log(f"tenders.json 已刷新：{len(items)} 条，最新 {payload['latestBulletinDate']}")
+
+
 def git_pull() -> bool:
     r = subprocess.run(["git", "pull", "--rebase", "origin", "main"],
                        cwd=ROOT, capture_output=True, text=True, timeout=120)
@@ -162,14 +209,14 @@ def git_push() -> bool:
             return False
         return True
 
-    diff = subprocess.run(["git", "diff", "--quiet", "--", "news.js", "news.json"],
+    diff = subprocess.run(["git", "diff", "--quiet", "--", "news.js", "news.json", "tenders.json"],
                           cwd=ROOT)
     staged = subprocess.run(["git", "diff", "--cached", "--quiet", "--",
-                             "news.js", "news.json"], cwd=ROOT)
+                             "news.js", "news.json", "tenders.json"], cwd=ROOT)
     if diff.returncode == 0 and staged.returncode == 0:
         log("news 文件无变化，跳过提交")
         return True
-    if not run("git", "add", "news.js", "news.json"):
+    if not run("git", "add", "news.js", "news.json", "tenders.json"):
         return False
     today = datetime.now().strftime("%Y-%m-%d %H:%M")
     if not run("git", "commit", "-m", f"tenders: 每日招投标信息流更新 {today}"):
@@ -197,7 +244,8 @@ def main() -> int:
     payload = merge(new_items)
     log(f"合并完成：新增 {payload['_added']} 条，招投标合计 {payload['_total_tenders']} 条")
     write_news(payload)
-    log("news.js / news.json 已写入")
+    update_tenders_json(new_items)
+    log("news.js / news.json / tenders.json 已写入")
 
     ok = git_push()
     log(f"=== 结束（push={'ok' if ok else 'failed'}）===")
