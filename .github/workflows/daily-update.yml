@@ -88,6 +88,6 @@ jobs:
           rm -rf .cf-deploy && mkdir .cf-deploy
           cp index.html app.js styles.css research-layout.css allocation-tools.js workspace.css workspace.js tender-feed.js ui-utils.js _headers .cf-deploy/
           cp tenders.json data.json data_research.json news.json corp_actions.json projects.json reits_snapshot.json advice.json data_panel_l1l7.json .cf-deploy/
-          cp -r lib icons research .cf-deploy/
+          cp -r lib icons research geography .cf-deploy/
           npm i -D wrangler --no-save
           npx wrangler pages deploy .cf-deploy --project-name=reits-dashboard --branch=main --commit-dirty=true

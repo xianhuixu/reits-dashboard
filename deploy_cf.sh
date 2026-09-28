@@ -10,5 +10,5 @@ cp tenders.json data.json data_research.json news.json corp_actions.json project
 # 懒加载入口（withScript 实际拉 .json；保留 .js 便于直链与兼容）
 cp advice.js news.js corp_actions.js projects.js data_panel.js .cf-deploy/ 2>/dev/null || true
 cp 6015e57c6c228145fd65bb64b909526d.txt .cf-deploy/
-cp -r lib icons research .cf-deploy/
+cp -r lib icons research geography .cf-deploy/
 npx wrangler pages deploy .cf-deploy --project-name=reits-dashboard --branch=main --commit-dirty=true
