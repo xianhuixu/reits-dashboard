@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-29 01:42:44",
+ "updated": "2026-09-29 09:54:44",
  "ndrc": [
   {
    "name": "上海地产租赁住房新购入项目",
@@ -199,6 +199,15 @@
   }
  ],
  "sse": [
+  {
+   "name": "汇添富上海地产租赁住房封闭式基础设施证券投资基金",
+   "manager": "汇添富基金管理股份有限公司",
+   "assetType": "基础设施",
+   "status": "已申报",
+   "acceptDate": "",
+   "updateDate": "2026-09-29",
+   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=72c49c7e1ec847fea999460058302391"
+  },
   {
    "name": "广发新世界封闭式商业不动产证券投资基金",
    "manager": "广发基金管理有限公司",
