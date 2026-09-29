@@ -101,7 +101,7 @@
    },
    "扩张型": {
     "399324.SZ": 0.08,
-    "000012.SH": 0.06,
+    "000012.SH": 0.07,
     "000300.SH": 0.09,
     "399393.SZ": 0.14,
     "399995.SZ": 0.11,
@@ -149,7 +149,7 @@
    },
    "商业不动产": {
     "399324.SZ": 0.05,
-    "000012.SH": -0.25,
+    "000012.SH": -0.24,
     "000300.SH": 0.1,
     "399393.SZ": 0.08,
     "399995.SZ": 0.02,
@@ -173,7 +173,7 @@
    },
    "数据中心": {
     "399324.SZ": 0.08,
-    "000012.SH": 0.06,
+    "000012.SH": 0.07,
     "000300.SH": 0.09,
     "399393.SZ": 0.14,
     "399995.SZ": 0.11,
@@ -238,7 +238,7 @@
    },
    {
     "sector": "商业不动产",
-    "bond": -0.25,
+    "bond": -0.24,
     "equity": 0.1
    },
    {
@@ -248,7 +248,7 @@
    },
    {
     "sector": "数据中心",
-    "bond": 0.06,
+    "bond": 0.07,
     "equity": 0.09
    },
    {
@@ -359,8 +359,8 @@
      "sector": "产业园",
      "members": 20,
      "betaEq": -0.002,
-     "betaBond": 1.536,
-     "sens10y": -0.077,
+     "betaBond": 1.54,
+     "sens10y": -0.073,
      "n": 102,
      "score": 0.585,
      "cls": "中性",
@@ -370,8 +370,8 @@
      "sector": "仓储物流",
      "members": 11,
      "betaEq": -0.033,
-     "betaBond": 1.339,
-     "sens10y": 0.011,
+     "betaBond": 1.341,
+     "sens10y": 0.014,
      "n": 102,
      "score": 0.383,
      "cls": "中性",
@@ -381,8 +381,8 @@
      "sector": "保租房",
      "members": 9,
      "betaEq": -0.167,
-     "betaBond": 6.373,
-     "sens10y": -2.296,
+     "betaBond": 6.372,
+     "sens10y": -2.297,
      "n": 102,
      "score": -2.979,
      "cls": "偏债",
@@ -402,10 +402,10 @@
      "sector": "市政环保",
      "members": 4,
      "betaEq": -0.093,
-     "betaBond": 3.793,
-     "sens10y": -1.344,
+     "betaBond": 3.795,
+     "sens10y": -1.341,
      "n": 102,
-     "score": -1.207,
+     "score": -1.208,
      "cls": "偏债",
      "rankEq": 7
     },
@@ -413,8 +413,8 @@
      "sector": "数据中心",
      "members": 2,
      "betaEq": 0.201,
-     "betaBond": -1.587,
-     "sens10y": 1.94,
+     "betaBond": -1.581,
+     "sens10y": 1.95,
      "n": 58,
      "score": 3.776,
      "cls": "偏股",
@@ -425,9 +425,9 @@
      "members": 12,
      "betaEq": -0.09,
      "betaBond": 3.361,
-     "sens10y": -1.305,
+     "sens10y": -1.306,
      "n": 102,
-     "score": -0.997,
+     "score": -0.996,
      "cls": "偏债",
      "rankEq": 6
     },
@@ -435,10 +435,10 @@
      "sector": "能源",
      "members": 11,
      "betaEq": -0.069,
-     "betaBond": 2.474,
-     "sens10y": -0.921,
+     "betaBond": 2.472,
+     "sens10y": -0.924,
      "n": 102,
-     "score": -0.429,
+     "score": -0.427,
      "cls": "中性",
      "rankEq": 5
     },
@@ -446,10 +446,10 @@
      "sector": "高速公路",
      "members": 15,
      "betaEq": -0.012,
-     "betaBond": 0.652,
-     "sens10y": 0.293,
+     "betaBond": 0.654,
+     "sens10y": 0.296,
      "n": 102,
-     "score": 0.866,
+     "score": 0.867,
      "cls": "偏股",
      "rankEq": 3
     }
@@ -461,10 +461,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.001,
-     "betaBond": 0.204,
-     "sens10y": 0.364,
+     "betaBond": 0.201,
+     "sens10y": 0.361,
      "n": 102,
-     "score": 0.973,
+     "score": 0.974,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -475,10 +475,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.022,
-     "betaBond": 2.721,
-     "sens10y": -0.184,
+     "betaBond": 2.718,
+     "sens10y": -0.186,
      "n": 102,
-     "score": 0.124,
+     "score": 0.126,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -489,10 +489,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.058,
-     "betaBond": 1.569,
-     "sens10y": 0.028,
+     "betaBond": 1.573,
+     "sens10y": 0.035,
      "n": 102,
-     "score": 0.889,
+     "score": 0.888,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -503,8 +503,8 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.092,
-     "betaBond": 1.123,
-     "sens10y": 0.008,
+     "betaBond": 1.124,
+     "sens10y": 0.01,
      "n": 102,
      "score": -0.181,
      "cls": "中性",
@@ -517,10 +517,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.213,
-     "betaBond": 2.871,
-     "sens10y": -0.711,
+     "betaBond": 2.879,
+     "sens10y": -0.701,
      "n": 91,
-     "score": -1.894,
+     "score": -1.896,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -531,10 +531,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.035,
-     "betaBond": -0.129,
-     "sens10y": 0.822,
+     "betaBond": -0.132,
+     "sens10y": 0.818,
      "n": 102,
-     "score": 1.385,
+     "score": 1.387,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -545,10 +545,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.092,
-     "betaBond": 1.973,
-     "sens10y": -0.561,
+     "betaBond": 1.972,
+     "sens10y": -0.562,
      "n": 97,
-     "score": -0.522,
+     "score": -0.521,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -559,10 +559,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.146,
-     "betaBond": 3.683,
-     "sens10y": -0.151,
+     "betaBond": 3.699,
+     "sens10y": -0.13,
      "n": 92,
-     "score": 0.762,
+     "score": 0.756,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -573,10 +573,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.354,
-     "betaBond": -0.78,
-     "sens10y": 1.816,
+     "betaBond": -0.786,
+     "sens10y": 1.807,
      "n": 89,
-     "score": 4.304,
+     "score": 4.307,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -587,10 +587,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.052,
-     "betaBond": 1.229,
-     "sens10y": 0.155,
+     "betaBond": 1.238,
+     "sens10y": 0.167,
      "n": 102,
-     "score": 0.116,
+     "score": 0.113,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -601,8 +601,8 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.022,
-     "betaBond": -0.267,
-     "sens10y": 0.348,
+     "betaBond": -0.264,
+     "sens10y": 0.352,
      "n": 102,
      "score": 0.971,
      "cls": "偏股",
@@ -615,10 +615,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.023,
-     "betaBond": 2.608,
-     "sens10y": -0.952,
+     "betaBond": 2.616,
+     "sens10y": -0.942,
      "n": 102,
-     "score": 0.173,
+     "score": 0.17,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -629,10 +629,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.13,
-     "betaBond": 0.762,
-     "sens10y": 0.045,
+     "betaBond": 0.761,
+     "sens10y": 0.044,
      "n": 102,
-     "score": 1.813,
+     "score": 1.814,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -643,10 +643,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.107,
-     "betaBond": -4.061,
-     "sens10y": 2.588,
+     "betaBond": -4.046,
+     "sens10y": 2.628,
      "n": 45,
-     "score": 1.806,
+     "score": 1.801,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -657,10 +657,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.121,
-     "betaBond": 2.554,
-     "sens10y": -0.091,
+     "betaBond": 2.599,
+     "sens10y": -0.009,
      "n": 60,
-     "score": -0.999,
+     "score": -1.017,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -674,7 +674,7 @@
      "betaBond": -1.683,
      "sens10y": 0.922,
      "n": 64,
-     "score": 0.581,
+     "score": 0.582,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -685,10 +685,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.03,
-     "betaBond": 0.637,
-     "sens10y": -0.02,
+     "betaBond": 0.646,
+     "sens10y": -0.009,
      "n": 102,
-     "score": 1.035,
+     "score": 1.032,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -699,8 +699,8 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.029,
-     "betaBond": 1.741,
-     "sens10y": 1.199,
+     "betaBond": 1.743,
+     "sens10y": 1.201,
      "n": 81,
      "score": 0.577,
      "cls": "中性",
@@ -713,10 +713,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.013,
-     "betaBond": 5.43,
-     "sens10y": -1.845,
+     "betaBond": 5.426,
+     "sens10y": -1.849,
      "n": 93,
-     "score": -1.058,
+     "score": -1.057,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -727,10 +727,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.073,
-     "betaBond": 0.072,
-     "sens10y": 0.466,
+     "betaBond": 0.077,
+     "sens10y": 0.472,
      "n": 102,
-     "score": 1.624,
+     "score": 1.623,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -741,8 +741,8 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.144,
-     "betaBond": -0.719,
-     "sens10y": 0.772,
+     "betaBond": -0.716,
+     "sens10y": 0.775,
      "n": 102,
      "score": 0.139,
      "cls": "中性",
@@ -755,8 +755,8 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.08,
-     "betaBond": 1.82,
-     "sens10y": 0.245,
+     "betaBond": 1.822,
+     "sens10y": 0.248,
      "n": 102,
      "score": 0.973,
      "cls": "偏股",
@@ -769,10 +769,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.045,
-     "betaBond": -0.45,
-     "sens10y": 0.586,
+     "betaBond": -0.448,
+     "sens10y": 0.588,
      "n": 98,
-     "score": 1.598,
+     "score": 1.599,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -783,10 +783,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.025,
-     "betaBond": 1.686,
-     "sens10y": 0.15,
+     "betaBond": 1.709,
+     "sens10y": 0.185,
      "n": 73,
-     "score": 0.571,
+     "score": 0.562,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -811,10 +811,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.022,
-     "betaBond": 3.378,
-     "sens10y": -0.702,
+     "betaBond": 3.387,
+     "sens10y": -0.69,
      "n": 90,
-     "score": -0.515,
+     "score": -0.518,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -825,10 +825,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.054,
-     "betaBond": -0.622,
-     "sens10y": 0.514,
+     "betaBond": -0.615,
+     "sens10y": 0.522,
      "n": 102,
-     "score": 1.747,
+     "score": 1.745,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -839,10 +839,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.01,
-     "betaBond": 0.874,
-     "sens10y": 0.649,
+     "betaBond": 0.866,
+     "sens10y": 0.637,
      "n": 86,
-     "score": 0.607,
+     "score": 0.611,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -853,10 +853,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.047,
-     "betaBond": 3.216,
-     "sens10y": -0.636,
+     "betaBond": 3.221,
+     "sens10y": -0.63,
      "n": 81,
-     "score": -0.656,
+     "score": -0.658,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -867,10 +867,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.061,
-     "betaBond": -0.133,
-     "sens10y": 1.296,
+     "betaBond": -0.158,
+     "sens10y": 1.247,
      "n": 59,
-     "score": 0.591,
+     "score": 0.602,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -881,10 +881,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.032,
-     "betaBond": 2.992,
+     "betaBond": 2.991,
      "sens10y": -0.361,
      "n": 102,
-     "score": -0.441,
+     "score": -0.44,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -895,10 +895,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.158,
-     "betaBond": 8.478,
-     "sens10y": -3.229,
+     "betaBond": 8.476,
+     "sens10y": -3.232,
      "n": 102,
-     "score": -3.717,
+     "score": -3.716,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -909,10 +909,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.244,
-     "betaBond": 6.373,
-     "sens10y": -2.03,
+     "betaBond": 6.374,
+     "sens10y": -2.029,
      "n": 99,
-     "score": -3.574,
+     "score": -3.575,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -937,8 +937,8 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.111,
-     "betaBond": 4.965,
-     "sens10y": -1.885,
+     "betaBond": 4.967,
+     "sens10y": -1.884,
      "n": 102,
      "score": -1.897,
      "cls": "偏债",
@@ -951,10 +951,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.166,
-     "betaBond": 5.717,
-     "sens10y": -1.074,
+     "betaBond": 5.714,
+     "sens10y": -1.08,
      "n": 76,
-     "score": -2.66,
+     "score": -2.659,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -965,10 +965,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.174,
-     "betaBond": 5.231,
-     "sens10y": -2.031,
+     "betaBond": 5.227,
+     "sens10y": -2.037,
      "n": 102,
-     "score": -2.53,
+     "score": -2.527,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -993,10 +993,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.118,
-     "betaBond": 5.752,
-     "sens10y": -2.156,
+     "betaBond": 5.756,
+     "sens10y": -2.151,
      "n": 100,
-     "score": -2.278,
+     "score": -2.279,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1007,10 +1007,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.073,
-     "betaBond": 7.648,
-     "sens10y": -1.089,
+     "betaBond": 7.65,
+     "sens10y": -1.09,
      "n": 69,
-     "score": -2.674,
+     "score": -2.675,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1077,10 +1077,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": -0.22,
-     "betaBond": 6.197,
-     "sens10y": -2.232,
+     "betaBond": 6.195,
+     "sens10y": -2.235,
      "n": 97,
-     "score": -3.306,
+     "score": -3.305,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1091,10 +1091,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": -0.074,
-     "betaBond": 2.191,
-     "sens10y": -0.818,
+     "betaBond": 2.205,
+     "sens10y": -0.802,
      "n": 102,
-     "score": -0.463,
+     "score": -0.468,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1105,10 +1105,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": -0.065,
-     "betaBond": 2.068,
-     "sens10y": -0.999,
+     "betaBond": 2.065,
+     "sens10y": -1.003,
      "n": 102,
-     "score": -0.339,
+     "score": -0.338,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1119,10 +1119,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": 0.098,
-     "betaBond": 5.894,
-     "sens10y": -0.657,
+     "betaBond": 5.9,
+     "sens10y": -0.65,
      "n": 82,
-     "score": -0.541,
+     "score": -0.543,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1133,10 +1133,10 @@
      "sector": "数据中心",
      "strategy": "扩张型",
      "betaEq": 0.211,
-     "betaBond": -2.379,
-     "sens10y": 2.328,
+     "betaBond": -2.366,
+     "sens10y": 2.355,
      "n": 58,
-     "score": 3.764,
+     "score": 3.759,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1147,10 +1147,10 @@
      "sector": "数据中心",
      "strategy": "扩张型",
      "betaEq": 0.191,
-     "betaBond": -0.794,
-     "sens10y": 1.551,
+     "betaBond": -0.796,
+     "sens10y": 1.546,
      "n": 58,
-     "score": 2.953,
+     "score": 2.955,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1161,8 +1161,8 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.053,
-     "betaBond": 4.464,
-     "sens10y": -1.925,
+     "betaBond": 4.465,
+     "sens10y": -1.924,
      "n": 102,
      "score": -1.212,
      "cls": "偏债",
@@ -1175,8 +1175,8 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.134,
-     "betaBond": 2.856,
-     "sens10y": -0.851,
+     "betaBond": 2.858,
+     "sens10y": -0.849,
      "n": 102,
      "score": -1.228,
      "cls": "偏债",
@@ -1189,10 +1189,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.169,
-     "betaBond": 4.56,
-     "sens10y": -1.617,
+     "betaBond": 4.555,
+     "sens10y": -1.623,
      "n": 102,
-     "score": -2.211,
+     "score": -2.209,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1203,10 +1203,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.001,
-     "betaBond": 3.418,
-     "sens10y": -0.241,
+     "betaBond": 3.412,
+     "sens10y": -0.251,
      "n": 86,
-     "score": -0.354,
+     "score": -0.351,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1217,10 +1217,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": 0.246,
-     "betaBond": 3.948,
-     "sens10y": -0.576,
+     "betaBond": 3.953,
+     "sens10y": -0.57,
      "n": 64,
-     "score": 1.487,
+     "score": 1.485,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1231,10 +1231,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": 0.133,
-     "betaBond": -1.782,
-     "sens10y": 1.706,
+     "betaBond": -1.741,
+     "sens10y": 1.806,
      "n": 46,
-     "score": 2.873,
+     "score": 2.858,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1245,8 +1245,8 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.024,
-     "betaBond": 0.668,
-     "sens10y": 0.194,
+     "betaBond": 0.671,
+     "sens10y": 0.198,
      "n": 102,
      "score": 0.574,
      "cls": "中性",
@@ -1259,10 +1259,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.19,
-     "betaBond": 5.021,
-     "sens10y": -2.232,
+     "betaBond": 5.017,
+     "sens10y": -2.236,
      "n": 102,
-     "score": -2.58,
+     "score": -2.578,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1287,10 +1287,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.077,
-     "betaBond": 1.998,
-     "sens10y": -1.262,
+     "betaBond": 1.993,
+     "sens10y": -1.269,
      "n": 102,
-     "score": -0.406,
+     "score": -0.403,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1301,10 +1301,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": 0.037,
-     "betaBond": -0.745,
-     "sens10y": 1.205,
+     "betaBond": -0.796,
+     "sens10y": 1.092,
      "n": 53,
-     "score": 1.654,
+     "score": 1.676,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1315,10 +1315,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": 0.045,
-     "betaBond": -0.809,
+     "betaBond": -0.811,
      "sens10y": 0.968,
      "n": 50,
-     "score": 1.752,
+     "score": 1.754,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1329,10 +1329,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": 0.004,
-     "betaBond": 1.823,
-     "sens10y": -0.619,
+     "betaBond": 1.821,
+     "sens10y": -0.621,
      "n": 102,
-     "score": 0.338,
+     "score": 0.339,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1343,10 +1343,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.207,
-     "betaBond": 1.966,
-     "sens10y": -1.5,
+     "betaBond": 1.93,
+     "sens10y": -1.548,
      "n": 92,
-     "score": -1.476,
+     "score": -1.46,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1357,10 +1357,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": 0.146,
-     "betaBond": 1.848,
-     "sens10y": -0.265,
+     "betaBond": 1.861,
+     "sens10y": -0.248,
      "n": 102,
-     "score": 1.504,
+     "score": 1.5,
      "cls": "偏股",
      "expected": "偏债",
      "disagree": true
@@ -1371,10 +1371,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.047,
-     "betaBond": 3.698,
-     "sens10y": -0.861,
+     "betaBond": 3.687,
+     "sens10y": -0.885,
      "n": 59,
-     "score": -0.846,
+     "score": -0.841,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1385,10 +1385,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.127,
-     "betaBond": 2.395,
-     "sens10y": -1.232,
+     "betaBond": 2.393,
+     "sens10y": -1.235,
      "n": 102,
-     "score": -0.984,
+     "score": -0.983,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1399,10 +1399,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.014,
-     "betaBond": 1.652,
-     "sens10y": -0.294,
+     "betaBond": 1.651,
+     "sens10y": -0.295,
      "n": 102,
-     "score": 0.256,
+     "score": 0.258,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1455,10 +1455,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.091,
-     "betaBond": 4.827,
-     "sens10y": -2.084,
+     "betaBond": 4.828,
+     "sens10y": -2.082,
      "n": 102,
-     "score": -1.679,
+     "score": -1.68,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1469,10 +1469,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.169,
-     "betaBond": 1.283,
-     "sens10y": -0.284,
+     "betaBond": 1.28,
+     "sens10y": -0.286,
      "n": 102,
-     "score": -0.881,
+     "score": -0.88,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1483,10 +1483,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.049,
-     "betaBond": -0.053,
-     "sens10y": 0.405,
+     "betaBond": -0.055,
+     "sens10y": 0.403,
      "n": 102,
-     "score": 1.476,
+     "score": 1.477,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1498,9 +1498,9 @@
      "strategy": "周期型",
      "betaEq": -0.003,
      "betaBond": -0.621,
-     "sens10y": 0.708,
+     "sens10y": 0.709,
      "n": 102,
-     "score": 1.27,
+     "score": 1.271,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1511,8 +1511,8 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.056,
-     "betaBond": -0.786,
-     "sens10y": 1.472,
+     "betaBond": -0.783,
+     "sens10y": 1.476,
      "n": 95,
      "score": 1.827,
      "cls": "偏股",
@@ -1525,10 +1525,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.067,
-     "betaBond": 1.193,
-     "sens10y": 0.027,
+     "betaBond": 1.188,
+     "sens10y": 0.022,
      "n": 102,
-     "score": 0.006,
+     "score": 0.009,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1539,10 +1539,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.031,
-     "betaBond": 0.834,
-     "sens10y": 0.618,
+     "betaBond": 0.839,
+     "sens10y": 0.625,
      "n": 102,
-     "score": 0.452,
+     "score": 0.45,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1553,10 +1553,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.014,
-     "betaBond": 1.426,
-     "sens10y": -0.406,
+     "betaBond": 1.423,
+     "sens10y": -0.409,
      "n": 102,
-     "score": 0.578,
+     "score": 0.58,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1567,8 +1567,8 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.163,
-     "betaBond": 1.435,
-     "sens10y": 0.058,
+     "betaBond": 1.436,
+     "sens10y": 0.06,
      "n": 102,
      "score": -0.896,
      "cls": "偏债",
@@ -1581,10 +1581,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.075,
-     "betaBond": 0.558,
-     "sens10y": 0.583,
+     "betaBond": 0.561,
+     "sens10y": 0.588,
      "n": 102,
-     "score": 1.439,
+     "score": 1.438,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1609,8 +1609,8 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.028,
-     "betaBond": 0.43,
-     "sens10y": 0.279,
+     "betaBond": 0.432,
+     "sens10y": 0.282,
      "n": 102,
      "score": 1.099,
      "cls": "偏股",
@@ -1623,10 +1623,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.265,
-     "betaBond": 2.461,
-     "sens10y": -0.167,
+     "betaBond": 2.456,
+     "sens10y": -0.175,
      "n": 90,
-     "score": -2.157,
+     "score": -2.154,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1637,8 +1637,8 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.092,
-     "betaBond": 1.345,
-     "sens10y": 0.757,
+     "betaBond": 1.347,
+     "sens10y": 0.761,
      "n": 102,
      "score": 1.266,
      "cls": "偏股",
@@ -1651,10 +1651,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.164,
-     "betaBond": 1.814,
-     "sens10y": -0.893,
+     "betaBond": 1.838,
+     "sens10y": -0.865,
      "n": 98,
-     "score": -1.056,
+     "score": -1.065,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1665,8 +1665,8 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.146,
-     "betaBond": -1.264,
-     "sens10y": 0.47,
+     "betaBond": -1.262,
+     "sens10y": 0.472,
      "n": 102,
      "score": 2.772,
      "cls": "偏股",
@@ -1885,7 +1885,7 @@
        -1.749,
        -1.676,
        -1.688,
-       -1.617
+       -1.615
       ]
      },
      "仓储物流": {
@@ -2007,7 +2007,7 @@
        -1.535,
        -1.441,
        -1.548,
-       -1.48
+       -1.483
       ]
      },
      "保租房": {
@@ -2129,7 +2129,7 @@
        3.089,
        3.112,
        2.956,
-       2.953
+       2.943
       ]
      },
      "商业不动产": {
@@ -2373,7 +2373,7 @@
        0.568,
        0.44,
        0.28,
-       0.29
+       0.3
       ]
      },
      "数据中心": {
@@ -2495,7 +2495,7 @@
        -1.972,
        -1.732,
        -1.856,
-       -1.816
+       -1.809
       ]
      },
      "消费": {
@@ -2617,7 +2617,7 @@
        0.313,
        0.338,
        0.034,
-       -0.003
+       -0.018
       ]
      },
      "能源": {
@@ -2739,7 +2739,7 @@
        0.216,
        0.199,
        0.089,
-       0.079
+       0.065
       ]
      },
      "高速公路": {
@@ -2861,7 +2861,7 @@
        1.586,
        1.578,
        1.1,
-       1.076
+       1.079
       ]
      }
     }
@@ -6214,26 +6214,26 @@
  "backtest": {
   "MACD金叉": {
    "d5": {
-    "n": 1097,
-    "avg": -0.23,
+    "n": 1096,
+    "avg": -0.24,
     "win": 45.0
    },
    "d20": {
-    "n": 1058,
-    "avg": -0.77,
-    "win": 38.8
+    "n": 1057,
+    "avg": -0.79,
+    "win": 38.7
    }
   },
   "价稳量缩": {
    "d5": {
-    "n": 5582,
+    "n": 5576,
     "avg": -0.26,
-    "win": 42.9
+    "win": 42.8
    },
    "d20": {
-    "n": 5333,
-    "avg": -1.03,
-    "win": 35.2
+    "n": 5327,
+    "avg": -1.04,
+    "win": 35.1
    }
   },
   "RSI超卖": {
@@ -6244,31 +6244,31 @@
    },
    "d20": {
     "n": 651,
-    "avg": -1.06,
+    "avg": -1.05,
     "win": 41.5
    }
   },
   "成交异动": {
    "d5": {
-    "n": 5171,
-    "avg": -0.14,
-    "win": 46.3
+    "n": 5164,
+    "avg": -0.15,
+    "win": 46.2
    },
    "d20": {
-    "n": 5017,
-    "avg": -0.66,
+    "n": 5010,
+    "avg": -0.67,
     "win": 43.2
    }
   },
   "突破250日线": {
    "d5": {
-    "n": 2924,
+    "n": 2919,
     "avg": 0.2,
-    "win": 49.7
+    "win": 49.6
    },
    "d20": {
-    "n": 2895,
-    "avg": 0.45,
+    "n": 2890,
+    "avg": 0.44,
     "win": 47.5
    }
   },
@@ -31757,7 +31757,7 @@
     2.311,
     2.298
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
@@ -31794,7 +31794,7 @@
    "amt5": 1123144.0,
    "amt20": 1772559.0,
    "amtRatio": 0.64,
-   "sinceIPO": -1.47,
+   "sinceIPO": -2.3,
    "volAnn": 13.9,
    "histDates": [
     "2025-09-17",
@@ -32300,7 +32300,7 @@
     2.085,
     2.08
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -2,
     "sentiment": 0,
@@ -32332,7 +32332,7 @@
     "cross": null
    },
    "rsi14": 57.2,
-   "pctRank": 29.3,
+   "pctRank": 29.2,
    "devMA250": -4.91,
    "amt5": 2969393.0,
    "amt20": 2874768.0,
@@ -32843,7 +32843,7 @@
     3.354,
     3.355
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": 2,
@@ -32875,12 +32875,12 @@
     "cross": null
    },
    "rsi14": 40.8,
-   "pctRank": 19.0,
+   "pctRank": 18.8,
    "devMA250": -10.11,
    "amt5": 2864479.0,
    "amt20": 2059119.0,
    "amtRatio": 0.92,
-   "sinceIPO": 10.29,
+   "sinceIPO": 9.69,
    "volAnn": 16.5,
    "histDates": [
     "2025-09-17",
@@ -33386,7 +33386,7 @@
     2.606,
     2.593
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -2,
     "sentiment": -1,
@@ -33966,7 +33966,7 @@
    "amt5": 96310.0,
    "amt20": 682320.0,
    "amtRatio": 0.51,
-   "sinceIPO": -28.03,
+   "sinceIPO": -28.0,
    "volAnn": 10.4,
    "histDates": [
     "2025-09-17",
@@ -34472,7 +34472,7 @@
     4.207,
     4.193
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -2,
     "sentiment": -1,
@@ -34509,7 +34509,7 @@
    "amt5": 2789583.0,
    "amt20": 5050859.0,
    "amtRatio": 0.88,
-   "sinceIPO": -25.4,
+   "sinceIPO": -25.81,
    "volAnn": 15.2,
    "histDates": [
     "2025-09-17",
@@ -35015,7 +35015,7 @@
     1.902,
     1.909
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": 2,
@@ -35052,7 +35052,7 @@
    "amt5": 1796713.0,
    "amt20": 4591145.0,
    "amtRatio": 1.09,
-   "sinceIPO": -28.61,
+   "sinceIPO": -28.1,
    "volAnn": 14.2,
    "histDates": [
     "2025-09-16",
@@ -35558,7 +35558,7 @@
     1.407,
     1.41
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -35595,8 +35595,8 @@
    "amt5": 2658929.0,
    "amt20": 3456633.0,
    "amtRatio": 1.13,
-   "sinceIPO": -30.35,
-   "volAnn": 12.9,
+   "sinceIPO": -30.52,
+   "volAnn": 13.0,
    "histDates": [
     "2025-09-17",
     "2025-09-18",
@@ -36101,7 +36101,7 @@
     2.362,
     2.361
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": -2,
@@ -36138,7 +36138,7 @@
    "amt5": 5688510.0,
    "amt20": 7586595.0,
    "amtRatio": 0.86,
-   "sinceIPO": -47.34,
+   "sinceIPO": -47.38,
    "volAnn": 17.4,
    "histDates": [
     "2025-09-17",
@@ -36644,7 +36644,7 @@
     1.192,
     1.187
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
@@ -36681,7 +36681,7 @@
    "amt5": 1568485.0,
    "amt20": 3606130.0,
    "amtRatio": 0.86,
-   "sinceIPO": -48.41,
+   "sinceIPO": -48.7,
    "volAnn": 17.8,
    "histDates": [
     "2025-09-17",
@@ -37187,7 +37187,7 @@
     1.002,
     1.003
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": 0,
@@ -37224,7 +37224,7 @@
    "amt5": 3527378.0,
    "amt20": 3374091.0,
    "amtRatio": 0.71,
-   "sinceIPO": -24.59,
+   "sinceIPO": -24.42,
    "volAnn": 16.8,
    "histDates": [
     "2025-09-17",
@@ -37730,7 +37730,7 @@
     3.34,
     3.349
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": 0,
@@ -37762,12 +37762,12 @@
     "cross": null
    },
    "rsi14": 42.4,
-   "pctRank": 15.4,
+   "pctRank": 15.2,
    "devMA250": -10.24,
    "amt5": 1489535.0,
    "amt20": 3061127.0,
    "amtRatio": 0.79,
-   "sinceIPO": 2.46,
+   "sinceIPO": 2.74,
    "volAnn": 15.4,
    "histDates": [
     "2025-09-16",
@@ -38273,7 +38273,7 @@
     3.392,
     3.375
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
@@ -38310,8 +38310,8 @@
    "amt5": 1230752.0,
    "amt20": 1856399.0,
    "amtRatio": 1.15,
-   "sinceIPO": -38.53,
-   "volAnn": 14.5,
+   "sinceIPO": -39.65,
+   "volAnn": 14.4,
    "histDates": [
     "2025-09-17",
     "2025-09-18",
@@ -38816,7 +38816,7 @@
     1.536,
     1.533
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -2,
     "sentiment": -2,
@@ -38853,7 +38853,7 @@
    "amt5": 1363076.0,
    "amt20": 3574894.0,
    "amtRatio": 0.94,
-   "sinceIPO": -48.0,
+   "sinceIPO": -48.54,
    "volAnn": 15.6,
    "histDates": [
     "2025-09-17",
@@ -39359,7 +39359,7 @@
     1.244,
     1.235
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
@@ -40477,12 +40477,12 @@
     "cross": null
    },
    "rsi14": 70.1,
-   "pctRank": 53.3,
+   "pctRank": 53.2,
    "devMA250": 0.13,
    "amt5": 4029394.0,
    "amt20": 3420089.0,
    "amtRatio": 0.52,
-   "sinceIPO": 23.45,
+   "sinceIPO": 24.48,
    "volAnn": 14.3,
    "histDates": [
     "2025-09-17",
@@ -40988,7 +40988,7 @@
     4.03,
     4.033
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": 1,
@@ -41020,12 +41020,12 @@
     "cross": null
    },
    "rsi14": 65.3,
-   "pctRank": 45.3,
+   "pctRank": 45.2,
    "devMA250": -3.54,
    "amt5": 4935245.0,
    "amt20": 4091055.0,
    "amtRatio": 0.83,
-   "sinceIPO": 16.68,
+   "sinceIPO": 16.88,
    "volAnn": 14.8,
    "histDates": [
     "2025-09-16",
@@ -41531,7 +41531,7 @@
     3.919,
     3.932
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": 2,
@@ -41563,12 +41563,12 @@
     "cross": null
    },
    "rsi14": 59.0,
-   "pctRank": 19.2,
+   "pctRank": 19.0,
    "devMA250": -4.83,
    "amt5": 3635179.0,
    "amt20": 2125919.0,
    "amtRatio": 0.78,
-   "sinceIPO": 10.17,
+   "sinceIPO": 9.73,
    "volAnn": 15.8,
    "histDates": [
     "2025-09-17",
@@ -42074,7 +42074,7 @@
     3.238,
     3.238
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": 2,
@@ -42111,8 +42111,8 @@
    "amt5": 5142985.0,
    "amt20": 5005539.0,
    "amtRatio": 0.68,
-   "sinceIPO": -4.24,
-   "volAnn": 17.1,
+   "sinceIPO": -4.21,
+   "volAnn": 17.2,
    "histDates": [
     "2025-09-08",
     "2025-09-09",
@@ -42617,7 +42617,7 @@
     2.669,
     2.662
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": 0,
@@ -43735,12 +43735,12 @@
     "cross": null
    },
    "rsi14": 45.8,
-   "pctRank": 36.7,
+   "pctRank": 36.6,
    "devMA250": -0.66,
    "amt5": 5534548.0,
    "amt20": 3871527.0,
    "amtRatio": 0.86,
-   "sinceIPO": 9.64,
+   "sinceIPO": 8.95,
    "volAnn": 13.6,
    "histDates": [
     "2025-09-17",
@@ -44246,7 +44246,7 @@
     3.834,
     3.821
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": 0,
@@ -45074,12 +45074,12 @@
     "cross": null
    },
    "rsi14": 50.9,
-   "pctRank": 32.3,
+   "pctRank": 32.2,
    "devMA250": -5.68,
    "amt5": 14171045.0,
    "amt20": 9744533.0,
    "amtRatio": 0.79,
-   "sinceIPO": 27.61,
+   "sinceIPO": 27.31,
    "volAnn": 12.8,
    "histDates": [
     "2025-09-17",
@@ -45585,7 +45585,7 @@
     9.3,
     9.3
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
@@ -45617,12 +45617,12 @@
     "cross": null
    },
    "rsi14": 61.8,
-   "pctRank": 27.9,
+   "pctRank": 27.8,
    "devMA250": -6.63,
    "amt5": 1292287.0,
    "amt20": 2296456.0,
    "amtRatio": 0.56,
-   "sinceIPO": 19.96,
+   "sinceIPO": 19.92,
    "volAnn": 14.5,
    "histDates": [
     "2025-09-17",
@@ -46128,7 +46128,7 @@
     3.83,
     3.835
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": 2,
@@ -46160,12 +46160,12 @@
     "cross": null
    },
    "rsi14": 41.1,
-   "pctRank": 18.4,
+   "pctRank": 18.2,
    "devMA250": -19.35,
    "amt5": 3053412.0,
    "amt20": 3928493.0,
    "amtRatio": 1.02,
-   "sinceIPO": 14.17,
+   "sinceIPO": 14.87,
    "volAnn": 17.5,
    "histDates": [
     "2025-09-17",
@@ -46671,7 +46671,7 @@
     3.201,
     3.191
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -48337,7 +48337,7 @@
    "amt5": 2806405.0,
    "amt20": 3453462.0,
    "amtRatio": 0.62,
-   "sinceIPO": -10.92,
+   "sinceIPO": -10.8,
    "volAnn": 15.1,
    "histDates": [
     "2025-09-17",
@@ -48843,7 +48843,7 @@
     5.499,
     5.474
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
@@ -48880,7 +48880,7 @@
    "amt5": 12298556.0,
    "amt20": 13072757.0,
    "amtRatio": 1.12,
-   "sinceIPO": -29.95,
+   "sinceIPO": -30.13,
    "volAnn": 10.4,
    "histDates": [
     "2025-09-17",
@@ -49386,7 +49386,7 @@
     6.814,
     6.798
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": -2,
@@ -49423,7 +49423,7 @@
    "amt5": 2065070.0,
    "amt20": 1671732.0,
    "amtRatio": 0.5,
-   "sinceIPO": -36.99,
+   "sinceIPO": -36.86,
    "volAnn": 16.6,
    "histDates": [
     "2025-09-17",
@@ -49929,7 +49929,7 @@
     4.696,
     4.7
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -2,
     "sentiment": -1,
@@ -49966,7 +49966,7 @@
    "amt5": 4406197.0,
    "amt20": 5501439.0,
    "amtRatio": 0.8,
-   "sinceIPO": 17.36,
+   "sinceIPO": 17.43,
    "volAnn": 11.1,
    "histDates": [
     "2025-09-17",
@@ -50472,7 +50472,7 @@
     5.823,
     5.808
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
@@ -50509,7 +50509,7 @@
    "amt5": 6626658.0,
    "amt20": 5429330.0,
    "amtRatio": 0.87,
-   "sinceIPO": -17.86,
+   "sinceIPO": -18.38,
    "volAnn": 12.5,
    "histDates": [
     "2025-09-17",
@@ -51015,7 +51015,7 @@
     7.336,
     7.325
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
@@ -51052,7 +51052,7 @@
    "amt5": 2656833.0,
    "amt20": 2166010.0,
    "amtRatio": 0.69,
-   "sinceIPO": -32.63,
+   "sinceIPO": -32.82,
    "volAnn": 8.8,
    "histDates": [
     "2025-09-17",
@@ -51558,7 +51558,7 @@
     4.539,
     4.516
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": -2,
@@ -52133,12 +52133,12 @@
     "cross": "golden"
    },
    "rsi14": 43.5,
-   "pctRank": 48.5,
+   "pctRank": 48.4,
    "devMA250": 1.09,
    "amt5": 8982983.0,
    "amt20": 6174563.0,
    "amtRatio": 1.26,
-   "sinceIPO": 4.6,
+   "sinceIPO": 4.43,
    "volAnn": 14.1,
    "histDates": [
     "2025-09-17",
@@ -52644,7 +52644,7 @@
     7.687,
     7.66
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
@@ -52681,7 +52681,7 @@
    "amt5": 5918822.0,
    "amt20": 4765839.0,
    "amtRatio": 0.6,
-   "sinceIPO": -11.16,
+   "sinceIPO": -12.45,
    "volAnn": 13.2,
    "histDates": [
     "2025-09-17",
@@ -53187,7 +53187,7 @@
     6.058,
     6.041
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": 2,
@@ -53219,12 +53219,12 @@
     "cross": null
    },
    "rsi14": 49.0,
-   "pctRank": 37.7,
+   "pctRank": 37.6,
    "devMA250": -5.86,
    "amt5": 3072506.0,
    "amt20": 3476804.0,
    "amtRatio": 1.03,
-   "sinceIPO": 36.91,
+   "sinceIPO": 35.36,
    "volAnn": 17.8,
    "histDates": [
     "2025-09-17",
@@ -53730,7 +53730,7 @@
     3.557,
     3.587
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": 0,
@@ -53767,7 +53767,7 @@
    "amt5": 2888371.0,
    "amt20": 2655121.0,
    "amtRatio": 0.71,
-   "sinceIPO": -14.68,
+   "sinceIPO": -14.57,
    "volAnn": 13.3,
    "histDates": [
     "2025-09-16",
@@ -54273,7 +54273,7 @@
     9.041,
     9.041
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": 0,
@@ -54981,7 +54981,7 @@
     "cross": null
    },
    "rsi14": 56.7,
-   "pctRank": 23.8,
+   "pctRank": 23.6,
    "devMA250": -5.73,
    "amt5": 1781314.0,
    "amt20": 2079105.0,
@@ -55492,7 +55492,7 @@
     3.788,
     3.81
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -2,
     "sentiment": 2,
@@ -55529,8 +55529,8 @@
    "amt5": 3167418.0,
    "amt20": 2514813.0,
    "amtRatio": 1.0,
-   "sinceIPO": -31.42,
-   "volAnn": 15.5,
+   "sinceIPO": -31.81,
+   "volAnn": 15.6,
    "histDates": [
     "2025-09-17",
     "2025-09-18",
@@ -56035,7 +56035,7 @@
     5.29,
     5.243
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
@@ -56072,8 +56072,8 @@
    "amt5": 3220754.0,
    "amt20": 4079857.0,
    "amtRatio": 0.91,
-   "sinceIPO": -14.47,
-   "volAnn": 15.4,
+   "sinceIPO": -14.71,
+   "volAnn": 15.5,
    "histDates": [
     "2025-09-17",
     "2025-09-18",
@@ -56578,7 +56578,7 @@
     4.1,
     4.083
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -56615,7 +56615,7 @@
    "amt5": 3215107.0,
    "amt20": 5255799.0,
    "amtRatio": 0.9,
-   "sinceIPO": -15.47,
+   "sinceIPO": -15.81,
    "volAnn": 10.8,
    "histDates": [
     "2025-09-17",
@@ -57121,7 +57121,7 @@
     5.389,
     5.387
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -58665,7 +58665,7 @@
    "amt5": 2465014.0,
    "amt20": 3205330.0,
    "amtRatio": 0.72,
-   "sinceIPO": -10.8,
+   "sinceIPO": -11.65,
    "volAnn": 11.7,
    "histDates": [
     "2025-09-17",
@@ -59171,7 +59171,7 @@
     5.974,
     5.969
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
@@ -61858,13 +61858,13 @@
     "cross": null
    },
    "rsi14": 40.4,
-   "pctRank": 20.6,
+   "pctRank": 20.4,
    "devMA250": -14.91,
    "amt5": 3300034.0,
    "amt20": 2950057.0,
    "amtRatio": 0.49,
-   "sinceIPO": 9.73,
-   "volAnn": 18.7,
+   "sinceIPO": 9.5,
+   "volAnn": 18.8,
    "histDates": [
     "2025-09-17",
     "2025-09-18",
@@ -62369,7 +62369,7 @@
     2.549,
     2.56
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
@@ -62401,12 +62401,12 @@
     "cross": null
    },
    "rsi14": 61.0,
-   "pctRank": 56.1,
+   "pctRank": 56.0,
    "devMA250": 0.01,
    "amt5": 5577895.0,
    "amt20": 4602237.0,
    "amtRatio": 0.79,
-   "sinceIPO": 56.99,
+   "sinceIPO": 56.51,
    "volAnn": 16.7,
    "histDates": [
     "2025-09-17",
@@ -62912,7 +62912,7 @@
     4.075,
     4.077
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": 2,
@@ -63455,7 +63455,7 @@
     9.699,
     9.69
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
@@ -64398,7 +64398,7 @@
    "amt5": 2487280.0,
    "amt20": 4004363.0,
    "amtRatio": 1.04,
-   "sinceIPO": -15.93,
+   "sinceIPO": -16.76,
    "volAnn": 11.3,
    "histDates": [
     "2025-09-17",
@@ -64904,7 +64904,7 @@
     3.302,
     3.303
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -64941,7 +64941,7 @@
    "amt5": 6033102.0,
    "amt20": 3907102.0,
    "amtRatio": 0.84,
-   "sinceIPO": -16.67,
+   "sinceIPO": -17.39,
    "volAnn": 8.0,
    "histDates": [
     "2025-09-17",
@@ -65447,7 +65447,7 @@
     11.372,
     11.354
    ],
-   "listDays": 501,
+   "listDays": 500,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
