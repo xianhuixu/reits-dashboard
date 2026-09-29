@@ -538,6 +538,89 @@ LAZY.research.push(function () {
 
 });
 
+  // ---- 股/债 Beta 定位（correlation.betas；fetch_data*.py 周频回归，杜丽虹 2021 偏股/偏债法中国化） ----
+  LAZY.research.push(function () {
+    var B = D.correlation && D.correlation.betas;
+    function pendingAll(msg) {
+      $("betaStamp").textContent = "状态：待计算";
+      ["betaScatter", "betaRolling"].forEach(function (id) { $(id).innerHTML = '<div class="empty">' + escH(msg) + "</div>"; });
+      $("betaSectorTable").innerHTML = "";
+      $("betaDisagree").innerHTML = "";
+    }
+    if (!B || B.status !== "ok") {
+      pendingAll("Beta 待计算 · " + ((B && B.reason) || "研究数据包尚无 correlation.betas（下次 fetch_data_em.py 运行后生成）") + " · 不展示任何示例数值");
+      return;
+    }
+    $("betaStamp").textContent = "asOf " + (B.asOf || "—") + " · 可用 " + (B.weeksAvailable || "—") + " 周（目标 " + B.window + " 周，最少 " + B.minObs + " 周）· 滚动 " + B.rollWindow + " 周 · 基准 " +
+      (B.benchmarks || {}).equity + " / " + (B.benchmarks || {}).bond + " · Δ10Y 敏感度：" + (B.sens10yStatus || "—");
+    var ST_HEX = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+    function f3(v) { return v == null ? "—" : Number(v).toFixed(2); }
+    function renderBetaScatter() {
+      var th = chartTheme();
+      var pts = (B.byReit || []).filter(function (r) { return r.betaEq != null && r.betaBond != null; });
+      var series = Object.keys(ST_HEX).map(function (st) {
+        return {
+          name: st, type: "scatter", symbolSize: 8,
+          data: pts.filter(function (r) { return r.strategy === st; }).map(function (r) {
+            return { value: [r.betaBond, r.betaEq], name: r.name, r: r,
+              symbol: r.disagree ? "diamond" : "circle", symbolSize: r.disagree ? 12 : 8,
+              itemStyle: r.disagree ? { borderColor: th.up, borderWidth: 2 } : undefined };
+          }),
+          itemStyle: { color: ST_HEX[st], opacity: 0.85 }
+        };
+      });
+      series.push({
+        name: "板块等权", type: "scatter", symbolSize: 15, symbol: "roundRect",
+        data: (B.bySector || []).filter(function (s) { return s.betaEq != null && s.betaBond != null; }).map(function (s) {
+          return { value: [s.betaBond, s.betaEq], name: s.sector, s: s };
+        }),
+        itemStyle: { color: "transparent", borderColor: th.tx2, borderWidth: 1.5 },
+        label: { show: true, position: "right", color: th.tx2, fontSize: 9, formatter: "{b}" }
+      });
+      echSet("betaScatter", {
+        legend: { top: 0, textStyle: { color: th.tx2, fontSize: 11 } },
+        grid: { left: 48, right: 24, top: 34, bottom: 40 },
+        tooltip: {
+          trigger: "item", backgroundColor: th.panel, borderColor: th.line, textStyle: { color: th.tx, fontSize: 12 },
+          formatter: function (p) {
+            var r = p.data.r, s = p.data.s;
+            if (s) return "<b>" + escH(s.sector) + "</b>（板块等权 " + s.members + " 只）<br>股Beta " + f3(s.betaEq) + " · 债Beta " + f3(s.betaBond) + "<br>Δ10Y+10bp 周收益 " + f3(s.sens10y) + "% · " + escH(s.cls || "—");
+            return "<b>" + escH(r.name) + "</b> " + r.code + "<br>" + escH(r.sector) + " · 人工 " + escH(r.strategy) + " · 量化 " + escH(r.cls || "—") +
+              (r.disagree ? " <b style='color:" + th.up + "'>不一致</b>" : "") + "<br>股Beta " + f3(r.betaEq) + " · 债Beta " + f3(r.betaBond) + " · n=" + r.n + "周";
+          }
+        },
+        xAxis: { type: "value", scale: true, name: "债 Beta →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+        yAxis: { type: "value", scale: true, name: "股 Beta →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
+        series: series
+      });
+    }
+    registerChart(renderBetaScatter, "betaScatter");
+    renderBetaScatter();
+    var RL = B.rolling;
+    if (RL && RL.dates && RL.dates.length) {
+      var rs = Object.keys(RL.bySector || {}).map(function (sec, i) {
+        return { label: sec, color: SEC_PALETTE[i % SEC_PALETTE.length], data: RL.bySector[sec].betaEq };
+      });
+      registerChart(function () { renderLineChart("betaRolling", RL.dates, rs, { area: false }); }, "betaRolling");
+      renderLineChart("betaRolling", RL.dates, rs, { area: false });
+    } else {
+      $("betaRolling").innerHTML = '<div class="empty">52 周滚动 Beta 样本不足</div>';
+    }
+    $("betaSectorTable").innerHTML = '<table class="matrix"><thead><tr><th class="l">板块</th><th>只数</th><th>股 Beta</th><th>股Beta排名</th><th>债 Beta</th><th>Δ10Y +10bp 周收益</th><th>z(股)−z(债)</th><th>量化分类</th><th>样本周</th></tr></thead><tbody>' +
+      (B.bySector || []).map(function (s) {
+        return "<tr><td class='l'>" + escH(s.sector) + "</td><td class='num'>" + s.members + "</td><td class='num'>" + f3(s.betaEq) + "</td><td class='num'>" + (s.rankEq || "—") +
+          "</td><td class='num'>" + f3(s.betaBond) + "</td><td class='num'>" + (s.sens10y == null ? "—" : f3(s.sens10y) + "%") + "</td><td class='num'>" + f3(s.score) + "</td><td>" + escH(s.cls || "—") + "</td><td class='num'>" + s.n + "</td></tr>";
+      }).join("") + "</tbody></table>";
+    var dis = (B.byReit || []).filter(function (r) { return r.disagree; });
+    $("betaDisagree").innerHTML = dis.length ?
+      '<table class="matrix"><thead><tr><th class="l">量化分类与人工标签不一致</th><th class="l">板块</th><th>人工标签</th><th>期望</th><th>量化分类</th><th>股 Beta</th><th>债 Beta</th><th>Δ10Y +10bp</th></tr></thead><tbody>' +
+      dis.map(function (r) {
+        return "<tr><td class='l'><b>" + escH(r.name) + "</b> <span style='color:var(--tx3);font-size:11px'>" + r.code + "</span></td><td class='l'>" + escH(r.sector) + "</td><td><span class='st-tag st-" + r.strategy + "'>" + escH(r.strategy) + "</span></td><td>" + escH(r.expected) +
+          "</td><td style='color:var(--gold)'><b>" + escH(r.cls) + "</b></td><td class='num'>" + f3(r.betaEq) + "</td><td class='num'>" + f3(r.betaBond) + "</td><td class='num'>" + (r.sens10y == null ? "—" : f3(r.sens10y) + "%") + "</td></tr>";
+      }).join("") + "</tbody></table>" :
+      '<p class="note">量化偏股/偏债分类与人工「防御 / 周期 / 扩张」标签无相反一端的冲突</p>';
+  });
+
   // ---- 策略×板块矩阵 ----
   LAZY.research.push(function () {
     var secs = D.sectors;
@@ -1683,6 +1766,101 @@ LAZY.research.push(function () {
          '<text x="12" y="' + H / 2 + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + H / 2 + ')">通胀 →</text>';
     $("clockChart").innerHTML = s + "</svg>";
 
+    // REITs 投资时钟（增长 × 利率方向；杜丽虹 2021 框架中国化，rateClock 由 update_cycle_data.py 自动计算）
+    (function renderRateClock() {
+      var RC = CY.rateClock;
+      var OC = D.overseasClock;
+      var QN = { Q1: "繁荣", Q2: "复苏/泡沫", Q3: "衰退", Q4: "滞胀/复苏" };
+      var QP = {};
+      ((OC && OC.quadrants) || []).forEach(function (qq) { QP[qq.id] = qq.annualTotalReturn; });
+      if (!RC || RC.status !== "ok") {
+        var why = RC ? (RC.statusNote || RC.status) : "cycle_judgment.json 尚无 rateClock（运行 update_cycle_data.py 生成）";
+        $("rateClockDetail").innerHTML = '<div class="empty">增长×利率时钟未判定：' + escH(why) + "</div>";
+        $("rateClockChart").innerHTML = '<div class="empty">待真实 10Y / PMI 数据</div>';
+        $("rateClockStamp").textContent = RC && RC.asOf ? "· 上次 asOf " + RC.asOf : "";
+        return;
+      }
+      var g = RC.growth || {};
+      var q2 = RC.quadrant;
+      $("rateClockStamp").textContent = "· asOf " + (RC.asOf || "—") + " · 计算 " + (RC.computedAt || "—");
+      function bp(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "bp"; }
+      var dirTxt = { up: "升息", down: "降息", flat: "横盘（死区内）" }[RC.rateDir] || "—";
+      var leanTxt = RC.deadBand && RC.rateLean ? "，倾向" + (RC.rateLean === "down" ? "降息" : "升息") : "";
+      var prior = RC.usPriorAnnualReturn;
+      var sectors = (OC && OC.bySector) || [];
+      function inZone(z) {
+        if (!z || !q2) return false;
+        return z.indexOf(q2) >= 0 || (q2 === "Q4" && RC.subState === "滞胀" && z.indexOf("Q4-stagflation") >= 0);
+      }
+      var leaders = sectors.filter(function (x) { return inZone(x.best); }).map(function (x) { return x.type; });
+      var mines = sectors.filter(function (x) { return inZone(x.danger); }).map(function (x) { return x.type; });
+      var flags = RC.conflictFlags || [];
+      var flagColor = { conflict: "var(--gold)", watch: "var(--accent)", background: "var(--tx3)" };
+      var GT = CY.rateRentGate || null;
+      var gateTxt = !GT ? "未计算" :
+        ({ triggered: "⚠️ 已触发 → 利率风险升级为「高」、估值闸门降为 partial", not_triggered: "未触发", "pending data": "待数据" }[GT.status] || GT.status) +
+        "（利率腿 " + (GT.rateLeg && GT.rateLeg.status === "ok" ? bp(GT.rateLeg.d10y60bp) + (GT.rateLeg.met ? " ✓" : " ✗") : "待数据") +
+        " · 产权利差分位腿 " + (GT.spreadLeg && GT.spreadLeg.status === "ok" ? GT.spreadLeg.pctileChangePP + "pp" : "pending data：SEED 非真实") + "）";
+      var rot = RC.rotation || {};
+      $("rateClockDetail").innerHTML =
+        '<div class="grid3" style="margin-bottom:12px">' +
+          '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px"><div style="font-size:11.5px;color:var(--tx3)">当前象限</div>' +
+            '<div style="font-size:20px;font-weight:650;color:var(--accent);margin:4px 0">' + escH(q2 || "未判定") + " · " + escH(RC.subState || RC.quadrantName || "") + "</div>" +
+            '<div style="font-size:11.5px;color:var(--tx2)">置信度 ' + escH(RC.confidence || "—") + " · " + escH(RC.confidenceNote || "") + "</div></div>" +
+          '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px"><div style="font-size:11.5px;color:var(--tx3)">利率轴 · 10Y 国债</div>' +
+            '<div class="num" style="font-size:20px;font-weight:650;margin:4px 0">' + (RC.y10 != null ? RC.y10.toFixed(3) + "%" : "—") + ' <span style="font-size:12px;color:var(--tx2)">' + bp(RC.d10y60bp) + "/60日</span></div>" +
+            '<div style="font-size:11.5px;color:var(--tx2)">' + dirTxt + leanTxt + " · 起点 " + escH(RC.y10StartDate || "—") + " " + (RC.y10Start != null ? RC.y10Start.toFixed(3) + "%" : "") + "</div></div>" +
+          '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px"><div style="font-size:11.5px;color:var(--tx3)">增长轴 · 制造业 PMI</div>' +
+            '<div class="num" style="font-size:20px;font-weight:650;margin:4px 0">' + (g.pmi3m != null ? g.pmi3m.toFixed(2) : "—") + ' <span style="font-size:12px;color:var(--tx2)">3月均 · ' + escH(g.level || "—") + "</span></div>" +
+            '<div style="font-size:11.5px;color:var(--tx2)">最新 ' + escH(g.pmiMonth || "—") + " " + (g.pmiLatest != null ? g.pmiLatest : "—") + " · 趋势 " + escH(g.trend || "—") + (g.trendDelta != null ? "（" + (g.trendDelta > 0 ? "+" : "") + g.trendDelta + "）" : "") + "</div></div>" +
+        "</div>" +
+        '<div style="font-size:12px;color:var(--tx2);line-height:1.8">' +
+          "<b>美国先验</b>（本象限整体年化总回报）：" + (prior == null ? "—" : (prior > 0 ? "+" : "") + prior + "%") +
+          (q2 === "Q4" ? "（Q4 整体 " + (QP.Q4 != null ? QP.Q4 : 15.1) + "%，滞胀 −10.7% / 复苏 +26.1%）" : "") +
+          " · 旋转：" + escH(rot.direction || "—") + (rot.from ? "（" + rot.from + "→" + rot.to + "）" : "") + "<br>" +
+          "<b>美国先验领先业态</b>：" + (leaders.length ? escH(leaders.join("、")) : "—") +
+          " · <b>雷区业态</b>：" + (mines.length ? escH(mines.join("、")) : "—") + "<br>" +
+          "<b>升息快于租金闸门</b>：" + escH(gateTxt) +
+        "</div>" +
+        (flags.length ? '<ul style="margin:10px 0 0;padding-left:18px;font-size:12px;line-height:1.7">' + flags.map(function (f) {
+          return '<li style="color:' + (flagColor[f.level] || "var(--tx2)") + '"><b>' + escH({ conflict: "冲突", watch: "复核", background: "背景" }[f.level] || f.level) + "</b> · " + escH(f.text) + "</li>";
+        }).join("") + "</ul>" : '<p style="font-size:12px;color:var(--tx3);margin-top:8px">本象限与学派板块观点无自动冲突</p>') +
+        '<p style="font-size:11px;color:var(--tx3);margin-top:8px">数据：' + escH(((RC.sources || {}).y10) || "") + "；" + escH(((RC.sources || {}).pmi) || "") +
+        (RC.seriesOrigin && (RC.seriesOrigin.y10 === "cache" || RC.seriesOrigin.pmi === "cache") ? " · ⚠️ 本次取数失败，沿用缓存序列" : "") + "</p>";
+
+      // SVG：真实坐标（Δ10Y bp × PMI3m），±10bp 死区灰带，24 个月轨迹
+      var W2 = 340, H2 = 300, m2 = 30, cx = W2 / 2, cy = (H2 - 10) / 2 + 5;
+      var hw = (W2 - 2 * m2) / 2, hh = (H2 - 10 - 2 * m2) / 2;
+      function px(v) { v = Math.max(-50, Math.min(50, v || 0)); return cx + v / 50 * (hw - 8); }
+      function py(v) { v = Math.max(48, Math.min(52, v == null ? 50 : v)); return cy - (v - 50) / 2 * (hh - 8); }
+      var cols2 = { Q1: "#ef4444", Q2: "#10b981", Q3: "#3b82f6", Q4: "#f59e0b" };
+      var cells = [["Q2", cx - hw, cy - hh], ["Q1", cx, cy - hh], ["Q3", cx - hw, cy], ["Q4", cx, cy]];
+      var sv = '<svg viewBox="0 0 ' + W2 + " " + H2 + '" width="100%">' + svgTitle("REITs 投资时钟（增长×利率）定位图");
+      cells.forEach(function (c) {
+        var on = c[0] === q2;
+        sv += '<rect x="' + c[1] + '" y="' + c[2] + '" width="' + hw + '" height="' + hh + '" fill="' + cols2[c[0]] + '" fill-opacity="' + (on ? ".12" : ".04") + '" stroke="#e2e8f0" rx="8"/>' +
+          '<text x="' + (c[1] + hw / 2) + '" y="' + (c[2] + 18) + '" text-anchor="middle" fill="' + (on ? cols2[c[0]] : "var(--tx2)") + '" font-size="12" font-weight="600">' + c[0] + " " + QN[c[0]] + "</text>" +
+          '<text x="' + (c[1] + hw / 2) + '" y="' + (c[2] + 32) + '" text-anchor="middle" fill="var(--tx3)" font-size="9.5">美国先验 ' + (QP[c[0]] != null ? (QP[c[0]] > 0 ? "+" : "") + QP[c[0]] + "%" : "—") + "</text>";
+      });
+      sv += '<rect x="' + px(-10) + '" y="' + (cy - hh) + '" width="' + (px(10) - px(-10)) + '" height="' + (2 * hh) + '" fill="#94a3b8" fill-opacity=".12"/>';
+      var H = (RC.history || []).filter(function (h) { return h.d10y60bp != null && h.pmi3m != null; }).slice(-24);
+      if (H.length > 1) {
+        sv += '<polyline fill="none" stroke="var(--tx3)" stroke-width="1" stroke-opacity=".6" points="' +
+          H.map(function (h) { return px(h.d10y60bp).toFixed(1) + "," + py(h.pmi3m).toFixed(1); }).join(" ") + '"/>';
+        H.forEach(function (h, i) {
+          sv += '<circle cx="' + px(h.d10y60bp).toFixed(1) + '" cy="' + py(h.pmi3m).toFixed(1) + '" r="2.4" fill="' + (cols2[h.quadrant] || "#94a3b8") + '" fill-opacity="' + (0.25 + 0.6 * i / H.length).toFixed(2) + '"><title>' + h.month + " " + (h.quadrant || "—") + " Δ10Y " + h.d10y60bp + "bp PMI3m " + h.pmi3m + "</title></circle>";
+        });
+      }
+      var X = px(RC.d10y60bp), Y = py(g.pmi3m), col = cols2[q2] || "#64748b";
+      sv += '<circle cx="' + X + '" cy="' + Y + '" r="5" fill="none" stroke="' + col + '" stroke-width="1.2"><animate attributeName="r" values="5;16" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".7;0" dur="1.8s" repeatCount="indefinite"/></circle>' +
+        '<circle cx="' + X + '" cy="' + Y + '" r="4.5" fill="' + col + '"/>';
+      sv += '<text x="' + (W2 - m2) + '" y="' + (H2 - 4) + '" text-anchor="end" fill="var(--tx3)" font-size="10">升息 →</text>' +
+        '<text x="' + m2 + '" y="' + (H2 - 4) + '" fill="var(--tx3)" font-size="10">← 降息</text>' +
+        '<text x="12" y="' + cy + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + cy + ')">PMI 3M 均值（50 为界）→</text>';
+      $("rateClockChart").innerHTML = sv + "</svg>";
+      $("rateClockDesc").innerHTML = "与美林时钟（增长×通胀）并列：本时钟横轴换成<b>利率方向</b>，更贴近 REITs 估值主因（P = 分派 ÷ (r<sub>f</sub> + 风险溢价)）。当前：<b style=\"color:" + col + "\">" + escH((q2 || "未判定") + " " + (RC.subState || "")) + "</b>" + (RC.deadBand ? "（死区内倾向判断）" : "");
+    })();
+
     // 美国 REITs 长期走势（对数轴 + NBER 衰退带 + 耦合统计）
     (function () {
       var U = D.usLong;
@@ -1838,23 +2016,43 @@ LAZY.research.push(function () {
             "</td><td class='num'>" + pf2(s.dd2020) + "</td><td class='num'>" + pf2(s.cagr10) + "</td></tr>";
         }).join("") + "</tbody></table>";
     })();
-    var OS = D.overseasStatic;
-    if (OS && OS.matrix) {
-      $("osMatrixNote").textContent = (OS.placeholder ? "⚠️ 占位示例值，待 Nareit/NBER 研究数据核实替换 · " : "") + (OS.source || "") + " · 更新 " + (OS.updated || "");
-      var M = OS.matrix;
-      var all = M.ret.flat();
-      var mx = Math.max.apply(null, all.map(Math.abs));
-      $("osMatrix").innerHTML = '<table class="matrix"><thead><tr><th class="l">资产类型 \\ 周期阶段</th>' +
-        M.stages.map(function (s2) { return "<th>" + s2 + "</th>"; }).join("") + "</tr></thead><tbody>" +
-        M.types.map(function (t, i) {
-          return "<tr><td class='l'>" + t + "</td>" + M.ret[i].map(function (v) {
-            var a = Math.min(Math.abs(v) / mx, 1);
-            var bg = v >= 0 ? "rgba(240,79,79," + (0.08 + 0.55 * a) + ")" : "rgba(43,181,163," + (0.08 + 0.55 * a) + ")";
-            return '<td class="num" style="background:' + bg + '">' + (v > 0 ? "+" : "") + v.toFixed(1) + "</td>";
-          }).join("") + "</tr>";
+    // 海外先验：杜丽虹 2021 美国 REITs 投资时钟（overseas_clock_du2021.json；替代已删除的占位矩阵）
+    var OC2 = D.overseasClock;
+    if (OC2 && OC2.quadrants) {
+      var src2 = OC2.source || {};
+      $("osMatrixNote").innerHTML = "来源：" + escH(src2.author || "") + "《" + escH(src2.title || "") + "》，" + escH(src2.outlet || "") + " " + escH(src2.date || "") +
+        ' · <a href="' + escH(src2.url || "#") + '" target="_blank" rel="noopener">原文</a> · 样本：' + escH(src2.sample || "") +
+        " · 口径：" + escH(OC2.metric || "年化总回报") + "（非超额收益）· " + escH(src2.chinaApplicability || "") + " · ⚠️ " + escH(src2.missing || "");
+      function pct2(v) { return v == null ? "—" : (v > 0 ? "+" : "") + Number(v).toFixed(1) + "%"; }
+      function heat(v) {
+        var a = Math.min(Math.abs(v) / 26, 1);
+        return v >= 0 ? "rgba(240,79,79," + (0.08 + 0.5 * a) + ")" : "rgba(43,181,163," + (0.08 + 0.5 * a) + ")";
+      }
+      var rows2 = [];
+      OC2.quadrants.forEach(function (qq) {
+        rows2.push("<tr><td class='l'><b>" + qq.id + "</b> " + escH(qq.name) + "</td><td class='l'>" + escH(qq.growth) + " · " + escH(qq.rate) + "</td>" +
+          '<td class="num" style="background:' + heat(qq.annualTotalReturn) + '">' + pct2(qq.annualTotalReturn) + "</td><td class='l' style='color:var(--tx3);font-size:11px'>" + escH(qq.rank || qq.note || "") + "</td></tr>");
+        (qq.split || []).forEach(function (sp) {
+          rows2.push("<tr><td class='l' style='padding-left:22px'>↳ " + escH(sp.name) + "</td><td class='l'>" + escH(qq.growth) + " · " + escH(qq.rate) + "</td>" +
+            '<td class="num" style="background:' + heat(sp.annualTotalReturn) + '">' + pct2(sp.annualTotalReturn) + "</td><td class='l' style='color:var(--tx3);font-size:11px'>" + escH(sp.example || "") + "</td></tr>");
+        });
+      });
+      $("osMatrix").innerHTML = '<table class="matrix"><thead><tr><th class="l">象限</th><th class="l">美国实际 GDP · 利率方向</th><th>年化总回报</th><th class="l">备注</th></tr></thead><tbody>' + rows2.join("") + "</tbody></table>";
+      var BAND_TXT = { ">15%": ">15%", "10-15%": "10–15%", ">10%": ">10%", ">=10%": "≥10%", "<10%": "<10%", "<0": "负", "n/a": "样本不足" };
+      var BAND_BG = { ">15%": "rgba(240,79,79,.42)", "10-15%": "rgba(240,79,79,.26)", ">10%": "rgba(240,79,79,.26)", ">=10%": "rgba(240,79,79,.16)", "<10%": "rgba(240,79,79,.06)", "<0": "rgba(43,181,163,.35)", "n/a": "transparent" };
+      var colsB = OC2.bandColumns || ["Q1", "Q2", "Q3", "Q4-stagflation"];
+      var colName = { Q1: "Q1 繁荣", Q2: "Q2 复苏/泡沫", Q3: "Q3 衰退", "Q4-stagflation": "Q4 滞胀子态" };
+      function zone(z) { return z && z.length ? z.map(function (x) { return x === "Q4-stagflation" ? "Q4·滞胀" : x; }).join(" / ") : "原文未给"; }
+      $("osClockSectorsNote").textContent = "单元格为原文文字给出的平均收益区间（色带），无点值；「<10%」= 原文归入“其他类型”；Q2 原文称各类型均 ≥10%；Q4 复苏子态原文无分业态数据。图2/图3 气泡图未获取。";
+      $("osClockSectors").innerHTML = '<table class="matrix"><thead><tr><th class="l">美国业态</th>' + colsB.map(function (c) { return "<th>" + colName[c] + "</th>"; }).join("") +
+        '<th>最佳投资期</th><th>雷区</th><th class="l">原文要点</th></tr></thead><tbody>' +
+        (OC2.bySector || []).map(function (x) {
+          return "<tr><td class='l'><b>" + escH(x.type) + "</b>" + (x.shortHistory ? ' <span style="color:var(--tx3);font-size:10.5px">历史短</span>' : "") + "</td>" +
+            colsB.map(function (c) { var b = (x.bands || {})[c]; return '<td class="num" style="background:' + (BAND_BG[b] || "transparent") + '">' + (BAND_TXT[b] || "—") + "</td>"; }).join("") +
+            "<td>" + escH(zone(x.best)) + "</td><td>" + escH(zone(x.danger)) + "</td><td class='l' style='color:var(--tx3);font-size:11px'>" + escH(x.note || "") + "</td></tr>";
         }).join("") + "</tbody></table>";
     } else {
-      $("osMatrix").innerHTML = '<div class="empty">overseas_static.json 未配置</div>';
+      $("osMatrix").innerHTML = '<div class="empty">overseas_clock_du2021.json 未嵌入研究数据包（运行 fetch_data_em.py 或 scripts/sync_static_embeds.py）</div>';
     }
 
     // 映射结论

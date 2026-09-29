@@ -16,7 +16,8 @@
       "研究日与行情日双时间戳；行情转弱降低周频置信度但不自动作废月度底部逻辑",
       "CSC强于大市与CICC趋势未确立取交集：结构性偏多+分批+闸门约束",
       "板块超配以advice.sectorViews为准，cycle.mapping降级为宏观注释",
-      "产业园/仓储：战术卫星、战略非底仓；加仓绑定出租率/续租边际证据"
+      "产业园/仓储：战术卫星、战略非底仓；加仓绑定出租率/续租边际证据",
+      "增长×利率时钟（cycle.rateClock）与 clockSectorPrior 仅作宏观背景层；冲突自动产出 conflictFlag，不直接改变 sectorViews"
     ]
   },
   "asOfMarket": "2026-09-09",
@@ -29,7 +30,8 @@
     "cycle.clock=衰退 vs CSC下半年企稳复苏叙事 → 学派：clock作宏观背景，强化抗周期",
     "revaluation=重估暂停(1/4) vs 无闸门全面超配 → 学派禁止全面超配",
     "CSC 08-29 weekly close 955.3 vs post-week pullback / CICC 09-07 week -1.52%",
-    "CICC「已具备配置价值」≠「趋势确立」"
+    "CICC「已具备配置价值」≠「趋势确立」",
+    "clockSectorPrior：消费（美国类比购物中心/社区商业）雷区=Q3，学派「标配偏超配」→ 待中国抗周期实证；当前 rateClock 象限与自动冲突见周期分析页"
   ],
   "breakoutGates": [
     {
@@ -165,7 +167,8 @@
         "商业不动产定价失序",
         "产权基本面继续下修",
         "长端利率上行超预期",
-        "增量资金不及预期"
+        "增量资金不及预期",
+        "升息快于租金闸门触发（rateRentGate）"
       ],
       "confidence": "中",
       "citations": [
@@ -509,7 +512,8 @@
     "ipoPipeline[] / expansionPipeline[]",
     "indexFundAUM / secondaryBondFundCount",
     "earningsBeatRate quarterly by sector",
-    "breakoutGates auto-scoring feed"
+    "breakoutGates auto-scoring feed",
+    "propertySpreadPercentile live series (for rateRentGate)"
   ],
   "disclaimer": "本advice节点与分权破局重估学派框架仅供投研仪表盘信息展示与研究训练，不构成任何投资建议或收益承诺。投资者应独立判断并自行承担风险。",
   "supplyDemand": {
@@ -552,5 +556,151 @@
       }
     ],
     "summary": "供给维仍为观察项：解禁可消化不等于无冲击；新发定价有序与增量资金落地共同决定是否点亮供给闸门。"
+  },
+  "clockSectorPrior": [
+    {
+      "sector": "保租房",
+      "usAnalog": "出租公寓（中国有政策托底）",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q4-stagflation"
+      ],
+      "analogConfidence": "中低",
+      "chinaEvidence": "政策性租赁住房，租金受约束、需求刚性；与美国市场化公寓现金流性质不同",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "市政环保",
+      "usAnalog": "基建（经营权、摊还型）",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q4"
+      ],
+      "analogConfidence": "低",
+      "chinaEvidence": "政府付费/保底量价机制，现金流偏债；美国基建 REITs 历史短、缺衰退/滞胀样本",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "能源",
+      "usAnalog": "基建（经营权、摊还型）",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q4"
+      ],
+      "analogConfidence": "低",
+      "chinaEvidence": "电价与出力决定收入，经营权到期回收本金；与美国基建类比弱",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "高速公路",
+      "usAnalog": "基建（经营权；车流偏顺周期）",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q4"
+      ],
+      "analogConfidence": "低",
+      "chinaEvidence": "车流量与货运顺周期，经营权摊还；美国无直接对应",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "数据中心",
+      "usAnalog": "数据中心",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q4"
+      ],
+      "analogConfidence": "中高",
+      "chinaEvidence": "长租约、上架率驱动；美国样本短（缺衰退/滞胀期）",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "仓储物流",
+      "usAnalog": "工业/物流地产",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q4-stagflation"
+      ],
+      "analogConfidence": "高",
+      "chinaEvidence": "业态最接近；国内租金下行与供给出清是当前主要矛盾",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "产业园",
+      "usAnalog": "办公（部分厂房接近工业）",
+      "best": [
+        "Q2"
+      ],
+      "danger": [
+        "Q3",
+        "Q4"
+      ],
+      "analogConfidence": "中",
+      "chinaEvidence": "研发办公/厂房混合，续租与租金折让压力",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "消费",
+      "usAnalog": "购物中心 / 社区商业中心",
+      "best": [
+        "Q4",
+        "Q2"
+      ],
+      "danger": [
+        "Q3"
+      ],
+      "analogConfidence": "中",
+      "chinaEvidence": "国内以奥莱/社区商业/购物中心为主，CICC 中报显示调改后运营总体稳健；是否具备抗周期性尚缺跨周期实证",
+      "conflictFlag": "学派「标配偏超配 · anti_cycle」vs 美国先验：购物中心与社区商业在 Q3（衰退）均为雷区（年化为负）、最佳在 Q4/Q2 → 需补中国消费 REITs 抗周期实证（租约结构、调改、客流/销售），否则在 Q3 期间降为「标配」复核",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    },
+    {
+      "sector": "商业不动产",
+      "usAnalog": "多元化 / 办公 / 酒店（按底层业态拆分）",
+      "best": null,
+      "danger": [
+        "Q3"
+      ],
+      "analogConfidence": "低",
+      "chinaEvidence": "商业不动产 REITs 2026 年起步，底层业态混合；原文对多元化未给最佳期，办公/酒店衰退期均为负",
+      "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
+    }
+  ],
+  "clockSectorPriorMeta": {
+    "source": "杜丽虹《用数据解读你不知道的REITs（六）REITs的投资时钟》，证券市场周刊 2021-12-22，https://baijiahao.baidu.com/s?id=1719823577102902700",
+    "quadrants": {
+      "Q1": "增长强+升息（繁荣）",
+      "Q2": "增长强+降息（复苏/泡沫）",
+      "Q3": "增长弱+降息（衰退）",
+      "Q4": "增长弱+升息（滞胀/复苏）",
+      "Q4-stagflation": "Q4 且增长下行（滞胀子态）"
+    },
+    "disclaimer": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）；用于冲突提示，不直接改变 sectorViews（resolutionRules）",
+    "reviewStatus": "待学派复核（2026-09-29 初稿）"
+  },
+  "rateRentGate": {
+    "id": "rate_faster_than_rent",
+    "label": "升息快于租金闸门",
+    "rule": "Δ10Y(60交易日) ≥ +25bp 且 产权利差分位 60 日下降 ≥ 20pp",
+    "rationale": "杜丽虹 2021：繁荣期升息速度快于租金增速时，股息率−国债利差收窄，REITs 可能负收益；与学派「长端利率上行」风险、重估假说证伪条件一致",
+    "effectsIfTriggered": {
+      "risk": "rate_equity_divert",
+      "escalateTo": "高",
+      "gate": "valuation",
+      "downgradeTo": "partial"
+    },
+    "statusSource": "cycle_judgment.json → rateRentGate（update_cycle_data.py 每日自动计算；前端叠加显示，不改写本文件）",
+    "dataStatus": "利率腿=真实 10Y（东财/中债口径）；产权利差分位腿=pending data（data_panel_l1l7.json 仍为 SEED 插值）"
   }
 }

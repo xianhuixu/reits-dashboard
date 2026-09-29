@@ -37,7 +37,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 })();
 </script>
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="research-layout.css?v=20260914-2">
+<link rel="stylesheet" href="research-layout.css?v=20260929-1">
 <link rel="stylesheet" href="workspace.css?v=20260915-tender-1">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
@@ -263,6 +263,19 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
       <div class="clock-desc" id="clockDesc"></div>
     </div>
   </div>
+  <div class="grid" id="rateClockRow">
+    <div class="card">
+      <h2>REITs 投资时钟 · 增长 × 利率方向 <span class="note" style="display:inline" id="rateClockStamp"></span></h2>
+      <p class="note">杜丽虹 2021 框架中国化：利率轴 = 10Y 国债 60 交易日变化（±10bp 死区）· 增长轴 = 制造业 PMI 近 3 月均值 vs 50（替代美国「实际 GDP 2%」）· 美国先验 = 1994 年以来美国权益型 REITs 年化总回报 · <b>仅作宏观背景层</b>，板块观点以「配置与风险」为准</p>
+      <div id="rateClockDetail"></div>
+    </div>
+    <div class="card cycle-clock-card">
+      <h2>REITs 投资时钟</h2>
+      <p class="note">横轴 Δ10Y(60日) · 纵轴 PMI 3 月均值 · 灰带 = ±10bp 死区 · 连线 = 近 24 个月月末轨迹</p>
+      <div id="rateClockChart" class="clock-chart"></div>
+      <div class="clock-desc" id="rateClockDesc"></div>
+    </div>
+  </div>
   <div class="card">
     <h2>资产重估判断（"资产重估理论"框架）</h2>
     <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
@@ -286,9 +299,12 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     </div>
   </div>
   <div class="card">
-    <h2>海外 REITs 周期-资产类型耦合矩阵（历史平均年化超额收益 %）</h2>
+    <h2>海外先验 · 美国 REITs 投资时钟（年化总回报 %）</h2>
     <p class="note" id="osMatrixNote"></p>
     <div class="table-scroll" id="osMatrix"></div>
+    <h3 style="font-size:13px;margin:16px 0 6px">分业态最佳投资期 / 雷区（仅原文文字区间，不含点值）</h3>
+    <p class="note" id="osClockSectorsNote"></p>
+    <div class="table-scroll" id="osClockSectors"></div>
   </div>
   <div class="card">
     <h2>对中国 REITs 的映射结论（3-5 年维度）</h2>
@@ -324,7 +340,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     </div>
     <div class="card">
       <h2>股性 - 债性定位</h2>
-      <p class="note">X = 与国债指数相关性（债性）· Y = 与沪深300相关性（股性）</p>
+      <p class="note">X = 与国债指数相关性（债性）· Y = 与沪深300相关性（股性）· 回归口径（周频 Beta、偏股/偏债相对分类）见 <a href="#v-strategy" data-jump-view="strategy">策略分类「股/债 Beta 定位」</a></p>
       <div id="corrScatter" style="height:380px"></div>
     </div>
   </div>
@@ -401,6 +417,17 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
         <div id="chartL2Operating" style="height:320px"></div>
       </div>
     </div>
+  </div>
+  <div class="card" id="betaPanel">
+    <h2>股 / 债 Beta 定位 · 偏股 vs 偏债（周频回归）</h2>
+    <p class="note" id="betaNote">周频收益对沪深300（000300.SH）与上证国债（000012.SH）回归 · 104 周主窗口 + 52 周滚动 · 中国 REITs 股性普遍很低，分类用<b>截面相对排序</b>（z(股Beta)−z(债Beta) 三分位），不用「Beta&gt;1」 · 与人工「防御 / 周期 / 扩张」标签对照，标出不一致个券</p>
+    <p class="panel-l2-stamp" id="betaStamp" style="font-size:11.5px;color:var(--tx3);margin:0 0 10px"></p>
+    <div class="grid" style="margin-bottom:0">
+      <div><div id="betaScatter" style="height:360px"></div></div>
+      <div><div id="betaRolling" style="height:360px"></div></div>
+    </div>
+    <div class="table-scroll" id="betaSectorTable" style="margin-top:12px"></div>
+    <div class="table-scroll" id="betaDisagree" style="margin-top:12px"></div>
   </div>
   <div class="card">
     <h2>策略 × 板块 今日表现矩阵（平均日涨跌 %）</h2>
@@ -627,6 +654,13 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
       </tbody></table>
     </div>
     <p class="research-caveat">运营指标选择参考上交所审核关注事项中对租赁、现金流提供方及预测假设的要求；表内配置条件为本研究判断，不是监管阈值。<a href="#source-4">[4]</a></p>
+    <section class="clock-prior" id="clockPriorPanel" aria-labelledby="clockPriorTitle">
+      <h3 id="clockPriorTitle">时钟先验：增长 × 利率象限下的美国类比（研究假设）</h3>
+      <p class="note">美国先验来自杜丽虹《REITs的投资时钟》（证券市场周刊 2021-12-22，美国 1994 年以来）；<b>中国业态 ↔ 美国业态的映射为本仪表盘提出的假设，不是原文观点</b>。当前象限由 10Y 与 PMI 真实数据每日计算，仅作宏观背景；与学派板块观点冲突时标黄，不自动改变配置。</p>
+      <p class="research-caveat" id="clockPriorState" aria-live="polite">时钟先验加载中…</p>
+      <div class="table-scroll" id="clockPriorTable"></div>
+      <p class="research-caveat" id="clockPriorGate"></p>
+    </section>
   </article>
 
   <article class="card" id="advRisk">
@@ -717,8 +751,8 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <script src="lib/echarts-custom.min.js" defer></script>
 <script src="workspace.js?v=20260915-tender-1" defer></script>
 <script src="tender-feed.js?v=20260915-1" defer></script>
-<script src="app.js?v=20260928-l2panel" defer></script>
-<script src="allocation-tools.js?v=20260915-tender-1" defer></script>
+<script src="app.js?v=20260929-rateclock" defer></script>
+<script src="allocation-tools.js?v=20260929-rateclock" defer></script>
 <script src="geography/map.js?v=20260928-3" defer></script>
 </body>
 </html>

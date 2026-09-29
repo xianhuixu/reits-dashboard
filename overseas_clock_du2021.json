@@ -1,0 +1,66 @@
+{
+  "_comment": "美国权益型 REITs「增长×利率」投资时钟（杜丽虹 2021）。仅收录原文正文文字给出的数字/区间；表1与图1–3为图片，未获取，不据此编造点值。替代已删除的 overseas_static.json 占位矩阵。",
+  "schema": "overseas_clock_du2021/v1",
+  "updated": "2026-09-29",
+  "source": {
+    "author": "杜丽虹（北京贝塔咨询中心合伙人，本刊特约作者）",
+    "title": "用数据解读你不知道的REITs（六）REITs的投资时钟",
+    "outlet": "证券市场周刊",
+    "date": "2021-12-22",
+    "url": "https://baijiahao.baidu.com/s?id=1719823577102902700",
+    "market": "美国权益型 REITs（Nareit 物业分类）",
+    "sample": "1994 年以来月度收益（各象限月均收益年化）；Beta 截至 2021-06 底、过去 5 年",
+    "missing": "正文表1（各业态股/债 Beta 表）与图1–3（最佳投资期/雷区气泡图）为图片，未获取；方法细节（加权方式、子指数、GDP 插值）原文未说明",
+    "chinaApplicability": "文章只研究美国 REITs，未涉及中国公募 REITs；数值仅作海外先验"
+  },
+  "axes": {
+    "x": "利率变化方向（右=升息，左=降息；原文用国债收益率变化趋势）",
+    "y": "美国实际 GDP 同比，以 2% 为界",
+    "clockwise": ["Q1", "Q4", "Q3", "Q2"],
+    "clockwiseNote": "顺时针：繁荣→滞胀→衰退→复苏；利率先于增长变动时逆时针：繁荣→泡沫→衰退→复苏"
+  },
+  "metric": "年化总回报（%）",
+  "quadrants": [
+    {"id": "Q1", "name": "繁荣", "growth": ">=2%", "rate": "升息", "annualTotalReturn": 4.9, "note": "升息快于租金增速时股息率−国债利差收窄，可能出现负收益"},
+    {"id": "Q2", "name": "复苏/泡沫", "growth": ">=2%", "rate": "降息", "annualTotalReturn": 23.9, "rank": "最佳"},
+    {"id": "Q3", "name": "衰退", "growth": "<2%", "rate": "降息", "annualTotalReturn": 3.5, "rank": "最差"},
+    {"id": "Q4", "name": "滞胀/复苏", "growth": "<2%", "rate": "升息", "annualTotalReturn": 15.1,
+     "split": [
+       {"id": "Q4-stagflation", "name": "滞胀（GDP<2% 且下行）", "annualTotalReturn": -10.7, "example": "2007 年、2009 年上半年"},
+       {"id": "Q4-recovery", "name": "复苏（GDP<2% 但上行）", "annualTotalReturn": 26.1, "example": "疫情冲击后的复苏期（20%以上）"}
+     ]}
+  ],
+  "overallRanking": "复苏/泡沫（Q2）> 繁荣（Q1）>> 滞胀、衰退（高风险）",
+  "bandLegend": {">15%": "平均收益 >15%", "10-15%": "10%–15%", ">10%": ">10%", ">=10%": "≥10%（复苏/泡沫期各类型均 ≥10%）", "<10%": "<10%（正文未单列，归入“其他类型”）", "<0": "负收益", "n/a": "历史短，缺该阶段样本"},
+  "bandColumns": ["Q1", "Q2", "Q3", "Q4-stagflation"],
+  "bySector": [
+    {"type": "商业地产抵押贷款", "typeEn": "Commercial mortgage", "best": ["Q1"], "danger": ["Q3", "Q4"], "bands": {"Q1": ">15%", "Q2": ">=10%", "Q3": "<0", "Q4-stagflation": "<0"}, "note": "对经济增长敏感；经济增速<2%时可能面临较大违约损失"},
+    {"type": "办公", "typeEn": "Office", "best": ["Q2"], "danger": ["Q3", "Q4"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "<0", "Q4-stagflation": "<0"}, "note": "衰退期和滞胀期都可能面临较大损失"},
+    {"type": "社区商业中心", "typeEn": "Shopping center (community)", "best": ["Q2"], "danger": ["Q3", "Q4"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "<0", "Q4-stagflation": "<0"}, "note": "衰退期和滞胀期都可能面临较大损失"},
+    {"type": "工业/物流地产", "typeEn": "Industrial", "best": ["Q2"], "danger": ["Q4-stagflation"], "bands": {"Q1": "10-15%", "Q2": ">=10%", "Q3": "<10%", "Q4-stagflation": "<0"}, "note": "具一定周期防御性，雷区主要在滞胀期"},
+    {"type": "出租公寓", "typeEn": "Apartments", "best": ["Q2"], "danger": ["Q4-stagflation"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "<10%", "Q4-stagflation": "<0"}, "note": "具一定周期防御性，雷区主要在滞胀期"},
+    {"type": "康养物业", "typeEn": "Health care", "best": ["Q2"], "danger": ["Q4-stagflation", "Q1"], "bands": {"Q1": "<0", "Q2": ">=10%", "Q3": ">15%", "Q4-stagflation": "<0"}, "note": "偏债、对利率敏感；升息尤其滞胀期可能较大损失，繁荣期也可能亏损"},
+    {"type": "活动房屋", "typeEn": "Manufactured homes", "best": ["Q2"], "danger": ["Q4-stagflation"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": ">15%", "Q4-stagflation": "<0"}, "note": "偏债；升息尤其滞胀期可能较大损失"},
+    {"type": "独立店面", "typeEn": "Free standing (net lease)", "best": ["Q2"], "danger": ["Q4-stagflation", "Q1"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "10-15%", "Q4-stagflation": "<0"}, "note": "偏债；升息尤其滞胀期可能较大损失，繁荣期也可能亏损"},
+    {"type": "自存仓", "typeEn": "Self storage", "best": ["Q2"], "danger": ["Q4-stagflation"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": ">15%", "Q4-stagflation": "<0"}, "note": "逆周期特性；升息尤其滞胀期可能较大损失"},
+    {"type": "住宅抵押贷款", "typeEn": "Home financing (mortgage)", "best": ["Q3"], "danger": ["Q4-stagflation"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": ">15%", "Q4-stagflation": "<0"}, "note": "可从不良资产收购中获益；升息尤其滞胀期可能较大损失"},
+    {"type": "酒店", "typeEn": "Lodging/Resorts", "best": ["Q4"], "danger": ["Q3"], "bands": {"Q1": "10-15%", "Q2": ">=10%", "Q3": "<0", "Q4-stagflation": ">10%"}, "note": "受益于通胀，最佳在面临升息压力的快速复苏周期；衰退期可能较大损失"},
+    {"type": "购物中心", "typeEn": "Regional malls", "best": ["Q4"], "danger": ["Q3"], "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "<0", "Q4-stagflation": ">10%"}, "note": "受益于通胀，最佳在升息复苏周期；衰退期可能较大损失"},
+    {"type": "多元化", "typeEn": "Diversified", "best": null, "danger": null, "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "<0", "Q4-stagflation": "<0"}, "note": "原文未明确最佳期/雷区，仅给出区间"},
+    {"type": "基建", "typeEn": "Infrastructure", "best": ["Q2"], "danger": ["Q4"], "shortHistory": true, "bands": {"Q1": "10-15%", "Q2": ">=10%", "Q3": "n/a", "Q4-stagflation": "n/a"}, "note": "历史短，缺衰退/滞胀样本；广义基建雷区主要在第四象限"},
+    {"type": "数据中心", "typeEn": "Data centers", "best": ["Q2"], "danger": ["Q4"], "shortHistory": true, "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "n/a", "Q4-stagflation": "n/a"}, "note": "历史短，缺衰退/滞胀样本；广义基建雷区主要在第四象限"},
+    {"type": "独屋出租", "typeEn": "Single family homes", "best": ["Q3"], "danger": null, "shortHistory": true, "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "n/a", "Q4-stagflation": "n/a"}, "note": "以不良资产起家；历史短，原文未给雷区"},
+    {"type": "林场", "typeEn": "Timberland", "best": ["Q4"], "danger": null, "shortHistory": true, "bands": {"Q1": "<10%", "Q2": ">=10%", "Q3": "<10%", "Q4-stagflation": "<0"}, "note": "历史短；原文未给雷区"}
+  ],
+  "betas2021": {
+    "asOf": "2021-06",
+    "window": "过去 5 年",
+    "classRule": "美国口径：股市 Beta>1 → 偏股型；<1 → 偏债型（中国 REITs 不适用该绝对阈值）",
+    "equityPoints": {"酒店": 1.72, "林场": 1.66, "商业地产抵押贷款": 1.53, "购物中心": 1.47, "社区商业中心": 1.43, "住宅抵押贷款": 1.38},
+    "equityRanges": {">1": ["多元化", "特殊地产", "办公"], "0.5-1.0": ["活动房屋", "工业/物流地产", "独屋出租", "出租公寓", "独立店面", "康养物业"], "<0.5": ["自存仓", "数据中心", "基建"]},
+    "bondPoints": {"数据中心": 0.64, "基建": 0.49},
+    "bondPositive": ["活动房屋", "自存仓", "康养物业", "独立店面", "工业/物流地产"],
+    "bondNegativeNote": "其余业态债市 Beta 均为负",
+    "tableImageRetrieved": false
+  }
+}
