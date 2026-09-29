@@ -36,21 +36,26 @@
     return zone && zone.length ? zone.map(function (z) { return z === "Q4-stagflation" ? "Q4·滞胀" : z; }).join(" / ") : "未给出";
   }
   /** advice.clockSectorPrior × sectorViews × 当前 rateClock → 表格行（纯函数，便于测试）。
+   * 过渡期（利率走平，|Δ10Y 60日| < 10bp）不判定象限：按最近象限推演，命中时 status=reference（软提示「参考」），不产生 conflict/watch。
    * @param {any} advice @param {any} clock @returns {Array<any>} */
   function clockPriorRows(advice, clock) {
     var views = {};
     ((advice && advice.sectorViews) || []).forEach(function (v) { views[v.sector] = v; });
-    var ok = clock && clock.status === "ok" && clock.quadrant;
-    var q = ok ? clock.quadrant : null, sub = ok ? clock.subState : null;
+    var live = clock && clock.status === "ok";
+    var trans = !!(live && clock.state === "transitional" && clock.leanQuadrant);
+    var definite = !!(live && !trans && clock.quadrant);
+    var q = definite ? clock.quadrant : trans ? clock.leanQuadrant : null;
+    var sub = definite ? clock.subState : trans ? clock.leanSubState : null;
     return ((advice && advice.clockSectorPrior) || []).map(function (p) {
       var action = (views[p.sector] || {}).action || "—";
       var over = /超配/.test(action) && !/低配/.test(action);
       var under = /低配|观望|谨慎/.test(action);
       var inDanger = inZone(p.danger, q, sub), inBest = inZone(p.best, q, sub);
-      var status = over && inDanger ? "conflict" : under && inBest ? "watch" : p.conflictFlag ? "static" : "ok";
+      var hit = over && inDanger ? "conflict" : under && inBest ? "watch" : null;
+      var status = hit ? (trans ? "reference" : hit) : p.conflictFlag ? "static" : "ok";
       return { sector: p.sector, action: action, usAnalog: p.usAnalog, best: zoneLabel(p.best), danger: zoneLabel(p.danger),
-        confidence: p.analogConfidence, inDanger: inDanger, inBest: inBest, status: status,
-        flag: p.conflictFlag || "", evidence: p.chinaEvidence || "" };
+        confidence: p.analogConfidence, inDanger: inDanger, inBest: inBest, status: status, reference: trans,
+        softOf: trans ? hit : null, flag: p.conflictFlag || "", evidence: p.chinaEvidence || "" };
     });
   }
   if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone };
@@ -119,17 +124,26 @@
     var clock = cycle && cycle.rateClock;
     var rows = clockPriorRows(advice, clock);
     if (!rows.length) { state.textContent = "advice.json 暂无 clockSectorPrior。"; return; }
-    var ok = clock && clock.status === "ok" && clock.quadrant;
-    state.innerHTML = ok ?
-      "当前象限：<b>" + esc(clock.quadrant + " " + (clock.subState || clock.quadrantName || "")) + "</b>（asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "—") +
-        (clock.deadBand ? "，10Y 60日变化在 ±10bp 死区内，按符号倾向判定" : "") + "）· 美国先验本象限整体年化总回报 " +
-        (clock.usPriorAnnualReturn == null ? "—" : clock.usPriorAnnualReturn + "%") + " · 标黄 = 学派超配但落在美国先验雷区" :
+    var live = clock && clock.status === "ok";
+    var trans = live && clock.state === "transitional";
+    var gr = (clock && clock.growth) || {};
+    var gNote = gr.boundary ? "；增长<b>边界</b>（PMI 3月均 " + esc(gr.pmi3m) + " 处 49.5–50.5）" : "";
+    function pr(v) { return v == null ? "—" : v + "%"; }
+    state.innerHTML = trans ?
+      "当前状态：<b>" + esc(clock.stateLabel || "利率走平·过渡期") + "</b> · 最近象限 " + esc((clock.leanQuadrant || "—") + " " + (clock.leanQuadrantName || clock.leanSubState || "")) +
+        "（参考，Δ10Y " + esc((clock.d10y60bp > 0 ? "+" : "") + clock.d10y60bp) + "bp/60日，在 ±10bp 死区内；asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "低") + "）" + gNote +
+        " · 美国先验（最近象限，仅参考）" + pr(clock.leanUsPriorAnnualReturn) + " · 过渡期不判硬冲突，命中项标「参考」" :
+      live && clock.quadrant ?
+      "当前象限：<b>" + esc(clock.quadrant + " " + (clock.subState || clock.quadrantName || "")) + "</b>（asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "—") + "）" + gNote +
+        " · 美国先验本象限整体年化总回报 " + pr(clock.usPriorAnnualReturn) + " · 标黄 = 学派超配但落在美国先验雷区" :
       "当前象限未判定（" + esc((clock && (clock.statusNote || clock.status)) || "行情核心数据未含 rateClock") + "），下表仅展示静态先验。";
-    var LBL = { conflict: "冲突", watch: "复核", "static": "待实证", ok: "—" };
+    var LBL = { conflict: "冲突", watch: "复核", reference: "参考", "static": "待实证", ok: "—" };
     table.innerHTML = '<table class="matrix research-table"><thead><tr><th scope="col">中国板块</th><th scope="col">学派观点</th><th scope="col">美国类比（假设）</th><th scope="col">最佳象限</th><th scope="col">雷区</th><th scope="col">类比置信</th><th scope="col">冲突</th></tr></thead><tbody>' +
       rows.map(function (r) {
-        var hl = r.status === "conflict" ? ' class="clock-conflict" style="background:rgba(212,160,23,.16)"' : "";
-        var mark = (r.inDanger ? " ⚠️当前处雷区" : "") + (r.inBest ? " ★当前处最佳" : "");
+        var hl = r.status === "conflict" ? ' class="clock-conflict" style="background:rgba(212,160,23,.16)"' :
+          r.status === "reference" ? ' class="clock-reference" style="background:rgba(148,163,184,.10)"' : "";
+        var mark = r.reference ? (r.inDanger ? " ◌最近象限雷区（参考）" : "") + (r.inBest ? " ☆最近象限最佳（参考）" : "") :
+          (r.inDanger ? " ⚠️当前处雷区" : "") + (r.inBest ? " ★当前处最佳" : "");
         return "<tr" + hl + "><td><strong>" + esc(r.sector) + "</strong></td><td>" + esc(r.action) + "</td><td>" + esc(r.usAnalog) + '<span class="cell-note">' + esc(r.evidence) + "</span></td><td>" + esc(r.best) + "</td><td>" + esc(r.danger) + esc(mark) +
           "</td><td>" + esc(r.confidence) + "</td><td><b>" + esc(LBL[r.status]) + "</b>" + (r.flag ? '<span class="cell-note">' + esc(r.flag) + "</span>" : "") + "</td></tr>";
       }).join("") + "</tbody></table>";

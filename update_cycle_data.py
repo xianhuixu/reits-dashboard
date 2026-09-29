@@ -119,7 +119,7 @@ def update_cycle_data():
             MACRO_JSON.write_text(json.dumps(macro, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         apply_rate_clock(cycle, macro, _load(ADVICE_JSON), _load(PANEL_JSON), today_str)
         rcb = cycle["rateClock"]
-        print(f"[info] rateClock: {rcb.get('status')} {rcb.get('quadrant')} {rcb.get('quadrantName')} "
+        print(f"[info] rateClock: {rcb.get('status')} {rcb.get('state')} {rcb.get('quadrant') or ('lean ' + str(rcb.get('leanQuadrant')))} {rcb.get('quadrantName')} "
               f"Δ10Y60={rcb.get('d10y60bp')}bp PMI3m={(rcb.get('growth') or {}).get('pmi3m')} "
               f"冲突 {len(rcb.get('conflictFlags') or [])} 条；rateRentGate={cycle['rateRentGate']['status']}")
         updated = True

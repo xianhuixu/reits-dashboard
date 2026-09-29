@@ -61,6 +61,65 @@ def check_overseas(errs):
             errs.append(f"{f} 仍引用 overseas_static / overseasStatic")
 
 
+STATES = {"definite", "transitional", "undetermined"}
+FLAG_LEVELS = {"conflict", "watch", "background", "reference"}
+DEAD_BAND_BP = 10.0
+PMI_BAND = 0.5
+
+
+def _state_rules(obj, where, errs):
+    """单个时点（当前或 history 条目）的死区/象限一致性。"""
+    st, d, q = obj.get("state"), obj.get("d10y60bp"), obj.get("quadrant")
+    if st not in STATES:
+        errs.append(f"{where}: state 非法 {st}")
+        return
+    if st == "transitional":
+        if q is not None:
+            errs.append(f"{where}: 过渡期不得给出象限（quadrant={q}）")
+        if obj.get("rateDir") != "flat":
+            errs.append(f"{where}: 过渡期 rateDir 必须为 flat")
+        if obj.get("confidence") not in (None, "低"):
+            errs.append(f"{where}: 过渡期置信度必须为 低")
+        if d is not None and abs(d) >= DEAD_BAND_BP:
+            errs.append(f"{where}: Δ10Y {d}bp 超出 ±10bp 却标为过渡期")
+        if obj.get("leanQuadrant") not in ("Q1", "Q2", "Q3", "Q4", None):
+            errs.append(f"{where}: leanQuadrant 非法")
+    elif st == "definite":
+        if q not in ("Q1", "Q2", "Q3", "Q4"):
+            errs.append(f"{where}: 确定状态必须给出象限")
+        if d is not None and abs(d) < DEAD_BAND_BP:
+            errs.append(f"{where}: Δ10Y {d}bp 在 ±10bp 死区内却判定了象限 {q}")
+    elif q is not None:
+        errs.append(f"{where}: undetermined 不得给出象限")
+
+
+def check_dead_band(rc, errs):
+    _state_rules(rc, "rateClock", errs)
+    st = rc.get("state")
+    if st == "transitional":
+        if rc.get("usPriorAnnualReturn") is not None:
+            errs.append("rateClock: 过渡期 usPriorAnnualReturn 应为空（最近象限先验放 leanUsPriorAnnualReturn）")
+        if rc.get("stateLabel") != "利率走平·过渡期":
+            errs.append("rateClock: 过渡期 stateLabel 应为「利率走平·过渡期」")
+        hard = [f for f in rc.get("conflictFlags") or [] if f.get("level") != "reference"]
+        if hard:
+            errs.append(f"rateClock: 过渡期只允许「参考」级提示，发现 {[f.get('level') for f in hard]}")
+    elif st == "definite":
+        if any(f.get("level") == "reference" for f in rc.get("conflictFlags") or []):
+            errs.append("rateClock: 确定象限不应出现 reference 级提示")
+    g = rc.get("growth") or {}
+    if g.get("pmi3m") is not None:
+        want = abs(g["pmi3m"] - 50) <= PMI_BAND + 1e-9
+        if bool(g.get("boundary")) != want:
+            errs.append(f"rateClock.growth.boundary={g.get('boundary')} 与 PMI3m {g['pmi3m']} 不一致（49.5–50.5 为边界）")
+        if want and not g.get("boundaryNote"):
+            errs.append("rateClock.growth 边界状态缺 boundaryNote")
+    for h in rc.get("history") or []:
+        _state_rules(h, f"rateClock.history[{h.get('month')}]", errs)
+        if h.get("pmi3m") is not None and "growthBoundary" in h and bool(h["growthBoundary"]) != (abs(h["pmi3m"] - 50) <= PMI_BAND + 1e-9):
+            errs.append(f"rateClock.history[{h.get('month')}] growthBoundary 与 pmi3m 不一致")
+
+
 def check_cycle(errs):
     cy = load("cycle_judgment.json")
     rc = cy.get("rateClock")
@@ -79,8 +138,9 @@ def check_cycle(errs):
             errs.append("rateClock.history 条目缺 month/quadrant")
         if rc.get("rateDir") not in ("up", "down", "flat"):
             errs.append("rateClock.rateDir 非法")
+        check_dead_band(rc, errs)
     for f in rc.get("conflictFlags") or []:
-        if f.get("level") not in ("conflict", "watch", "background") or not f.get("text"):
+        if f.get("level") not in FLAG_LEVELS or not f.get("text"):
             errs.append(f"rateClock.conflictFlags 条目非法 {f}")
     g = cy.get("rateRentGate")
     if not g or g.get("status") not in ("triggered", "not_triggered", "pending data"):

@@ -5,8 +5,13 @@
 
 口径（中国化，见 docs/rate-clock.md）：
 - 利率轴：10Y 国债收益率 60 个交易日变化，±10bp 死区。死区内 rateDir='flat'，
-  象限按变化符号（rateLean）给出「倾向象限」并标 confidence='低'；变化恰为 0 时不判定。
+  **不强制判定象限**：state='transitional'，显示「利率走平·过渡期」，quadrant=None；
+  另给出按变化符号的 leanQuadrant（最近象限）与 bp 变化，仅作参考，confidence='低'。
   （不做长期滞回：慢速单边下行时滞回会把一年前的升息方向延续到今天，误导性更大。）
+- 增长边界：PMI 3 月均值落在 [49.5, 50.5] 时 growth.boundary=True、标注「边界」，
+  象限仍按 50 判定但置信度下调并注明（仅利率轴决定是否进入过渡期）。
+- 冲突标记：只有确定象限才产生硬冲突（conflict/watch/background）；过渡期按 leanQuadrant
+  产生 level='reference' 的「参考」提示。
 - 增长轴：制造业 PMI 近 3 个月均值 vs 50（替代美国「实际 GDP 同比 2%」）；
   趋势 = 近 3 月均值 − 前 3 月均值（±0.1 死区），用于 Q4 滞胀/复苏拆分。
 - 象限：Q1 增长强+升息（繁荣）· Q2 增长强+降息（复苏/泡沫）· Q3 增长弱+降息（衰退）· Q4 增长弱+升息（滞胀/复苏）。
@@ -23,6 +28,8 @@ RATE_LOOKBACK = 60          # 交易日
 RATE_DEAD_BAND_BP = 10.0
 PMI_THRESHOLD = 50.0
 PMI_TREND_DEAD_BAND = 0.1
+PMI_BOUNDARY_BAND = 0.5      # 49.5–50.5 视为增长边界
+TRANSITIONAL_LABEL = "利率走平·过渡期"
 HISTORY_MONTHS = 24
 
 # 门槛：升息快于租金（P1-5）
@@ -124,10 +131,6 @@ def rate_direction(change_bp, dead_band: float = RATE_DEAD_BAND_BP):
     return "flat", True, lean
 
 
-def effective_dir(rdir, lean):
-    return rdir if rdir in ("up", "down") else lean
-
-
 def growth_state(pmi: list[dict], upto_month: str | None = None):
     """PMI 近3月均值 vs 50 + 趋势。返回 dict 或 None（不足 3 个月）。"""
     rows = [r for r in pmi if upto_month is None or r["month"] <= upto_month]
@@ -145,9 +148,13 @@ def growth_state(pmi: list[dict], upto_month: str | None = None):
         trend = "下行"
     else:
         trend = "持平"
+    boundary = abs(avg3 - PMI_THRESHOLD) <= PMI_BOUNDARY_BAND + 1e-9
     return {
         "pmiLatest": rows[-1]["value"], "pmiMonth": rows[-1]["month"],
         "pmi3m": round(avg3, 2), "level": "强" if avg3 >= PMI_THRESHOLD else "弱",
+        "boundary": boundary, "levelLabel": "边界" if boundary else ("强" if avg3 >= PMI_THRESHOLD else "弱"),
+        "boundaryNote": (f"PMI 3月均值 {avg3:.2f} 处于 {PMI_THRESHOLD - PMI_BOUNDARY_BAND:.1f}–{PMI_THRESHOLD + PMI_BOUNDARY_BAND:.1f} 边界带，"
+                         f"强/弱归属不稳定（按 50 暂归「{'强' if avg3 >= PMI_THRESHOLD else '弱'}」）") if boundary else None,
         "trend": trend, "trendDelta": trend_val,
     }
 
@@ -171,13 +178,18 @@ def sub_state(quadrant: str | None, growth_trend: str | None):
 
 
 def rotation_of(history: list[dict]):
-    seq = []
+    """只用确定象限（过渡期月份跳过）判断最近一次切换的旋转方向。"""
+    seq, months = [], []
     for h in history:
         q = h.get("quadrant")
         if q and (not seq or seq[-1] != q):
             seq.append(q)
+            months.append(h.get("month"))
+    last_def = next((h.get("month") for h in reversed(history) if h.get("quadrant")), None)
+    trans_since = sum(1 for h in history if last_def and h.get("month", "") > last_def and h.get("state") == "transitional")
+    base = {"basis": "仅确定象限（过渡期月份不计）", "lastDefiniteMonth": last_def, "transitionalMonthsSince": trans_since}
     if len(seq) < 2:
-        return {"direction": "未切换", "from": None, "to": seq[-1] if seq else None}
+        return dict(base, direction="未切换", **{"from": None, "to": seq[-1] if seq else None, "switchMonth": None})
     a, b = seq[-2], seq[-1]
     if CLOCKWISE_NEXT[a] == b:
         d = "顺时针"
@@ -185,7 +197,29 @@ def rotation_of(history: list[dict]):
         d = "逆时针（利率先行）"
     else:
         d = "跳跃"
-    return {"direction": d, "from": a, "to": b}
+    return dict(base, direction=d, **{"from": a, "to": b, "switchMonth": months[-1]})
+
+
+def classify_point(chg, g) -> dict:
+    """单个时点的象限状态：definite（确定象限）/ transitional（利率走平）/ undetermined（数据不足）。"""
+    rdir, band, lean = rate_direction(chg)
+    level = g["level"] if g else None
+    trend = g["trend"] if g else None
+    gb = bool(g and g.get("boundary"))
+    if rdir in ("up", "down") and level:
+        q = quadrant_of(level, rdir)
+        return {"state": "definite", "stateLabel": QUADRANT_META[q]["name"], "quadrant": q,
+                "subState": sub_state(q, trend), "leanQuadrant": None, "leanSubState": None,
+                "rateDir": rdir, "rateLean": lean, "deadBand": False,
+                "confidence": "中低" if gb else "中"}
+    if rdir == "flat" and level:
+        lq = quadrant_of(level, lean)
+        return {"state": "transitional", "stateLabel": TRANSITIONAL_LABEL, "quadrant": None, "subState": None,
+                "leanQuadrant": lq, "leanSubState": sub_state(lq, trend) if lq else None,
+                "rateDir": "flat", "rateLean": lean, "deadBand": True, "confidence": "低"}
+    return {"state": "undetermined", "stateLabel": "未判定", "quadrant": None, "subState": None,
+            "leanQuadrant": None, "leanSubState": None, "rateDir": rdir, "rateLean": lean,
+            "deadBand": band, "confidence": None}
 
 
 def month_end_indices(series: list[dict]) -> dict[str, int]:
@@ -206,15 +240,17 @@ def build_history(series: list[dict], pmi: list[dict], months: int = HISTORY_MON
         chg, _, d_end = rate_change_bp(series, end_idx=i)
         if chg is None:
             continue
-        rdir, band, lean = rate_direction(chg)
         g = growth_state(pmi, upto_month=m)
-        q = quadrant_of(g["level"] if g else None, effective_dir(rdir, lean))
+        c = classify_point(chg, g)
         hist.append({
             "month": m, "asOf": d_end, "y10": series[i]["value"], "d10y60bp": chg,
-            "rateDir": rdir, "rateLean": lean, "deadBand": band, "confidence": "低" if band else "中",
+            "state": c["state"], "stateLabel": c["stateLabel"],
+            "rateDir": c["rateDir"], "rateLean": c["rateLean"], "deadBand": c["deadBand"], "confidence": c["confidence"],
             "pmi3m": g["pmi3m"] if g else None, "growth": g["level"] if g else None,
+            "growthBoundary": bool(g and g.get("boundary")),
             "growthTrend": g["trend"] if g else None,
-            "quadrant": q, "subState": sub_state(q, g["trend"] if g else None),
+            "quadrant": c["quadrant"], "subState": c["subState"],
+            "leanQuadrant": c["leanQuadrant"], "leanSubState": c["leanSubState"],
         })
     return hist[-months:]
 
@@ -232,8 +268,8 @@ def compute_rate_clock(series: list[dict], pmi: list[dict], old_block: dict | No
     base = {
         "_comment": "增长×利率 REITs 投资时钟（杜丽虹 2021 框架中国化）；仅作宏观背景，不改变 advice.sectorViews；见 docs/rate-clock.md",
         "method": {
-            "rate": f"10Y 国债 {RATE_LOOKBACK} 交易日变化，±{RATE_DEAD_BAND_BP:.0f}bp 死区（死区内按符号给倾向象限，置信度低）",
-            "growth": "制造业 PMI 近3月均值 vs 50；趋势=近3月均值−前3月均值（±0.1 死区）",
+            "rate": f"10Y 国债 {RATE_LOOKBACK} 交易日变化，±{RATE_DEAD_BAND_BP:.0f}bp 死区；死区内不判象限，记「{TRANSITIONAL_LABEL}」，最近象限仅作参考",
+            "growth": f"制造业 PMI 近3月均值 vs 50（{PMI_THRESHOLD - PMI_BOUNDARY_BAND:.1f}–{PMI_THRESHOLD + PMI_BOUNDARY_BAND:.1f} 标「边界」）；趋势=近3月均值−前3月均值（±0.1 死区）",
             "usPriorSource": "overseas_clock_du2021.json（美国 1994 年以来，年化总回报）",
         },
         "sources": {"y10": CGB10Y_SOURCE, "pmi": PMI_SOURCE},
@@ -250,25 +286,39 @@ def compute_rate_clock(series: list[dict], pmi: list[dict], old_block: dict | No
         return base
     hist = build_history(series, pmi)
     chg, d0, d1 = rate_change_bp(series)
-    rdir, band, lean = rate_direction(chg)
     g = growth_state(pmi)
-    q = quadrant_of(g["level"], effective_dir(rdir, lean))
-    sub = sub_state(q, g["trend"])
+    c = classify_point(chg, g)
+    q, sub = c["quadrant"], c["subState"]
     merged = merge_history(old_hist, hist)
-    prior = QUADRANT_META[q]["usPrior"] if q else None
-    if q == "Q4" and sub in Q4_SPLIT_PRIOR:
-        prior = Q4_SPLIT_PRIOR[sub]
+
+    def prior_of(qq, ss):
+        if not qq:
+            return None
+        return Q4_SPLIT_PRIOR[ss] if qq == "Q4" and ss in Q4_SPLIT_PRIOR else QUADRANT_META[qq]["usPrior"]
+
+    notes = []
+    if c["state"] == "transitional":
+        notes.append(f"10Y 60日变化 {chg:+.1f}bp 在 ±{RATE_DEAD_BAND_BP:.0f}bp 死区内 → 利率走平·过渡期，不判定象限；"
+                     f"最近象限 {c['leanQuadrant'] or '—'} 仅作参考")
+    elif c["state"] == "definite":
+        notes.append(f"10Y 60日变化 {chg:+.1f}bp 超出死区")
+    if g and g.get("boundary"):
+        notes.append(g["boundaryNote"])
     base.update({
         "status": "ok",
         "asOf": d1,
         "y10": series[-1]["value"], "y10Start": series[-1 - RATE_LOOKBACK]["value"], "y10StartDate": d0,
-        "d10y60bp": chg, "rateDir": rdir, "rateLean": lean, "deadBand": band,
-        "confidence": "低" if band else "中",
-        "confidenceNote": ("10Y 60日变化在 ±10bp 死区内，象限按变化符号给出倾向判断" if band
-                           else "10Y 60日变化超出死区"),
+        "d10y60bp": chg, "rateDir": c["rateDir"], "rateLean": c["rateLean"], "deadBand": c["deadBand"],
+        "state": c["state"], "stateLabel": c["stateLabel"],
+        "confidence": c["confidence"],
+        "confidenceNote": "；".join(notes),
         "growth": g,
-        "quadrant": q, "quadrantName": QUADRANT_META[q]["name"] if q else "利率横盘（未判定）",
-        "subState": sub, "usPriorAnnualReturn": prior,
+        "quadrant": q, "quadrantName": QUADRANT_META[q]["name"] if q else c["stateLabel"],
+        "subState": sub, "usPriorAnnualReturn": prior_of(q, sub),
+        "leanQuadrant": c["leanQuadrant"], "leanSubState": c["leanSubState"],
+        "leanQuadrantName": QUADRANT_META[c["leanQuadrant"]]["name"] if c["leanQuadrant"] else None,
+        "leanUsPriorAnnualReturn": prior_of(c["leanQuadrant"], c["leanSubState"]),
+        "leanNote": "仅作参考：死区内按 10Y 变化符号推得的最近象限，不参与硬冲突判定" if c["state"] == "transitional" else None,
         "rotation": rotation_of(merged),
         "history": merged,
     })
@@ -293,10 +343,20 @@ def _in_zone(zone: list | None, quadrant: str, sub: str | None) -> bool:
 
 
 def conflict_flags(clock: dict, advice: dict | None) -> list[dict]:
-    """当前象限 vs 学派板块观点：超配板块落在美国先验雷区 → 冲突；低配板块处于最佳象限 → 提示。"""
-    if not clock or clock.get("status") != "ok" or not clock.get("quadrant") or not advice:
+    """确定象限 vs 学派板块观点：超配板块落在美国先验雷区 → conflict；低配板块处最佳象限 → watch；
+    高风险象限 → background。过渡期（利率走平）只按 leanQuadrant 产生 level='reference' 的「参考」提示。"""
+    if not clock or clock.get("status") != "ok" or not advice:
         return []
-    q, sub = clock["quadrant"], clock.get("subState")
+    definite = bool(clock.get("quadrant"))
+    if definite:
+        q, sub = clock["quadrant"], clock.get("subState")
+        tag = f"rateClock={q}（{clock.get('quadrantName')}）"
+    elif clock.get("state") == "transitional" and clock.get("leanQuadrant"):
+        q, sub = clock["leanQuadrant"], clock.get("leanSubState")
+        tag = f"参考·{TRANSITIONAL_LABEL}（最近象限 {q} {clock.get('leanQuadrantName') or ''}，Δ10Y {clock.get('d10y60bp')}bp）"
+    else:
+        return []
+    gnote = "；增长处边界带" if (clock.get("growth") or {}).get("boundary") else ""
     views = {v.get("sector"): v for v in advice.get("sectorViews") or []}
     flags = []
     for p in advice.get("clockSectorPrior") or []:
@@ -304,19 +364,22 @@ def conflict_flags(clock: dict, advice: dict | None) -> list[dict]:
         act = v.get("action")
         if _is_overweight(act) and _in_zone(p.get("danger"), q, sub):
             flags.append({
-                "sector": p["sector"], "level": "conflict", "action": act,
-                "text": f"rateClock={q}（{clock.get('quadrantName')}）× {p['sector']}「{act}」 vs 美国先验雷区（{p.get('usAnalog')}）→ 需给出中国实证理由或降级",
+                "sector": p["sector"], "level": "conflict" if definite else "reference", "action": act,
+                "text": f"{tag} × {p['sector']}「{act}」 vs 美国先验雷区（{p.get('usAnalog')}）" +
+                        ("→ 需给出中国实证理由或降级" if definite else "→ 非确定象限，仅提示跟踪") + gnote,
             })
         elif _is_underweight(act) and _in_zone(p.get("best"), q, sub):
             flags.append({
-                "sector": p["sector"], "level": "watch", "action": act,
-                "text": f"rateClock={q} 为 {p['sector']} 美国先验最佳象限（{p.get('usAnalog')}），学派「{act}」→ 复核是否错过修复",
+                "sector": p["sector"], "level": "watch" if definite else "reference", "action": act,
+                "text": f"{tag} 为 {p['sector']} 美国先验最佳象限（{p.get('usAnalog')}），学派「{act}」" +
+                        ("→ 复核是否错过修复" if definite else "→ 非确定象限，仅提示跟踪") + gnote,
             })
     if q == "Q3" or (q == "Q4" and sub == "滞胀"):
         mon = ((advice.get("horizons") or {}).get("monthly") or {}).get("stance")
+        pr = clock.get("usPriorAnnualReturn") if definite else clock.get("leanUsPriorAnnualReturn")
         flags.append({
-            "sector": "全市场", "level": "background",
-            "text": f"rateClock={q}{'·' + sub if sub else ''}：美国先验整体年化 {clock.get('usPriorAnnualReturn')}%（高风险象限）vs 学派月度「{mon}」→ 按 resolutionRules 仅作宏观背景，强化偏债/逆周期结构，不单独改仓位",
+            "sector": "全市场", "level": "background" if definite else "reference",
+            "text": f"{tag}{'·' + sub if sub else ''}：美国先验整体年化 {pr}%（高风险象限）vs 学派月度「{mon}」→ 按 resolutionRules 仅作宏观背景，不单独改仓位",
         })
     return flags
 

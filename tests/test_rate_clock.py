@@ -40,7 +40,59 @@ class RateClockTests(unittest.TestCase):
         self.assertEqual(g["pmi3m"], 49.77)
         self.assertEqual(g["level"], "弱")
         self.assertEqual(g["trend"], "下行")
+        self.assertTrue(g["boundary"])                     # 49.77 ∈ [49.5, 50.5]
+        self.assertEqual(g["levelLabel"], "边界")
+        self.assertIn("边界", g["boundaryNote"])
         self.assertIsNone(rc.growth_state(pmi([50, 51])))
+
+    def test_growth_boundary_band_edges(self):
+        self.assertTrue(rc.growth_state(pmi([49.5] * 6))["boundary"])
+        self.assertTrue(rc.growth_state(pmi([50.5] * 6))["boundary"])
+        self.assertFalse(rc.growth_state(pmi([49.4] * 6))["boundary"])
+        self.assertFalse(rc.growth_state(pmi([50.6] * 6))["boundary"])
+        self.assertEqual(rc.growth_state(pmi([49.4] * 6))["levelLabel"], "弱")
+
+    def test_dead_band_is_transitional_not_forced_quadrant(self):
+        flat_down = daily([1.80 - i * 0.001 for i in range(200)])  # 60 日 −6bp
+        weak = pmi([50.5] * 18 + [49.6, 49.5, 49.3, 49.2, 49.1, 49.0])  # 3M 49.1，非边界
+        c = rc.compute_rate_clock(flat_down, weak, today="2024-12-31")
+        self.assertEqual(c["state"], "transitional")
+        self.assertEqual(c["stateLabel"], "利率走平·过渡期")
+        self.assertIsNone(c["quadrant"])
+        self.assertIsNone(c["usPriorAnnualReturn"])
+        self.assertEqual(c["rateDir"], "flat")
+        self.assertEqual(c["confidence"], "低")
+        self.assertEqual((c["leanQuadrant"], c["leanUsPriorAnnualReturn"]), ("Q3", 3.5))
+        self.assertAlmostEqual(c["d10y60bp"], -6.0, places=1)
+        flat_up = daily([1.60 + i * 0.001 for i in range(200)])
+        self.assertEqual(rc.compute_rate_clock(flat_up, weak)["leanQuadrant"], "Q4")
+        self.assertEqual(rc.compute_rate_clock(daily([1.7] * 200), weak)["leanQuadrant"], None)
+
+    def test_history_marks_transitional_months_distinctly(self):
+        # 前段快速下行（确定 Q3），后段横盘（过渡期）
+        vals = [2.2 - i * 0.004 for i in range(150)] + [1.604 - i * 0.0005 for i in range(150)]
+        weak = pmi([49.0] * 24)
+        c = rc.compute_rate_clock(daily(vals), weak)
+        states = {h["state"] for h in c["history"]}
+        self.assertEqual(states, {"definite", "transitional"})
+        for h in c["history"]:
+            if h["state"] == "transitional":
+                self.assertIsNone(h["quadrant"])
+                self.assertEqual(h["stateLabel"], "利率走平·过渡期")
+                self.assertTrue(abs(h["d10y60bp"]) < 10)
+            else:
+                self.assertEqual(h["quadrant"], "Q3")
+        rot = c["rotation"]
+        self.assertEqual(rot["lastDefiniteMonth"], max(h["month"] for h in c["history"] if h["state"] == "definite"))
+        self.assertGreater(rot["transitionalMonthsSince"], 0)
+
+    def test_growth_boundary_lowers_confidence_but_keeps_definite_quadrant(self):
+        falling = daily([2.0 - i * 0.004 for i in range(200)])
+        c = rc.compute_rate_clock(falling, pmi([50.0] * 18 + [49.9, 49.8, 49.8, 49.7, 49.7, 49.6]))
+        self.assertEqual((c["state"], c["quadrant"]), ("definite", "Q3"))
+        self.assertTrue(c["growth"]["boundary"])
+        self.assertEqual(c["confidence"], "中低")
+        self.assertIn("边界", c["confidenceNote"])
 
     def test_quadrants_and_q4_split(self):
         self.assertEqual(rc.quadrant_of("强", "up"), "Q1")
@@ -57,6 +109,10 @@ class RateClockTests(unittest.TestCase):
         h = [{"quadrant": q} for q in ("Q1", "Q2")]
         self.assertTrue(rc.rotation_of(h)["direction"].startswith("逆时针"))
         self.assertEqual(rc.rotation_of([{"quadrant": "Q3"}])["direction"], "未切换")
+        h = [{"month": "2025-01", "quadrant": "Q3", "state": "definite"}, {"month": "2025-02", "quadrant": None, "state": "transitional"},
+             {"month": "2025-03", "quadrant": "Q4", "state": "definite"}, {"month": "2025-04", "quadrant": None, "state": "transitional"}]
+        r = rc.rotation_of(h)
+        self.assertEqual((r["from"], r["to"], r["switchMonth"], r["lastDefiniteMonth"], r["transitionalMonthsSince"]), ("Q3", "Q4", "2025-03", "2025-03", 1))
 
     def test_compute_rate_clock_q3_and_q4_stagflation_prior(self):
         falling = daily([2.0 - i * 0.004 for i in range(200)])  # −0.4bp/日 → 60 日 −24bp
@@ -97,6 +153,15 @@ class RateClockTests(unittest.TestCase):
         self.assertTrue(any(f["level"] == "watch" and f["sector"] == "仓储物流" for f in flags))
         self.assertTrue(any(f["level"] == "background" for f in flags))
         self.assertEqual(rc.conflict_flags({"status": "unavailable"}, advice), [])
+        # 过渡期：按最近象限推演，但只出「参考」软提示，不出硬冲突
+        trans = {"status": "ok", "state": "transitional", "quadrant": None, "leanQuadrant": "Q3", "leanSubState": "衰退",
+                 "leanQuadrantName": "衰退", "leanUsPriorAnnualReturn": 3.5, "d10y60bp": -5.9, "growth": {"boundary": True}}
+        soft = rc.conflict_flags(trans, advice)
+        self.assertTrue(soft)
+        self.assertEqual({f["level"] for f in soft}, {"reference"})
+        self.assertTrue(all(f["text"].startswith("参考·利率走平·过渡期") for f in soft))
+        self.assertIn("消费", [f["sector"] for f in soft])
+        self.assertTrue(any("增长处边界带" in f["text"] for f in soft))
 
     def test_stagflation_zone_matches_only_q4_stagflation(self):
         self.assertTrue(rc._in_zone(["Q4-stagflation"], "Q4", "滞胀"))

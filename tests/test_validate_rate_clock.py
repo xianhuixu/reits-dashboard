@@ -16,6 +16,37 @@ class ValidatorTests(unittest.TestCase):
         r = subprocess.run([sys.executable, "validate_rate_clock.py"], cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
+    def _rc(self):
+        return json.loads((ROOT / "cycle_judgment.json").read_text(encoding="utf-8"))["rateClock"]
+
+    def test_dead_band_rules_reject_forced_quadrant(self):
+        import validate_rate_clock as v
+        rc = self._rc()
+        bad = copy.deepcopy(rc)
+        bad.update(state="definite", quadrant="Q3", d10y60bp=-5.9, conflictFlags=[])
+        errs = []
+        v.check_dead_band(bad, errs)
+        self.assertTrue(any("死区内却判定了象限" in e for e in errs), errs)
+
+    def test_transitional_rejects_hard_flags_and_quadrant(self):
+        import validate_rate_clock as v
+        bad = copy.deepcopy(self._rc())
+        bad.update(state="transitional", stateLabel="利率走平·过渡期", rateDir="flat", confidence="低",
+                   quadrant="Q3", usPriorAnnualReturn=None, d10y60bp=-5.9,
+                   conflictFlags=[{"level": "conflict", "text": "x"}])
+        errs = []
+        v.check_dead_band(bad, errs)
+        self.assertTrue(any("过渡期不得给出象限" in e for e in errs), errs)
+        self.assertTrue(any("只允许「参考」" in e for e in errs), errs)
+
+    def test_growth_boundary_must_match_pmi3m(self):
+        import validate_rate_clock as v
+        bad = copy.deepcopy(self._rc())
+        bad["growth"] = dict(bad["growth"], pmi3m=49.77, boundary=False)
+        errs = []
+        v.check_dead_band(bad, errs)
+        self.assertTrue(any("boundary" in e for e in errs), errs)
+
 
 class UpdateCycleOfflineTests(unittest.TestCase):
     def setUp(self):
@@ -42,6 +73,9 @@ class UpdateCycleOfflineTests(unittest.TestCase):
         cycle = ucd.apply_rate_clock({"rateClock": None}, copy.deepcopy(macro), self.advice, self.panel, committed.get("computedAt"))
         rc = cycle["rateClock"]
         self.assertEqual(rc["quadrant"], committed["quadrant"])
+        self.assertEqual(rc["state"], committed["state"])
+        self.assertEqual(rc.get("leanQuadrant"), committed.get("leanQuadrant"))
+        self.assertEqual([h["state"] for h in rc["history"]], [h["state"] for h in committed["history"]])
         self.assertEqual(rc["d10y60bp"], committed["d10y60bp"])
         self.assertEqual(rc["asOf"], macro["cgb10y"]["asOf"])
         self.assertEqual(cycle["rateRentGate"]["spreadLeg"]["status"], "pending data")  # SEED 面板不得当真实

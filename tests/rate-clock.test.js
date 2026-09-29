@@ -24,6 +24,40 @@ test("clock prior without a live quadrant never claims a conflict", () => {
   assert.equal(rows.find((r) => r.sector === "消费").status, "static");
 });
 
+test("transitional state (rate flat) downgrades hits to soft reference, never conflict", () => {
+  const clock = { status: "ok", state: "transitional", stateLabel: "利率走平·过渡期", quadrant: null,
+    leanQuadrant: "Q3", leanSubState: "衰退", rateDir: "flat", confidence: "低" };
+  const rows = clockPriorRows(advice, clock);
+  assert.ok(rows.every((r) => r.status !== "conflict" && r.status !== "watch"));
+  const consumer = rows.find((r) => r.sector === "消费");
+  assert.equal(consumer.status, "reference");
+  assert.equal(consumer.softOf, "conflict");
+  assert.equal(consumer.inDanger, true);
+  assert.equal(consumer.reference, true);
+});
+
+test("transitional without lean quadrant behaves like undetermined", () => {
+  const rows = clockPriorRows(advice, { status: "ok", state: "transitional", quadrant: null, leanQuadrant: null });
+  assert.ok(rows.every((r) => !r.inDanger && !r.inBest && r.status !== "reference"));
+});
+
+test("committed rateClock: transitional ⇒ no quadrant, flat, low confidence, only reference flags", () => {
+  const rc = JSON.parse(read("cycle_judgment.json")).rateClock;
+  if (rc.status !== "ok") return;
+  assert.ok(["definite", "transitional", "undetermined"].includes(rc.state));
+  if (rc.state === "transitional") {
+    assert.equal(rc.quadrant, null);
+    assert.equal(rc.rateDir, "flat");
+    assert.equal(rc.confidence, "低");
+    assert.equal(rc.stateLabel, "利率走平·过渡期");
+    assert.ok(Math.abs(rc.d10y60bp) < 10);
+    assert.ok((rc.conflictFlags || []).every((f) => f.level === "reference"));
+  }
+  const app = read("app.js");
+  assert.match(app, /reference: "参考"/);
+  assert.match(app, /rc-trans/);
+});
+
 test("Q4 stagflation zone only matches stagflation sub-state", () => {
   assert.equal(inZone(["Q4-stagflation"], "Q4", "滞胀"), true);
   assert.equal(inZone(["Q4-stagflation"], "Q4", "复苏"), false);
