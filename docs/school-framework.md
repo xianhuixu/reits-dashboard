@@ -240,3 +240,12 @@
 
 面板数字须带 as-of；seed 快照不可替代 live 重算。
 
+
+## Appendix · 增长 × 利率 REITs 投资时钟（2026-09-29 新增）
+
+- 文献先验：杜丽虹 2021（美国 REITs，1994 年以来，年化总回报 Q1 4.9% / Q2 23.9% / Q3 3.5% / Q4 15.1%，滞胀 −10.7%，复苏 26.1%），见 `overseas_clock_du2021.json`。
+- `cycle_judgment.json.rateClock` 每日由 10Y（60 日，±10bp 死区）× PMI（3 月均值 vs 50，49.5–50.5 为边界带）自动判定，与美林时钟并列，**只作宏观背景层**（新增 resolutionRule：冲突自动产出 conflictFlag，不直接改变 sectorViews）。|Δ10Y| < 10bp 时不判象限，显示「利率走平·过渡期」，只给最近象限作参考；硬冲突只来自确定象限。
+- `advice.json.clockSectorPrior`：中国 9 业态 × 美国类比，**映射为本仪表盘假设**；当前（2026-09-28）为利率走平·过渡期（最近象限 Q3，增长边界），消费「标配偏超配」vs 购物中心 Q3 雷区仅为**参考**提示，不构成硬冲突。
+- `rateRentGate`：Δ10Y ≥ +25bp 且产权利差分位下降 ≥ 20pp → 利率风险升为高、估值闸门降为 partial；产权利差分位腿待 live 数据。
+- Beta：`correlation.betas`，采用截面相对排序（不用 Beta>1），与人工「防御 / 周期 / 扩张」标签对照，标出不一致。
+- 详见 `docs/rate-clock.md`。

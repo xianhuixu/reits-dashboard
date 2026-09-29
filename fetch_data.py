@@ -19,6 +19,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from beta_calc import compute_betas_safe
+
 ROOT = Path(__file__).resolve().parent
 IFIND_SCRIPT = Path(
     "/Users/lion/Library/Application Support/kimi-desktop/daimon-share/daimon/"
@@ -604,6 +606,8 @@ def main():
         corr_payload = {"benchmarks": benchmarks_meta, "matrix": matrix,
                         "scatter": scatter, "peers": peers}
         print(f"[corr] 基准 {len(benchmarks_meta)} 个", flush=True)
+        # 股/债 Beta（周频 104 周 + 52 周滚动 + Δ10Y 敏感度；杜丽虹 2021 偏股/偏债法）
+        corr_payload["betas"] = compute_betas_safe(close, bclose, universe, ROOT)
 
 
     # ---------- 5b. 个券相似度（个券×个券收益率相关性 Top5，供详情页"相似个券"） ----------
@@ -727,7 +731,7 @@ def main():
         "backtest": backtest,
         "cycle": cycle or None,
         "fundamentals": fund_raw.get("items", []) if isinstance(fund_raw, dict) else [],
-        "overseasStatic": load_json("overseas_static.json"),
+        "overseasClock": load_json("overseas_clock_du2021.json"),
         "series": {
             "dates": wdates,
             "market": eq_index(codes),

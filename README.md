@@ -62,7 +62,9 @@ https://xianhuixu.github.io/reits-dashboard/
 | `data_panel_l1l7.json` / `data_panel.js` | L1–L7 二级投研数据面板（L2 分权利差序列等） | 当前为 PPT seed；live 见 `build_data_panel.py` | seed → 日后日/周频 |
 | `universe.json` | 上市个券清单 | 手动（新 REIT 上市时） | 不定期 |
 | `fundamentals.json` | 分派达成率等基本面 | 手动 | 季度 |
-| `cycle_judgment.json` | 周期判定 + 10Y 国债 | 手动 | 月度 |
+| `cycle_judgment.json` | 周期判定 + 10Y 国债 （`rateClock` 增长×利率时钟、`rateRentGate` 闸门由 `update_cycle_data.py` 自动计算） | 手动 + 自动 | 月度 / 每日 |
+| `macro_series.json` | 真实 10Y 国债日序列 + 制造业 PMI 月序列缓存（东财数据中心） | `update_cycle_data.py` 自动 | 每日 |
+| `overseas_clock_du2021.json` | 美国 REITs 投资时钟先验（杜丽虹 2021，年化总回报；替代已删除的 `overseas_static.json` 占位矩阵） | 手动（静态文献数据） | 不定期 |
 | `holidays.txt` | 节假日表（跳过非交易日） | 手动 | 每年初 |
 | `hist_cache/`（gitignore） | 全历史日线增量缓存 | 抓取脚本自动维护，自带单位自愈 | 随行情更新 |
 

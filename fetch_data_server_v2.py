@@ -505,7 +505,7 @@ def main():
         "backtest": backtest,
         "cycle": cycle or None,
         "fundamentals": fund_raw.get("items", []) if isinstance(fund_raw, dict) else [],
-        "overseasStatic": load_json("overseas_static.json"),
+        "overseasClock": load_json("overseas_clock_du2021.json"),
         "series": {
             "dates": wdates,
             "market": eq_index(codes),

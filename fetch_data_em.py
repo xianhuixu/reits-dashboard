@@ -15,6 +15,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from beta_calc import compute_betas_safe
+
 ROOT = Path(__file__).resolve().parent
 DATA_JS = ROOT / "data.js"
 DATA_JSON = ROOT / "data.json"
@@ -615,6 +617,10 @@ def main():
     except Exception as e:
         print(f"[corr] 计算失败: {e}", flush=True)
 
+    # ---------- 5a. 股/债 Beta（周频 104 周 + 52 周滚动 + Δ10Y 敏感度；杜丽虹 2021 偏股/偏债法） ----------
+    if corr_payload is not None:
+        corr_payload["betas"] = compute_betas_safe(close, bclose, universe, ROOT)
+
 
     # ---------- 5b. 个券相似度（个券×个券收益率相关性 Top5，供详情页"相似个券"） ----------
     reit_peers = None
@@ -736,9 +742,10 @@ def main():
         us_long = json.loads((ROOT / "us_long_static.json").read_text(encoding="utf-8"))
     except Exception:
         pass
-    overseas_static = None
+    # 海外时钟先验：杜丽虹 2021 美国 REITs 投资时钟（替代已删除的 overseas_static.json 占位矩阵）
+    overseas_clock = None
     try:
-        overseas_static = json.loads((ROOT / "overseas_static.json").read_text(encoding="utf-8"))
+        overseas_clock = json.loads((ROOT / "overseas_clock_du2021.json").read_text(encoding="utf-8"))
     except Exception:
         pass
 
@@ -767,7 +774,7 @@ def main():
         "cycle": cycle or None,
         "fundamentals": fund_raw.get("items", []) if isinstance(fund_raw, dict) else [],
         "usLong": us_long,
-        "overseasStatic": overseas_static,
+        "overseasClock": overseas_clock,
         "series": {
             "dates": wdates,
             "market": eq_index(codes),

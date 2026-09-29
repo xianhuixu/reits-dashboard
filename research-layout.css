@@ -122,3 +122,9 @@ body { padding: 18px 28px 44px; max-width: 1600px; }
 /* L2 分权利差面板 */
 .panel-l2 h3 { color: var(--tx); font-weight: 650; }
 .panel-l2-stamp { letter-spacing: 0.01em; }
+
+/* 时钟先验（配置与风险 · 板块筛选） */
+#clockPriorPanel { margin-top: 20px; padding-top: 14px; border-top: 1px dashed var(--line); }
+#clockPriorPanel h3 { font-size: 14px; margin: 0 0 6px; }
+#clockPriorTable tr.clock-conflict td:last-child b { color: var(--gold); }
+#clockPriorTable tr.clock-reference td:last-child b { color: var(--tx3); font-weight: 600; border-bottom: 1px dashed var(--tx3); }

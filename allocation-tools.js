@@ -27,7 +27,38 @@
     return { count: group.length, valid: values.length,
       ret20: values.length ? values.reduce(function (a, b) { return a + b; }, 0) / values.length : null };
   }
-  if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize };
+  /** 象限区间是否命中（Q4 滞胀子态只在 subState=滞胀 时命中 Q4-stagflation）。 */
+  function inZone(zone, quadrant, sub) {
+    if (!zone || !zone.length || !quadrant) return false;
+    return zone.indexOf(quadrant) >= 0 || (quadrant === "Q4" && sub === "滞胀" && zone.indexOf("Q4-stagflation") >= 0);
+  }
+  function zoneLabel(zone) {
+    return zone && zone.length ? zone.map(function (z) { return z === "Q4-stagflation" ? "Q4·滞胀" : z; }).join(" / ") : "未给出";
+  }
+  /** advice.clockSectorPrior × sectorViews × 当前 rateClock → 表格行（纯函数，便于测试）。
+   * 过渡期（利率走平，|Δ10Y 60日| < 10bp）不判定象限：按最近象限推演，命中时 status=reference（软提示「参考」），不产生 conflict/watch。
+   * @param {any} advice @param {any} clock @returns {Array<any>} */
+  function clockPriorRows(advice, clock) {
+    var views = {};
+    ((advice && advice.sectorViews) || []).forEach(function (v) { views[v.sector] = v; });
+    var live = clock && clock.status === "ok";
+    var trans = !!(live && clock.state === "transitional" && clock.leanQuadrant);
+    var definite = !!(live && !trans && clock.quadrant);
+    var q = definite ? clock.quadrant : trans ? clock.leanQuadrant : null;
+    var sub = definite ? clock.subState : trans ? clock.leanSubState : null;
+    return ((advice && advice.clockSectorPrior) || []).map(function (p) {
+      var action = (views[p.sector] || {}).action || "—";
+      var over = /超配/.test(action) && !/低配/.test(action);
+      var under = /低配|观望|谨慎/.test(action);
+      var inDanger = inZone(p.danger, q, sub), inBest = inZone(p.best, q, sub);
+      var hit = over && inDanger ? "conflict" : under && inBest ? "watch" : null;
+      var status = hit ? (trans ? "reference" : hit) : p.conflictFlag ? "static" : "ok";
+      return { sector: p.sector, action: action, usAnalog: p.usAnalog, best: zoneLabel(p.best), danger: zoneLabel(p.danger),
+        confidence: p.analogConfidence, inDanger: inDanger, inBest: inBest, status: status, reference: trans,
+        softOf: trans ? hit : null, flag: p.conflictFlag || "", evidence: p.chinaEvidence || "" };
+    });
+  }
+  if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone };
   if (!root.document) return;
   var doc = root.document;
   // 按实际导航高度设置章节偏移，适配窄屏换行与字体缩放。
@@ -70,6 +101,73 @@
     });
   }
   if (filter) { filter.addEventListener("input", filterSectors); filter.addEventListener("change", filterSectors); }
+  // 时钟先验（advice.json 直读，不依赖研究数据包；当前象限取自核心 data.json 的 cycle.rateClock）
+  function esc(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function fetchAdvice() {
+    var urls = ["advice.json", "https://xianhuixu.github.io/reits-dashboard/advice.json"];
+    function at(i) {
+      if (i >= urls.length) return Promise.reject(new Error("advice.json 不可用"));
+      return fetch(urls[i]).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+      }).then(function (t) {
+        t = (t || "").replace(/^\uFEFF/, "").trim();
+        if (!t || t.charAt(0) === "<") throw new Error("HTML fallback");
+        return JSON.parse(t);
+      }).catch(function () { return at(i + 1); });
+    }
+    return at(0);
+  }
+  function renderClockPrior(advice, cycle) {
+    var state = doc.getElementById("clockPriorState"), table = doc.getElementById("clockPriorTable"), gateEl = doc.getElementById("clockPriorGate");
+    if (!state || !table) return;
+    var clock = cycle && cycle.rateClock;
+    var rows = clockPriorRows(advice, clock);
+    if (!rows.length) { state.textContent = "advice.json 暂无 clockSectorPrior。"; return; }
+    var live = clock && clock.status === "ok";
+    var trans = live && clock.state === "transitional";
+    var gr = (clock && clock.growth) || {};
+    var gNote = gr.boundary ? "；增长<b>边界</b>（PMI 3月均 " + esc(gr.pmi3m) + " 处 49.5–50.5）" : "";
+    function pr(v) { return v == null ? "—" : v + "%"; }
+    state.innerHTML = trans ?
+      "当前状态：<b>" + esc(clock.stateLabel || "利率走平·过渡期") + "</b> · 最近象限 " + esc((clock.leanQuadrant || "—") + " " + (clock.leanQuadrantName || clock.leanSubState || "")) +
+        "（参考，Δ10Y " + esc((clock.d10y60bp > 0 ? "+" : "") + clock.d10y60bp) + "bp/60日，在 ±10bp 死区内；asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "低") + "）" + gNote +
+        " · 美国先验（最近象限，仅参考）" + pr(clock.leanUsPriorAnnualReturn) + " · 过渡期不判硬冲突，命中项标「参考」" :
+      live && clock.quadrant ?
+      "当前象限：<b>" + esc(clock.quadrant + " " + (clock.subState || clock.quadrantName || "")) + "</b>（asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "—") + "）" + gNote +
+        " · 美国先验本象限整体年化总回报 " + pr(clock.usPriorAnnualReturn) + " · 标黄 = 学派超配但落在美国先验雷区" :
+      "当前象限未判定（" + esc((clock && (clock.statusNote || clock.status)) || "行情核心数据未含 rateClock") + "），下表仅展示静态先验。";
+    var LBL = { conflict: "冲突", watch: "复核", reference: "参考", "static": "待实证", ok: "—" };
+    table.innerHTML = '<table class="matrix research-table"><thead><tr><th scope="col">中国板块</th><th scope="col">学派观点</th><th scope="col">美国类比（假设）</th><th scope="col">最佳象限</th><th scope="col">雷区</th><th scope="col">类比置信</th><th scope="col">冲突</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        var hl = r.status === "conflict" ? ' class="clock-conflict" style="background:rgba(212,160,23,.16)"' :
+          r.status === "reference" ? ' class="clock-reference" style="background:rgba(148,163,184,.10)"' : "";
+        var mark = r.reference ? (r.inDanger ? " ◌最近象限雷区（参考）" : "") + (r.inBest ? " ☆最近象限最佳（参考）" : "") :
+          (r.inDanger ? " ⚠️当前处雷区" : "") + (r.inBest ? " ★当前处最佳" : "");
+        return "<tr" + hl + "><td><strong>" + esc(r.sector) + "</strong></td><td>" + esc(r.action) + "</td><td>" + esc(r.usAnalog) + '<span class="cell-note">' + esc(r.evidence) + "</span></td><td>" + esc(r.best) + "</td><td>" + esc(r.danger) + esc(mark) +
+          "</td><td>" + esc(r.confidence) + "</td><td><b>" + esc(LBL[r.status]) + "</b>" + (r.flag ? '<span class="cell-note">' + esc(r.flag) + "</span>" : "") + "</td></tr>";
+      }).join("") + "</tbody></table>";
+    var spec = advice.rateRentGate || {}, g = cycle && cycle.rateRentGate;
+    if (gateEl) {
+      var st = g ? ({ triggered: "已触发", not_triggered: "未触发", "pending data": "待数据" }[g.status] || g.status) : "待数据";
+      var legs = g ? "（利率腿：" + (g.rateLeg && g.rateLeg.status === "ok" ? (g.rateLeg.d10y60bp > 0 ? "+" : "") + g.rateLeg.d10y60bp + "bp/60日" + (g.rateLeg.met ? " 满足" : " 未满足") : "待数据") +
+        "；产权利差分位腿：" + (g.spreadLeg && g.spreadLeg.status === "ok" ? g.spreadLeg.pctileChangePP + "pp" : "pending data") + "）" : "";
+      var eff = spec.effectsIfTriggered || {};
+      gateEl.innerHTML = "<b>" + esc(spec.label || "升息快于租金闸门") + "</b>：" + esc(spec.rule || "") + " → 当前 <b>" + esc(st) + "</b>" + esc(legs) +
+        (g && g.status === "triggered" ? " · <b style=\"color:var(--up)\">已叠加：风险「" + esc(eff.risk) + "」升级为「" + esc(eff.escalateTo) + "」，估值闸门降为「" + esc(eff.downgradeTo) + "」</b>" :
+          " · 触发后：风险「" + esc(eff.risk) + "」→「" + esc(eff.escalateTo) + "」，估值闸门 →「" + esc(eff.downgradeTo) + "」") + "。" + esc(spec.dataStatus || "");
+    }
+  }
+  if (doc.getElementById("clockPriorPanel") && root.fetch) {
+    var cyclePromise = root.__DATA_READY ? root.__DATA_READY.then(function () { return (root.REITS_DATA || {}).cycle || null; }, function () { return null; }) : Promise.resolve(null);
+    fetchAdvice().then(function (advice) {
+      return cyclePromise.then(function (cycle) { renderClockPrior(advice, cycle); });
+    }).catch(function (e) {
+      var st = doc.getElementById("clockPriorState");
+      if (st) st.textContent = "时钟先验暂不可用（advice.json 加载失败），板块研究正文不受影响。";
+      if (root.console) root.console.warn("[clockPrior]", e && e.message);
+    });
+  }
   root.__DATA_READY.then(function () {
     var data = root.REITS_DATA || {};
     var rows = Array.isArray(data.reits) ? data.reits : [];
