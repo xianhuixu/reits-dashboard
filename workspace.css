@@ -391,3 +391,190 @@ th,.matrix th { font-size:11px; font-weight:500; background:var(--th-bg); color:
 .tender-status summary { cursor:pointer; padding:8px 0; }
 .tender-status details p { font-size:12px; }
 .tender-warning { color:var(--warn); }
+
+/* ===================================================================
+   市场总览 / 配置建议 重排（设计师线框 2026-09-30：结论 → 证据 → 明细）
+   · 首屏（结论横幅 + 4 张状态卡）纯 HTML/CSS，无图表；卡片与图表容器定高 → CLS≈0
+   · 数字 tabular-nums；圆角统一 var(--radius)=12px；间距 8 / 12 / 16 / 20
+   · 颜色：红/绿只用于价格（且带 ▲▼）；蓝阶 = 配置倾向；橙 = 预警/临界（描边 + ⚠）；品红 = 风险
+   =================================================================== */
+.ov-tier, .adv-tier { display:flex; align-items:center; gap:10px; margin:22px 0 10px; font-size:11px; letter-spacing:1.5px; color:var(--tx3); font-weight:600; }
+.ov-tier::after, .adv-tier::after { content:""; flex:1; border-top:1px dashed var(--line2); }
+#v-heatmap > .ov-tier:first-child { margin-top:0; }
+.ov-hero { display:flex; justify-content:space-between; align-items:center; gap:20px; background:var(--panel); border:1px solid var(--line2); border-left:4px solid var(--accent); border-radius:var(--radius); padding:18px 22px; box-shadow:var(--shadow); min-height:132px; }
+.ov-hero-main { min-width:0; flex:1; }
+.ov-kicker { font-size:11px; color:var(--tx3); margin:0 0 6px; letter-spacing:.5px; }
+.ov-kicker-src { margin-left:6px; opacity:.85; }
+.ov-headline { font-size:22px; line-height:1.45; font-weight:650; letter-spacing:-.2px; margin:0; min-height:32px; overflow-wrap:anywhere; }
+.ov-headline .ov-arrow { color:var(--tx3); font-weight:500; margin:0 6px; }
+.ov-headline .ov-stance { color:var(--accent); }
+.ov-headline .rc-tag { vertical-align:4px; margin-left:4px; }
+.ov-sub { margin:8px 0 0; font-size:12px; color:var(--tx2); display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; }
+.ov-tag-switch { display:inline-flex; align-items:center; height:20px; padding:0 8px; border-radius:10px; font-size:11px; font-weight:650; color:var(--tx); border:1px solid var(--tx2); }
+.ov-tag-switch::before { content:"⇄\00a0" / ""; }
+.ov-switch-note { margin:8px 0 0; display:inline-block; font-size:12px; line-height:1.6; color:var(--tx2); background:var(--panel2); border:1px solid var(--line2); border-radius:6px; padding:4px 10px; }
+.ov-switch-note::before { content:"ⓘ\00a0" / ""; color:var(--accent); }
+.ov-hero-side { text-align:right; font-size:12px; color:var(--tx2); display:flex; flex-direction:column; gap:6px; align-items:flex-end; flex-shrink:0; }
+.ov-hero-side p { margin:0; }
+.ov-link { background:none; border:0; padding:4px 0; color:var(--accent); font-size:12.5px; font-weight:600; min-height:32px; }
+.ov-link:hover { text-decoration:underline; }
+.ov-cards { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-top:16px; }
+.ov-card { position:relative; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px 14px; box-shadow:var(--shadow); min-height:212px; display:flex; flex-direction:column; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+.ov-card:hover, .ov-card:focus-visible { border-color:var(--accent); box-shadow:var(--shadow-h); outline:none; }
+.ov-card h3 { font-size:12px; font-weight:600; color:var(--tx3); margin:0; padding-right:70px; }
+.ov-card .ov-go { position:absolute; right:14px; top:14px; font-size:11px; color:var(--accent); }
+.ov-card[data-ds] .ov-go { top:auto; bottom:12px; }
+.ov-big { font:650 28px/1.2 var(--font-data); letter-spacing:-.5px; margin:10px 0 4px; font-variant-numeric:tabular-nums; color:var(--tx); white-space:nowrap; }
+.ov-big.ov-big-text { font:650 20px/1.3 var(--font-body); letter-spacing:0; }
+.ov-big small { font-size:13px; font-weight:500; color:var(--tx3); margin-left:6px; letter-spacing:0; }
+.ov-big .ov-dir { font-size:18px; color:var(--tx2); margin-left:4px; }
+.ov-note { font-size:11.5px; color:var(--tx2); line-height:1.6; margin:0; font-variant-numeric:tabular-nums; }
+.ov-note + .ov-note { margin-top:2px; }
+.ov-note b { color:var(--tx); font-weight:600; }
+.ov-foot { margin-top:auto; padding-top:10px; display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px; font-size:11px; color:var(--tx3); }
+.ov-pill { display:inline-flex; align-items:center; height:20px; padding:0 8px; border-radius:10px; font-size:11px; color:var(--tx2); border:1px solid var(--line2); white-space:nowrap; }
+.ov-pill-grey { color:var(--tx3); background:var(--panel2); border-color:var(--line); font-weight:500; }
+.ov-bar { height:6px; border-radius:3px; background:var(--prog-track); margin-top:10px; overflow:hidden; }
+.ov-bar > i { display:block; height:100%; border-radius:3px; background:var(--tilt-pos); }
+.ov-dots { display:inline-flex; gap:4px; vertical-align:-1px; margin-right:4px; }
+.ov-dots i { width:9px; height:9px; border-radius:50%; border:1.5px solid var(--warn); display:inline-block; }
+.ov-dots i.on { background:var(--warn); }
+.ov-confirm { margin-top:8px; font-size:11.5px; color:var(--tx2); font-variant-numeric:tabular-nums; }
+.ov-confirm b { color:var(--tx); font-weight:600; }
+.ov-confirm small { display:block; color:var(--tx3); font-size:11px; line-height:1.5; margin-top:2px; }
+.ov-mini-clock { float:right; display:grid; grid-template-columns:1fr 1fr; width:76px; height:76px; border:1px solid var(--line2); border-radius:50%; overflow:hidden; margin:-2px 0 4px 8px; font-size:9.5px; }
+.ov-mini-clock span { display:flex; align-items:center; justify-content:center; color:var(--tx3); border:.5px solid var(--line); }
+.ov-mini-clock span.on { background:var(--tilt-pos); color:#fff; font-weight:650; }
+.ov-mini-clock span.lean { outline:1.5px dashed var(--tilt-pos); outline-offset:-3px; color:var(--tilt-pos); }
+.ov-crit { color:var(--warn); font-weight:600; }
+.ov-skel { color:var(--tx3); }
+.ov-grid2 { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:20px; margin-bottom:20px; }
+.ov-grid2-wide { grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr); }
+.ov-grid2 > .card { margin:0; min-width:0; }
+.ov-points-list { list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; min-height:132px; }
+.ov-points-list li { position:relative; padding-left:14px; font-size:12.5px; line-height:1.65; color:var(--tx2); }
+.ov-points-list li::before { content:""; position:absolute; left:0; top:.7em; width:5px; height:5px; border-radius:50%; background:var(--accent); }
+.ov-points-list li b { color:var(--tx); }
+.ov-fold { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); margin-bottom:10px; }
+.ov-fold > summary { list-style:none; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:13px 18px; cursor:pointer; font-size:13px; color:var(--tx2); min-height:48px; }
+.ov-fold > summary::-webkit-details-marker { display:none; }
+.ov-fold > summary > span:first-child::before { content:"▸"; display:inline-block; width:16px; color:var(--tx3); transition:transform .15s; }
+.ov-fold[open] > summary > span:first-child::before { transform:rotate(90deg); }
+.ov-fold-act { font-size:12px; color:var(--accent); white-space:nowrap; }
+.ov-fold[open] > summary .ov-fold-act { visibility:hidden; }
+.ov-fold > .card, .ov-fold > .kpis, .ov-fold-grid, .ov-fold-links { margin:0 16px 16px; }
+.ov-fold > .card { box-shadow:none; }
+.ov-fold-grid { display:grid; grid-template-columns:minmax(0,1.4fr) minmax(260px,1fr); gap:16px; }
+.ov-fold-grid > .card { margin:0; }
+.ov-fold-links { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.ov-fold-links .note { flex:1 1 100%; margin:0; font-size:12px; color:var(--tx3); }
+/* 热力图半宽后仍定高 */
+.ov-grid2 #treemap { height:360px !important; }
+.sector-line .sector-value.up::before, .sector-line .sector-value.down::before { font-size:.75em; }
+
+/* ---- 配置建议页（① 建议 → ② 理由 → ③ 风险 → ④ 操作） ---- */
+.adv-overview > .adv-tier:first-child { margin-top:0; }
+.adv-hero { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:16px 20px; border:1px solid var(--line2); border-left:4px solid var(--tilt-pos); border-radius:var(--radius); background:var(--panel2); margin-bottom:14px; }
+.adv-headline { font-size:21px; font-weight:650; line-height:1.45; margin:0; }
+.adv-sub { margin:6px 0 0; font-size:12px; color:var(--tx2); }
+.adv-legend { font-size:11px; color:var(--tx3); text-align:right; margin:0; line-height:1.6; flex-shrink:0; }
+.adv-rec { min-width:560px; }
+.adv-rec td, .adv-rec th { vertical-align:middle; text-align:left; }
+.adv-rec th { font-weight:600; }
+.adv-rec tr.adv-right td { background:var(--panel2); font-weight:650; }
+.adv-rec tr.adv-sector td:first-child { padding-left:26px; }
+.adv-rec td.adv-reason-cell { color:var(--tx2); font-size:12px; line-height:1.6; }
+.adv-rec .adv-conf { font-size:11px; color:var(--tx3); margin-left:6px; white-space:nowrap; }
+.adv-reasons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.adv-reason { margin:0; padding:14px 16px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); position:relative; min-width:0; }
+.adv-reason h3 { font-size:13px; margin:0; }
+.adv-reason figcaption .note { margin:2px 0 0; font-size:11px; }
+.adv-mini { height:128px; margin-top:8px; }
+.adv-mini svg { width:100%; height:100%; display:block; overflow:visible; }
+.adv-mini text { font:10px var(--font-data); fill:var(--tx3); }
+.adv-reason-read { margin:8px 0 0; font-size:12px; line-height:1.6; color:var(--tx2); min-height:38px; }
+.adv-evidence { margin-top:12px; }
+.adv-risks { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
+.adv-risk { position:relative; padding:14px 16px; border:1px solid var(--line); border-left:4px solid var(--risk); border-radius:var(--radius); background:var(--panel); min-width:0; }
+.adv-risk.is-near { border-left-color:var(--warn); }
+.adv-risk.is-pending { border-left-style:dashed; border-left-color:var(--tx3); }
+.adv-risk h3 { font-size:13px; margin:0 0 6px; }
+.adv-risk h3::before { content:"⚠\00a0" / ""; color:var(--risk); }
+.adv-risk.is-near h3::before { color:var(--warn); }
+.adv-risk.is-pending h3::before { color:var(--tx3); }
+.adv-risk .ov-note { font-size:11.5px; }
+.adv-risk .ov-bar > i { background:var(--risk); }
+.adv-risk.is-near .ov-bar > i { background:var(--warn); }
+.adv-risk-dist { margin-top:6px; font-size:12px; font-variant-numeric:tabular-nums; }
+.adv-risk-dist b { font-weight:650; }
+.adv-risk-pending { margin-top:4px; font-size:11px; color:var(--tx3); }
+.adv-risk-list { margin:8px 0 0; padding-left:0; list-style:none; display:grid; gap:8px; }
+.adv-risk-list li { font-size:12px; line-height:1.6; color:var(--tx2); }
+.adv-risk-list li b { color:var(--tx); margin-right:6px; }
+.adv-steps { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; counter-reset:none; }
+.adv-steps li { border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); padding:14px 16px; min-width:0; }
+.adv-steps li b { display:block; font-size:13px; margin-bottom:4px; }
+.adv-steps li p { margin:0; font-size:12px; color:var(--tx2); line-height:1.6; }
+.adv-step-go { all:unset; cursor:pointer; display:block; }
+.adv-step-go:focus-visible { outline:2px solid var(--accent); outline-offset:4px; border-radius:4px; }
+.adv-step-go p { color:var(--accent) !important; }
+.allocation-legacy { margin-top:14px; }
+@media (max-width:1180px) { .ov-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:1023px) { .ov-grid2, .ov-grid2-wide, .ov-fold-grid { grid-template-columns:1fr; } .adv-reasons { grid-template-columns:1fr 1fr; } .adv-steps { grid-template-columns:1fr 1fr; } }
+@media (max-width:767px) {
+  .ov-hero { flex-direction:column; align-items:flex-start; padding:14px 16px; gap:10px; min-height:0; }
+  .ov-hero-side { text-align:left; align-items:flex-start; flex-direction:row; flex-wrap:wrap; gap:4px 12px; }
+  .ov-headline { font-size:18px; }
+  .ov-cards { gap:10px; margin-top:12px; }
+  .ov-card { padding:12px 12px 10px; min-height:196px; }
+  .ov-card h3 { padding-right:0; font-size:11.5px; }
+  .ov-card .ov-go { display:none; }
+  .ov-big { font-size:22px; margin:8px 0 2px; }
+  .ov-big.ov-big-text { font-size:16px; }
+  .ov-mini-clock { width:52px; height:52px; font-size:8px; }
+  .ov-note { font-size:11px; }
+  .ov-fold > .card, .ov-fold > .kpis, .ov-fold-grid, .ov-fold-links { margin:0 10px 10px; }
+  .adv-hero { flex-direction:column; align-items:flex-start; }
+  .adv-legend { text-align:left; }
+  .adv-reasons, .adv-steps { grid-template-columns:1fr; }
+}
+@media (max-width:380px) { .ov-cards { grid-template-columns:1fr; } }
+/* 首页卡片细节：数据状态角标放在标题下一行（不与标题/详情重叠）；时钟卡迷你象限在宽屏靠右 */
+.ov-card > h3 { order:-2; }
+.ov-card > .ds-badge.ds-corner { position:static; order:-1; align-self:flex-start; margin:6px 0 0; }
+.ov-card[data-ds] h3 { padding-right:70px; }
+.ov-card[data-ds] .ov-go { top:14px; bottom:auto; }
+.ov-headline .ov-stance { display:inline-block; }
+@media (min-width:768px) {
+  #ovCardClock .ov-mini-clock { position:absolute; right:16px; top:40px; float:none; margin:0; }
+  #ovCardClock .ov-big, #ovCardClock .ov-big + .ov-note { padding-right:84px; }
+}
+/* CLS：首屏结论与卡片按断点预留高度（取当前内容最大高度；内容变短时不回缩） */
+.ov-switch-note-plain { color:var(--tx3); }
+.ov-switch-note-plain::before { color:var(--tx3); }
+.ov-switch-note .ov-link { min-height:0; padding:0; font-size:12px; }
+.ov-hero { min-height:176px; }
+.ov-card { min-height:262px; }
+@media (max-width:1180px) { .ov-hero { min-height:212px; } .ov-card { min-height:236px; } }
+@media (max-width:1023px) {
+  .ov-hero { flex-direction:column; align-items:flex-start; gap:10px; min-height:250px; }
+  .ov-hero-side { text-align:left; align-items:flex-start; flex-direction:row; flex-wrap:wrap; gap:4px 14px; }
+  .ov-card { min-height:262px; }
+}
+@media (max-width:767px) {
+  .ov-hero { min-height:284px; }
+  .ov-card { min-height:252px; }
+  #ovCardClock, #ovCardSpread { min-height:324px; }
+}
+@media (max-width:380px) {
+  .ov-hero { min-height:336px; }
+  .ov-card, #ovCardSpread { min-height:200px; }
+  #ovCardClock { min-height:252px; }
+}
+/* 首屏以下的明细折叠区：跳过屏外渲染 */
+.ov-fold:not([open]) { content-visibility:auto; contain-intrinsic-size:auto 50px; }
+.ov-headline { min-height:32px; }
+@media (max-width:1180px) { .ov-headline { min-height:64px; } }
+@media (max-width:767px) { .ov-headline { min-height:52px; } }
+@media (max-width:380px) { .ov-headline { min-height:104px; } }
+@media (max-width:1023px) { .ov-hero { justify-content:flex-start; } .ov-hero-main { flex:none; width:100%; } }

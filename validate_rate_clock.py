@@ -70,12 +70,21 @@ G_ENTER, G_EXIT = 0.5, 0.25
 TOL = 0.051  # 存档值保留 1 位小数（bp）/ 2 位小数（σ）的容差
 
 
-def _growth_rules(z3, gs, where, errs):
-    """月度增长滞回：z3 ≥ +0.5 ⇒ 高于趋势(1)；≤ −0.5 ⇒ 低于趋势(−1)；|z3| < 0.25 ⇒ 趋势附近(0)。"""
+G_PERSIST = 2
+
+
+def _growth_rules(z3, gs, where, errs, pending=0):
+    """月度增长滞回（无待确认时）：z3 ≥ +0.5 ⇒ 高于趋势(1)；≤ −0.5 ⇒ 低于趋势(−1)；|z3| < 0.25 ⇒ 趋势附近(0)。
+    新状态须连续 2 个月确认：pending ∈ [0, 1]，待确认期间状态可暂不跟随 z3。"""
     if z3 is None or gs is None:
+        return
+    if pending is not None and not (0 <= pending < G_PERSIST):
+        errs.append(f"{where}: growth pending {pending} 超出 [0, {G_PERSIST - 1}]")
         return
     if gs not in (1, 0, -1):
         errs.append(f"{where}: growthState 非法 {gs}")
+    elif pending:
+        return
     elif z3 >= G_ENTER + 0.005 and gs != 1:
         errs.append(f"{where}: z3 {z3} ≥ +0.5 却不是「高于趋势」")
     elif z3 <= -G_ENTER - 0.005 and gs != -1:
@@ -136,7 +145,12 @@ def check_dead_band(rc, errs):
     gs = g.get("state")
     _state_rules(rc, gs, "rateClock", errs)
     _rate_rules(rc.get("d10y60bp"), rc.get("thresholdBp"), rc.get("exitBp"), rc.get("rateDir"), rc.get("ratePending"), "rateClock", errs)
-    _growth_rules(g.get("z3"), gs, "rateClock.growth", errs)
+    _growth_rules(g.get("z3"), gs, "rateClock.growth", errs, g.get("pending", 0))
+    conf = g.get("confirm")
+    if g.get("hysteresisBacktested") is not True or not conf or conf.get("need") != G_PERSIST:
+        errs.append("rateClock.growth: 缺 2 个月确认进度（confirm）或回测标记")
+    if "尚未回测" in json.dumps(rc.get("method") or {}, ensure_ascii=False):
+        errs.append("rateClock.method: 增长轴已回测，不得再标「尚未回测」")
     sig = rc.get("sigma60bp")
     if sig is not None and rc.get("thresholdBp") is not None and abs(rc["thresholdBp"] - max(RATE_FLOOR_BP, RATE_K * sig)) > 0.1:
         errs.append(f"rateClock: 进入线 {rc['thresholdBp']}bp ≠ max(5, 0.7×σ {sig}bp)")
@@ -164,7 +178,7 @@ def check_dead_band(rc, errs):
         w = f"rateClock.history[{h.get('month')}]"
         _state_rules(h, h.get("growthState"), w, errs)
         _rate_rules(h.get("d10y60bp"), h.get("thresholdBp"), h.get("exitBp"), h.get("rateDir"), h.get("ratePending"), w, errs)
-        _growth_rules(h.get("z3"), h.get("growthState"), w, errs)
+        _growth_rules(h.get("z3"), h.get("growthState"), w, errs, h.get("growthPending", 0))
 
 
 def check_tsf(cy, errs):

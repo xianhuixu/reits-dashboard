@@ -8,7 +8,100 @@
     var base = rows.length ? rows[0].value : 1;
     return rows.map(function (r) { return {date:r.date, value:r.value / base * 100}; });
   }
-  if (typeof module !== 'undefined' && module.exports) module.exports = {normalizedSeries:normalizedSeries};
+
+  // ---------------- 市场总览首屏派生（设计师线框 2026-09-30）：纯函数，node 下可测 ----------------
+  var GROWTH_TXT = { "1": "增长高于趋势", "-1": "增长低于趋势", "0": "增长趋势附近" };
+  var RATE_TXT = { up: "利率上行", down: "利率下行", flat: "利率走平" };
+  var RATE_ARROW = { up: "↑", down: "↓", flat: "→" };
+  var CLOCK_CELLS = [["Q2", "复苏"], ["Q1", "繁荣"], ["Q3", "衰退"], ["Q4", "滞胀"]];
+  function num(v) { return typeof v === "number" && isFinite(v); }
+  /** 带 Unicode 负号的有符号数：−7.4 / +0.12 */
+  function sgnNum(v, d) { return !num(v) ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d == null ? 1 : d); }
+  function noSignNum(v, d) { return !num(v) ? "—" : (v < 0 ? "−" : "") + Math.abs(v).toFixed(d == null ? 1 : d); }
+  /** 「2026-09-30 11:50:33」→「09-30 11:50」 */
+  function shortStamp(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec(String(s || ""));
+    return m ? m[2] + "-" + m[3] + (m[4] ? " " + m[4] + ":" + m[5] : "") : "—";
+  }
+  function fmtAmount(v) { return !num(v) ? "—" : v >= 1e8 ? (v / 1e8).toFixed(2) + " 亿" : v >= 1e4 ? Math.round(v / 1e4) + " 万" : String(Math.round(v)); }
+  /** 结论横幅（时钟部分）：增长 / 利率文字、临界、信号切换。置信度不进横幅（放在时钟卡的灰色小标签）。 */
+  function clockBanner(rc) {
+    if (!rc || rc.status !== "ok") return { ok: false, growth: null, rate: null, critical: false, switchTag: false, switchNote: "", text: "增长 × 利率时钟未判定" };
+    var g = rc.growth || {};
+    var growth = GROWTH_TXT[String(g.state)] || "增长未判定";
+    var rate = RATE_TXT[rc.rateDir] || "利率未判定";
+    var gCrit = !!g.critical, rCrit = !!(rc.rateDistance && rc.rateDistance.critical);
+    var sw = rc.signalSwitch && rc.signalSwitch.active ? rc.signalSwitch : null;
+    return { ok: true, growth: growth, rate: rate, critical: gCrit || rCrit, criticalAxis: gCrit ? "growth" : rCrit ? "rate" : null,
+      state: rc.state || null, quadrant: rc.quadrant || null, leanQuadrant: rc.leanQuadrant || null,
+      switchTag: !!sw, switchNote: sw ? sw.note || "" : "", switchCause: sw ? sw.cause || null : null,
+      text: growth + (gCrit ? "（临界）" : "") + " · " + rate + (rCrit ? "（临界）" : "") };
+  }
+  /** 时钟卡：大字 = 利率方向，迷你四象限，距切换线，增长轴 2 个月确认进度（圆点），置信度小标签。 */
+  function clockCard(rc) {
+    var b = clockBanner(rc);
+    if (!b.ok) return { ok: false, big: "未判定", note: "10Y / PMI 真实序列未就绪" };
+    var g = rc.growth || {}, dist = g.distance || {}, cf = g.confirm || null;
+    var cells = CLOCK_CELLS.map(function (c) {
+      return { q: c[0], label: c[1], on: rc.quadrant === c[0], lean: !rc.quadrant && rc.leanQuadrant === c[0] };
+    });
+    return { ok: true, big: b.rate, arrow: RATE_ARROW[rc.rateDir] || "", cells: cells,
+      rateLine: "10Y 60日 " + sgnNum(rc.d10y60bp) + "bp，阈值 " + noSignNum(rc.thresholdBp) + "bp" + (rc.thresholdFloored ? "（下限）" : ""),
+      growthLine: "增长 z3 = " + noSignNum(g.z3, 2) + "σ（" + (GROWTH_TXT[String(g.state)] || "—").replace("增长", "") + "）",
+      growthDist: num(dist.sigma) ? "距退出线 " + noSignNum(Math.max(0, dist.sigma), 2) + "σ" : "", critical: !!g.critical,
+      confirm: cf ? { title: cf.title || "确认", count: cf.count || 0, need: cf.need || 2, label: cf.label || "" } : null,
+      confidence: rc.confidence || null, quadrantName: rc.quadrant ? rc.quadrant + " " + (rc.quadrantName || "") : (rc.stateLabel || "") };
+  }
+  /** 产权利差分位卡（data_panel_l1l7.json，当前为 SEED → 前端加「示例数据」角标）。 */
+  function spreadCard(panel) {
+    var s = panel && panel.propertyYieldSeries;
+    if (!s || !s.length || !num(s[s.length - 1].pctile)) return { ok: false };
+    var last = s[s.length - 1], prev = s.length > 3 ? s[s.length - 4] : null;
+    var pct = Math.round(last.pctile * 100);
+    var delta = prev && num(prev.pctile) ? Math.round((last.pctile - prev.pctile) * 100) : null;
+    return { ok: true, pctile: pct, spread: last.spread, asOf: last.date || panel.asOfTrade || null,
+      delta: delta, arrow: delta == null ? "" : delta > 0 ? "↑" : delta < 0 ? "↓" : "→" };
+  }
+  /** 市场今日卡：指数日涨跌（缺失时用等权）、成交额、涨跌家数。 */
+  function marketCard(data) {
+    var rows = (data && data.reits) || [];
+    var pcts = rows.map(function (r) { return r.pct; }).filter(num);
+    var up = pcts.filter(function (v) { return v > 0; }).length, down = pcts.filter(function (v) { return v < 0; }).length;
+    var eq = pcts.length ? pcts.reduce(function (a, b) { return a + b; }, 0) / pcts.length : null;
+    var amt = rows.reduce(function (a, r) { return a + (num(r.amount) ? r.amount : 0); }, 0);
+    var mi = (data && data.marketIndex) || null;
+    var useIdx = !!(mi && num(mi.pct));
+    return { ok: pcts.length > 0 || useIdx, pct: useIdx ? mi.pct : eq, source: useIdx ? "index" : "equal",
+      name: useIdx ? mi.name || "中证REITs" : "全市场等权", code: useIdx ? String(mi.code || "").replace(/\.CSI$/, "") : "",
+      close: mi && num(mi.close) ? mi.close : null, equalPct: eq, amount: amt, up: up, down: down, flat: pcts.length - up - down, count: rows.length };
+  }
+  /** 社融脉冲卡：数值、方向箭头、由正转负/由负转正的解读、数据截至。 */
+  function tsfCard(t) {
+    if (!t || t.status !== "ok" || !num(t.value)) return { ok: false };
+    var flip = t.lastFlip && t.lastFlip.direction;
+    var read = flip === "正转负" ? "由正转负 → 提示约半年后 REITs 环境改善" : flip === "负转正" ? "由负转正 → 提示约半年后 REITs 环境承压" : "只看方向，不并入增长轴";
+    return { ok: true, value: t.value, prev: num(t.prev) ? t.prev : null, arrow: num(t.prev) ? (t.value > t.prev ? "↑" : t.value < t.prev ? "↓" : "→") : "",
+      read: read, asOf: t.asOf || null, monthsBehind: t.monthsBehind == null ? null : t.monthsBehind };
+  }
+  /** 今日要点（≤3 条）：信号切换 / 时钟提示 → 领涨领跌 → 宽度与重估。返回 {text, parts} 供安全渲染。 */
+  function todayPoints(data) {
+    var out = [], rc = data && data.cycle && data.cycle.rateClock;
+    var sw = rc && rc.signalSwitch && rc.signalSwitch.active ? rc.signalSwitch : null;
+    if (sw) out.push({ kind: "switch", text: "投资时钟读数切换：" + (sw.from || "—") + " → " + (sw.to || "—") + "。" + (sw.note || "") });
+    else if (rc && (rc.conflictFlags || []).length) out.push({ kind: "flag", text: "时钟提示（" + rc.conflictFlags[0].sector + "）：" + String(rc.conflictFlags[0].text || "").slice(0, 70) });
+    var rows = ((data && data.reits) || []).filter(function (r) { return num(r.pct); });
+    if (rows.length) {
+      var hi = rows.reduce(function (a, r) { return r.pct > a.pct ? r : a; }), lo = rows.reduce(function (a, r) { return r.pct < a.pct ? r : a; });
+      out.push({ kind: "movers", hi: { name: hi.name, code: hi.code, pct: hi.pct }, lo: { name: lo.name, code: lo.code, pct: lo.pct },
+        text: "领涨 " + hi.name + " " + sgnNum(hi.pct, 2) + "% · 领跌 " + lo.name + " " + sgnNum(lo.pct, 2) + "%" });
+      var m = marketCard(data), rv = (data && data.revaluation) || {};
+      out.push({ kind: "breadth", text: "市场宽度 " + Math.round(m.up / rows.length * 100) + "% 上涨（" + m.up + " / " + m.down + "）" +
+        (rv.stage ? " · 资产重估：" + rv.stage + "（" + (rv.score != null ? rv.score : "—") + "/4 项成立）" : "") });
+    }
+    return out.slice(0, 3);
+  }
+  var HOME = {normalizedSeries:normalizedSeries, clockBanner:clockBanner, clockCard:clockCard, spreadCard:spreadCard, marketCard:marketCard, tsfCard:tsfCard, todayPoints:todayPoints, shortStamp:shortStamp, sgnNum:sgnNum, fmtAmount:fmtAmount};
+  if (typeof module !== 'undefined' && module.exports) module.exports = HOME;
   if (!root.document) return;
   var doc = root.document, activeAdvice = 'advOverview', chart, series, days = 60;
   var $ = function (id) { return doc.getElementById(id); };
@@ -60,7 +153,7 @@
     var last = rows[rows.length - 1];
     $('workspaceTrendValue').textContent = last.value.toFixed(2);
     $('workspaceTrendChange').textContent = signed(last.value - 100);
-    $('workspaceTrendChange').style.color = 'var(--' + (last.value >= 100 ? 'up' : 'down') + ')';
+    $('workspaceTrendChange').className = last.value > 100 ? 'up' : last.value < 100 ? 'down' : 'flat';
     $('workspaceTrendPeriod').textContent = rows[0].date + ' — ' + last.date;
     el.setAttribute('aria-label', '全市场等权价格指数，区间首日100，区间变化' + signed(last.value - 100));
     chart.setOption({animation:false,grid:{left:42,right:12,top:18,bottom:28},
@@ -71,7 +164,171 @@
     $('workspaceTrendTable').querySelector('tbody').replaceChildren();
     rows.forEach(function(r){var tr=doc.createElement('tr'); [r.date,r.value.toFixed(2)].forEach(function(v){var td=doc.createElement('td');td.textContent=v;tr.append(td);});$('workspaceTrendTable').querySelector('tbody').append(tr);});
   }
+
+  // ---------------- 市场总览首屏渲染 ----------------
+  function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function pctSpan(v, d) { if (!num(v)) return '—'; var c = v > 0 ? 'up' : v < 0 ? 'down' : 'flat'; return '<span class="' + c + '">' + sgnNum(v, d == null ? 2 : d) + '%</span>'; }
+  function dsApply(el, s) { if (root.ReitsDataStatus && root.ReitsDataStatus.apply) root.ReitsDataStatus.apply(el, s); }
+  function cardShell(el, title, attrs, inner) {
+    el.innerHTML = '<h3>' + esc(title) + '</h3><span class="ov-go" aria-hidden="true">详情 →</span>' + inner;
+    Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+    el.setAttribute('role', 'link'); el.tabIndex = 0;
+    el.setAttribute('aria-label', title + ' · 查看详情');
+  }
+  function renderBanner(data, stance) {
+    var rc = data.cycle && data.cycle.rateClock, b = clockBanner(rc), h = $('ovHeadline');
+    if (!h) return;
+    var html;
+    if (!b.ok) html = esc(b.text);
+    else html = esc(b.growth) + (b.criticalAxis === 'growth' ? ' <span class="rc-tag rc-tag-warn" title="增长 z3 距退出线不足 0.05σ">临界</span>' : '') +
+      ' · ' + esc(b.rate) + (b.criticalAxis === 'rate' ? ' <span class="rc-tag rc-tag-warn">临界</span>' : '');
+    html += '<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">' + (stance ? esc(stance) : '<span class="ov-skel">配置结论加载中…</span>') + '</span>';
+    h.innerHTML = html;
+    $('ovUpdated').textContent = '数据更新于 ' + shortStamp(data.updated || data.lastTradeDate);
+    if (b.switchTag) {
+      $('ovSwitchTag').innerHTML = '<span class="ov-tag-switch" title="时钟读数较上一交易日发生切换">信号切换</span>';
+      var note = $('ovSwitchNote');
+      note.innerHTML = esc(b.switchNote || '时钟读数较上一交易日切换') + ' <button type="button" class="ov-link" data-ov-view="cycle" data-ov-anchor="rateClockRow">口径说明 →</button>';
+      note.hidden = false;
+      note.classList.remove('ov-switch-note-plain');
+    } else {
+      // 无切换时保留同一位置放口径入口，首屏高度不随信号变化（CLS≈0）
+      var n2 = $('ovSwitchNote');
+      n2.innerHTML = '时钟每日按 10Y 国债 60 日变化与 PMI 偏离趋势自动判定 <button type="button" class="ov-link" data-ov-view="cycle" data-ov-anchor="rateClockRow">口径说明 →</button>';
+      n2.classList.add('ov-switch-note-plain'); n2.hidden = false;
+    }
+  }
+  function renderHome(data, panel, stance) {
+    var rc = data.cycle && data.cycle.rateClock, DS = root.ReitsDataStatus;
+    var rows = data.reits || [];
+    var sectors = {}; rows.forEach(function (r) { if (r.sector) sectors[r.sector] = 1; });
+    $('ovUniverse').textContent = '全市场 ' + rows.length + ' 只 · ' + Object.keys(sectors).length + ' 个业态';
+    var rv = data.revaluation;
+    if (rv && rv.stage) $('ovReval').innerHTML = '<button type="button" class="ov-link ov-link-sub" data-ov-view="cycle" data-ov-anchor="revalFull">资产重估：' + esc(rv.stage) + ' · ' + esc(rv.score) + '/4 →</button>';
+    renderBanner(data, stance || null);
+    // 1 · 投资时钟
+    var c = clockCard(rc), el = $('ovCardClock');
+    if (el) {
+      var inner;
+      if (!c.ok) inner = '<div class="ov-big ov-big-text">' + esc(c.big) + '</div><p class="ov-note">' + esc(c.note) + '</p>';
+      else {
+        inner = '<div class="ov-mini-clock" aria-hidden="true">' + c.cells.map(function (x) { return '<span class="' + (x.on ? 'on' : x.lean ? 'lean' : '') + '">' + x.label + '</span>'; }).join('') + '</div>' +
+          '<div class="ov-big ov-big-text">' + esc(c.big) + ' <span class="ov-dir" aria-hidden="true">' + esc(c.arrow) + '</span></div>' +
+          '<p class="ov-note">' + esc(c.rateLine) + '</p>' +
+          '<p class="ov-note">' + esc(c.growthLine) + (c.growthDist ? ' · <span class="' + (c.critical ? 'ov-crit' : '') + '">' + esc(c.growthDist) + '</span>' : '') + '</p>';
+        if (c.confirm) {
+          var dots = ''; for (var i = 0; i < c.confirm.need; i++) dots += '<i class="' + (i < c.confirm.count ? 'on' : '') + '"></i>';
+          inner += '<div class="ov-confirm"><span class="ov-dots" aria-hidden="true">' + dots + '</span><b>' + esc(c.confirm.title) + ' ' + c.confirm.count + '/' + c.confirm.need + '</b><small>' + esc(c.confirm.label) + '</small></div>';
+        }
+        inner += '<div class="ov-foot">' + (c.confidence ? '<span class="ov-pill ov-pill-grey">置信度 ' + esc(c.confidence) + '</span>' : '') + '<span>' + esc(c.quadrantName) + '</span></div>';
+      }
+      cardShell(el, '投资时钟', { 'data-ov-view': 'cycle', 'data-ov-anchor': 'rateClockRow' }, inner);
+      if (DS && DS.fromRateClock) dsApply(el, DS.fromRateClock(rc));
+    }
+    // 2 · 产权利差分位
+    var sp = spreadCard(panel); el = $('ovCardSpread');
+    if (el) {
+      cardShell(el, '产权利差分位', { 'data-ov-view': 'strategy', 'data-ov-anchor': 'panelL2Spreads' }, !sp.ok ? '<div class="ov-big">—</div><p class="ov-note">利差序列待接入</p>' :
+        '<div class="ov-big">' + sp.pctile + '%<small>分位</small>' + (sp.arrow ? '<span class="ov-dir" aria-hidden="true">' + sp.arrow + '</span>' : '') + '</div>' +
+        '<p class="ov-note">利差 ' + (num(sp.spread) ? sp.spread.toFixed(2) + '%' : '—') + (sp.delta != null ? ' · 较 3 个月前 ' + sgnNum(sp.delta, 0) + 'pp' : '') + '</p>' +
+        '<div class="ov-bar" role="img" aria-label="历史分位 ' + sp.pctile + '%"><i style="width:' + sp.pctile + '%"></i></div>' +
+        '<p class="ov-note" style="margin-top:6px">分位越高 = 产权类相对债券越便宜</p><div class="ov-foot"><span>截至 ' + esc(sp.asOf || '—') + '</span></div>');
+      if (DS && DS.fromPanel) dsApply(el, DS.fromPanel(panel));
+    }
+    // 3 · 市场今日
+    var m = marketCard(data); el = $('ovCardMarket');
+    if (el) {
+      cardShell(el, '市场今日', { 'data-ov-view': 'sector', 'data-ov-anchor': 'v-sector' },
+        '<div class="ov-big">' + pctSpan(m.pct) + '</div>' +
+        '<p class="ov-note">' + esc(m.name) + (m.code ? ' ' + esc(m.code) : '') + (m.close != null ? ' · ' + m.close.toFixed(2) : '') + '</p>' +
+        '<p class="ov-note">成交额 <b>' + fmtAmount(m.amount) + '</b></p>' +
+        '<p class="ov-note">上涨 <b class="up no-arrow">' + m.up + '</b> · 下跌 <b class="down no-arrow">' + m.down + '</b> · 平 ' + m.flat + '</p>' +
+        '<div class="ov-foot"><span>' + (m.source === 'index' ? '等权 ' + pctSpan(m.equalPct) : '指数缺失，按等权计') + '</span></div>');
+      if (DS && DS.fromMarketIndex) dsApply(el, DS.fromMarketIndex(data.marketIndex, data.lastTradeDate));
+    }
+    // 4 · 社融脉冲
+    var tsf = data.cycle && data.cycle.tsfImpulse, t = tsfCard(tsf); el = $('ovCardTsf');
+    if (el) {
+      cardShell(el, '社融脉冲 · 领先预警', { 'data-ov-view': 'cycle', 'data-ov-anchor': 'tsfImpulseCard' }, !t.ok ? '<div class="ov-big">—</div><p class="ov-note">社融序列待接入</p>' :
+        '<div class="ov-big">' + noSignNum(t.value, 2) + '%' + (t.arrow ? '<span class="ov-dir" aria-hidden="true">' + t.arrow + '</span>' : '') + '</div>' +
+        '<p class="ov-note">上期 ' + (t.prev != null ? noSignNum(t.prev, 2) + '%' : '—') + '</p>' +
+        '<p class="ov-note"><b>' + esc(t.read) + '</b></p>' +
+        '<div class="ov-foot"><span class="ov-pill">领先 5–7 个月</span><span>数据截至 ' + esc(t.asOf || '—') + (t.monthsBehind ? '（滞后 ' + t.monthsBehind + ' 个月）' : '') + '</span></div>');
+      if (DS && DS.fromTsfImpulse) dsApply(el, DS.fromTsfImpulse(tsf));
+    }
+    // 今日要点
+    var ul = $('ovPoints');
+    if (ul) {
+      ul.innerHTML = todayPoints(data).map(function (p) {
+        if (p.kind === 'movers') return '<li>领涨 <b>' + esc(p.hi.name) + '</b> ' + pctSpan(p.hi.pct) + ' · 领跌 <b>' + esc(p.lo.name) + '</b> ' + pctSpan(p.lo.pct) + '</li>';
+        return '<li>' + (p.kind === 'switch' ? '<b>信号切换</b> · ' : '') + esc(p.kind === 'switch' ? p.text.replace(/^投资时钟读数切换：/, '时钟读数 ') : p.text) + '</li>';
+      }).join('') || '<li>暂无要点</li>';
+    }
+  }
+  function goView(view, anchor) {
+    var btn = doc.querySelector('#subbar [data-v="' + view + '"]');
+    if (btn) btn.click();
+    if (!anchor) return;
+    var tries = 0;
+    (function seek() {
+      var a = $(anchor);
+      if (a && a.offsetParent !== null) {
+        // 研究页图表/数据异步渲染会改变上方高度：短时间内复位几次，用户一旦滚动即停止
+        var userMoved = false, stop = function () { userMoved = true; };
+        root.addEventListener('wheel', stop, { once: true, passive: true }); root.addEventListener('touchstart', stop, { once: true, passive: true });
+        [0, 250, 600, 1200, 2000].forEach(function (ms) { setTimeout(function () { if (!userMoved) a.scrollIntoView({ block: 'start' }); }, ms); });
+        return;
+      }
+      if (++tries < 40) setTimeout(seek, 75);
+    })();
+  }
+  function bindHomeNav() {
+    doc.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-ov-view],[data-ov-page]');
+      if (!t) return;
+      if (t.dataset.ovPage) { var nav = doc.querySelector('#tbNav [data-pg="' + t.dataset.ovPage + '"]'); if (nav) nav.click(); root.scrollTo({ top: 0, behavior: 'auto' }); return; }
+      e.preventDefault(); goView(t.dataset.ovView, t.dataset.ovAnchor);
+    });
+    doc.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var t = e.target.closest && e.target.closest('.ov-card[role="link"]');
+      if (!t || t !== e.target) return;
+      e.preventDefault(); t.click();
+    });
+  }
+  var sectorKey = 'pct';
+  function renderSectors(rows) {
+    var groups = {}; rows.forEach(function (r) { var v = r[sectorKey]; if (num(v)) { (groups[r.sector] = groups[r.sector] || []).push(v); } });
+    var sectors = Object.keys(groups).map(function (k) { return { name: k, value: groups[k].reduce(function (a, b) { return a + b; }, 0) / groups[k].length }; }).sort(function (a, b) { return b.value - a.value; });
+    var max = Math.max.apply(null, sectors.map(function (r) { return Math.abs(r.value); }).concat([.01]));
+    $('workspaceSectors').replaceChildren();
+    sectors.forEach(function (r) {
+      var b = doc.createElement('button'); b.className = 'sector-line';
+      var label = doc.createElement('span'); label.className = 'sector-label'; label.textContent = r.name;
+      var track = doc.createElement('span'); track.className = 'sector-track';
+      var bar = doc.createElement('i'); bar.style.width = Math.abs(r.value) / max * 100 + '%'; bar.style.background = 'var(--' + (r.value >= 0 ? 'up' : 'down') + ')'; track.append(bar);
+      var value = doc.createElement('span'); value.className = 'sector-value ' + (r.value > 0 ? 'up' : r.value < 0 ? 'down' : 'flat'); value.textContent = sgnNum(r.value, 2) + '%';
+      b.append(label, track, value);
+      b.setAttribute('aria-label', r.name + ' ' + (sectorKey === 'pct' ? '今日' : '近 1 月') + ' ' + value.textContent);
+      b.addEventListener('click', function () { var chip = Array.from(doc.querySelectorAll('#hmSectorChips button')).find(function (x) { return x.dataset.s === r.name; }); if (chip) chip.click(); $('heatmapCard').scrollIntoView({ block: 'start' }); });
+      $('workspaceSectors').append(b);
+    });
+  }
+  function loadTrendLazily() {
+    var el = $('workspaceTrend'), started = false;
+    function start() {
+      if (started) return; started = true;
+      var load = root.__loadECharts ? root.__loadECharts() : Promise.resolve();
+      Promise.all([fetch('data_research.json').then(function (r) { if (!r.ok) throw new Error('历史数据加载失败'); return r.json(); }), load])
+        .then(function (res) { series = res[0].series; renderTrend(); })
+        .catch(function (error) { el.textContent = '历史序列暂不可用，请刷新重试。'; console.warn(error.message); });
+    }
+    if (!root.IntersectionObserver) return start();
+    var io = new IntersectionObserver(function (en) { if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); } }, { rootMargin: '200px' });
+    io.observe(el);
+  }
   function init() {
+    bindHomeNav();
     selectAdviceForTarget($(activeAdvice)); drawer(false);
     // 示意图只切换解释，不读取或改写财务模型。
     var explanations = {
@@ -114,15 +371,28 @@
       var data=root.REITS_DATA, rows=data.reits||[];
       $('workspaceDate').textContent=data.lastTradeDate||'日期未提供';
       Array.from($('kpis').children).slice(4).forEach(function(el){$('marketContext').append(el);});
-      var groups={};rows.forEach(function(r){if(Number.isFinite(r.pct)){if(!groups[r.sector])groups[r.sector]=[];groups[r.sector].push(r.pct);}});
-      var sectors=Object.keys(groups).map(function(k){return {name:k,value:groups[k].reduce(function(a,b){return a+b;},0)/groups[k].length};}).sort(function(a,b){return b.value-a.value;});
-      var max=Math.max.apply(null,sectors.map(function(r){return Math.abs(r.value);}).concat([.01]));
-      $('workspaceSectors').replaceChildren();
-      sectors.forEach(function(r){var b=doc.createElement('button');b.className='sector-line';var label=doc.createElement('span');label.className='sector-label';label.textContent=r.name;var track=doc.createElement('span');track.className='sector-track';var bar=doc.createElement('i');bar.style.width=Math.abs(r.value)/max*100+'%';bar.style.background='var(--'+(r.value>=0?'up':'down')+')';track.append(bar);var value=doc.createElement('span');value.className='sector-value';value.textContent=signed(r.value);value.style.color=bar.style.background;b.append(label,track,value);b.addEventListener('click',function(){var chip=Array.from(doc.querySelectorAll('#hmSectorChips button')).find(function(x){return x.dataset.s===r.name;});if(chip)chip.click();$('heatmapCard').scrollIntoView({block:'start'});});$('workspaceSectors').append(b);});
+      renderSectors(rows);
+      $('sectorRange').addEventListener('click',function(e){var b=e.target.closest('[data-k]');if(!b)return;sectorKey=b.dataset.k;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b));});renderSectors(rows);});
       rows.filter(function(r){return Number.isFinite(r.amount);}).sort(function(a,b){return b.amount-a.amount;}).slice(0,5).forEach(function(r){var b=doc.createElement('button');b.className='active-asset';var name=doc.createElement('span');name.textContent=r.name;var pct=doc.createElement('span');pct.textContent=Number.isFinite(r.pct)?signed(r.pct):'—';var code=doc.createElement('small');code.textContent=r.code;var amount=doc.createElement('span');amount.textContent=(r.amount/1e4).toFixed(0)+' 万元';b.append(name,pct,code,amount);b.addEventListener('click',function(){root.location.hash='/detail/'+r.code;});$('workspaceActive').append(b);});
       $('exportMarket').addEventListener('click',function(){var csv=[['代码','名称','板块','收盘价','当日涨跌幅(%)','成交额(元)']].concat(rows.map(function(r){return [r.code,r.name,r.sector,r.close,r.pct,r.amount];})).map(function(row){return row.map(function(v){return '"'+String(v==null?'':v).replace(/"/g,'""')+'"';}).join(',');}).join('\r\n');var url=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));var a=doc.createElement('a');a.href=url;a.download='REITs行情-'+data.lastTradeDate+'.csv';a.click();setTimeout(function(){URL.revokeObjectURL(url);},1000);});
-      fetch('data_research.json').then(function(r){if(!r.ok)throw new Error('历史数据加载失败');return r.json();}).then(function(data){series=data.series;renderTrend();}).catch(function(error){$('workspaceTrend').textContent='历史序列暂不可用，请刷新重试。';console.warn(error.message);});
+      loadTrendLazily();
     }).catch(function(){pageChanged('advice');$('workspaceDate').textContent='行情暂不可用';});
   }
+
+  // 首屏结论：脚本执行时 DOM 已解析（defer），数据 + 面板 + advice 就绪即一次性渲染（横幅只渲染一次，避免文字增长造成 CLS）
+  (function earlyHome() {
+    if (!root.__DATA_READY) return;
+    var soft = function (p) { return p ? p.then(function (x) { return x; }, function () { return null; }) : Promise.resolve(null); };
+    var advice = soft(root.__ADVICE_READY);
+    var advTimed = Promise.race([advice, new Promise(function (r) { setTimeout(function () { r(null); }, 2500); })]);
+    function stanceOf(adv) { var api = root.ReitsAllocation; var st = adv && api && api.schoolStance ? api.schoolStance(adv) : null; return st && st.text || null; }
+    root.__DATA_READY.then(function () {
+      return Promise.all([soft(root.__PANEL_READY), advTimed]);
+    }).then(function (res) {
+      var data = root.REITS_DATA; if (!data || !$('ovHero')) return;
+      renderHome(data, root.REITS_DATA_PANEL || null, stanceOf(res[1]) || (res[1] ? '配置结论见配置页' : null));
+      if (!res[1]) advice.then(function (adv) { renderBanner(data, stanceOf(adv) || '配置结论见配置页'); });
+    }).catch(function (e) { if (root.console) console.warn('首屏渲染失败', e); });
+  })();
   doc.addEventListener('DOMContentLoaded',init);
 })(typeof window==='undefined'?globalThis:window);

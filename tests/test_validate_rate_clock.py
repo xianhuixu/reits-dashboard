@@ -19,6 +19,19 @@ class ValidatorTests(unittest.TestCase):
     def _rc(self):
         return json.loads((ROOT / "cycle_judgment.json").read_text(encoding="utf-8"))["rateClock"]
 
+    def test_growth_requires_confirmation_and_no_unbacktested_label(self):
+        import validate_rate_clock as v
+        bad = copy.deepcopy(self._rc())
+        bad["growth"].pop("confirm", None)
+        errs = []
+        v.check_dead_band(bad, errs)
+        self.assertTrue(any("2 个月确认进度" in e for e in errs), errs)
+        bad2 = copy.deepcopy(self._rc())
+        bad2.setdefault("method", {})["growth"] = "滞回阈值尚未回测"
+        errs = []
+        v.check_dead_band(bad2, errs)
+        self.assertTrue(any("尚未回测" in e for e in errs), errs)
+
     def test_definite_requires_both_axes_directional(self):
         import validate_rate_clock as v
         bad = copy.deepcopy(self._rc())
