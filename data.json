@@ -3556,16 +3556,6 @@
      "medianLagDays": 60,
      "note": "滞后主要来自 60 日窗口（20–40 日窗口更快，未采用）；加 60 日均线条件无增益"
     },
-    "backtestGrowth": {
-     "period": "2016-01 ~ 2026-09（月度）",
-     "switchesPerYear": 0.9,
-     "medianStateMonths": 6,
-     "whipsawsUnder2m": 0,
-     "neutralPct": 51,
-     "confirmMonths": 2,
-     "entryShift": "本轮进入「高于趋势」由 2026-04 推迟到 2026-05",
-     "source": "宏观分析师回测（2026-09-30）"
-    },
     "growthReference": "宏观分析师参考：2026-09 PMI 50.1，偏离 +0.42，z 0.72（月度序列 growth_axis.csv 逐月核对一致）",
     "usPriorSource": "overseas_clock_du2021.json（美国 1994 年以来，年化总回报）"
    },

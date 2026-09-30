@@ -119,3 +119,71 @@ test("shape-based colour: prices carry ▲▼ without fills, warnings are outlin
   assert.match(ws, /\.ov-dots i\.on/);
   assert.doesNotMatch(read("workspace.js"), /style\.color = 'var\(--' \+ \(last\.value/);
 });
+
+// ---------------- 2026-09-30 团队反馈：结论横幅依据行 ----------------
+const STANCE = "结构性偏多：产权超配 · 经营权标配";
+const liveData = () => JSON.parse(read("data.json"));
+
+test("banner conclusion is rate direction → school stance, with rationale line", () => {
+  const m = H.bannerModel(liveData(), STANCE, JSON.parse(read("data_panel_l1l7.json")));
+  assert.equal(m.conclusion, "利率下行 → " + STANCE);
+  assert.equal(m.basis, "依据：时钟·利率下行");
+  assert.equal(m.aux, "辅助：社融脉冲转负（低置信，数据截至 4 月）");
+  // 增长侧状态（含「临界」）不进横幅
+  assert.doesNotMatch([m.conclusion, m.basis, m.aux].join("|"), /增长|临界|趋势|PMI|z3/);
+});
+
+test("growth state never changes the banner", () => {
+  const base = H.bannerModel(liveData(), STANCE);
+  for (const g of [{ state: -1, z3: -0.9, critical: false }, { state: 0, z3: 0.1, critical: true }, { state: 1, z3: 2, critical: false }]) {
+    const d = liveData();
+    Object.assign(d.cycle.rateClock.growth, g);
+    const m = H.bannerModel(d, STANCE);
+    assert.deepEqual([m.conclusion, m.basis, m.aux], [base.conclusion, base.basis, base.aux]);
+  }
+});
+
+test("seed / pending modules are excluded from banner derivation", () => {
+  const d = liveData();
+  const base = H.bannerModel(d, STANCE);
+  // 产权利差分位（SEED）无论分位高低都不影响结论与依据
+  for (const pctile of [0.01, 0.5, 0.99]) {
+    const seedPanel = { source: "seed", seedMeta: { liveFetch: false }, propertyYieldSeries: [{ pctile, spread: 1 }] };
+    const m = H.bannerModel(d, STANCE, seedPanel);
+    assert.deepEqual([m.conclusion, m.basis, m.aux], [base.conclusion, base.basis, base.aux]);
+    assert.ok(m.excluded.includes("propertySpread:seed"));
+    assert.ok(!m.used.some((u) => /spread/i.test(u)));
+  }
+  // 社融脉冲 pending → 不给辅助依据
+  const d2 = liveData(); d2.cycle.tsfImpulse = { status: "pending" };
+  assert.equal(H.bannerModel(d2, STANCE).aux, null);
+  // 时钟为种子 / 待接入 → 不给利率结论
+  const d3 = liveData(); d3.cycle.rateClock.status = "seed";
+  const m3 = H.bannerModel(d3, STANCE);
+  assert.equal(m3.rate, null);
+  assert.ok(m3.excluded.includes("rateClock"));
+  assert.equal(m3.basis, "依据：配置页学派立场");
+});
+
+test("tsf aux line: only when negative; 转负 only after a positive→negative flip", () => {
+  const withTsf = (t) => { const d = liveData(); d.cycle.tsfImpulse = Object.assign({ status: "ok", asOf: "2026-04", monthsBehind: 5 }, t); return H.bannerModel(d, STANCE).aux; };
+  assert.equal(withTsf({ value: 0.5, lastFlip: { direction: "负转正" } }), null);
+  assert.equal(withTsf({ value: -0.3, lastFlip: null }), "辅助：社融脉冲为负（低置信，数据截至 4 月）");
+  assert.match(withTsf({ value: -0.3, lastFlip: { direction: "正转负" } }), /转负/);
+});
+
+test("banner / advice rationale containers and clock card no-wrap fragments", () => {
+  const html = read("index.html");
+  assert.match(html, /id="ovBasis"/);
+  assert.match(html, /id="advBasis"/);
+  const c = H.clockCard(JSON.parse(read("data.json")).cycle.rateClock);
+  assert.equal(c.rateThr, "阈值 5.0bp（下限）");
+  assert.match(read("workspace.js"), /ov-nw/);
+});
+
+test("head: scripts deferred, no web fonts; stylesheets stay plain (inline critical CSS measured slower)", () => {
+  const html = read("index.html");
+  (html.match(/<script src="[^"]+"[^>]*>/g) || []).forEach((s) => assert.match(s, /\bdefer\b/, s));
+  assert.doesNotMatch(read("styles.css") + read("workspace.css"), /@font-face/, "no web fonts (font-display not needed)");
+  assert.doesNotMatch(html, /critical-css/);
+});

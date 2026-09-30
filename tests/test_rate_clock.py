@@ -160,8 +160,8 @@ class GrowthAxisTests(unittest.TestCase):
         m = rc._method_block()
         self.assertNotIn("尚未回测", m["growth"])
         self.assertIn("连续 2 个月", m["growth"])
-        self.assertEqual(m["backtestGrowth"]["switchesPerYear"], 0.9)
-        self.assertEqual(m["backtestGrowth"]["medianStateMonths"], 6)
+        # 页面与数据只保留生产口径统计（rateClock.growthBacktest），不再并列分析师的另一套数字
+        self.assertNotIn("backtestGrowth", m)
 
 class TsfImpulseTests(unittest.TestCase):
     def test_gdp_quarterly_and_ttm(self):

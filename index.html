@@ -64,11 +64,12 @@ window.__loadECharts = function () {
     t = sysLight ? "light" : "dark";
   }
   document.documentElement.dataset.theme = t;
+  if (!/^#\/?detail\//.test(location.hash || "")) document.documentElement.classList.add("is-home");
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=20260930-layout">
+<link rel="stylesheet" href="styles.css?v=20260930-polish">
 <link rel="stylesheet" href="research-layout.css?v=20260930-status">
-<link rel="stylesheet" href="workspace.css?v=20260930-layout">
+<link rel="stylesheet" href="workspace.css?v=20260930-polish">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
@@ -151,8 +152,9 @@ window.__loadECharts = function () {
   <!-- 第一层 · 结论：纯 HTML/CSS（首屏不含任何图表）。数据由 workspace.js 从 data.json / advice.json / data_panel 派生 -->
   <section class="ov-hero" id="ovHero" aria-labelledby="ovHeadline">
     <div class="ov-hero-main">
-      <p class="ov-kicker">一句话结论 <span class="ov-kicker-src">由增长 × 利率时钟与配置页学派立场同步</span></p>
-      <h2 class="ov-headline" id="ovHeadline"><span class="ov-skel">增长 · 利率时钟读取中</span><span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance"><span class="ov-skel">配置结论读取中</span></span></h2>
+      <p class="ov-kicker">一句话结论 <span class="ov-kicker-src">利率时钟 × 配置页学派立场</span></p>
+      <h2 class="ov-headline" id="ovHeadline"><span class="ov-skel">利率时钟读取中</span><span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance"><span class="ov-skel">配置结论读取中</span></span></h2>
+      <p class="ov-basis" id="ovBasis"><span class="ov-basis-main ov-skel">依据：时钟读取中</span></p>
       <p class="ov-sub num" id="ovSub"><span id="ovUpdated">数据更新于 —</span><span id="ovSwitchTag"></span></p>
       <p class="ov-switch-note ov-switch-note-plain" id="ovSwitchNote">时钟每日按 10Y 国债 60 日变化与 PMI 偏离趋势自动判定</p>
     </div>
@@ -645,6 +647,7 @@ window.__loadECharts = function () {
     <header class="adv-hero">
       <div>
         <h2 id="adviceHeadline" class="adv-headline">配置结论加载中…</h2>
+        <p class="ov-basis" id="advBasis" hidden></p>
         <p class="adv-sub num" id="advHeroSub">分权破局重估学派 · advice.json 加载中</p>
       </div>
       <p class="adv-legend">颜色只表示配置方向（蓝阶 + ↑↗→↓），<br>涨跌仍用红 / 绿 + ▲▼</p>
@@ -875,9 +878,9 @@ window.__loadECharts = function () {
 <!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
 <script src="data-status.js?v=20260930-1" defer></script>
 <script src="allocation-tools.js?v=20260930-layout" defer></script>
-<script src="workspace.js?v=20260930-layout" defer></script>
+<script src="workspace.js?v=20260930-polish" defer></script>
 <script src="tender-feed.js?v=20260930-status" defer></script>
-<script src="app.js?v=20260930-layout" defer></script>
+<script src="app.js?v=20260930-polish" defer></script>
 <script src="geography/map.js?v=20260930-lazy" defer></script>
 </body>
 </html>

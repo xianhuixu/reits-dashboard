@@ -47,6 +47,7 @@
     });
     return { ok: true, big: b.rate, arrow: RATE_ARROW[rc.rateDir] || "", cells: cells,
       rateLine: "10Y 60日 " + sgnNum(rc.d10y60bp) + "bp，阈值 " + noSignNum(rc.thresholdBp) + "bp" + (rc.thresholdFloored ? "（下限）" : ""),
+      rateHead: "10Y 60日 " + sgnNum(rc.d10y60bp) + "bp", rateThr: "阈值 " + noSignNum(rc.thresholdBp) + "bp" + (rc.thresholdFloored ? "（下限）" : ""),
       growthLine: "增长 z3 = " + noSignNum(g.z3, 2) + "σ（" + (GROWTH_TXT[String(g.state)] || "—").replace("增长", "") + "）",
       growthDist: num(dist.sigma) ? "距退出线 " + noSignNum(Math.max(0, dist.sigma), 2) + "σ" : "", critical: !!g.critical,
       confirm: cf ? { title: cf.title || "确认", count: cf.count || 0, need: cf.need || 2, label: cf.label || "" } : null,
@@ -100,7 +101,43 @@
     }
     return out.slice(0, 3);
   }
-  var HOME = {normalizedSeries:normalizedSeries, clockBanner:clockBanner, clockCard:clockCard, spreadCard:spreadCard, marketCard:marketCard, tsfCard:tsfCard, todayPoints:todayPoints, shortStamp:shortStamp, sgnNum:sgnNum, fmtAmount:fmtAmount};
+
+  // ---------------- 首页 / 配置页结论横幅（2026-09-30 团队反馈）----------------
+  // 结论 = 时钟利率方向 → 学派立场（advice.json）。增长侧状态不进横幅（「临界」只在时钟卡上）；
+  // 种子（seed）/ 待接入（pending）模块——如产权利差分位（data_panel SEED）——一律不参与结论与依据推导。
+  var DSX = root.ReitsDataStatus || (typeof require === 'function' ? (function () { try { return require('./data-status.js'); } catch (e) { return null; } })() : null);
+  function usable(s) { return !!s && (s.status === 'live' || s.status === 'cached'); }
+  function monthLabel(asOf) { var m = /^\d{4}-(\d{2})/.exec(String(asOf || '')); return m ? Number(m[1]) + ' 月' : null; }
+  /**
+   * @param {object} data   data.json（cycle.rateClock / cycle.tsfImpulse）
+   * @param {string|null} stance  学派立场文字（schoolStance(advice).text）；只来自 advice.json
+   * @param {object} [panel] data_panel_l1l7.json —— 仅用于记录「被排除」，从不参与推导
+   */
+  function bannerModel(data, stance, panel) {
+    var cy = (data && data.cycle) || {}, rc = cy.rateClock, tsf = cy.tsfImpulse;
+    var used = [], excluded = [];
+    var rcS = DSX && DSX.fromRateClock ? DSX.fromRateClock(rc) : { status: rc && rc.status === 'ok' ? 'live' : 'pending' };
+    var rate = null;
+    if (rc && rc.status === 'ok' && usable(rcS) && RATE_TXT[rc.rateDir]) { rate = RATE_TXT[rc.rateDir]; used.push('rateClock.rate'); }
+    else excluded.push('rateClock');
+    // 产权利差分位：SEED / 未接入真实数据前不参与任何结论
+    if (panel !== undefined) {
+      var pS = DSX && DSX.fromPanel ? DSX.fromPanel(panel) : { status: 'seed' };
+      excluded.push('propertySpread:' + (pS ? pS.status : 'pending'));
+    }
+    var aux = null;
+    var tS = DSX && DSX.fromTsfImpulse ? DSX.fromTsfImpulse(tsf) : { status: tsf && tsf.status === 'ok' ? 'live' : 'pending' };
+    if (tsf && tsf.status === 'ok' && usable(tS) && num(tsf.value) && tsf.value < 0) {
+      var turned = tsf.lastFlip && tsf.lastFlip.direction === '正转负';
+      var mo = monthLabel(tsf.asOf);
+      aux = '辅助：社融脉冲' + (turned ? '转负' : '为负') + '（低置信' + (mo ? '，数据截至 ' + mo : '') + '）';
+      used.push('tsfImpulse');
+    } else excluded.push('tsfImpulse');
+    var conclusion = (rate || '时钟未判定') + ' → ' + (stance || '配置结论见配置页');
+    return { rate: rate, stance: stance || null, conclusion: conclusion,
+      basis: rate ? '依据：时钟·' + rate : '依据：配置页学派立场', aux: aux, used: used, excluded: excluded };
+  }
+  var HOME = {bannerModel:bannerModel, normalizedSeries:normalizedSeries, clockBanner:clockBanner, clockCard:clockCard, spreadCard:spreadCard, marketCard:marketCard, tsfCard:tsfCard, todayPoints:todayPoints, shortStamp:shortStamp, sgnNum:sgnNum, fmtAmount:fmtAmount};
   if (typeof module !== 'undefined' && module.exports) module.exports = HOME;
   if (!root.document) return;
   var doc = root.document, activeAdvice = 'advOverview', chart, series, days = 60;
@@ -178,12 +215,12 @@
   function renderBanner(data, stance) {
     var rc = data.cycle && data.cycle.rateClock, b = clockBanner(rc), h = $('ovHeadline');
     if (!h) return;
-    var html;
-    if (!b.ok) html = esc(b.text);
-    else html = esc(b.growth) + (b.criticalAxis === 'growth' ? ' <span class="rc-tag rc-tag-warn" title="增长 z3 距退出线不足 0.05σ">临界</span>' : '') +
-      ' · ' + esc(b.rate) + (b.criticalAxis === 'rate' ? ' <span class="rc-tag rc-tag-warn">临界</span>' : '');
-    html += '<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">' + (stance ? esc(stance) : '<span class="ov-skel">配置结论加载中…</span>') + '</span>';
-    h.innerHTML = html;
+    // 结论只含利率方向 → 学派立场；增长侧（含「临界」）不进横幅
+    var m = bannerModel(data, stance || null);
+    h.innerHTML = esc(m.rate || '时钟未判定') + '<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">' +
+      (stance ? esc(stance) : '<span class="ov-skel">配置结论读取中</span>') + '</span>';
+    var basisHtml = '<span class="ov-basis-main">' + esc(m.basis) + '</span>' + (m.aux ? '<small class="ov-basis-aux">' + esc(m.aux) + '</small>' : '');
+    ['ovBasis', 'advBasis'].forEach(function (id) { var el = $(id); if (el) { el.innerHTML = basisHtml; el.hidden = false; } });
     $('ovUpdated').textContent = '数据更新于 ' + shortStamp(data.updated || data.lastTradeDate);
     if (b.switchTag) {
       $('ovSwitchTag').innerHTML = '<span class="ov-tag-switch" title="时钟读数较上一交易日发生切换">信号切换</span>';
@@ -214,8 +251,9 @@
       else {
         inner = '<div class="ov-mini-clock" aria-hidden="true">' + c.cells.map(function (x) { return '<span class="' + (x.on ? 'on' : x.lean ? 'lean' : '') + '">' + x.label + '</span>'; }).join('') + '</div>' +
           '<div class="ov-big ov-big-text">' + esc(c.big) + ' <span class="ov-dir" aria-hidden="true">' + esc(c.arrow) + '</span></div>' +
-          '<p class="ov-note">' + esc(c.rateLine) + '</p>' +
-          '<p class="ov-note">' + esc(c.growthLine) + (c.growthDist ? ' · <span class="' + (c.critical ? 'ov-crit' : '') + '">' + esc(c.growthDist) + '</span>' : '') + '</p>';
+          '<p class="ov-note"><span class="ov-nw">' + esc(c.rateHead) + '，</span><span class="ov-nw">' + esc(c.rateThr) + '</span></p>' +
+          '<p class="ov-note"><span class="ov-nw">' + esc(c.growthLine) + '</span>' + (c.growthDist ? ' <span class="ov-nw' + (c.critical ? ' ov-crit' : '') + '">' + esc(c.growthDist) + '</span>' : '') +
+          (c.critical ? ' <span class="rc-tag rc-tag-warn ov-tag-sm" title="增长 z3 距退出线不足 0.05σ">临界</span>' : '') + '</p>';
         if (c.confirm) {
           var dots = ''; for (var i = 0; i < c.confirm.need; i++) dots += '<i class="' + (i < c.confirm.count ? 'on' : '') + '"></i>';
           inner += '<div class="ov-confirm"><span class="ov-dots" aria-hidden="true">' + dots + '</span><b>' + esc(c.confirm.title) + ' ' + c.confirm.count + '/' + c.confirm.need + '</b><small>' + esc(c.confirm.label) + '</small></div>';

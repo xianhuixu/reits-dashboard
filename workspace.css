@@ -578,3 +578,46 @@ th,.matrix th { font-size:11px; font-weight:500; background:var(--th-bg); color:
 @media (max-width:767px) { .ov-headline { min-height:52px; } }
 @media (max-width:380px) { .ov-headline { min-height:104px; } }
 @media (max-width:1023px) { .ov-hero { justify-content:flex-start; } .ov-hero-main { flex:none; width:100%; } }
+/* ===== 2026-09-30 团队反馈：结论横幅依据行 + 窄屏首屏压缩 ===== */
+.ov-basis { margin:6px 0 0; font-size:13px; line-height:1.55; color:var(--tx); display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px; }
+.ov-basis-main { font-weight:500; }
+.ov-basis-aux { font-size:11.5px; color:var(--tx3); }
+.adv-hero .ov-basis { margin:4px 0 2px; }
+.ov-nw { white-space:nowrap; }
+.ov-tag-sm { height:18px; padding:0 6px; font-size:10.5px; vertical-align:1px; }
+@media (max-width:767px) {
+  .is-home #workspaceSubtitle, .is-home #meta { display:none; }
+  .is-home #v-heatmap > .ov-tier:first-child { display:none; }
+  .ov-hero { padding:12px 14px 10px; gap:8px; }
+  .ov-kicker { margin-bottom:4px; }
+  .ov-basis { font-size:12.5px; margin-top:4px; }
+  .ov-basis-aux { font-size:11px; }
+  .ov-sub { margin-top:6px; }
+  .ov-switch-note { margin-top:6px; padding:3px 8px; font-size:11.5px; }
+  .ov-cards { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #ovCardClock { grid-column:1 / -1; }
+  #ovCardClock .ov-mini-clock { float:right; width:64px; height:64px; font-size:9px; margin:-4px 0 4px 8px; }
+}
+@media (max-width:380px) { .ov-cards { grid-template-columns:1fr; } }
+/* CLS 预留高度（依据行加入 + 窄屏重排后按实测重设） */
+.ov-hero { min-height:188px; }
+.ov-headline { min-height:32px; }
+.ov-card { min-height:262px; }
+@media (max-width:1180px) { .ov-hero { min-height:190px; } .ov-headline { min-height:32px; } .ov-card { min-height:214px; } }
+@media (max-width:1023px) { .ov-hero { min-height:232px; } .ov-card { min-height:262px; } }
+@media (max-width:767px) {
+  .ov-hero { min-height:284px; } .ov-headline { min-height:52px; }
+  .ov-card, #ovCardSpread { min-height:252px; } #ovCardClock { min-height:256px; }
+}
+@media (max-width:380px) { .ov-hero { min-height:286px; } .ov-headline { min-height:52px; } .ov-card, #ovCardSpread { min-height:192px; } #ovCardClock { min-height:256px; } }
+@media (max-width:767px) {
+  #ovCardClock .ov-mini-clock { position:absolute; right:14px; top:12px; float:none; margin:0; }
+  #ovCardClock .ov-big { padding-right:76px; }
+}
+@media (max-width:767px) { #ovCardClock { min-height:192px; } }
+@media (max-width:767px) { .ov-hero { min-height:300px; } }
+.ov-basis { min-height:20px; }
+@media (max-width:767px) { .ov-basis { min-height:38px; } }
+@media (min-width:768px) { .ov-hero-side { min-height:96px; justify-content:center; } }
+@media (max-width:767px) { .ov-switch-note { min-height:44px; } }
+@media (min-width:768px) and (max-width:1023px) { .ov-hero { min-height:296px; } }
