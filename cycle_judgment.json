@@ -1,7 +1,7 @@
 {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
   "updated": "2026-09-30",
-  "bond10y": 1.67,
+  "bond10y": 1.68,
   "pm": {
     "pmi": 49.2,
     "cpi": 0.5,
@@ -105,12 +105,12 @@
     },
     "computedAt": "2026-09-30",
     "status": "ok",
-    "asOf": "2026-09-29",
-    "y10": 1.667,
-    "y10Start": 1.7406,
-    "y10StartDate": "2026-07-07",
-    "d10y60bp": -7.4,
-    "sigma60bp": 6.9,
+    "asOf": "2026-09-30",
+    "y10": 1.6822,
+    "y10Start": 1.7385,
+    "y10StartDate": "2026-07-08",
+    "d10y60bp": -5.6,
+    "sigma60bp": 6.7,
     "thresholdBp": 5.0,
     "exitBp": 2.5,
     "thresholdFloored": true,
@@ -120,20 +120,20 @@
     "ratePending": 0,
     "rateDistance": {
       "target": "flat",
-      "bp": 4.9,
-      "label": "距退出下行（转走平）还差 4.9bp（60日变化需回升至 > −2.5bp）",
+      "bp": 3.1,
+      "label": "距退出下行（转走平）还差 3.1bp（60日变化需回升至 > −2.5bp）",
       "critical": false,
-      "marginPct": 97,
+      "marginPct": 63,
       "all": {
-        "flat": 4.9,
-        "up": 12.4
+        "flat": 3.1,
+        "up": 10.6
       }
     },
     "state": "definite",
     "stateLabel": "复苏/泡沫",
     "summary": "增长高于趋势（临界）· 利率下行",
     "confidence": "中低",
-    "confidenceNote": "10Y 60日变化 -7.4bp，进入线 ±5.0bp（σ 6.9bp×0.7，下限 5bp）、退出线 ±2.5bp → 利率下行；距退出下行（转走平）还差 4.9bp（60日变化需回升至 > −2.5bp）；PMI 偏离 z3 +0.26σ → 增长高于趋势；距趋势附近（退出高于趋势）还差 0.01σ（临界）",
+    "confidenceNote": "10Y 60日变化 -5.6bp，进入线 ±5.0bp（σ 6.7bp×0.7，下限 5bp）、退出线 ±2.5bp → 利率下行；距退出下行（转走平）还差 3.1bp（60日变化需回升至 > −2.5bp）；PMI 偏离 z3 +0.26σ → 增长高于趋势；距趋势附近（退出高于趋势）还差 0.01σ（临界）",
     "growth": {
       "pmiLatest": 50.1,
       "pmiMonth": "2026-09",
@@ -177,8 +177,8 @@
     "leanNote": null,
     "backtest": {
       "from": "2016-03-31",
-      "to": "2026-09-29",
-      "tradingDays": 2627,
+      "to": "2026-09-30",
+      "tradingDays": 2628,
       "switchesPerYear": 4.8,
       "switches": 50,
       "medianStateDays": 50,
@@ -738,9 +738,9 @@
       },
       {
         "month": "2026-09",
-        "asOf": "2026-09-29",
-        "y10": 1.667,
-        "d10y60bp": -7.4,
+        "asOf": "2026-09-30",
+        "y10": 1.6822,
+        "d10y60bp": -5.6,
         "thresholdBp": 5.0,
         "exitBp": 2.5,
         "ratePending": 0,
@@ -794,9 +794,9 @@
     "dataStatus": "partial",
     "rateLeg": {
       "status": "ok",
-      "d10y60bp": -7.4,
-      "from": "2026-07-07",
-      "to": "2026-09-29",
+      "d10y60bp": -5.6,
+      "from": "2026-07-08",
+      "to": "2026-09-30",
       "met": false,
       "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
     },
@@ -804,7 +804,7 @@
       "status": "pending data",
       "note": "产权利差分位仅有 data_panel_l1l7.json SEED 插值（非真实），待中债/中证 live 序列接入"
     },
-    "asOf": "2026-09-29"
+    "asOf": "2026-09-30"
   },
   "tsfImpulse": {
     "_comment": "社融脉冲领先预警（单独卡片，不并入增长轴）；见 docs/rate-clock.md §2.4",
