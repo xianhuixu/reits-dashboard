@@ -1158,5 +1158,55 @@
       "weekAvgTurnoverPct": 0.329
     }
   ],
-  "csiReitsMonth": []
+  "csiReitsMonth": [],
+  "operatingSpreadTermMatched": {
+    "status": "pending",
+    "label": "待接入 · 期限匹配（当前图仍为 SEED IRR−10Y）",
+    "formula": "经营权利差 = IRR − 与市值加权剩余期限匹配的中债国债收益率（2/5/10/30Y 关键期限线性插值，端点外水平外推）",
+    "propertyFormula": "产权利差 = TTM 分派率 − 10Y（不变）",
+    "pendingReason": "缺经营权 REITs 剩余期限（逐只，市值加权）与 live IRR；曲线已接入。数据齐备前不展示期限匹配利差数值",
+    "interpolation": "cgb_curve.interp_yield / term_matched_spread（tests/test_cgb_curve.py）",
+    "creditSpreadAAplus": "未接入：AA+ 信用利差无易得的免费日频源，本期跳过",
+    "curve": {
+      "asOf": "2026-09-29",
+      "points": [
+        [
+          2,
+          1.259
+        ],
+        [
+          5,
+          1.3948
+        ],
+        [
+          10,
+          1.667
+        ],
+        [
+          30,
+          2.0735
+        ]
+      ],
+      "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · 中债国债收益率 2Y(EMM00588704)/5Y(EMM00166462)/10Y(EMM00166466)/30Y(EMM00166469)",
+      "origin": "live"
+    },
+    "curvePreview": [
+      {
+        "years": 3,
+        "yield": 1.3043
+      },
+      {
+        "years": 7,
+        "yield": 1.5037
+      },
+      {
+        "years": 15,
+        "yield": 1.7686
+      },
+      {
+        "years": 20,
+        "yield": 1.8703
+      }
+    ]
+  }
 }
