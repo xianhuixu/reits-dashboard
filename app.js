@@ -252,6 +252,17 @@ window.__DATA_READY.then(function () {
     kpiCard("10Y 国债收益率", bond10y == null ? "—" : bond10y.toFixed(2) + "%", "无风险利率锚（债性定价分母）") +
     kpiCard("资产重估状态", rv.stage || "—", (rv.score != null ? rv.score : "—") + "/4 项成立 · 每日更新");
   $("kpis").innerHTML = kpiCards;
+  // 数据状态角标（data-status.js）：指数 stale → 缓存
+  var DS = window.ReitsDataStatus || null;
+  function dsApply(el, st) { if (DS && el) DS.apply(el, st); }
+  function dsBadge(st) { return DS && st ? DS.badgeHtml(st, true) : ""; }
+  dsApply(document.querySelector("#kpis .kpi-idx"), DS ? DS.fromMarketIndex(mktIdx) : null);
+  // 语义色：重估阶段分数（非价格 → 蓝 / 灰 / 琥珀轴，不用红绿）
+  function rvStageColor(score) { return score >= 3 ? "var(--tilt-pos)" : score === 2 ? "var(--tilt-neu)" : "var(--tilt-neg)"; }
+  function allocChip(view) {
+    var A = window.ReitsAllocation;
+    return '<span class="alloc-chip ' + (A ? A.allocClass(view) : "alloc-n") + '">' + escH(view) + "</span>";
+  }
 
 LAZY.research.push(function () {
   // ---- 策略卡片 ----
@@ -270,7 +281,8 @@ LAZY.research.push(function () {
 });
 
   function sigLabel(l) { return l ? '<span class="sig-label sig-' + l + '">' + l + '</span>' : ''; }
-  var SEC_PALETTE = ["#3b82f6","#10b981","#f59e0b","#8b5cf6","#ef4444","#06b6d4","#ec4899","#84cc16","#f97316"];
+  // 类别色：不含红 / 绿（红绿只表示价格涨跌）
+  var SEC_PALETTE = ["#3b82f6","#0891b2","#f59e0b","#8b5cf6","#64748b","#ec4899","#a16207","#38bdf8","#f97316"];
 
   // ---- ECharts 基础设施 ----
   var CHART = {};            // id -> echarts 实例
@@ -434,7 +446,7 @@ LAZY.research.push(function () {
   // 产权/经营权走势
   var rtSeries = [
     { label: "产权 REITs", color: "#3b82f6", data: D.series.byRight["产权"] },
-    { label: "经营权 REITs", color: "#10b981", data: D.series.byRight["经营权"] }
+    { label: "经营权 REITs", color: "#f59e0b", data: D.series.byRight["经营权"] }
   ];
   registerChart(function () { renderLineChart("chartRight", D.series.dates, rtSeries, {area: false}); }, "chartRight");
   renderLineChart("chartRight", D.series.dates, rtSeries, {area: false});
@@ -443,6 +455,7 @@ LAZY.research.push(function () {
   function renderL2SpreadCharts() {
     var P = window.REITS_DATA_PANEL;
     var stamp = $("panelL2Stamp");
+    if (DS) dsApply($("panelL2Spreads"), DS.fromPanel(P));
     if (!P || !P.propertyYieldSeries || !P.operatingIrrSeries) {
       if (stamp) stamp.textContent = "L2 面板数据未加载（data_panel_l1l7.json）";
       ["chartL2Property", "chartL2Operating"].forEach(function (id) {
@@ -470,7 +483,7 @@ LAZY.research.push(function () {
       var lastSpreadBp = last.spread != null ? Math.round(last.spread * 100) : "—";
       var lastPct = last.pctile != null ? (last.pctile * 100).toFixed(1) + "%" : "—";
       return {
-        color: [spreadColor, "#94a3b8", "#f59e0b", "#a78bfa"],
+        color: [spreadColor, "#94a3b8", "#a78bfa"],
         tooltip: {
           trigger: "axis",
           backgroundColor: th.tipBg,
@@ -523,7 +536,7 @@ LAZY.research.push(function () {
     }
 
     paint("chartL2Property", P.propertyYieldSeries, "ttmYield", "产权 TTM", "#3b82f6");
-    paint("chartL2Operating", P.operatingIrrSeries, "irr", "经营权 IRR", "#10b981");
+    paint("chartL2Operating", P.operatingIrrSeries, "irr", "经营权 IRR", "#f59e0b");
   }
 
   function scheduleL2() {
@@ -541,6 +554,7 @@ LAZY.research.push(function () {
   // ---- 股/债 Beta 定位（correlation.betas；fetch_data*.py 周频回归，杜丽虹 2021 偏股/偏债法中国化） ----
   LAZY.research.push(function () {
     var B = D.correlation && D.correlation.betas;
+    if (DS) dsApply($("betaPanel"), DS.fromBetas(B));
     function pendingAll(msg) {
       $("betaStamp").textContent = "状态：待计算";
       ["betaScatter", "betaRolling"].forEach(function (id) { $(id).innerHTML = '<div class="empty">' + escH(msg) + "</div>"; });
@@ -553,10 +567,11 @@ LAZY.research.push(function () {
     }
     $("betaStamp").textContent = "asOf " + (B.asOf || "—") + " · 可用 " + (B.weeksAvailable || "—") + " 周（目标 " + B.window + " 周，最少 " + B.minObs + " 周）· 滚动 " + B.rollWindow + " 周 · 基准 " +
       (B.benchmarks || {}).equity + " / " + (B.benchmarks || {}).bond + " · Δ10Y 敏感度：" + (B.sens10yStatus || "—");
-    var ST_HEX = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+    var ST_HEX = { "防御型": "var(--def)", "周期型": "var(--cyc)", "扩张型": "var(--gro)" };
     function f3(v) { return v == null ? "—" : Number(v).toFixed(2); }
     function renderBetaScatter() {
       var th = chartTheme();
+      var flagC = cssVal("--flag-conflict") || th.gold;
       var pts = (B.byReit || []).filter(function (r) { return r.betaEq != null && r.betaBond != null; });
       var series = Object.keys(ST_HEX).map(function (st) {
         return {
@@ -564,9 +579,9 @@ LAZY.research.push(function () {
           data: pts.filter(function (r) { return r.strategy === st; }).map(function (r) {
             return { value: [r.betaBond, r.betaEq], name: r.name, r: r,
               symbol: r.disagree ? "diamond" : "circle", symbolSize: r.disagree ? 12 : 8,
-              itemStyle: r.disagree ? { borderColor: th.up, borderWidth: 2 } : undefined };
+              itemStyle: r.disagree ? { borderColor: flagC, borderWidth: 2 } : undefined };
           }),
-          itemStyle: { color: ST_HEX[st], opacity: 0.85 }
+          itemStyle: { color: resolveColor(ST_HEX[st]), opacity: 0.85 }
         };
       });
       series.push({
@@ -586,7 +601,7 @@ LAZY.research.push(function () {
             var r = p.data.r, s = p.data.s;
             if (s) return "<b>" + escH(s.sector) + "</b>（板块等权 " + s.members + " 只）<br>股Beta " + f3(s.betaEq) + " · 债Beta " + f3(s.betaBond) + "<br>Δ10Y+10bp 周收益 " + f3(s.sens10y) + "% · " + escH(s.cls || "—");
             return "<b>" + escH(r.name) + "</b> " + r.code + "<br>" + escH(r.sector) + " · 人工 " + escH(r.strategy) + " · 量化 " + escH(r.cls || "—") +
-              (r.disagree ? " <b style='color:" + th.up + "'>不一致</b>" : "") + "<br>股Beta " + f3(r.betaEq) + " · 债Beta " + f3(r.betaBond) + " · n=" + r.n + "周";
+              (r.disagree ? " <b style='color:" + flagC + "'>不一致</b>" : "") + "<br>股Beta " + f3(r.betaEq) + " · 债Beta " + f3(r.betaBond) + " · n=" + r.n + "周";
           }
         },
         xAxis: { type: "value", scale: true, name: "债 Beta →", nameLocation: "end", nameTextStyle: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.line } }, axisLabel: { color: th.tx3, fontSize: 9 }, splitLine: { lineStyle: { color: th.grid } } },
@@ -616,7 +631,7 @@ LAZY.research.push(function () {
       '<table class="matrix"><thead><tr><th class="l">量化分类与人工标签不一致</th><th class="l">板块</th><th>人工标签</th><th>期望</th><th>量化分类</th><th>股 Beta</th><th>债 Beta</th><th>Δ10Y +10bp</th></tr></thead><tbody>' +
       dis.map(function (r) {
         return "<tr><td class='l'><b>" + escH(r.name) + "</b> <span style='color:var(--tx3);font-size:11px'>" + r.code + "</span></td><td class='l'>" + escH(r.sector) + "</td><td><span class='st-tag st-" + r.strategy + "'>" + escH(r.strategy) + "</span></td><td>" + escH(r.expected) +
-          "</td><td style='color:var(--gold)'><b>" + escH(r.cls) + "</b></td><td class='num'>" + f3(r.betaEq) + "</td><td class='num'>" + f3(r.betaBond) + "</td><td class='num'>" + (r.sens10y == null ? "—" : f3(r.sens10y) + "%") + "</td></tr>";
+          "</td><td><span class='flag-chip flag-conflict'>" + escH(r.cls) + "</span></td><td class='num'>" + f3(r.betaEq) + "</td><td class='num'>" + f3(r.betaBond) + "</td><td class='num'>" + (r.sens10y == null ? "—" : f3(r.sens10y) + "%") + "</td></tr>";
       }).join("") + "</tbody></table>" :
       '<p class="note">量化偏股/偏债分类与人工「防御 / 周期 / 扩张」标签无相反一端的冲突</p>';
   });
@@ -1100,7 +1115,8 @@ LAZY.research.push(function () {
     function cellColor(v) {
       if (v == null) return "var(--panel2)";
       var t = Math.min(Math.abs(v), 1);
-      return v >= 0 ? "rgba(198,40,40," + (0.06 + 0.6 * t) + ")" : "rgba(16,185,129," + (0.06 + 0.6 * t) + ")";
+      // 相关性不是价格：正相关 = 蓝，负相关 = 琥珀
+      return "color-mix(in srgb, " + (v >= 0 ? "var(--tilt-pos)" : "var(--tilt-neg)") + " " + Math.round(6 + 52 * t) + "%, transparent)";
     }
     var html = '<table class="matrix"><thead><tr><th class="l">组合 \\ 基准</th>' +
       cols.map(function (b) { return '<th title="' + b.note + '">' + b.name + "</th>"; }).join("") + "</tr></thead><tbody>";
@@ -1285,10 +1301,11 @@ LAZY.research.push(function () {
     }
     function stTag(s) {
       var c = "var(--tx2)";
-      if (/受理|申报/.test(s)) c = "var(--accent)";
-      else if (/问询|反馈/.test(s)) c = "var(--gold)";
-      else if (/通过|生效/.test(s)) c = "var(--down)";
-      else if (/未通过|终止/.test(s)) c = "var(--up)";
+      // 项目状态不是价格：终止 = 风险紫，问询 = 预警橙，通过 = 正向蓝
+      if (/未通过|终止/.test(s)) c = "var(--risk)";
+      else if (/受理|申报/.test(s)) c = "var(--accent)";
+      else if (/问询|反馈/.test(s)) c = "var(--warn)";
+      else if (/通过|生效/.test(s)) c = "var(--tilt-pos)";
       return '<span class="sec-tag" style="color:' + c + '">' + esc(s) + "</span>";
     }
     function fillTable(tableId, metaId, thead, rows, meta) {
@@ -1598,17 +1615,19 @@ LAZY.research.push(function () {
   LAZY.research.push(function () {
     // 资产重估状态仪
     var RV = D.revaluation;
+    // 四项排他性条件 ↔ 六因子映射（原「策略信号」页重复模块并入此处）
+    var RV_FACTOR = ["利差因子（spread）", "资金面因子（moneyflow）", "市场情绪因子（sentiment）", "个券历史分位（pctRank）"];
     if (RV) {
-      var stageColor = RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)";
+      var stageColor = rvStageColor(RV.score);
       $("revalPanel").innerHTML =
         '<div style="display:flex;align-items:baseline;gap:14px;margin-bottom:10px">' +
         '<span class="rv-stage" style="color:' + stageColor + '">' + RV.stage + "</span>" +
         '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项验证条件成立 · 每日随行情自动更新</span></div>" +
-        RV.items.map(function (it) {
+        RV.items.map(function (it, i) {
           return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
             '<span class="vl num">' + it.value + "</span>" +
             '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓ 成立" : "✗ 未成立") + "</span>" +
-            '<span class="ds">' + it.desc + "</span></div>";
+            '<span class="ds">' + it.desc + (RV_FACTOR[i] ? ' <span class="rv-factor">→ ' + RV_FACTOR[i] + "</span>" : "") + "</span></div>";
         }).join("");
     } else {
       $("revalPanel").innerHTML = '<div class="empty">重估状态数据未生成</div>';
@@ -1662,16 +1681,18 @@ LAZY.research.push(function () {
         // 粗口径参考标尺（非产权锚）：学派否决统一 avgYield 作产权专用锚
         var bond10y = (D.cycle && D.cycle.bond10y != null) ? D.cycle.bond10y : 1.7;
         var avgYield = (D.cycle && D.cycle.avgYield != null) ? D.cycle.avgYield : 4.5;
+        // 缺字段时使用内置默认值 → 标「示例数据」
+        if (DS) dsApply($("spreadGauge").closest(".card"), (D.cycle && D.cycle.bond10y != null && D.cycle.avgYield != null) ? DS.make(DS.LIVE) : DS.make(DS.SEED, { note: "cycle.avgYield / bond10y 缺失，使用内置默认值" }));
         var cur = Math.round((avgYield - bond10y) * 100);
         var zone = cur >= 250 ? "粗览·偏宽" : cur >= 100 ? "粗览·中性" : "粗览·偏窄";
-        var zoneColor = cur >= 250 ? "var(--up)" : cur >= 100 ? "var(--gold)" : "var(--down)";
+        var zoneColor = cur >= 250 ? "var(--tilt-pos)" : cur >= 100 ? "var(--tilt-neu)" : "var(--tilt-neg)";
         var anchors = [{ v: 350, l: "2021 初 350BP" }, { v: 170, l: "2025 中 170BP" }, { v: cur, l: "粗览 " + cur + "BP" }];
         var pct = function (v) { return Math.min(100, Math.max(0, v / 400 * 100)); };
         $("spreadGauge").innerHTML =
           '<div style="position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex;opacity:.85">' +
-          '<div style="width:' + pct(100) + '%;background:rgba(16,185,129,.22)"></div>' +
-          '<div style="width:' + (pct(250) - pct(100)) + '%;background:rgba(100,116,139,.14)"></div>' +
-          '<div style="flex:1;background:rgba(239,68,68,.18)"></div></div>' +
+          '<div style="width:' + pct(100) + '%;background:color-mix(in srgb, var(--tilt-neg) 22%, transparent)"></div>' +
+          '<div style="width:' + (pct(250) - pct(100)) + '%;background:color-mix(in srgb, var(--tilt-neu) 16%, transparent)"></div>' +
+          '<div style="flex:1;background:color-mix(in srgb, var(--tilt-pos) 20%, transparent)"></div></div>' +
           '<div style="position:relative;height:0">' + anchors.map(function (a, i) {
             return '<div style="position:absolute;left:' + pct(a.v) + '%;transform:translateX(-50%);top:-32px">' +
               '<div style="width:2.5px;height:' + (i === 2 ? 34 : 24) + 'px;background:' + (i === 2 ? "var(--tx2)" : "var(--tx3)") + ';margin:0 auto"></div>' +
@@ -1685,7 +1706,7 @@ LAZY.research.push(function () {
       if ($("rvLiveStrip")) {
         $("rvLiveStrip").innerHTML = RV ? (
           '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:10px">' +
-          '<span class="rv-stage" style="color:' + (RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)") + '">' + RV.stage + "</span>" +
+          '<span class="rv-stage" style="color:' + rvStageColor(RV.score) + '">' + RV.stage + "</span>" +
           '<span class="num" style="color:var(--tx3)">' + RV.score + " / 4 项成立 · 每日自动更新</span></div>" +
           RV.items.map(function (it) {
             return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
@@ -1741,8 +1762,9 @@ LAZY.research.push(function () {
       "衰退": "<b>衰退</b>(增长↓ 通胀↓)：债券>股票>现金>商品。利率快速下行 → 类债高股息资产占优，防御型领涨，顺周期承压"
     };
     $("clockDesc").innerHTML = (CLOCK_DESC[q] || "") + '<div style="margin-top:6px;color:var(--tx3)">当前位置：<b style="color:var(--accent)">' + q + '</b> · ' + ((CY.clock || {}).note || "—") + "</div>";
-    var quads = [["复苏", "增长↑ 通胀↓", "#10b981"], ["过热", "增长↑ 通胀↑", "#ef4444"],
-                 ["滞胀", "增长↓ 通胀↑", "#f59e0b"], ["衰退", "增长↓ 通胀↓", "#3b82f6"]];
+    // 象限类别色（非价格）：不用红 / 绿
+    var quads = [["复苏", "增长↑ 通胀↓", "var(--clk-recov)"], ["过热", "增长↑ 通胀↑", "var(--clk-boom)"],
+                 ["滞胀", "增长↓ 通胀↑", "var(--clk-stag)"], ["衰退", "增长↓ 通胀↓", "var(--clk-reces)"]];
     var W = 340, H = 300, m = 30;
     var pos = { "复苏": [1, 1], "过热": [1, 0], "滞胀": [0, 0], "衰退": [0, 1] };
     var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="100%">' + svgTitle("美林时钟周期定位图");
@@ -1770,6 +1792,7 @@ LAZY.research.push(function () {
     (function renderRateClock() {
       var RC = CY.rateClock;
       var OC = D.overseasClock;
+      if (DS) dsApply(document.querySelector("#rateClockRow > .card"), DS.fromRateClock(RC));
       var QN = { Q1: "繁荣", Q2: "复苏/泡沫", Q3: "衰退", Q4: "滞胀/复苏" };
       var QP = {};
       ((OC && OC.quadrants) || []).forEach(function (qq) { QP[qq.id] = qq.annualTotalReturn; });
@@ -1799,7 +1822,7 @@ LAZY.research.push(function () {
       var leaders = sectors.filter(function (x) { return inZone(x.best); }).map(function (x) { return x.type; });
       var mines = sectors.filter(function (x) { return inZone(x.danger); }).map(function (x) { return x.type; });
       var flags = RC.conflictFlags || [];
-      var flagColor = { conflict: "var(--gold)", watch: "var(--accent)", background: "var(--tx3)", reference: "var(--tx3)" };
+      var flagColor = { conflict: "var(--flag-conflict)", watch: "var(--flag-watch)", background: "var(--flag-ref)", reference: "var(--flag-ref)" };
       var flagName = { conflict: "冲突", watch: "复核", background: "背景", reference: "参考" };
       var GT = CY.rateRentGate || null;
       var gateTxt = !GT ? "未计算" :
@@ -1836,7 +1859,7 @@ LAZY.research.push(function () {
           (rot.lastDefiniteMonth ? " · 最近确定象限月 " + escH(rot.lastDefiniteMonth) + (rot.transitionalMonthsSince ? "，其后过渡期 " + rot.transitionalMonthsSince + " 个月" : "") : "") + "<br>" +
           "<b>美国先验领先业态</b>" + (trans ? "（最近象限·参考）" : "") + "：" + (leaders.length ? escH(leaders.join("、")) : "—") +
           " · <b>雷区业态</b>" + (trans ? "（参考）" : "") + "：" + (mines.length ? escH(mines.join("、")) : "—") + "<br>" +
-          "<b>升息快于租金闸门</b>：" + escH(gateTxt) +
+          "<b>升息快于租金闸门</b>：" + escH(gateTxt) + (GT && DS ? dsBadge(DS.fromGateLeg(GT.spreadLeg, GT.asOf)) : "") +
         "</div>" +
         (flags.length ? '<ul id="rateClockFlags" style="margin:10px 0 0;padding-left:18px;font-size:12px;line-height:1.7">' + flags.map(function (f) {
           return '<li data-level="' + escH(f.level) + '" style="color:' + (flagColor[f.level] || "var(--tx2)") + '"><b>' + escH(flagName[f.level] || f.level) + "</b> · " + escH(f.level === "reference" ? String(f.text).replace(/^参考·/, "") : f.text) + "</li>";
@@ -1850,7 +1873,7 @@ LAZY.research.push(function () {
       var hw = (W2 - 2 * m2) / 2, hh = (H2 - 10 - 2 * m2) / 2;
       function px(v) { v = Math.max(-50, Math.min(50, v || 0)); return cx + v / 50 * (hw - 8); }
       function py(v) { v = Math.max(48, Math.min(52, v == null ? 50 : v)); return cy - (v - 50) / 2 * (hh - 8); }
-      var cols2 = { Q1: "#ef4444", Q2: "#10b981", Q3: "#3b82f6", Q4: "#f59e0b" };
+      var cols2 = { Q1: "var(--clk-boom)", Q2: "var(--clk-recov)", Q3: "var(--clk-reces)", Q4: "var(--clk-stag)" };
       var cells = [["Q2", cx - hw, cy - hh], ["Q1", cx, cy - hh], ["Q3", cx - hw, cy], ["Q4", cx, cy]];
       var sv = '<svg viewBox="0 0 ' + W2 + " " + H2 + '" width="100%">' + svgTitle("REITs 投资时钟（增长×利率）定位图");
       cells.forEach(function (c) {
@@ -1899,7 +1922,7 @@ LAZY.research.push(function () {
       var W = 760, H = 400, pl = 46, pr = 10, pt = 14, pb = 26;
       $("usLongAsOf").textContent = "当前截至 " + U.dates[U.dates.length - 1] + " 美股收盘";
       var cats = ["防御型", "周期型", "扩张型"];
-      var cols = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+      var cols = { "防御型": "#0891b2", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
       function renderUsLong() {
         var th = chartTheme();
         var markAreaData = (U.recessions || []).filter(function (r) {
@@ -1967,10 +1990,10 @@ LAZY.research.push(function () {
         if ($("chartUsMembers")) $("chartUsMembers").innerHTML = '<div class="empty">代表标的个体序列未生成 — 请运行 scripts/build_us_long.py</div>';
         return;
       }
-      // 类别配色：防御=绿、周期=琥珀、扩张=紫；同类别多只时用色阶区分
-      var catBase = { "防御型": "#10b981", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
+      // 类别配色：防御=青、周期=琥珀、扩张=紫（与 --def/--cyc/--gro 一致，不用绿）；同类别多只时用色阶区分
+      var catBase = { "防御型": "#0891b2", "周期型": "#f59e0b", "扩张型": "#8b5cf6" };
       var catShades = {
-        "防御型": ["#0d9e6e", "#34d399", "#059669"],
+        "防御型": ["#0891b2", "#22d3ee", "#0e7490"],
         "周期型": ["#f59e0b", "#d97706", "#fbbf24"],
         "扩张型": ["#8b5cf6", "#a78bfa", "#7c3aed"]
       };
@@ -2088,7 +2111,7 @@ LAZY.research.push(function () {
       $("mappingConclusion").textContent = CY.mapping.conclusion || "";
       $("mappingCards").innerHTML = (CY.mapping.directions || []).map(function (d2) {
         return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
-          '<b style="font-size:13px">' + d2.sector + '</b><span class="tag" style="font-size:11px;padding:2px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line)">' + d2.view + "</span></div>" +
+          '<b style="font-size:13px">' + d2.sector + '</b>' + allocChip(d2.view) + "</div>" +
           '<p style="font-size:11.5px;color:var(--tx2);margin-top:6px;line-height:1.6">' + d2.reason + "</p>" +
           '<div style="font-size:11px;color:var(--tx3);margin-top:4px">置信度：' + d2.confidence + "</div></div>";
       }).join("");
@@ -2109,6 +2132,11 @@ LAZY.research.push(function () {
     ];
     var fundMap = {};
     (D.fundamentals || []).forEach(function (f) { fundMap[f.code] = f; });
+    if (DS) {
+      var fundSt = DS.fromFundamentals(D.fundamentals);
+      dsApply($("trackGrid").closest(".card"), fundSt);
+      dsApply($("fundTable").closest(".card"), fundSt);
+    }
     $("trackGrid").innerHTML = '<div class="grid3" style="margin-bottom:0">' + TRACKS.map(function (t) {
       var members = D.reits.filter(function (r) { return r.sector === t.sector; });
       var pills = [];
@@ -2118,9 +2146,9 @@ LAZY.research.push(function () {
           Object.keys(f.metrics).forEach(function (mk) {
             var v = f.metrics[mk];
             if (v == null) return;
-            var level = "green";
-            if (mk === "出租率" && v < 90) level = "red"; else if (mk === "出租率" && v < 92) level = "yellow";
-            if (mk === "空置率" && v > 12) level = "red"; else if (mk === "空置率" && v > 10) level = "yellow";
+            var level = "ok";
+            if (mk === "出租率" && v < 90) level = "risk"; else if (mk === "出租率" && v < 92) level = "warn";
+            if (mk === "空置率" && v > 12) level = "risk"; else if (mk === "空置率" && v > 10) level = "warn";
             pills.push({ n: r.name.replace(/REIT.*$/, ""), m: mk, v: v, level: level });
           });
         }
@@ -2133,7 +2161,7 @@ LAZY.research.push(function () {
       return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
         '<b style="font-size:13px">' + t.sector + '</b><span style="font-size:11px;color:var(--tx3)">' + members.length + " 只</span></div>" +
         '<div style="margin:6px 0">' + t.metrics.map(function (m2) { return '<span class="metric-pill gray">' + m2 + "</span>"; }).join("") + "</div>" +
-        '<div style="font-size:11px;color:var(--up);margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
+        '<div style="font-size:11px;color:var(--risk);margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
     }).join("") + "</div>";
 
     // 分派达成监测
@@ -2145,7 +2173,7 @@ LAZY.research.push(function () {
         funds.map(function (f) {
           var r = D.reits.find(function (x) { return x.code === f.code; });
           var a = f.achieveRate;
-          var st = a == null ? ["待更新", "var(--tx3)"] : a >= 95 ? ["正常", "var(--down)"] : a >= 90 ? ["警戒", "var(--gold)"] : ["减持红线", "var(--up)"];
+          var st = a == null ? ["待更新", "var(--tx3)"] : a >= 95 ? ["正常", "var(--tilt-pos)"] : a >= 90 ? ["警戒", "var(--warn)"] : ["减持红线", "var(--risk)"];
           return "<tr><td class='l'>" + (r ? r.name : f.code) + "</td>" +
             '<td class="num">' + (a == null ? "—" : a + "%") + "</td>" +
             '<td class="num">' + (f.distYield == null ? "—" : f.distYield + "%") + "</td>" +
@@ -2157,20 +2185,17 @@ LAZY.research.push(function () {
 
   // ---- 策略信号中心 ----
   LAZY.research.push(function () {
-    // 重估因子映射
+    // 资产重估：信号页只保留摘要，完整判断（理论回溯 / 排他性预测 / 因子映射）在「周期分析」
     var RV = D.revaluation;
-    if (RV) {
-      var MAP = ["利差因子（spread）", "资金面因子（moneyflow）", "市场情绪因子（sentiment）", "个券历史分位（pctRank）"];
-      $("revalSignalMap").innerHTML =
-        '<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px">' +
-        '<span class="rv-stage" style="color:' + (RV.score >= 3 ? "var(--up)" : RV.score === 2 ? "var(--gold)" : "var(--tx2)") + '">' + RV.stage + "</span>" +
-        '<span class="num" style="color:var(--tx3);font-size:11.5px">' + RV.score + "/4 · 重估的利率驱动力在，资金与价格验证未跟上，仍处初期反复阶段</span></div>" +
-        RV.items.map(function (it, i) {
-          return '<div class="rv-item"><span class="nm">' + it.name + "</span>" +
-            '<span class="vl num">' + it.value + "</span>" +
-            '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '">' + (it.ok ? "✓ 成立" : "✗ 未成立") + "</span>" +
-            '<span class="ds">→ ' + MAP[i] + "</span></div>";
-        }).join("");
+    if (RV && $("revalSignalSummary")) {
+      $("revalSignalSummary").innerHTML =
+        '<span class="rv-stage" style="color:' + rvStageColor(RV.score) + '">' + escH(RV.stage) + "</span>" +
+        '<span class="num rv-score">' + RV.score + " / 4 项成立</span>" +
+        '<span class="rv-mini">' + RV.items.map(function (it) {
+          return '<span class="' + (it.ok ? "rv-ok" : "rv-no") + '" title="' + escH(it.name + " · " + it.value) + '">' + (it.ok ? "✓ " : "✗ ") + escH(it.name) + "</span>";
+        }).join("") + "</span>";
+    } else if ($("revalSignalSummary")) {
+      $("revalSignalSummary").innerHTML = '<span class="empty">重估状态数据未生成</span>';
     }
 
     // 三策略信号条

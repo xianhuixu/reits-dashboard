@@ -58,8 +58,17 @@
         softOf: trans ? hit : null, flag: p.conflictFlag || "", evidence: p.chinaEvidence || "" };
     });
   }
-  if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone };
+  /** 配置倾向文本 → 语义色类（超配=深蓝 / 偏超配=蓝描边 / 标配=灰 / 低配=琥珀）；红绿只留给价格涨跌。
+   * @param {string} action @returns {"alloc-ow"|"alloc-ow-lite"|"alloc-n"|"alloc-uw"} */
+  function allocClass(action) {
+    var a = String(action || "");
+    if (/低配|减配|回避|谨慎|观望/.test(a)) return "alloc-uw";
+    if (/超配/.test(a)) return /标配|偏超配/.test(a) ? "alloc-ow-lite" : "alloc-ow";
+    return "alloc-n";
+  }
+  if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone, allocClass: allocClass };
   if (!root.document) return;
+  root.ReitsAllocation = { allocClass: allocClass };
   var doc = root.document;
   // 按实际导航高度设置章节偏移，适配窄屏换行与字体缩放。
   function updateAnchorOffset() {
@@ -123,6 +132,7 @@
     if (!state || !table) return;
     var clock = cycle && cycle.rateClock;
     var rows = clockPriorRows(advice, clock);
+    if (root.ReitsDataStatus) root.ReitsDataStatus.apply(doc.getElementById("clockPriorPanel"), root.ReitsDataStatus.fromRateClock(clock));
     if (!rows.length) { state.textContent = "advice.json 暂无 clockSectorPrior。"; return; }
     var live = clock && clock.status === "ok";
     var trans = live && clock.state === "transitional";
@@ -135,26 +145,28 @@
         " · 美国先验（最近象限，仅参考）" + pr(clock.leanUsPriorAnnualReturn) + " · 过渡期不判硬冲突，命中项标「参考」" :
       live && clock.quadrant ?
       "当前象限：<b>" + esc(clock.quadrant + " " + (clock.subState || clock.quadrantName || "")) + "</b>（asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "—") + "）" + gNote +
-        " · 美国先验本象限整体年化总回报 " + pr(clock.usPriorAnnualReturn) + " · 标黄 = 学派超配但落在美国先验雷区" :
+        " · 美国先验本象限整体年化总回报 " + pr(clock.usPriorAnnualReturn) + " · 橙色标记 = 学派超配但落在美国先验雷区" :
       "当前象限未判定（" + esc((clock && (clock.statusNote || clock.status)) || "行情核心数据未含 rateClock") + "），下表仅展示静态先验。";
     var LBL = { conflict: "冲突", watch: "复核", reference: "参考", "static": "待实证", ok: "—" };
     table.innerHTML = '<table class="matrix research-table"><thead><tr><th scope="col">中国板块</th><th scope="col">学派观点</th><th scope="col">美国类比（假设）</th><th scope="col">最佳象限</th><th scope="col">雷区</th><th scope="col">类比置信</th><th scope="col">冲突</th></tr></thead><tbody>' +
       rows.map(function (r) {
-        var hl = r.status === "conflict" ? ' class="clock-conflict" style="background:rgba(212,160,23,.16)"' :
-          r.status === "reference" ? ' class="clock-reference" style="background:rgba(148,163,184,.10)"' : "";
+        var hl = r.status === "conflict" ? ' class="clock-conflict"' : r.status === "reference" ? ' class="clock-reference"' : "";
+        var flagCls = { conflict: "flag-conflict", watch: "flag-watch", reference: "flag-reference" }[r.status];
         var mark = r.reference ? (r.inDanger ? " ◌最近象限雷区（参考）" : "") + (r.inBest ? " ☆最近象限最佳（参考）" : "") :
           (r.inDanger ? " ⚠️当前处雷区" : "") + (r.inBest ? " ★当前处最佳" : "");
-        return "<tr" + hl + "><td><strong>" + esc(r.sector) + "</strong></td><td>" + esc(r.action) + "</td><td>" + esc(r.usAnalog) + '<span class="cell-note">' + esc(r.evidence) + "</span></td><td>" + esc(r.best) + "</td><td>" + esc(r.danger) + esc(mark) +
-          "</td><td>" + esc(r.confidence) + "</td><td><b>" + esc(LBL[r.status]) + "</b>" + (r.flag ? '<span class="cell-note">' + esc(r.flag) + "</span>" : "") + "</td></tr>";
+        return "<tr" + hl + "><td><strong>" + esc(r.sector) + "</strong></td><td>" + (r.action === "—" ? "—" : '<span class="alloc-chip ' + allocClass(r.action) + '">' + esc(r.action) + "</span>") + "</td><td>" + esc(r.usAnalog) + '<span class="cell-note">' + esc(r.evidence) + "</span></td><td>" + esc(r.best) + "</td><td>" + esc(r.danger) + esc(mark) +
+          "</td><td>" + esc(r.confidence) + "</td><td>" + (flagCls ? '<span class="flag-chip ' + flagCls + '">' + esc(LBL[r.status]) + "</span>" : "<b>" + esc(LBL[r.status]) + "</b>") + (r.flag ? '<span class="cell-note">' + esc(r.flag) + "</span>" : "") + "</td></tr>";
       }).join("") + "</tbody></table>";
     var spec = advice.rateRentGate || {}, g = cycle && cycle.rateRentGate;
     if (gateEl) {
       var st = g ? ({ triggered: "已触发", not_triggered: "未触发", "pending data": "待数据" }[g.status] || g.status) : "待数据";
       var legs = g ? "（利率腿：" + (g.rateLeg && g.rateLeg.status === "ok" ? (g.rateLeg.d10y60bp > 0 ? "+" : "") + g.rateLeg.d10y60bp + "bp/60日" + (g.rateLeg.met ? " 满足" : " 未满足") : "待数据") +
         "；产权利差分位腿：" + (g.spreadLeg && g.spreadLeg.status === "ok" ? g.spreadLeg.pctileChangePP + "pp" : "pending data") + "）" : "";
+      var DS = root.ReitsDataStatus;
+      var legBadge = DS ? DS.badgeHtml(g ? DS.fromGateLeg(g.spreadLeg, g.asOf) : DS.make(DS.PENDING, { note: "闸门未计算" }), true) : "";
       var eff = spec.effectsIfTriggered || {};
-      gateEl.innerHTML = "<b>" + esc(spec.label || "升息快于租金闸门") + "</b>：" + esc(spec.rule || "") + " → 当前 <b>" + esc(st) + "</b>" + esc(legs) +
-        (g && g.status === "triggered" ? " · <b style=\"color:var(--up)\">已叠加：风险「" + esc(eff.risk) + "」升级为「" + esc(eff.escalateTo) + "」，估值闸门降为「" + esc(eff.downgradeTo) + "」</b>" :
+      gateEl.innerHTML = "<b>" + esc(spec.label || "升息快于租金闸门") + "</b>：" + esc(spec.rule || "") + " → 当前 <b>" + esc(st) + "</b>" + esc(legs) + legBadge +
+        (g && g.status === "triggered" ? " · <b class=\"tone-risk\">已叠加：风险「" + esc(eff.risk) + "」升级为「" + esc(eff.escalateTo) + "」，估值闸门降为「" + esc(eff.downgradeTo) + "」</b>" :
           " · 触发后：风险「" + esc(eff.risk) + "」→「" + esc(eff.escalateTo) + "」，估值闸门 →「" + esc(eff.downgradeTo) + "」") + "。" + esc(spec.dataStatus || "");
     }
   }
