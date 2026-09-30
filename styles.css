@@ -520,8 +520,7 @@ main { min-width: 0; }
 }
 
 
-/* ==========================================================================
-   语义色板（2026-09-30）
+/* ===================================================================   语义色板（2026-09-30）
    · 红 / 绿（--up / --down）只用于价格涨跌（A 股惯例：红涨绿跌）。
    · 配置倾向：单一冷色阶，超配 = 深蓝 · 标配 = 蓝灰 · 低配 = 浅蓝灰；标签另带 ↑ / ↗ / → / ↓ 符号。
    · 研判正 / 负倾向（成立、正常、偏强 / 未成立、偏弱）：深蓝 / 紫灰（冷色），另有 ✓ / ✗ 文字。
@@ -610,3 +609,46 @@ main { min-width: 0; }
 .reval-summary .rv-mini { display: inline-flex; flex-wrap: wrap; gap: 6px; }
 .reval-summary .rv-mini span { font-size: 11.5px; padding: 1px 8px; border-radius: 999px; background: var(--panel2); border: 1px solid var(--line); }
 .rv-item .rv-factor { color: var(--tx2); white-space: nowrap; margin-left: 4px; }
+=======
+/* ---- REITs 投资时钟（2026-09-30 校准）· 社融脉冲卡 ----
+   色彩约定：红/绿只用于价格涨跌；蓝/紫 = 配置/象限；橙 = 临界/预警。数字 tabular-nums；图表容器定高防 CLS。 */
+.rc-chart { aspect-ratio: 340 / 300; width: 100%; max-width: 420px; }
+.rc-head { background: var(--panel2); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+.rc-head-main { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.rc-state { font-size: 20px; font-weight: 650; color: var(--accent); margin-right: 4px; }
+.rc-state[data-state="transitional"] { color: var(--tx2); }
+.rc-summary { margin-top: 4px; font-size: 13px; color: var(--tx); font-weight: 560; }
+.rc-conf { margin-left: 10px; font-size: 11.5px; font-weight: 400; color: var(--tx3); }
+.rc-switch-note { margin-top: 6px; font-size: 11.5px; color: var(--warn); line-height: 1.6; }
+.rc-tag { display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 10px; font-size: 11px; font-weight: 600; line-height: 1; white-space: nowrap; }
+.rc-tag-warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); }
+.rc-tag-ref { color: var(--tx3); border: 1px dashed var(--tx3); font-weight: 500; }
+.rc-axes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.rc-box { background: var(--panel2); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+.rc-box-t { font-size: 11.5px; color: var(--tx3); }
+.rc-box-v { font-size: 20px; font-weight: 650; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+.rc-box-v small { font-size: 12px; font-weight: 500; color: var(--tx2); margin-left: 4px; }
+.rc-box-s, .rc-dist-lbl, .rc-foot, .tsf-meta { font-variant-numeric: tabular-nums; }
+.rc-box-s { font-size: 11.5px; color: var(--tx2); line-height: 1.6; }
+.rc-box-f { margin-top: 6px; font-size: 10.5px; color: var(--tx3); }
+.rc-dist { margin-top: 8px; }
+.rc-dist-lbl { font-size: 11.5px; color: var(--tx2); margin-bottom: 4px; }
+.rc-bar { height: 6px; border-radius: 3px; background: var(--prog-track); overflow: hidden; }
+.rc-bar > i { display: block; height: 100%; border-radius: 3px; background: var(--accent); transition: width .4s var(--ease); }
+.rc-dist.is-crit .rc-dist-lbl { color: var(--warn); font-weight: 600; }
+.rc-dist.is-crit .rc-bar > i { background: var(--warn); }
+.rc-meta { font-size: 12px; color: var(--tx2); line-height: 1.8; }
+.rc-flags { margin: 10px 0 0; padding-left: 18px; font-size: 12px; line-height: 1.7; }
+.rc-foot { font-size: 11px; color: var(--tx3); margin-top: 6px; line-height: 1.6; }
+.tsf-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: center; }
+.tsf-spark { height: 96px; }
+.tsf-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.tsf-big { font-size: 28px; font-weight: 700; color: var(--gro); font-variant-numeric: tabular-nums; }
+.tsf-big small { font-size: 14px; margin-left: 2px; }
+.tsf-side { font-size: 12px; color: var(--tx2); line-height: 1.6; }
+.tsf-asof { font-weight: 600; color: var(--tx); }
+.tsf-stale { display: inline-block; margin-top: 6px; font-size: 11.5px; color: var(--warn); }
+.tsf-read { font-size: 12px; color: var(--tx2); line-height: 1.7; margin-top: 6px; }
+.tsf-pending { font-size: 12.5px; color: var(--tx3); }
+.clock-state-line .rc-tag { margin-left: 4px; vertical-align: 1px; }
+@media (max-width: 900px) { .rc-axes, .tsf-grid { grid-template-columns: 1fr; } }

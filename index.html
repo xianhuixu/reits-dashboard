@@ -266,14 +266,22 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   <div class="grid" id="rateClockRow">
     <div class="card">
       <h2>REITs 投资时钟 · 增长 × 利率方向 <span class="note" style="display:inline" id="rateClockStamp"></span></h2>
-      <p class="note">杜丽虹 2021 框架中国化：利率轴 = 10Y 国债 60 交易日变化（±10bp 死区）· 增长轴 = 制造业 PMI 近 3 月均值 vs 50（替代美国「实际 GDP 2%」）· 美国先验 = 1994 年以来美国权益型 REITs 年化总回报 · <b>仅作宏观背景层</b>，板块观点以「配置与风险」为准</p>
+      <p class="note">杜丽虹 2021 框架中国化（2026-09-30 校准）：利率轴 = 10Y 国债 60 交易日变化，动态死区 max(5bp, 0.7σ) + 滞回 + 5 日确认 · 增长轴 = 制造业 PMI 偏离近 36 月均值的 z 分数（3 月均，±0.5σ 进入 / ±0.25σ 退出）· 美国先验 = 1994 年以来美国权益型 REITs 年化总回报 · <b>仅作宏观背景层</b>，板块观点以「配置与风险」为准</p>
       <div id="rateClockDetail"></div>
     </div>
     <div class="card cycle-clock-card">
       <h2>REITs 投资时钟</h2>
-      <p class="note">横轴 Δ10Y(60日) · 纵轴 PMI 3 月均值 · 灰带 = ±10bp 死区 · 连线 = 近 24 个月月末轨迹</p>
-      <div id="rateClockChart" class="clock-chart"></div>
+      <p class="note">横轴 Δ10Y(60日) · 纵轴 PMI 偏离趋势 z3(σ) · 灰带 = 进入/退出线 · 连线 = 近 24 个月月末轨迹</p>
+      <div id="rateClockChart" class="clock-chart rc-chart"></div>
       <div class="clock-desc" id="rateClockDesc"></div>
+    </div>
+  </div>
+  <div class="card tsf-card" id="tsfImpulseCard">
+    <h2>社融脉冲 · 领先预警 <span class="note" style="display:inline" id="tsfImpulseStamp"></span></h2>
+    <p class="note">（近 12 个月社融增量 − 上年同期）/ 近 4 季名义 GDP · 单独预警，<b>不并入</b>增长轴 · 只看方向</p>
+    <div class="tsf-grid">
+      <div id="tsfImpulseDetail"></div>
+      <div id="tsfImpulseSpark" class="tsf-spark" aria-hidden="false"></div>
     </div>
   </div>
   <div class="card">
@@ -402,7 +410,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     </div>
   </div>
   <div class="card panel-l2" id="panelL2Spreads">
-    <h2>L2 分权利差时序 · 产权 TTM−10Y / 经营权 IRR−10Y</h2>
+    <h2>L2 分权利差时序 · 产权 TTM−10Y / 经营权 IRR−期限匹配国债</h2>
     <p class="note" id="panelL2Note">市值加权分派/IRR 与 10Y 国债利差 · 面积=利差 · 虚线=历史分位 · 对齐分权破局重估学派 · 数据 as-of 见角标</p>
     <p class="panel-l2-stamp" id="panelL2Stamp" style="font-size:11.5px;color:var(--tx3);margin:0 0 10px"></p>
     <div class="grid">
@@ -412,8 +420,8 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
         <div id="chartL2Property" style="height:320px"></div>
       </div>
       <div>
-        <h3 style="font-size:13px;margin:0 0 6px">经营权 · 中债 IRR − 10Y</h3>
-        <p class="note" style="margin-bottom:8px">经营权利差 = <b>IRR − 10Y</b>（非 TTM）· 分位通常显著低于产权</p>
+        <h3 style="font-size:13px;margin:0 0 6px">经营权 · 中债 IRR − 期限匹配国债</h3>
+        <p class="note" style="margin-bottom:8px">目标口径 = <b>IRR − 按剩余期限插值的中债国债收益率</b>（2/5/10/30Y，非 TTM）· <span id="panelL2TermStatus" class="l2-term-status">待接入：图中暂为 SEED IRR−10Y</span></p>
         <div id="chartL2Operating" style="height:320px"></div>
       </div>
     </div>

@@ -44,6 +44,21 @@ test("operating spread is IRR-based (not TTM) in docs and last row", () => {
   assert.equal(typeof lastP.ttmYield, "number");
 });
 
+test("operating spread target = IRR − term-matched CGB (pending until remaining term is live)", () => {
+  const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
+  const tm = panel.operatingSpreadTermMatched;
+  assert.ok(tm, "operatingSpreadTermMatched present");
+  assert.ok(["pending", "ok"].includes(tm.status));
+  assert.match(tm.formula, /剩余期限/);
+  assert.match(tm.formula, /插值/);
+  assert.match(tm.propertyFormula, /TTM.*10Y/);
+  if (tm.status === "pending") assert.ok(!("spread" in tm) && !("series" in tm));
+  (tm.curve.points || []).forEach((p) => assert.equal(p.length, 2));
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  assert.match(html, /IRR − 期限匹配国债/);
+  assert.match(html, /id="panelL2TermStatus"/);
+});
+
 test("build_data_panel.py --check exits 0", () => {
   const r = spawnSync("python3", ["build_data_panel.py", "--check"], { cwd: root, encoding: "utf-8" });
   assert.equal(r.status, 0, r.stderr || r.stdout);
