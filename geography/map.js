@@ -158,15 +158,37 @@
     update();
   }
   function loadJson(url) { return fetch(url,{signal:AbortSignal.timeout(15000)}).then(function(r){if(!r.ok)throw new Error(url+': '+r.status);return r.json();}); }
-  Promise.all([root.__DATA_READY || Promise.resolve(),loadJson('geography/sponsors.json?v=20260928-3')]).then(function(results){
-    registry=results[1]; funds=(root.REITS_DATA||{}).reits;
-    if(!Array.isArray(funds)||!funds.length) throw new Error('行情样本未加载');
-    init();
-    return loadJson('geography/china-provinces.json?v=1').then(function(data){geo=data;buildMap();renderMarkers();$('geoMapLoading').hidden=true;});
-  }).catch(function(error){
+  // 地图与样本结构位于首页「明细」折叠区：展开对应折叠时才加载注册地表（sponsors.json），
+  // 省界 GeoJSON（china-provinces.json）仅在地图折叠 #foldGeo 展开时加载，首屏不下载。
+  var baseP=null, mapP=null;
+  function fail(error){
     console.error('原始权益人地图加载失败',error);
     $('geoMapLoading').hidden=false;
     $('geoMapLoading').textContent='地图加载失败，请刷新重试。已载入的城市排名和项目清单仍可使用。';
     $('geoStatus').textContent='地图未完整加载。';
-  });
+  }
+  function loadBase(){
+    if(!baseP) baseP=Promise.all([root.__DATA_READY || Promise.resolve(),loadJson('geography/sponsors.json?v=20260928-3')]).then(function(results){
+      registry=results[1]; funds=(root.REITS_DATA||{}).reits;
+      if(!Array.isArray(funds)||!funds.length) throw new Error('行情样本未加载');
+      init();
+    });
+    return baseP;
+  }
+  function loadMap(){
+    if(!mapP) mapP=loadBase().then(function(){return loadJson('geography/china-provinces.json?v=1');}).then(function(data){geo=data;buildMap();renderMarkers();$('geoMapLoading').hidden=true;});
+    mapP.catch(function(e){mapP=null;fail(e);});
+    return mapP;
+  }
+  function watch(id,fn){
+    var el=$(id);
+    if(!el){fn();return;}
+    if(el.open){fn();return;}
+    el.addEventListener('toggle',function h(){if(el.open){el.removeEventListener('toggle',h);fn();}});
+  }
+  function start(){
+    watch('foldGeo',loadMap);
+    watch('foldStructure',function(){loadBase().catch(fail);});
+  }
+  if(doc.readyState==='loading') doc.addEventListener('DOMContentLoaded',start); else start();
 })(typeof window!=='undefined'?window:globalThis);

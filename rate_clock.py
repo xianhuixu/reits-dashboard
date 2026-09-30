@@ -12,10 +12,12 @@
 - 预期统计：约 4.8 次切换/年、状态中位持续 50 个交易日、<10 日的“来回切换”占 6%、拐点识别中位滞后约 60 日；
   滞后主要来自 60 日窗口本身（20–40 日窗口更快，但未采用）。
 
-增长轴（宏观分析师口径；滞回阈值尚未回测）
+增长轴（宏观分析师口径；滞回 + 2 个月确认，2016-01~2026-09 已回测）
 - g = 制造业 PMI − 其近 36 个月均值（含当月）；z = g 在 60 个月滚动窗口内标准化（减均值 / 样本标准差）。
 - 象限用 z 的 3 个月均值 z3：z3 ≥ +0.5 进入「高于趋势」，≤ −0.5 进入「低于趋势」；已在高于/低于趋势时，
   z3 回到 ±0.25 以内（高于趋势时 z3 < 0.25 / 低于趋势时 z3 > −0.25）才退回「趋势附近」。
+- 新状态须连续 2 个月成立才切换（与利率轴 5 日确认同理；不满足即清零）。宏观分析师回测 2016-01~2026-09：
+  约 0.9 次切换/年、状态中位持续 6 个月、<2 个月的来回切换 0 次、趋势附近占 51%；本期进入「高于趋势」由 2026-04 推迟到 2026-05。
 - 东财 RPT_ECONOMY_PMI 无新订单分项 → 使用 PMI 总指数（已在 method 中标注）。已移除旧的「49.5–50.5 边界」规则。
 
 象限：两轴都有方向才判「确定象限」；任一轴处于走平/趋势附近 → 过渡期（只给最近象限作参考）。
@@ -54,6 +56,11 @@ GROWTH_ENTER = 0.5
 GROWTH_EXIT = 0.25
 GROWTH_CRITICAL = 0.05       # 距切换线 ≤ 0.05σ 记为「临界」
 GROWTH_TREND_DEAD_BAND = 0.05
+GROWTH_PERSIST = 2           # 连续月数确认
+BACKTEST_GROWTH = {"period": "2016-01 ~ 2026-09（月度）", "switchesPerYear": 0.9, "medianStateMonths": 6,
+                   "whipsawsUnder2m": 0, "neutralPct": 51, "confirmMonths": GROWTH_PERSIST,
+                   "entryShift": "本轮进入「高于趋势」由 2026-04 推迟到 2026-05",
+                   "source": "宏观分析师回测（2026-09-30）"}
 PMI_FETCH_MONTHS = 240
 
 TRANSITIONAL_LABEL = "利率走平·过渡期"
@@ -299,7 +306,7 @@ def rate_distance(state: int, d: float, t: float, e: float, pending: int = 0, ra
 
 # ---------------- 增长轴：PMI 偏离趋势 z 分数 + 滞回 ----------------
 def growth_step(cur: int, z3: float, enter: float = GROWTH_ENTER, exit_: float = GROWTH_EXIT) -> int:
-    """月度滞回：≥+0.5 进入高于趋势，≤−0.5 进入低于趋势；已在其中时回到 ±0.25 以内才退回趋势附近。"""
+    """月度滞回（原始信号）：≥+0.5 进入高于趋势，≤−0.5 进入低于趋势；已在其中时回到 ±0.25 以内才退回趋势附近。"""
     if z3 >= enter:
         return 1
     if z3 <= -enter:
@@ -311,8 +318,20 @@ def growth_step(cur: int, z3: float, enter: float = GROWTH_ENTER, exit_: float =
     return cur
 
 
-def growth_path(pmi: list[dict], trend_win: int = PMI_TREND_WINDOW, z_win: int = PMI_Z_WINDOW) -> list[dict]:
-    """逐月：dev = PMI − 近36月均值（含当月）；z = dev 在 60 月窗口内标准化；z3 = z 的 3 月均值；state 滞回。"""
+def growth_confirm_step(cur: int, cand, cnt: int, z3: float, persist: int = GROWTH_PERSIST):
+    """在滞回原始信号上叠加「连续 persist 个月确认」：返回 (state, raw, cand, cnt)。"""
+    raw = growth_step(cur, z3)
+    if raw == cur:
+        return cur, raw, None, 0
+    cnt = cnt + 1 if raw == cand else 1
+    if cnt >= persist:
+        return raw, raw, None, 0
+    return cur, raw, raw, cnt
+
+
+def growth_path(pmi: list[dict], trend_win: int = PMI_TREND_WINDOW, z_win: int = PMI_Z_WINDOW,
+                persist: int = GROWTH_PERSIST) -> list[dict]:
+    """逐月：dev = PMI − 近36月均值（含当月）；z = dev 在 60 月窗口内标准化；z3 = z 的 3 月均值；state 滞回 + 2 月确认。"""
     vals = [r["value"] for r in pmi]
     n = len(vals)
     dev = [vals[i] - _mean(vals[i - trend_win + 1:i + 1]) if i >= trend_win - 1 else None for i in range(n)]
@@ -322,18 +341,45 @@ def growth_path(pmi: list[dict], trend_win: int = PMI_TREND_WINDOW, z_win: int =
         if len(w) == z_win and all(x is not None for x in w):
             sd = _std(w)
             z[i] = (dev[i] - _mean(w)) / sd if sd else None
-    out, cur, prev_z3 = [], 0, None
+    out, cur, cand, cnt, prev_z3 = [], 0, None, 0, None
     for i in range(n):
         if i < 2 or any(z[k] is None for k in (i, i - 1, i - 2)):
             continue
         z3 = (z[i] + z[i - 1] + z[i - 2]) / 3
-        cur = growth_step(cur, z3)
+        cur, raw, cand, cnt = growth_confirm_step(cur, cand, cnt, z3, persist)
         td = None if prev_z3 is None else z3 - prev_z3
         trend = None if td is None else ("上行" if td > GROWTH_TREND_DEAD_BAND else "下行" if td < -GROWTH_TREND_DEAD_BAND else "持平")
         out.append({"month": pmi[i]["month"], "pmi": vals[i], "dev": dev[i], "z": z[i], "z3": z3,
-                    "state": cur, "trend": trend, "trendDelta": td})
+                    "state": cur, "raw": raw, "pending": cnt, "trend": trend, "trendDelta": td})
         prev_z3 = z3
     return out
+
+
+def growth_backtest(gp: list[dict], start: str = "2016-01") -> dict:
+    """月度复核：切换次数/年、状态持续中位数（月）、<2 个月状态数、趋势附近占比、最近一次进入月。"""
+    rows = [r for r in gp if r["month"] >= start]
+    if not rows:
+        return {}
+    st = [r["state"] for r in rows]
+    runs, k = [], 1
+    for i in range(1, len(st)):
+        if st[i] == st[i - 1]:
+            k += 1
+        else:
+            runs.append(k)
+            k = 1
+    runs.append(k)
+    rs = sorted(runs)
+    med = rs[len(rs) // 2] if len(rs) % 2 else (rs[len(rs) // 2 - 1] + rs[len(rs) // 2]) / 2
+    entry = None
+    for i in range(len(rows) - 1, 0, -1):
+        if st[i] != st[i - 1]:
+            entry = rows[i]["month"]
+            break
+    return {"from": rows[0]["month"], "to": rows[-1]["month"], "months": len(rows),
+            "switches": len(runs) - 1, "switchesPerYear": round((len(runs) - 1) / (len(rows) / 12), 2),
+            "medianStateMonths": med, "whipsawsUnder2m": sum(1 for x in runs[1:-1] if x < 2),
+            "neutralPct": round(st.count(0) / len(st) * 100), "currentEntryMonth": entry}
 
 
 def growth_distance(state: int, z3: float) -> dict:
@@ -349,6 +395,21 @@ def growth_distance(state: int, z3: float) -> dict:
             "marginPct": round(max(0.0, min(1.0, dist / (GROWTH_ENTER - GROWTH_EXIT))) * 100)}
 
 
+def growth_confirm(st: int, pending: int, month: str, persist: int = GROWTH_PERSIST) -> dict:
+    """确认进度：已在高于/低于趋势 → 退回趋势附近需连续 persist 个月越过 ±0.25σ；趋势附近 → 进入需连续 persist 个月越过 ±0.5σ。"""
+    cnt = max(0, min(int(pending or 0), persist - 1))
+    earliest = _month_add(month, persist - cnt) if month else None
+    em = f"{int(earliest[5:7])} 月" if earliest else "—"
+    if st == 1:
+        target, cond, title = "neutral", f"低于 {GROWTH_EXIT}σ", "退回中性确认"
+    elif st == -1:
+        target, cond, title = "neutral", f"高于 −{GROWTH_EXIT}σ", "退回中性确认"
+    else:
+        target, cond, title = "trend", f"越过 ±{GROWTH_ENTER}σ", "进入趋势确认"
+    return {"target": target, "count": cnt, "need": persist, "earliestMonth": earliest, "title": title,
+            "label": f"需连续 {persist} 个月{cond}，最早 {em}数据可能改变读数"}
+
+
 def growth_block(gp_row: dict) -> dict:
     st = gp_row["state"]
     dist = growth_distance(st, gp_row["z3"])
@@ -360,7 +421,9 @@ def growth_block(gp_row: dict) -> dict:
         "levelLabel": label + ("（临界）" if dist["critical"] else ""),
         "critical": dist["critical"], "distance": dist,
         "trend": gp_row["trend"], "trendDelta": None if gp_row["trendDelta"] is None else round(gp_row["trendDelta"], 2),
-        "basis": "PMI 总指数（东财接口无新订单分项）", "hysteresisBacktested": False,
+        "basis": "PMI 总指数（东财接口无新订单分项）", "hysteresisBacktested": True,
+        "rawState": gp_row.get("raw", st), "pending": gp_row.get("pending", 0),
+        "confirm": growth_confirm(st, gp_row.get("pending", 0), gp_row["month"]),
     }
 
 
@@ -459,7 +522,8 @@ def build_history(rp: list[dict], gp: list[dict], series: list[dict], months: in
             "month": m, "asOf": r["date"], "y10": series[r["idx"]]["value"], "d10y60bp": round(r["d60"], 1),
             "thresholdBp": round(r["thr"], 1), "exitBp": round(r["exit"], 1), "ratePending": r["pending"],
             "rateDir": c["rateDir"], "rateLean": c["rateLean"],
-            "z3": round(g["z3"], 2) if g else None, "growthState": gs, "growthMonth": g["month"] if g else None,
+            "z3": round(g["z3"], 2) if g else None, "growthState": gs, "growthPending": g.get("pending", 0) if g else None,
+            "growthMonth": g["month"] if g else None,
             "growthTrend": g["trend"] if g else None,
             "state": c["state"], "stateLabel": c["stateLabel"], "confidence": c["confidence"],
             "quadrant": c["quadrant"], "subState": c["subState"],
@@ -570,9 +634,10 @@ def _method_block() -> dict:
         "rate": (f"10Y 国债 {RATE_LOOKBACK} 交易日变化 d；σ = d 的滚动 {RATE_SIGMA_WINDOW} 交易日标准差；进入线 T = max({RATE_FLOOR_BP:.0f}bp, "
                  f"{RATE_K_ENTER}σ)，退出线 = T/2；新状态连续 {RATE_PERSIST} 个交易日成立才切换；无 60 日均线条件"),
         "growth": (f"制造业 PMI 总指数 − 近 {PMI_TREND_WINDOW} 月均值 → {PMI_Z_WINDOW} 月滚动标准化 z → 3 月均值 z3；"
-                   f"z3 ≥ +{GROWTH_ENTER} 进入高于趋势 / ≤ −{GROWTH_ENTER} 进入低于趋势，回到 ±{GROWTH_EXIT} 以内退回趋势附近（滞回阈值尚未回测）"),
+                   f"z3 ≥ +{GROWTH_ENTER} 进入高于趋势 / ≤ −{GROWTH_ENTER} 进入低于趋势，回到 ±{GROWTH_EXIT} 以内退回趋势附近；新状态须连续 {GROWTH_PERSIST} 个月成立才切换"),
         "quadrant": "两轴均有方向 → 确定象限；任一轴走平/趋势附近 → 过渡期（最近象限仅作参考）",
         "backtestPM": BACKTEST_PM,
+        "backtestGrowth": BACKTEST_GROWTH,
         "growthReference": "宏观分析师参考：2026-09 PMI 50.1，偏离 +0.42，z 0.72（月度序列 growth_axis.csv 逐月核对一致）",
         "usPriorSource": "overseas_clock_du2021.json（美国 1994 年以来，年化总回报）",
     }
@@ -640,6 +705,7 @@ def compute_rate_clock(series: list[dict], pmi: list[dict], old_block: dict | No
         "leanUsPriorAnnualReturn": prior_of(c["leanQuadrant"], c["leanSubState"]),
         "leanNote": "仅作参考：过渡期按两轴偏向推得的最近象限，不参与硬冲突判定" if c["state"] == "transitional" else None,
         "backtest": rate_backtest(rp, series),
+        "growthBacktest": growth_backtest(gp),
         "rotation": rotation_of(hist),
         "history": hist,
     })

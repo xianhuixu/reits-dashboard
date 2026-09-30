@@ -126,6 +126,43 @@ class GrowthAxisTests(unittest.TestCase):
         self.assertIn("距趋势上方还差 0.40σ", n["distance"]["label"])
 
 
+    def test_growth_two_month_confirmation(self):
+        # 一个月越线不切换，连续两个月才切换；中途回落清零
+        st, cand, cnt = 0, None, 0
+        seq = []
+        for z3 in (0.55, 0.3, 0.6, 0.93, 0.26, 0.2, 0.3, 0.2, 0.1):
+            st, raw, cand, cnt = rc.growth_confirm_step(st, cand, cnt, z3)
+            seq.append((st, cnt))
+        self.assertEqual(seq, [(0, 1), (0, 0), (0, 1), (1, 0), (1, 0), (1, 1), (1, 0), (1, 1), (0, 0)])
+
+    def test_growth_confirm_progress_and_earliest_month(self):
+        b = rc.growth_block({"month": "2026-09", "pmi": 50.1, "dev": 0.42, "z": 0.72, "z3": 0.26, "state": 1,
+                             "raw": 1, "pending": 0, "trend": "下行", "trendDelta": -0.08})
+        c = b["confirm"]
+        self.assertEqual((c["count"], c["need"], c["earliestMonth"]), (0, 2, "2026-11"))
+        self.assertEqual(c["label"], "需连续 2 个月低于 0.25σ，最早 11 月数据可能改变读数")
+        self.assertTrue(b["hysteresisBacktested"])
+        c1 = rc.growth_confirm(1, 1, "2026-10")
+        self.assertEqual((c1["count"], c1["earliestMonth"]), (1, "2026-11"))
+        self.assertEqual(rc.growth_confirm(0, 0, "2026-12")["earliestMonth"], "2027-02")
+
+    def test_growth_backtest_stats(self):
+        gp = [{"month": f"2016-{m:02d}", "state": s} for m, s in
+              zip(range(1, 13), [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, -1, -1])]
+        bt = rc.growth_backtest(gp)
+        self.assertEqual(bt["switches"], 3)
+        self.assertEqual(bt["switchesPerYear"], 3.0)
+        self.assertEqual(bt["whipsawsUnder2m"], 0)
+        self.assertEqual(bt["neutralPct"], 42)
+        self.assertEqual(bt["currentEntryMonth"], "2016-11")
+
+    def test_method_no_longer_says_not_backtested(self):
+        m = rc._method_block()
+        self.assertNotIn("尚未回测", m["growth"])
+        self.assertIn("连续 2 个月", m["growth"])
+        self.assertEqual(m["backtestGrowth"]["switchesPerYear"], 0.9)
+        self.assertEqual(m["backtestGrowth"]["medianStateMonths"], 6)
+
 class TsfImpulseTests(unittest.TestCase):
     def test_gdp_quarterly_and_ttm(self):
         cum = [{"month": m, "cum": v} for m, v in
@@ -160,7 +197,7 @@ class RateClockTests(unittest.TestCase):
 
     def test_definite_q2_and_signal_switch_from_methodology(self):
         falling = self._long_daily([2.0 - 0.002 * i for i in range(1, 80)])
-        strong = pmi([50.0] * 100 + [51.5, 52.0, 52.5], 2017, 1)
+        strong = pmi([50.0] * 100 + [51.5, 52.0, 52.5, 52.8], 2017, 1)  # 连续 2 个月 z3 ≥ 0.5 才确认
         old = {"status": "ok", "state": "transitional", "stateLabel": "利率走平·过渡期", "quadrant": None, "leanQuadrant": "Q3"}
         c = rc.compute_rate_clock(falling, strong, old_block=old, today="2026-09-30")
         self.assertEqual((c["state"], c["quadrant"], c["rateDir"], c["growth"]["state"]), ("definite", "Q2", "down", 1))
@@ -184,7 +221,7 @@ class RateClockTests(unittest.TestCase):
 
     def test_rate_flat_is_transitional(self):
         flat = self._long_daily([2.0] * 80)
-        strong = pmi([50.0] * 100 + [51.5, 52.0, 52.5], 2017, 1)
+        strong = pmi([50.0] * 100 + [51.5, 52.0, 52.5, 52.8], 2017, 1)  # 连续 2 个月 z3 ≥ 0.5 才确认
         c = rc.compute_rate_clock(flat, strong)
         self.assertEqual((c["state"], c["rateDir"], c["stateLabel"]), ("transitional", "flat", rc.TRANSITIONAL_LABEL))
         self.assertEqual(c["history"][-1]["state"], "transitional")

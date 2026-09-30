@@ -9,8 +9,7 @@
 <link rel="icon" type="image/png" sizes="128x128" href="icons/favicon-128.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
 <meta name="theme-color" content="#0a0e14">
-<!-- echarts 与核心数据是首屏关键资源：提前并行下载，不必等 HTML 解析到尾部才发起请求 -->
-<link rel="preload" href="lib/echarts-custom.min.js" as="script">
+<!-- 首屏（结论横幅 + 4 张状态卡）为纯 HTML/CSS，不依赖 ECharts；ECharts 在首个图表进入视口时才按需加载（window.__loadECharts） -->
 <!-- 核心数据走 fetch + JSON：ETag 条件请求，数据未变时仅一次 304 往返；尽早发起与静态资源并行 -->
 <script>
 window.__DATA_READY = fetch("data.json").then(function (r) {
@@ -24,6 +23,37 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   console.warn("[panel] data_panel_l1l7.json load failed:", e && e.message);
   window.REITS_DATA_PANEL = null;
 });
+// 配置建议 advice.json：首页结论横幅（学派立场）与配置页共用；本地失败时回退 GitHub Pages（Cloudflare 镜像漏拷时 200 回退 HTML）
+window.__ADVICE_READY = (function () {
+  var urls = ["advice.json", "https://xianhuixu.github.io/reits-dashboard/advice.json"];
+  function at(i) {
+    if (i >= urls.length) return Promise.resolve(null);
+    return fetch(urls[i]).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    }).then(function (t) {
+      t = (t || "").replace(/^\uFEFF/, "").trim();
+      if (!t || t.charAt(0) === "<") throw new Error("HTML fallback");
+      return JSON.parse(t);
+    }).catch(function () { return at(i + 1); });
+  }
+  return at(0).then(function (j) { window.REITS_ADVICE_JSON = j; return j; });
+})();
+// ECharts 按需加载：首个图表容器进入视口（IntersectionObserver）或进入研究页时才下载
+window.__loadECharts = function () {
+  if (window.echarts) return Promise.resolve(window.echarts);
+  if (!window.__echartsP) {
+    window.__echartsP = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "lib/echarts-custom.min.js";
+      s.async = true;
+      s.onload = function () { resolve(window.echarts); };
+      s.onerror = function () { window.__echartsP = null; reject(new Error("echarts load failed")); };
+      document.head.appendChild(s);
+    });
+  }
+  return window.__echartsP;
+};
 </script>
 <script>
 (function(){
@@ -36,16 +66,16 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   document.documentElement.dataset.theme = t;
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=20260930-cvd">
+<link rel="stylesheet" href="styles.css?v=20260930-layout">
 <link rel="stylesheet" href="research-layout.css?v=20260930-status">
-<link rel="stylesheet" href="workspace.css?v=20260930-cvd">
+<link rel="stylesheet" href="workspace.css?v=20260930-layout">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
 <a class="skip-link" href="#workspaceMain">跳到主要内容</a>
 <div class="sidebar-scrim" id="sidebarScrim" hidden></div>
 <aside id="sidebar" aria-label="工作台导航">
-  <a class="workspace-brand" href="./"><img src="icons/lion-v3.png" alt="Lion" width="40" height="40"><span><b>REITs</b><small>机构投研工作台</small></span></a>
+  <a class="workspace-brand" href="./"><img src="icons/lion-v3-96.png" alt="Lion" width="40" height="40" decoding="async"><span><b>REITs</b><small>机构投研工作台</small></span></a>
   <div class="sidebar-section-label">研究空间</div>
   <nav id="tbNav" aria-label="主导航">
 <button data-pg="pano" class="on" aria-current="page"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#layout-dashboard"></use></svg><span>市场总览</span><svg class="ui-icon nav-chevron" aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#chevron-right"></use></svg></button>
@@ -113,12 +143,60 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   </div><div class="data-meta" id="meta">数据加载中…</div>
 <div class="page" id="pg-pano">
 
-<div class="kpis" id="kpis"></div>
-
 <div class="sec-head"><span class="no">①</span><span class="t">市场全景信息</span><span class="d">在顶部二级菜单切换：行情总览 · 事件信息流 · 项目申报动态</span></div>
 
-<!-- ============ 第一段：全景热力图 ============ -->
+<!-- ============ 市场总览（设计师线框 2026-09-30：结论 → 证据 → 明细） ============ -->
 <section class="view" id="v-heatmap">
+  <div class="ov-tier" aria-hidden="true">结论</div>
+  <!-- 第一层 · 结论：纯 HTML/CSS（首屏不含任何图表）。数据由 workspace.js 从 data.json / advice.json / data_panel 派生 -->
+  <section class="ov-hero" id="ovHero" aria-labelledby="ovHeadline">
+    <div class="ov-hero-main">
+      <p class="ov-kicker">一句话结论 <span class="ov-kicker-src">由增长 × 利率时钟与配置页学派立场同步</span></p>
+      <h2 class="ov-headline" id="ovHeadline"><span class="ov-skel">增长 · 利率时钟读取中</span><span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance"><span class="ov-skel">配置结论读取中</span></span></h2>
+      <p class="ov-sub num" id="ovSub"><span id="ovUpdated">数据更新于 —</span><span id="ovSwitchTag"></span></p>
+      <p class="ov-switch-note ov-switch-note-plain" id="ovSwitchNote">时钟每日按 10Y 国债 60 日变化与 PMI 偏离趋势自动判定</p>
+    </div>
+    <div class="ov-hero-side" id="ovHeroSide">
+      <p class="num" id="ovUniverse">全市场 — 只</p>
+      <p id="ovReval"></p>
+      <button type="button" class="ov-link" data-ov-page="advice">查看配置建议 →</button>
+    </div>
+  </section>
+  <div class="ov-cards" id="ovCards" aria-label="市场状态卡片">
+    <article class="ov-card" id="ovCardClock"><h3>投资时钟</h3><div class="ov-big ov-skel">—</div></article>
+    <article class="ov-card" id="ovCardSpread"><h3>产权利差分位</h3><div class="ov-big ov-skel">—</div></article>
+    <article class="ov-card" id="ovCardMarket"><h3>市场今日</h3><div class="ov-big ov-skel">—</div></article>
+    <article class="ov-card" id="ovCardTsf"><h3>社融脉冲 · 领先预警</h3><div class="ov-big ov-skel">—</div></article>
+  </div>
+
+  <!-- 第二层 · 证据：图表在进入视口时才初始化（IntersectionObserver），容器定高防 CLS -->
+  <div class="ov-tier" id="ovEvidence">证据</div>
+  <div class="ov-grid2">
+    <article class="card sector-panel"><div class="panel-heading"><div><h2>板块表现</h2><p>板块内等权涨跌幅 · 点击条目查看热力图下钻</p></div><div class="segmented" id="sectorRange" aria-label="板块表现区间"><button data-k="pct" class="on" aria-pressed="true">今日</button><button data-k="ret20" aria-pressed="false">近 1 月</button></div></div><div id="workspaceSectors" class="sector-comparison"><p class="chart-placeholder">板块数据加载中…</p></div></article>
+    <div class="card" id="heatmapCard">
+    <h2>资产类别全景热力图</h2>
+    <p class="note">色块大小 ∝ 成交额（日涨跌=当日，5日/20日=区间日均）· 颜色 = 成交额加权区间涨跌幅 · 区间：<span id="hmRangeLabel">日涨跌</span></p>
+    <div class="filters" id="hmSectorChips" style="margin-bottom:8px"></div>
+    <div class="filters" id="hmRange" style="margin-bottom:8px">
+      <button class="range-btn on" data-r="pct">日涨跌</button>
+      <button class="range-btn" data-r="ret5">5日</button>
+      <button class="range-btn" data-r="ret20">20日</button>
+      <span class="hm-legend" aria-hidden="true"><i style="background:#c2413d"></i>▲涨<i style="background:#7a8494"></i>平<i style="background:#1f7a5c"></i>▼跌</span>
+    </div>
+    <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2);margin-bottom:10px;font-variant-numeric:tabular-nums"></div>
+    <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:10px"></div>
+    <div id="treemap" class="chart-box" style="position:relative;width:100%;height:360px"></div>
+  </div>
+  </div>
+  <div class="ov-grid2 ov-grid2-wide">
+    <article class="card trend-panel"><div class="panel-heading"><div><h2>市场走势</h2><p>全市场等权价格指数 · 区间起点 = 100</p></div><div class="segmented" id="workspaceRange" aria-label="指数观察窗口"><button data-days="20">20日</button><button data-days="60" class="on" aria-pressed="true">60日</button><button data-days="250">250日</button></div></div><div class="trend-headline"><strong id="workspaceTrendValue">—</strong><span id="workspaceTrendChange"></span><span class="trend-period" id="workspaceTrendPeriod">正在载入历史序列</span></div><div id="workspaceTrend" role="img" aria-label="等权价格指数走势图"><p class="chart-placeholder">历史序列加载中…</p></div><details class="chart-data-details"><summary>查看图表数据</summary><div class="table-scroll"><table id="workspaceTrendTable"><thead><tr><th>日期</th><th>区间归一化指数</th></tr></thead><tbody></tbody></table></div></details></article>
+    <article class="card ov-points" id="ovPointsCard"><div class="panel-heading"><div><h2>今日要点</h2><p>最多 3 条 · 由当日行情与信号自动生成</p></div></div><ul class="ov-points-list" id="ovPoints"><li class="ov-skel">加载中…</li></ul><button type="button" class="text-button" data-jump-view="news">全部事件信息流 →</button></article>
+  </div>
+
+  <!-- 第三层 · 明细：默认折叠；展开时才初始化（地图 geo 数据异步加载） -->
+  <div class="ov-tier">明细 · 默认折叠</div>
+  <details class="ov-fold" id="foldGeo">
+    <summary><span>原始权益人地图 · 地域分布</span><span class="ov-fold-act">展开</span></summary>
   <article class="card geo-panel" id="assetGeography" aria-labelledby="geoTitle">
     <div class="geo-heading"><div><div class="geo-kicker">ORIGINATOR GEOGRAPHY</div><h2 id="geoTitle">REITs 原始权益人地图</h2><p>按发起人／原始权益人注册城市定位，观察供给主体的地域分布。</p></div><span id="geoCoverage" class="geo-coverage">地理索引载入中…</span></div>
     <div id="geoSectorLegend" class="geo-sector-legend" aria-label="资产类别图例与筛选"></div>
@@ -141,26 +219,30 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     <details class="geo-method"><summary id="geoMissingLabel">收录口径与境外注册主体</summary><p>核查日期：<span id="geoChecked">—</span>。依据交易所披露的招募说明书及相关公告，按原始权益人或发起人的注册地址定位；不以基金管理人、运营管理机构或资产所在地代替。部分基金有多名原始权益人，点位按主体分别列示；同一城市和省份内按基金代码去重。该分布不代表资产价值、收入或风险敞口分布。境外主体不生成内地点位。</p><p>底图与城市示意坐标：<a href="https://datav.aliyun.com/portal/school/atlas/area_selector" target="_blank" rel="noopener noreferrer">阿里云 DataV GeoAtlas</a>。</p><div id="geoMissing" class="geo-missing"></div></details>
     <span id="geoStatus" class="sr-only" role="status" aria-live="polite"></span>
   </article>
-  <article class="card geo-sector-card"><div class="panel-heading"><div><h2>市场资产类型结构</h2><p>基金数量分布 · 全部站内行情样本，与地图收录范围独立</p></div><span id="geoUniverseCount" class="neutral-label"></span></div><div id="geoSectorChart" class="geo-sector-chart" aria-label="各资产类型的基金数量和占比"></div></article>
-
-  <div class="market-analysis-grid">
-    <article class="card trend-panel"><div class="panel-heading"><div><h2>市场走势</h2><p>全市场等权价格指数 · 区间起点 = 100</p></div><div class="segmented" id="workspaceRange" aria-label="指数观察窗口"><button data-days="20">20日</button><button data-days="60" class="on" aria-pressed="true">60日</button><button data-days="250">250日</button></div></div><div class="trend-headline"><strong id="workspaceTrendValue">—</strong><span id="workspaceTrendChange"></span><span class="trend-period" id="workspaceTrendPeriod">正在载入历史序列</span></div><div id="workspaceTrend" role="img" aria-label="等权价格指数走势图"><p class="chart-placeholder">历史序列加载中…</p></div><details class="chart-data-details"><summary>查看图表数据</summary><div class="table-scroll"><table id="workspaceTrendTable"><thead><tr><th>日期</th><th>区间归一化指数</th></tr></thead><tbody></tbody></table></div></details></article>
-    <article class="card sector-panel"><div class="panel-heading"><div><h2>板块表现</h2><p>板块内等权日涨跌幅</p></div><span class="neutral-label">日涨跌</span></div><div id="workspaceSectors" class="sector-comparison"><p class="chart-placeholder">板块数据加载中…</p></div></article>
-  </div>
-  <div class="market-detail-grid"><div class="card" id="heatmapCard">
-    <h2>资产类别全景热力图</h2>
-    <p class="note">色块大小 ∝ 成交额（日涨跌=当日，5日/20日=区间日均）· 颜色 = 成交额加权区间涨跌幅 · 区间：<span id="hmRangeLabel">日涨跌</span></p>
-    <div class="filters" id="hmSectorChips" style="margin-bottom:8px"></div>
-    <div class="filters" id="hmRange" style="margin-bottom:8px">
-      <button class="range-btn on" data-r="pct">日涨跌</button>
-      <button class="range-btn" data-r="ret5">5日</button>
-      <button class="range-btn" data-r="ret20">20日</button>
-      <span class="hm-legend" aria-hidden="true"><i style="background:#c2413d"></i>涨<i style="background:#7a8494"></i>平<i style="background:#1f7a5c"></i>跌</span>
+  </details>
+  <details class="ov-fold" id="foldStructure">
+    <summary><span>市场资产类型结构 · 活跃资产 · 市场观察</span><span class="ov-fold-act">展开</span></summary>
+    <div class="kpis" id="kpis"></div>
+    <div class="ov-fold-grid">
+    <article class="card geo-sector-card"><div class="panel-heading"><div><h2>市场资产类型结构</h2><p>基金数量分布 · 全部站内行情样本，与地图收录范围独立</p></div><span id="geoUniverseCount" class="neutral-label"></span></div><div id="geoSectorChart" class="geo-sector-chart" aria-label="各资产类型的基金数量和占比"></div></article>
+  <aside class="market-side-stack"><article class="card"><div class="panel-heading"><div><h2>市场观察</h2><p>价格位置与宏观环境</p></div></div><div id="marketContext"></div></article><article class="card"><div class="panel-heading"><div><h2>活跃资产</h2><p>按当日成交额排序</p></div></div><div id="workspaceActive"></div><button class="text-button" data-jump-view="detail">全部上市REITs <svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-right"></use></svg></button></article></aside>
     </div>
-    <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2);margin-bottom:10px;font-variant-numeric:tabular-nums"></div>
-    <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:10px"></div>
-    <div id="treemap" style="position:relative;width:100%;height:400px"></div>
-  </div><aside class="market-side-stack"><article class="card"><div class="panel-heading"><div><h2>市场观察</h2><p>价格位置与宏观环境</p></div></div><div id="marketContext"></div></article><article class="card"><div class="panel-heading"><div><h2>活跃资产</h2><p>按当日成交额排序</p></div></div><div id="workspaceActive"></div><button class="text-button" data-jump-view="detail">全部上市REITs <svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-right"></use></svg></button></article></aside></div>
+  </details>
+  <details class="ov-fold" id="foldPrimary">
+    <summary><span>发改委推荐 / 上交所 / 深交所 / 商业不动产 受理清单（4 张）</span><span class="ov-fold-act">一级市场 →</span></summary>
+    <div class="ov-fold-links"><p class="note">四张受理清单已移至顶部「一级市场」分组（二级菜单），内容与更新频率不变。</p>
+      <button type="button" class="secondary-button" data-jump-view="proj-ndrc">发改委推荐</button><button type="button" class="secondary-button" data-jump-view="proj-sse">上交所申报</button><button type="button" class="secondary-button" data-jump-view="proj-szse">深交所申报</button><button type="button" class="secondary-button" data-jump-view="proj-commercial">商业不动产申报</button></div>
+  </details>
+  <details class="ov-fold" id="foldOverseas">
+    <summary><span>美国 REITs 长期走势（2 张）· 海外先验</span><span class="ov-fold-act">海外先验 →</span></summary>
+    <div class="ov-fold-links"><p class="note">美国 REITs 长期走势与海外先验（杜丽虹 2021 投资时钟）位于「研究分析 · 周期分析」。</p>
+      <button type="button" class="secondary-button" data-ov-view="cycle" data-ov-anchor="chartUsLong">美国 REITs 长期走势</button><button type="button" class="secondary-button" data-ov-view="cycle" data-ov-anchor="osMatrix">海外先验 · 投资时钟</button></div>
+  </details>
+  <details class="ov-fold" id="foldNews">
+    <summary><span>事件信息流 · 分红 / 解禁 / 扩募公告</span><span class="ov-fold-act">信息流 →</span></summary>
+    <div class="ov-fold-links"><p class="note">政策监管、招投标、上市项目公告等事件流位于「新闻与公告」；逐券公告监测位于「研究分析 · 策略信号」。</p>
+      <button type="button" class="secondary-button" data-jump-view="news">新闻与公告</button><button type="button" class="secondary-button" data-ov-view="signal" data-ov-anchor="corpActions">分红 / 解禁 / 扩募公告</button></div>
+  </details>
 </section>
 
 <section class="view" id="v-news" hidden>
@@ -557,11 +639,31 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   <p>以可持续现金流定价，以风险预算决定配置。专业投资者研究框架。</p>
 </header>
 <section id="v-advice" aria-label="配置研究正文">
-  <article class="card" id="advOverview">
+  <article class="card adv-overview" id="advOverview">
+    <!-- 设计师线框 2026-09-30：① 建议 → ② 理由 → ③ 风险红线 → ④ 操作。advice.json 直读（allocation-tools.js），不依赖 data_research.json -->
+    <div class="adv-tier">① 建议 · 本期配置</div>
+    <header class="adv-hero">
+      <div>
+        <h2 id="adviceHeadline" class="adv-headline">配置结论加载中…</h2>
+        <p class="adv-sub num" id="advHeroSub">分权破局重估学派 · advice.json 加载中</p>
+      </div>
+      <p class="adv-legend">颜色只表示配置方向（蓝阶 + ↑↗→↓），<br>涨跌仍用红 / 绿 + ▲▼</p>
+    </header>
+    <div class="table-scroll adv-rec-wrap" id="advRecWrap"><table class="matrix adv-rec" id="advRecTable"><thead><tr><th scope="col">大类 / 业态</th><th scope="col">本期</th><th scope="col">一句话理由</th></tr></thead><tbody><tr><td colspan="3" class="note">advice.json 加载中…</td></tr></tbody></table></div>
+    <p class="research-caveat" id="advRecNote"></p>
+
+    <div class="adv-tier">② 理由 · 核心证据</div>
+    <div class="adv-reasons">
+      <figure class="adv-reason" id="advReasonClock"><figcaption><h3>时钟读数</h3><p class="note">增长（PMI 偏离 z3）× 利率（Δ10Y 60日）</p></figcaption><div class="adv-mini" id="advMiniClock" role="img" aria-label="增长乘利率时钟读数"></div><p class="adv-reason-read" id="advReadClock">—</p></figure>
+      <figure class="adv-reason" id="advReasonSpread"><figcaption><h3>双利差</h3><p class="note">产权 TTM−10Y / 经营权 IRR−国债</p></figcaption><div class="adv-mini" id="advMiniSpread" role="img" aria-label="产权与经营权利差走势"></div><p class="adv-reason-read" id="advReadSpread">—</p></figure>
+      <figure class="adv-reason" id="advReasonBeta"><figcaption><h3>股 / 债 Beta</h3><p class="note">业态周频 Beta · 偏股 vs 偏债</p></figcaption><div class="adv-mini" id="advMiniBeta" role="img" aria-label="各业态股债 Beta 散点"><p class="chart-placeholder">滚动到此处时加载</p></div><p class="adv-reason-read" id="advReadBeta">—</p></figure>
+    </div>
+    <details class="research-detail adv-evidence" id="advEvidence"><summary>展开全部证据：学派结论全文、进入 / 加仓 / 降配条件、研究与数据状态、四个深度模块入口</summary>
+    <div class="allocation-legacy">
     <div class="allocation-overview">
       <div>
         <span class="research-label">配置结论 · 条件性判断</span>
-        <h2 id="adviceHeadline" class="thesis">先验证现金流，
+        <h2 class="thesis" id="adviceThesis">先验证现金流，
 再判断配置价值。</h2>
         <p>产权类以可持续分派及资产价值交叉估值；经营权类以剩余期限现金流计算IRR。保租房可优先进入现金流稳定性筛选，园区、物流及消费需核查续租与租金，能源、公路及数据中心需逐项目验证收入机制。</p>
         <p class="research-caveat">当前尚缺统一口径的逐券远期分派、估值净资产和剩余全周期现金流，不能据价格低位直接判定“全面低估”，也不足以形成可执行的板块超配名单。</p>
@@ -591,7 +693,21 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
       <li><b>增加配置</b><p>经营数据兑现、价格仍有安全边际，且成交容量允许有序建仓。</p></li>
       <li><b>降低配置</b><p>核心现金流假设被证伪，或风险集中度、退出天数突破组合限额。</p></li>
     </ul>
-<div class="research-entry-grid"><button class="research-entry" data-advice-target="advRights"><span class="entry-number">01</span><b>分权估值</b><p>产权看持续分派，经营权看全周期回收。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button><button class="research-entry" data-advice-target="advCash"><span class="entry-number">02</span><b>现金流质量</b><p>从经营收益，核查到每份实际分派。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button><button class="research-entry" data-advice-target="advSectors"><span class="entry-number">03</span><b>板块筛选</b><p>把配置条件与证伪信号放在一起比较。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button><button class="research-entry" data-advice-target="advRisk"><span class="entry-number">04</span><b>风险压力测试</b><p>查看现金流与贴现率变化的联合影响。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button></div>  </article>
+<div class="research-entry-grid"><button class="research-entry" data-advice-target="advRights"><span class="entry-number">01</span><b>分权估值</b><p>产权看持续分派，经营权看全周期回收。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button><button class="research-entry" data-advice-target="advCash"><span class="entry-number">02</span><b>现金流质量</b><p>从经营收益，核查到每份实际分派。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button><button class="research-entry" data-advice-target="advSectors"><span class="entry-number">03</span><b>板块筛选</b><p>把配置条件与证伪信号放在一起比较。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button><button class="research-entry" data-advice-target="advRisk"><span class="entry-number">04</span><b>风险压力测试</b><p>查看现金流与贴现率变化的联合影响。</p><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#arrow-up-right"></use></svg></button></div>  </div>
+    </details>
+
+    <div class="adv-tier" id="advRedlines">③ 风险 · 红线清单（触发条件 + 当前距离）</div>
+    <div class="adv-risks" id="advRiskCards"><p class="note">红线清单加载中…</p></div>
+    <details class="research-detail"><summary>展开：学派风险清单（advice.json · risks）</summary><ul class="adv-risk-list" id="advRiskList"></ul></details>
+
+    <div class="adv-tier">④ 操作 · 四步流程</div>
+    <ol class="adv-steps">
+      <li><b>1 看结论</b><p>本期配置方向（上表）；上期数据接入后显示变化。</p></li>
+      <li><b>2 核证据</b><p>时钟、利差、Beta 是否指向同一方向。</p></li>
+      <li><b>3 查红线</b><p>有无风险接近触发（距离越短越要复核）。</p></li>
+      <li><button type="button" class="adv-step-go" data-jump-view="detail"><b>4 选个券</b><p>跳转「个券透视 · 信号总表」筛选 →</p></button></li>
+    </ol>
+  </article>
 
   <article class="card" id="advRights">
     <h2>估值：两类资产，两套现金流逻辑</h2>
@@ -756,12 +872,12 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 </div><!-- /workspace -->
 
 <script src="ui-utils.js" defer></script>
-<script src="lib/echarts-custom.min.js" defer></script>
-<script src="workspace.js?v=20260915-tender-1" defer></script>
-<script src="tender-feed.js?v=20260930-status" defer></script>
+<!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
 <script src="data-status.js?v=20260930-1" defer></script>
-<script src="app.js?v=20260930-status" defer></script>
-<script src="allocation-tools.js?v=20260930-status" defer></script>
-<script src="geography/map.js?v=20260928-3" defer></script>
+<script src="allocation-tools.js?v=20260930-layout" defer></script>
+<script src="workspace.js?v=20260930-layout" defer></script>
+<script src="tender-feed.js?v=20260930-status" defer></script>
+<script src="app.js?v=20260930-layout" defer></script>
+<script src="geography/map.js?v=20260930-lazy" defer></script>
 </body>
 </html>

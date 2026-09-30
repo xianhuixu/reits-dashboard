@@ -289,6 +289,15 @@ LAZY.research.push(function () {
   var CHART_RENDERERS = [];  // 主题切换时重渲染的回调
   var PENDING_RENDER = {};   // 容器隐藏时暂存的重渲染回调（显示后自动执行）
   function ech() { return window.echarts; }
+  // ECharts 改为按需加载（index.html 的 window.__loadECharts）：首屏不下载图表库；
+  // 研究/配置/机构页、或热力图进入视口时再加载，加载完成后补渲染所有已可见图表。
+  var _echPromise = null;
+  function withECharts(cb) {
+    if (ech()) { cb(); return; }
+    if (!_echPromise) _echPromise = window.__loadECharts ? window.__loadECharts() : Promise.reject(new Error("no loader"));
+    _echPromise.then(function () { try { cb(); } catch (e) { console.error("[echarts cb]", e && e.message); } })
+      .catch(function (e) { _echPromise = null; console.error("ECharts 加载失败", e && e.message); });
+  }
   function cssVal(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "";
   }
@@ -324,13 +333,14 @@ LAZY.research.push(function () {
     if (inst && (inst.isDisposed() || inst.getDom() !== el)) {
       inst.dispose(); delete CHART[id]; inst = null;
     }
-    if (!inst) { inst = ech().init(el, null, { renderer: "canvas" }); CHART[id] = inst; }
+    if (!inst) { if (!ech()) return null; inst = ech().init(el, null, { renderer: "canvas" }); CHART[id] = inst; }
     return inst;
   }
   function echSet(id, option) {
     var el = document.getElementById(id);
     if (!el) return null;
     // 容器不可见（display:none 时为 0×0）时先不渲染，等可见后由 echResizeAll 触发重渲染
+    if (!ech()) return null;   // 图表库尚未按需加载：不触发强制布局，加载后由 ensureCharts 补渲染
     if (el.offsetWidth === 0 || el.offsetHeight === 0) return null;
     var inst = echInit(id);
     if (inst) { inst.setOption(option, true); inst.resize(); }
@@ -953,7 +963,8 @@ LAZY.research.push(function () {
     }
     function tmSub(it) {
       var amt = it.amount != null ? Math.round(it.amount / 1e4).toLocaleString() + "万" : "";
-      return (it.ret != null ? fmt(it.ret) : "") + (amt ? " · " + amt : "");
+      var arrow = it.ret == null ? "" : it.ret > 0.00005 ? "▲" : it.ret < -0.00005 ? "▼" : "";
+      return (it.ret != null ? arrow + fmt(it.ret) : "") + (amt ? " · " + amt : "");
     }
     // 两级排版：标题字号大、粗；副行（涨跌幅/成交额）字号小、轻
     // 依据色块实际宽高 + 文字长度，分别计算两级能完整显示的最大字号（优先两行，放不下退化为单行标题）
@@ -1092,7 +1103,16 @@ LAZY.research.push(function () {
     $("hmRangeLabel").textContent = b.textContent;
     renderTreemap();
   });
-  renderTreemap();
+  // 热力图位于「证据」层（首屏以下）：进入视口前 200px 才加载 ECharts 并渲染，首屏不下载图表库
+  (function lazyTreemap() {
+    var el = $("treemap");
+    function go() { withECharts(renderTreemap); }
+    if (!el || !window.IntersectionObserver) { go(); return; }
+    var io = new IntersectionObserver(function (en) {
+      if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); go(); }
+    }, { rootMargin: "200px" });
+    io.observe(el);
+  })();
 
   // ---- 大类资产相关性 ----
   LAZY.research.push(function () {
@@ -1397,7 +1417,7 @@ LAZY.research.push(function () {
 
   // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
   function openReitDetail(code, updateHash) {
-    withResearchData(function () { openReitDetailInner(code, updateHash); });
+    withResearchData(function () { withECharts(function () { openReitDetailInner(code, updateHash); }); });
   }
   function openReitDetailInner(code, updateHash) {
     var r = null;
@@ -1508,13 +1528,13 @@ LAZY.research.push(function () {
       }
       if (pg === "advice") {
         // 研究正文不等待远程研究数据，避免缓存观点覆盖已核验内容。
-        ensureCharts();
+        withECharts(ensureCharts);
       } else if (pg === "research") {
         withResearchData(function () {
-          withScript("corp_actions.js", "REITS_ACTIONS", function () { runLazy("research"); ensureCharts(); });
+          withScript("corp_actions.js", "REITS_ACTIONS", function () { withECharts(function () { runLazy("research"); ensureCharts(); }); });
         });
       } else if (pg === "inst") {
-        initInstPage();
+        withECharts(function () { initInstPage(); ensureCharts(); });
       }
       if (switching && !keepScroll) restorePageScroll(pg);
       requestAnimationFrame(ensureCharts);
@@ -1862,8 +1882,21 @@ LAZY.research.push(function () {
       var growthBox = '<div class="rc-box"><div class="rc-box-t">增长轴 · PMI 偏离趋势 z3</div>' +
         '<div class="rc-box-v num"><span id="rateClockGrowth">' + sg(g.z3) + "σ</span> <small>" + escH(g.levelLabel || "—") + "</small></div>" +
         '<div class="rc-box-s">PMI ' + escH(g.pmiMonth || "—") + " " + (g.pmiLatest != null ? g.pmiLatest.toFixed(1) : "—") + " · 偏离 " + sg(g.dev) + " · z " + sg(g.z) + " · 趋势 " + escH(g.trend || "—") + "</div>" +
-        bar(g.distance, "σ", "rateClockGrowthDist") +
-        '<div class="rc-box-f">' + escH(g.basis || "PMI 总指数") + " · 滞回阈值 ±0.5/±0.25σ 尚未回测</div></div>";
+        (function () {
+          // 增长轴：新状态须连续 2 个月成立才切换 → 用确认圆点替代进度条（形状区分，灰度可读）
+          var cf = g.confirm, dl = g.distance && g.distance.label ? '<div class="rc-dist-lbl">' + escH(g.distance.label) + "</div>" : "";
+          if (!cf) return '<div class="rc-dist" id="rateClockGrowthDist">' + dl + "</div>";
+          var dots = ""; for (var i = 0; i < (cf.need || 2); i++) dots += '<i class="' + (i < (cf.count || 0) ? "on" : "") + '"></i>';
+          return '<div class="rc-dist rc-confirm' + (g.critical ? " is-crit" : "") + '" id="rateClockGrowthDist">' + dl +
+            '<div class="ov-confirm"><span class="ov-dots" aria-hidden="true">' + dots + "</span><b>" + escH(cf.title || "确认") + " " + (cf.count || 0) + "/" + (cf.need || 2) + "</b><small>" + escH(cf.label || "") + "</small></div></div>";
+        })() +
+        (function () {
+          var ab = (RC.method || {}).backtestGrowth, rb = RC.growthBacktest;
+          var t = escH(g.basis || "PMI 总指数") + " · 滞回 ±0.5/±0.25σ + 连续 2 个月确认";
+          if (ab) t += "<br>宏观分析师回测 " + escH(ab.period || "") + "：" + ab.switchesPerYear + " 次切换/年 · 状态中位 " + ab.medianStateMonths + " 个月 · <2 个月来回切换 " + ab.whipsawsUnder2m + " 次 · 趋势附近占 " + ab.neutralPct + "%";
+          if (rb) t += "<br>本仓复核：" + rb.switchesPerYear + " 次/年 · 中位 " + rb.medianStateMonths + " 个月 · 来回切换 " + rb.whipsawsUnder2m + " 次 · 趋势附近 " + rb.neutralPct + "% · 本轮进入 " + escH(rb.currentEntryMonth || "—");
+          return '<div class="rc-box-f">' + t + "</div></div>";
+        })();
       var bt = RC.backtest || {};
       $("rateClockDetail").innerHTML = head +
         '<div class="rc-axes">' + rateBox + growthBox + "</div>" +
