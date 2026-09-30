@@ -1,11 +1,11 @@
 {
  "_comment": "真实宏观序列缓存（update_cycle_data.py 自动写入；不得手工编辑/插值）。供 rateClock、rateRentGate 与 Beta 的 Δ10Y 敏感度使用",
- "updated": "2026-09-29",
+ "updated": "2026-09-30",
  "cgb10y": {
   "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
   "origin": "live",
   "asOf": "2026-09-29",
-  "fetchedAt": "2026-09-29",
+  "fetchedAt": "2026-09-30",
   "unit": "%",
   "series": [
    {
@@ -3761,13 +3761,9 @@
  "pmi": {
   "source": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI（国家统计局）",
   "origin": "live",
-  "asOf": "2026-08",
-  "fetchedAt": "2026-09-29",
+  "asOf": "2026-09",
+  "fetchedAt": "2026-09-30",
   "series": [
-   {
-    "month": "2023-09",
-    "value": 50.2
-   },
    {
     "month": "2023-10",
     "value": 49.5
@@ -3907,6 +3903,10 @@
    {
     "month": "2026-08",
     "value": 49.8
+   },
+   {
+    "month": "2026-09",
+    "value": 50.1
    }
   ]
  }

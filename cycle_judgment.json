@@ -1,6 +1,6 @@
 {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
-  "updated": "2026-09-29",
+  "updated": "2026-09-30",
   "bond10y": 1.67,
   "pm": {
     "pmi": 49.2,
@@ -90,7 +90,7 @@
       "y10": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
       "pmi": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI（国家统计局）"
     },
-    "computedAt": "2026-09-29",
+    "computedAt": "2026-09-30",
     "status": "ok",
     "asOf": "2026-09-29",
     "y10": 1.667,
@@ -103,17 +103,17 @@
     "state": "transitional",
     "stateLabel": "利率走平·过渡期",
     "confidence": "低",
-    "confidenceNote": "10Y 60日变化 -7.4bp 在 ±10bp 死区内 → 利率走平·过渡期，不判定象限；最近象限 Q3 仅作参考；PMI 3月均值 49.77 处于 49.5–50.5 边界带，强/弱归属不稳定（按 50 暂归「弱」）",
+    "confidenceNote": "10Y 60日变化 -7.4bp 在 ±10bp 死区内 → 利率走平·过渡期，不判定象限；最近象限 Q3 仅作参考；PMI 3月均值 49.70 处于 49.5–50.5 边界带，强/弱归属不稳定（按 50 暂归「弱」）",
     "growth": {
-      "pmiLatest": 49.8,
-      "pmiMonth": "2026-08",
-      "pmi3m": 49.77,
+      "pmiLatest": 50.1,
+      "pmiMonth": "2026-09",
+      "pmi3m": 49.7,
       "level": "弱",
       "boundary": true,
       "levelLabel": "边界",
-      "boundaryNote": "PMI 3月均值 49.77 处于 49.5–50.5 边界带，强/弱归属不稳定（按 50 暂归「弱」）",
+      "boundaryNote": "PMI 3月均值 49.70 处于 49.5–50.5 边界带，强/弱归属不稳定（按 50 暂归「弱」）",
       "trend": "下行",
-      "trendDelta": -0.47
+      "trendDelta": -0.5
     },
     "quadrant": null,
     "quadrantName": "利率走平·过渡期",
@@ -605,7 +605,7 @@
         "rateLean": "down",
         "deadBand": true,
         "confidence": "低",
-        "pmi3m": 49.77,
+        "pmi3m": 49.7,
         "growth": "弱",
         "growthBoundary": true,
         "growthTrend": "下行",
