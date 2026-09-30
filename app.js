@@ -1460,6 +1460,11 @@ LAZY.research.push(function () {
       else button.removeAttribute("aria-current");
     });
   }
+  // 首页（市场总览 · 行情总览）标记：窄屏据此隐藏副标题与重复的更新时间行（横幅已含「数据更新于」）
+  function markHome() {
+    var hm = document.getElementById("v-heatmap");
+    document.documentElement.classList.toggle("is-home", currentPage === "pano" && !!hm && !hm.hidden);
+  }
   function switchView(v) {
     try {
       var target = document.getElementById("v-" + v);
@@ -1495,6 +1500,7 @@ LAZY.research.push(function () {
           } catch (e) { /* 忽略 */ }
         }, 220);
       }
+      markHome();
     } catch (err) { console.error('[switchView] error:', err); }
   }
   function showPage(pg, keepScroll) {
@@ -1539,6 +1545,7 @@ LAZY.research.push(function () {
       if (switching && !keepScroll) restorePageScroll(pg);
       requestAnimationFrame(ensureCharts);
       setTimeout(echResizeAll, 160);
+      markHome();
       console.log('[showPage] switched to', pg);
     } catch (err) { console.error('[showPage] error:', err); }
   }
@@ -1891,10 +1898,9 @@ LAZY.research.push(function () {
             '<div class="ov-confirm"><span class="ov-dots" aria-hidden="true">' + dots + "</span><b>" + escH(cf.title || "确认") + " " + (cf.count || 0) + "/" + (cf.need || 2) + "</b><small>" + escH(cf.label || "") + "</small></div></div>";
         })() +
         (function () {
-          var ab = (RC.method || {}).backtestGrowth, rb = RC.growthBacktest;
+          var rb = RC.growthBacktest;
           var t = escH(g.basis || "PMI 总指数") + " · 滞回 ±0.5/±0.25σ + 连续 2 个月确认";
-          if (ab) t += "<br>宏观分析师回测 " + escH(ab.period || "") + "：" + ab.switchesPerYear + " 次切换/年 · 状态中位 " + ab.medianStateMonths + " 个月 · <2 个月来回切换 " + ab.whipsawsUnder2m + " 次 · 趋势附近占 " + ab.neutralPct + "%";
-          if (rb) t += "<br>本仓复核：" + rb.switchesPerYear + " 次/年 · 中位 " + rb.medianStateMonths + " 个月 · 来回切换 " + rb.whipsawsUnder2m + " 次 · 趋势附近 " + rb.neutralPct + "% · 本轮进入 " + escH(rb.currentEntryMonth || "—");
+          if (rb) t += "<br>回测 " + escH(rb.from || "") + "~" + escH(rb.to || "") + "：" + rb.switchesPerYear + " 次切换/年 · 状态中位 " + rb.medianStateMonths + " 个月 · <2 个月来回切换 " + rb.whipsawsUnder2m + " 次 · 趋势附近占 " + rb.neutralPct + "% · 本轮进入 " + escH(rb.currentEntryMonth || "—");
           return '<div class="rc-box-f">' + t + "</div></div>";
         })();
       var bt = RC.backtest || {};
