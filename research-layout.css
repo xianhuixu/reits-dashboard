@@ -74,7 +74,7 @@ body { padding: 18px 28px 44px; max-width: 1600px; }
 .scenario-form input, .scenario-form select { display: block; width: 100%; margin-top: 5px; }
 .scenario-form input:disabled { opacity: .5; }
 .scenario-value { font: 600 42px/1.4 ui-monospace, "SFMono-Regular", Consolas, monospace; display: block; margin: 12px 0; }
-.scenario-error { display: block; font-size: 14px; color: var(--up); margin: 12px 0; }
+.scenario-error { display: block; font-size: 14px; color: var(--warn); margin: 12px 0; }
 .scenario-output p { color: var(--tx2); font-size: 12px; }
 .reference-list { padding-left: 24px; columns: 2; column-gap: 36px; margin: 18px 0; }
 .reference-list li { break-inside: avoid; margin: 0 0 16px; padding-left: 4px; font-size: 13px; }
@@ -126,5 +126,8 @@ body { padding: 18px 28px 44px; max-width: 1600px; }
 /* 时钟先验（配置与风险 · 板块筛选） */
 #clockPriorPanel { margin-top: 20px; padding-top: 14px; border-top: 1px dashed var(--line); }
 #clockPriorPanel h3 { font-size: 14px; margin: 0 0 6px; }
-#clockPriorTable tr.clock-conflict td:last-child b { color: var(--gold); }
+#clockPriorTable tr.clock-conflict td { background: color-mix(in srgb, var(--flag-conflict) 9%, transparent); }
+#clockPriorTable tr.clock-conflict td:first-child { box-shadow: inset 3px 0 0 var(--flag-conflict); }
+#clockPriorTable tr.clock-reference td { background: color-mix(in srgb, var(--flag-ref) 7%, transparent); }
+#clockPriorTable tr.clock-reference td:first-child { box-shadow: inset 3px 0 0 transparent; border-left: 2px dashed var(--flag-ref); }
 #clockPriorTable tr.clock-reference td:last-child b { color: var(--tx3); font-weight: 600; border-bottom: 1px dashed var(--tx3); }

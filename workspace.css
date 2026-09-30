@@ -175,8 +175,8 @@ th,.matrix th { font-size:11px; font-weight:500; background:var(--th-bg); color:
 .decision-list { margin:20px 0; padding:0; gap:16px; border:0; }
 .decision-list li { padding:20px; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
 .decision-list li::before { content:""; display:block; width:24px; height:3px; background:var(--accent); margin-bottom:14px; border-radius:2px; }
-.decision-list li:nth-child(2)::before { background:var(--down); }
-.decision-list li:nth-child(3)::before { background:var(--gold); }
+.decision-list li:nth-child(2)::before { background:var(--alloc-ow); }
+.decision-list li:nth-child(3)::before { background:var(--alloc-uw); }
 .decision-list b { font-size:14px; margin-bottom:8px; }
 #v-advice .decision-list p { font-size:12px; color:var(--tx3); }
 .research-entry-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
@@ -390,4 +390,4 @@ th,.matrix th { font-size:11px; font-weight:500; background:var(--th-bg); color:
 .tender-status p { margin:4px 0; }
 .tender-status summary { cursor:pointer; padding:8px 0; }
 .tender-status details p { font-size:12px; }
-.tender-warning { color:var(--up); }
+.tender-warning { color:var(--warn); }

@@ -36,9 +36,9 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   document.documentElement.dataset.theme = t;
 })();
 </script>
-<link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="research-layout.css?v=20260929-2">
-<link rel="stylesheet" href="workspace.css?v=20260915-tender-1">
+<link rel="stylesheet" href="styles.css?v=20260930-status">
+<link rel="stylesheet" href="research-layout.css?v=20260930-status">
+<link rel="stylesheet" href="workspace.css?v=20260930-status">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
@@ -277,7 +277,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     </div>
   </div>
   <div class="card">
-    <h2>资产重估判断（"资产重估理论"框架）</h2>
+    <h2 id="revalFull">资产重估判断（"资产重估理论"框架 · 每日自动验证）</h2>
     <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
     <div id="revalPanel"></div>
     <div class="grid" style="margin-top:14px;margin-bottom:0">
@@ -317,7 +317,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <section class="view" id="v-track" hidden>
   <div class="card">
     <h2>宏观 → 行业 → 个股：各赛道关注指标与红线</h2>
-    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span style="color:var(--up)">红</span>=触发红线 / <span style="color:var(--gold)">黄</span>=接近 / <span style="color:var(--down)">绿</span>=正常，灰=待更新</p>
+    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span style="color:var(--risk)">紫</span>=触发红线 / <span style="color:var(--warn)">橙</span>=接近 / <span style="color:var(--tilt-pos)">蓝</span>=正常，灰=待更新</p>
     <div id="trackGrid"></div>
   </div>
   <div class="card">
@@ -334,7 +334,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   <div class="grid">
     <div class="card">
       <h2>相关性热力矩阵（日收益率 Pearson，近约 130 交易日）</h2>
-      <p class="note">砖红 = 正相关，墨绿 = 负相关，颜色越深相关性越强 · 中证红利 iFinD 无数据，以深证红利替代</p>
+      <p class="note">蓝 = 正相关，琥珀 = 负相关，颜色越深相关性越强（红绿仅用于价格涨跌） · 中证红利 iFinD 无数据，以深证红利替代</p>
       <div id="allocDonut" style="margin-bottom:10px"></div>
       <div class="table-scroll" id="corrMatrix"></div>
     </div>
@@ -489,10 +489,10 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
     <p class="note">六因子加权信号分（-12 ~ +12）：流动性 / 市场情绪 / 资金面 / 业绩达成 / 利差 / 股债联动</p>
     <div id="stratSignalBars"></div>
   </div>
-  <div class="card">
-    <h2>资产重估判断（"资产重估理论"框架 · 每日自动验证）</h2>
-    <p class="note">假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估 · 四项排他性条件与六因子映射：利率下行 → <b>利差因子</b>；资金中枢 → <b>资金面因子</b>；市场宽度 → <b>情绪因子</b>；估值分位 → <b>个券历史分位</b> · 完整理论回溯与预测见"周期耦合分析"</p>
-    <div id="revalSignalMap"></div>
+  <div class="card reval-summary-card">
+    <h2>资产重估 · 摘要</h2>
+    <div class="reval-summary" id="revalSignalSummary"></div>
+    <p class="note" style="margin:8px 0 0">四项排他性条件分别映射利差 / 资金面 / 情绪因子与个券历史分位 · 完整判断（理论回溯、排他性预测、因子映射）见 <a href="#v-cycle" data-jump-view="cycle">周期分析「资产重估判断」→</a></p>
   </div>
   <div class="grid">
     <div class="card">
@@ -675,7 +675,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
       <tr><td>集中度与期限</td><td>租户、付费方、区域、原始权益人及运营管理机构暴露；每月。</td><td>单一风险来源超限，或经营权剩余期缩短导致本金回收压力增加。</td><td>穿透基金名称计算共同风险，按相关性和压力损失配置；更新逐期IRR。</td></tr>
       <tr><td>权属与运营事件</td><td>土地期限、经营许可、诉讼、安全及停运公告；即时。</td><td>核心经营资格、可收取现金流或持续运营能力受到实质影响。</td><td>重估停运期、恢复成本及残值；必要时暂停新增投资并启动退出评审。</td></tr>
     </tbody></table></div>
-    <div class="scenario">
+    <div class="scenario" data-ds-status="seed" data-ds-note="纯假设情景参数，非当前市场数据">
       <div><h3>现金流与贴现率压力测试</h3><p class="note">纯假设示例，非当前市场数据；修改参数仅影响此演示。</p>
         <form id="stressForm" class="scenario-form">
           <label>估值模型<select id="stressKind"><option value="property">产权 · 零增长永续近似</option><option value="concession">经营权 · 有限期等额现金流</option></select></label>
@@ -750,9 +750,10 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <script src="ui-utils.js" defer></script>
 <script src="lib/echarts-custom.min.js" defer></script>
 <script src="workspace.js?v=20260915-tender-1" defer></script>
-<script src="tender-feed.js?v=20260915-1" defer></script>
-<script src="app.js?v=20260929-transitional" defer></script>
-<script src="allocation-tools.js?v=20260929-transitional" defer></script>
+<script src="tender-feed.js?v=20260930-status" defer></script>
+<script src="data-status.js?v=20260930-1" defer></script>
+<script src="app.js?v=20260930-status" defer></script>
+<script src="allocation-tools.js?v=20260930-status" defer></script>
 <script src="geography/map.js?v=20260928-3" defer></script>
 </body>
 </html>
