@@ -535,6 +535,13 @@ LAZY.research.push(function () {
       echSet(id, dualSpreadOption(rows, yieldKey, yieldLabel, color));
     }
 
+    var TM = P.operatingSpreadTermMatched, tmEl = $("panelL2TermStatus");
+    if (tmEl && TM) {
+      var pts = (TM.curve && TM.curve.points) || [];
+      tmEl.textContent = (TM.status === "ok" ? "已接入" : (TM.label || "待接入")) +
+        (pts.length ? " · 中债曲线 " + (TM.curve.asOf || "") + "：" + pts.map(function (p) { return p[0] + "Y " + Number(p[1]).toFixed(2) + "%"; }).join(" / ") : "") +
+        (TM.status !== "ok" && TM.pendingReason ? " · " + TM.pendingReason : "");
+    }
     paint("chartL2Property", P.propertyYieldSeries, "ttmYield", "产权 TTM", "#3b82f6");
     paint("chartL2Operating", P.operatingIrrSeries, "irr", "经营权 IRR", "#f59e0b");
   }
@@ -1788,7 +1795,7 @@ LAZY.research.push(function () {
          '<text x="12" y="' + H / 2 + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + H / 2 + ')">通胀 →</text>';
     $("clockChart").innerHTML = s + "</svg>";
 
-    // REITs 投资时钟（增长 × 利率方向；杜丽虹 2021 框架中国化，rateClock 由 update_cycle_data.py 自动计算）
+    // REITs 投资时钟（增长 × 利率方向；杜丽虹 2021 框架中国化，2026-09-30 校准口径；rateClock 由 update_cycle_data.py 自动计算）
     (function renderRateClock() {
       var RC = CY.rateClock;
       var OC = D.overseasClock;
@@ -1810,9 +1817,8 @@ LAZY.research.push(function () {
       var lsub = trans ? RC.leanSubState : null;
       var refQ = q2 || lq, refSub = q2 ? RC.subState : lsub;
       $("rateClockStamp").textContent = "· asOf " + (RC.asOf || "—") + " · 计算 " + (RC.computedAt || "—");
-      function bp(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "bp"; }
-      var dirTxt = { up: "升息", down: "降息", flat: "走平（±10bp 死区内）" }[RC.rateDir] || "—";
-      var leanTxt = RC.deadBand && RC.rateLean ? "，变化符号偏" + (RC.rateLean === "down" ? "降" : "升") + "（参考）" : "";
+      function bp(v) { return v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + "bp"; }
+      function sg(v, d) { return v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d == null ? 2 : d); }
       var prior = trans ? RC.leanUsPriorAnnualReturn : RC.usPriorAnnualReturn;
       var sectors = (OC && OC.bySector) || [];
       function inZone(z) {
@@ -1830,86 +1836,148 @@ LAZY.research.push(function () {
         "（利率腿 " + (GT.rateLeg && GT.rateLeg.status === "ok" ? bp(GT.rateLeg.d10y60bp) + (GT.rateLeg.met ? " ✓" : " ✗") : "待数据") +
         " · 产权利差分位腿 " + (GT.spreadLeg && GT.spreadLeg.status === "ok" ? GT.spreadLeg.pctileChangePP + "pp" : "pending data：SEED 非真实") + "）";
       var rot = RC.rotation || {};
-      var refTag = trans ? '<span style="font-size:10.5px;padding:1px 6px;border:1px dashed var(--tx3);border-radius:8px;color:var(--tx3);margin-left:4px">参考</span>' : "";
-      var mainBox = trans ?
-        '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px;border:1px dashed var(--tx3)"><div style="font-size:11.5px;color:var(--tx3)">当前状态（不判定象限）</div>' +
-          '<div id="rateClockState" data-state="transitional" style="font-size:20px;font-weight:650;color:var(--tx2);margin:4px 0">' + escH(RC.stateLabel || "利率走平·过渡期") + "</div>" +
-          '<div style="font-size:11.5px;color:var(--tx2)">最近象限 <b>' + escH((lq || "—") + " " + (RC.leanQuadrantName || lsub || "")) + "</b>" + refTag + " · Δ10Y " + bp(RC.d10y60bp) + "/60日</div>" +
-          '<div style="font-size:11.5px;color:var(--tx3);margin-top:2px">置信度 <b>' + escH(RC.confidence || "低") + "</b></div></div>"
-        :
-        '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px"><div style="font-size:11.5px;color:var(--tx3)">当前象限</div>' +
-          '<div id="rateClockState" data-state="' + escH(RC.state || "definite") + '" style="font-size:20px;font-weight:650;color:var(--accent);margin:4px 0">' + escH(q2 || "未判定") + " · " + escH(RC.subState || RC.quadrantName || "") + "</div>" +
-          '<div style="font-size:11.5px;color:var(--tx2)">置信度 ' + escH(RC.confidence || "—") + "</div></div>";
-      var gLevel = g.boundary ? "边界" : (g.level || "—");
-      $("rateClockDetail").innerHTML =
-        '<div class="grid3" style="margin-bottom:12px">' + mainBox +
-          '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px"><div style="font-size:11.5px;color:var(--tx3)">利率轴 · 10Y 国债</div>' +
-            '<div class="num" style="font-size:20px;font-weight:650;margin:4px 0">' + (RC.y10 != null ? RC.y10.toFixed(3) + "%" : "—") + ' <span style="font-size:12px;color:var(--tx2)">' + bp(RC.d10y60bp) + "/60日</span></div>" +
-            '<div style="font-size:11.5px;color:var(--tx2)">' + dirTxt + leanTxt + " · 起点 " + escH(RC.y10StartDate || "—") + " " + (RC.y10Start != null ? RC.y10Start.toFixed(3) + "%" : "") + "</div></div>" +
-          '<div style="background:var(--panel2);border-radius:10px;padding:12px 14px"><div style="font-size:11.5px;color:var(--tx3)">增长轴 · 制造业 PMI</div>' +
-            '<div class="num" style="font-size:20px;font-weight:650;margin:4px 0">' + (g.pmi3m != null ? g.pmi3m.toFixed(2) : "—") + ' <span id="rateClockGrowth" style="font-size:12px;color:' + (g.boundary ? "var(--gold)" : "var(--tx2)") + '">3月均 · ' + escH(gLevel) + "</span></div>" +
-            '<div style="font-size:11.5px;color:var(--tx2)">最新 ' + escH(g.pmiMonth || "—") + " " + (g.pmiLatest != null ? g.pmiLatest : "—") + " · 趋势 " + escH(g.trend || "—") + (g.trendDelta != null ? "（" + (g.trendDelta > 0 ? "+" : "") + g.trendDelta + "）" : "") + "</div>" +
-            (g.boundary ? '<div style="font-size:11px;color:var(--tx3);margin-top:2px">' + escH(g.boundaryNote || "PMI 3月均值处于 49.5–50.5 边界带") + "</div>" : "") + "</div>" +
-        "</div>" +
-        '<div style="font-size:12px;color:var(--tx2);line-height:1.8">' +
-          (RC.confidenceNote ? '<span style="color:var(--tx3)">判定说明：' + escH(RC.confidenceNote) + "</span><br>" : "") +
-          "<b>美国先验</b>（" + (trans ? "最近象限整体年化总回报，仅参考" : "本象限整体年化总回报") + "）：" + (prior == null ? "—" : (prior > 0 ? "+" : "") + prior + "%") + refTag +
+      var refTag = trans ? '<span class="rc-tag rc-tag-ref">参考</span>' : "";
+      var sw = RC.signalSwitch && RC.signalSwitch.active ? RC.signalSwitch : null;
+      var crit = !!(g.critical || (RC.rateDistance || {}).critical);
+      var tags = (sw ? '<span class="rc-tag rc-tag-warn" id="rateClockSwitchTag" title="' + escH((sw.from || "") + " → " + (sw.to || "")) + '">信号切换</span>' : "") +
+        (crit ? '<span class="rc-tag rc-tag-warn">临界</span>' : "") + refTag;
+      function bar(dist, unit, id) {
+        if (!dist) return "";
+        var c = dist.critical;
+        return '<div class="rc-dist' + (c ? " is-crit" : "") + '"' + (id ? ' id="' + id + '"' : "") + '>' +
+          '<div class="rc-dist-lbl">' + escH(dist.label) + "</div>" +
+          '<div class="rc-bar" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + (dist.marginPct || 0) + '" aria-label="' + escH(dist.label) + '"><i style="width:' + Math.max(3, dist.marginPct || 0) + '%"></i></div></div>';
+      }
+      var head = '<div class="rc-head">' +
+        '<div class="rc-head-main"><span class="rc-state" id="rateClockState" data-state="' + escH(RC.state || "") + '">' +
+          escH(trans ? (RC.stateLabel || "过渡期") : (q2 + " · " + (RC.subState || RC.quadrantName || ""))) + "</span>" + tags + "</div>" +
+        '<div class="rc-summary" id="rateClockSummary">' + escH(RC.summary || "") + '<span class="rc-conf">置信度 ' + escH(RC.confidence || "—") + "</span></div>" +
+        (sw ? '<div class="rc-switch-note" id="rateClockSwitchNote">' + escH(sw.note) + (sw.from ? "（" + escH(sw.from) + " → " + escH(sw.to) + "）" : "") + "</div>" : "") +
+        "</div>";
+      var rateBox = '<div class="rc-box"><div class="rc-box-t">利率轴 · 10Y 国债 60 日变化</div>' +
+        '<div class="rc-box-v num">' + bp(RC.d10y60bp) + ' <small>' + escH({ up: "上行", down: "下行", flat: "走平" }[RC.rateDir] || "—") + "</small></div>" +
+        '<div class="rc-box-s">10Y ' + (RC.y10 != null ? RC.y10.toFixed(3) + "%" : "—") + " · 进入线 ±" + (RC.thresholdBp != null ? RC.thresholdBp.toFixed(1) : "—") + "bp" +
+          (RC.thresholdFloored ? "（触底 5bp）" : "") + " · 退出线 ±" + (RC.exitBp != null ? RC.exitBp.toFixed(1) : "—") + "bp · σ " + (RC.sigma60bp != null ? RC.sigma60bp.toFixed(1) : "—") + "bp</div>" +
+        bar(RC.rateDistance, "bp", "rateClockRateDist") + "</div>";
+      var growthBox = '<div class="rc-box"><div class="rc-box-t">增长轴 · PMI 偏离趋势 z3</div>' +
+        '<div class="rc-box-v num"><span id="rateClockGrowth">' + sg(g.z3) + "σ</span> <small>" + escH(g.levelLabel || "—") + "</small></div>" +
+        '<div class="rc-box-s">PMI ' + escH(g.pmiMonth || "—") + " " + (g.pmiLatest != null ? g.pmiLatest.toFixed(1) : "—") + " · 偏离 " + sg(g.dev) + " · z " + sg(g.z) + " · 趋势 " + escH(g.trend || "—") + "</div>" +
+        bar(g.distance, "σ", "rateClockGrowthDist") +
+        '<div class="rc-box-f">' + escH(g.basis || "PMI 总指数") + " · 滞回阈值 ±0.5/±0.25σ 尚未回测</div></div>";
+      var bt = RC.backtest || {};
+      $("rateClockDetail").innerHTML = head +
+        '<div class="rc-axes">' + rateBox + growthBox + "</div>" +
+        '<div class="rc-meta">' +
+          "<b>美国先验</b>（" + (trans ? "最近象限，仅参考" : "本象限整体年化总回报") + "）：" + (prior == null ? "—" : (prior > 0 ? "+" : "") + prior + "%") +
           (refQ === "Q4" ? "（Q4 整体 " + (QP.Q4 != null ? QP.Q4 : 15.1) + "%，滞胀 −10.7% / 复苏 +26.1%）" : "") +
-          " · 旋转（仅确定象限）：" + escH(rot.direction || "—") + (rot.from ? "（" + rot.from + "→" + rot.to + "，" + escH(rot.switchMonth || "") + "）" : "") +
-          (rot.lastDefiniteMonth ? " · 最近确定象限月 " + escH(rot.lastDefiniteMonth) + (rot.transitionalMonthsSince ? "，其后过渡期 " + rot.transitionalMonthsSince + " 个月" : "") : "") + "<br>" +
-          "<b>美国先验领先业态</b>" + (trans ? "（最近象限·参考）" : "") + "：" + (leaders.length ? escH(leaders.join("、")) : "—") +
+          " · 旋转（仅确定象限）：" + escH(rot.direction || "—") + (rot.from ? "（" + rot.from + "→" + rot.to + "，" + escH(rot.switchMonth || "") + "）" : "") + "<br>" +
+          "<b>美国先验领先业态</b>" + (trans ? "（参考）" : "") + "：" + (leaders.length ? escH(leaders.join("、")) : "—") +
           " · <b>雷区业态</b>" + (trans ? "（参考）" : "") + "：" + (mines.length ? escH(mines.join("、")) : "—") + "<br>" +
           "<b>升息快于租金闸门</b>：" + escH(gateTxt) + (GT && DS ? dsBadge(DS.fromGateLeg(GT.spreadLeg, GT.asOf)) : "") +
         "</div>" +
-        (flags.length ? '<ul id="rateClockFlags" style="margin:10px 0 0;padding-left:18px;font-size:12px;line-height:1.7">' + flags.map(function (f) {
+        (flags.length ? '<ul id="rateClockFlags" class="rc-flags">' + flags.map(function (f) {
           return '<li data-level="' + escH(f.level) + '" style="color:' + (flagColor[f.level] || "var(--tx2)") + '"><b>' + escH(flagName[f.level] || f.level) + "</b> · " + escH(f.level === "reference" ? String(f.text).replace(/^参考·/, "") : f.text) + "</li>";
-        }).join("") + "</ul>" : '<p style="font-size:12px;color:var(--tx3);margin-top:8px">' + (trans ? "过渡期：无参考提示" : "本象限与学派板块观点无自动冲突") + "</p>") +
-        (trans ? '<p style="font-size:11px;color:var(--tx3);margin-top:6px">过渡期不产生硬冲突：以上提示按最近象限推演，仅供跟踪，不触发仓位调整。</p>' : "") +
-        '<p style="font-size:11px;color:var(--tx3);margin-top:8px">数据：' + escH(((RC.sources || {}).y10) || "") + "；" + escH(((RC.sources || {}).pmi) || "") +
+        }).join("") + "</ul>" : '<p class="rc-foot">' + (trans ? "过渡期：无参考提示" : "本象限与学派板块观点无自动冲突") + "</p>") +
+        (trans ? '<p class="rc-foot">过渡期不产生硬冲突：以上提示按最近象限推演，仅供跟踪，不触发仓位调整。</p>' : "") +
+        '<p class="rc-foot">利率轴回测（固收 PM，' + escH(bt.from || "2016-03") + "~" + escH(bt.to || "") + "，" + (bt.turningPoints || 13) + " 个 ≥30bp 拐点）：" +
+          (bt.switchesPerYear != null ? bt.switchesPerYear : "—") + " 次切换/年 · 状态中位 " + (bt.medianStateDays != null ? bt.medianStateDays : "—") + " 日 · 来回切换 " +
+          (bt.whipsawPct != null ? bt.whipsawPct : "—") + "% · 拐点滞后中位 " + (bt.medianLagDays != null ? bt.medianLagDays : "—") + " 日（主要来自 60 日窗口）</p>" +
+        '<p class="rc-foot">数据：' + escH(((RC.sources || {}).y10) || "") + "；" + escH(((RC.sources || {}).pmi) || "") +
         (RC.seriesOrigin && (RC.seriesOrigin.y10 === "cache" || RC.seriesOrigin.pmi === "cache") ? " · ⚠️ 本次取数失败，沿用缓存序列" : "") + "</p>";
 
-      // SVG：真实坐标（Δ10Y bp × PMI3m），±10bp 死区灰带 + PMI 49.5–50.5 边界带，24 个月轨迹（过渡期月份空心灰点）
+      // SVG：横轴 Δ10Y(60日, bp) × 纵轴 z3(σ)；灰带 = 利率退出/进入线、增长 ±0.25/±0.5σ；24 个月轨迹（过渡期空心点）
       var W2 = 340, H2 = 300, m2 = 30, cx = W2 / 2, cy = (H2 - 10) / 2 + 5;
       var hw = (W2 - 2 * m2) / 2, hh = (H2 - 10 - 2 * m2) / 2;
-      function px(v) { v = Math.max(-50, Math.min(50, v || 0)); return cx + v / 50 * (hw - 8); }
-      function py(v) { v = Math.max(48, Math.min(52, v == null ? 50 : v)); return cy - (v - 50) / 2 * (hh - 8); }
+      var XR = 40, YR = 1.6;
+      function px(v) { v = Math.max(-XR, Math.min(XR, v || 0)); return cx + v / XR * (hw - 8); }
+      function py(v) { v = Math.max(-YR, Math.min(YR, v == null ? 0 : v)); return cy - v / YR * (hh - 8); }
       var cols2 = { Q1: "var(--clk-boom)", Q2: "var(--clk-recov)", Q3: "var(--clk-reces)", Q4: "var(--clk-stag)" };
       var cells = [["Q2", cx - hw, cy - hh], ["Q1", cx, cy - hh], ["Q3", cx - hw, cy], ["Q4", cx, cy]];
-      var sv = '<svg viewBox="0 0 ' + W2 + " " + H2 + '" width="100%">' + svgTitle("REITs 投资时钟（增长×利率）定位图");
+      var sv = '<svg viewBox="0 0 ' + W2 + " " + H2 + '" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">' + svgTitle("REITs 投资时钟（增长×利率）定位图");
       cells.forEach(function (c) {
         var on = c[0] === q2, lean = c[0] === lq;
-        sv += '<rect x="' + c[1] + '" y="' + c[2] + '" width="' + hw + '" height="' + hh + '" fill="' + cols2[c[0]] + '" fill-opacity="' + (on ? ".12" : lean ? ".07" : ".04") + '" stroke="' + (lean ? cols2[c[0]] : "#e2e8f0") + '"' + (lean ? ' stroke-dasharray="4 3"' : "") + ' rx="8"/>' +
+        sv += '<rect x="' + c[1] + '" y="' + c[2] + '" width="' + hw + '" height="' + hh + '" fill="' + cols2[c[0]] + '" fill-opacity="' + (on ? ".13" : lean ? ".07" : ".035") + '" stroke="' + (on || lean ? cols2[c[0]] : "var(--line)") + '"' + (lean ? ' stroke-dasharray="4 3"' : "") + ' rx="8"/>' +
           '<text x="' + (c[1] + hw / 2) + '" y="' + (c[2] + 18) + '" text-anchor="middle" fill="' + (on ? cols2[c[0]] : "var(--tx2)") + '" font-size="12" font-weight="600">' + c[0] + " " + QN[c[0]] + (lean ? "（参考）" : "") + "</text>" +
           '<text x="' + (c[1] + hw / 2) + '" y="' + (c[2] + 32) + '" text-anchor="middle" fill="var(--tx3)" font-size="9.5">美国先验 ' + (QP[c[0]] != null ? (QP[c[0]] > 0 ? "+" : "") + QP[c[0]] + "%" : "—") + "</text>";
       });
-      sv += '<rect x="' + px(-10) + '" y="' + (cy - hh) + '" width="' + (px(10) - px(-10)) + '" height="' + (2 * hh) + '" fill="#94a3b8" fill-opacity=".14"/>' +
-        '<rect x="' + (cx - hw) + '" y="' + py(50.5) + '" width="' + (2 * hw) + '" height="' + (py(49.5) - py(50.5)) + '" fill="#94a3b8" fill-opacity=".08"/>' +
-        '<text x="' + cx + '" y="' + (cy + hh - 4) + '" text-anchor="middle" fill="var(--tx3)" font-size="9">±10bp 走平·过渡期</text>';
-      var H = (RC.history || []).filter(function (h) { return h.d10y60bp != null && h.pmi3m != null; }).slice(-24);
+      var T = RC.thresholdBp || 5, E = RC.exitBp || 2.5;
+      sv += '<rect x="' + px(-T) + '" y="' + (cy - hh) + '" width="' + (px(T) - px(-T)) + '" height="' + (2 * hh) + '" fill="#94a3b8" fill-opacity=".10"/>' +
+        '<rect x="' + px(-E) + '" y="' + (cy - hh) + '" width="' + (px(E) - px(-E)) + '" height="' + (2 * hh) + '" fill="#94a3b8" fill-opacity=".14"/>' +
+        '<rect x="' + (cx - hw) + '" y="' + py(0.5) + '" width="' + (2 * hw) + '" height="' + (py(-0.5) - py(0.5)) + '" fill="#94a3b8" fill-opacity=".07"/>' +
+        '<rect x="' + (cx - hw) + '" y="' + py(0.25) + '" width="' + (2 * hw) + '" height="' + (py(-0.25) - py(0.25)) + '" fill="#94a3b8" fill-opacity=".10"/>' +
+        '<text x="' + cx + '" y="' + (cy + hh - 4) + '" text-anchor="middle" fill="var(--tx3)" font-size="9">±' + T.toFixed(1) + "bp 进入 / ±" + E.toFixed(1) + "bp 退出</text>";
+      var H = (RC.history || []).filter(function (h) { return h.d10y60bp != null && h.z3 != null; }).slice(-24);
       if (H.length > 1) {
-        sv += '<polyline fill="none" stroke="var(--tx3)" stroke-width="1" stroke-opacity=".6" points="' +
-          H.map(function (h) { return px(h.d10y60bp).toFixed(1) + "," + py(h.pmi3m).toFixed(1); }).join(" ") + '"/>';
+        sv += '<polyline fill="none" stroke="var(--tx3)" stroke-width="1" stroke-opacity=".5" points="' +
+          H.map(function (h) { return px(h.d10y60bp).toFixed(1) + "," + py(h.z3).toFixed(1); }).join(" ") + '"/>';
         H.forEach(function (h, i) {
           var op = (0.3 + 0.6 * i / H.length).toFixed(2);
-          var tip = "<title>" + h.month + " " + (h.state === "transitional" ? "过渡期（最近 " + (h.leanQuadrant || "—") + "，参考）" : (h.quadrant || "—")) + " Δ10Y " + h.d10y60bp + "bp PMI3m " + h.pmi3m + (h.growthBoundary ? " 边界" : "") + "</title>";
+          var tip = "<title>" + h.month + " " + (h.state === "transitional" ? "过渡期（最近 " + (h.leanQuadrant || "—") + "，参考）" : (h.quadrant || "—")) + " Δ10Y " + h.d10y60bp + "bp（进入线 ±" + h.thresholdBp + "）z3 " + h.z3 + "σ</title>";
           if (h.state === "transitional") {
-            sv += '<circle class="rc-trail rc-trans" cx="' + px(h.d10y60bp).toFixed(1) + '" cy="' + py(h.pmi3m).toFixed(1) + '" r="2.6" fill="var(--panel)" stroke="#94a3b8" stroke-width="1" stroke-opacity="' + op + '">' + tip + "</circle>";
+            sv += '<circle class="rc-trail rc-trans" cx="' + px(h.d10y60bp).toFixed(1) + '" cy="' + py(h.z3).toFixed(1) + '" r="2.6" fill="var(--panel)" stroke="#94a3b8" stroke-width="1" stroke-opacity="' + op + '">' + tip + "</circle>";
           } else {
-            sv += '<circle class="rc-trail rc-def" cx="' + px(h.d10y60bp).toFixed(1) + '" cy="' + py(h.pmi3m).toFixed(1) + '" r="2.6" fill="' + (cols2[h.quadrant] || "#94a3b8") + '" fill-opacity="' + op + '">' + tip + "</circle>";
+            sv += '<circle class="rc-trail rc-def" cx="' + px(h.d10y60bp).toFixed(1) + '" cy="' + py(h.z3).toFixed(1) + '" r="2.6" fill="' + (cols2[h.quadrant] || "#94a3b8") + '" fill-opacity="' + op + '">' + tip + "</circle>";
           }
         });
       }
-      var X = px(RC.d10y60bp), Y = py(g.pmi3m), col = trans ? "#64748b" : (cols2[q2] || "#64748b");
-      sv += '<circle cx="' + X + '" cy="' + Y + '" r="5" fill="none" stroke="' + col + '" stroke-width="1.2"' + (trans ? ' stroke-dasharray="2 2"' : "") + '><animate attributeName="r" values="5;16" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".7;0" dur="1.8s" repeatCount="indefinite"/></circle>' +
+      var X = px(RC.d10y60bp), Y = py(g.z3), col = trans ? "#64748b" : (cols2[q2] || "#64748b");
+      sv += '<circle cx="' + X + '" cy="' + Y + '" r="5" fill="none" stroke="' + (crit ? "var(--warn)" : col) + '" stroke-width="1.2"' + (trans ? ' stroke-dasharray="2 2"' : "") + '><animate attributeName="r" values="5;16" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".7;0" dur="1.8s" repeatCount="indefinite"/></circle>' +
         (trans ? '<circle cx="' + X + '" cy="' + Y + '" r="4.5" fill="var(--panel)" stroke="' + col + '" stroke-width="1.6" stroke-dasharray="2 1.5"/>' : '<circle cx="' + X + '" cy="' + Y + '" r="4.5" fill="' + col + '"/>');
-      sv += '<text x="' + (W2 - m2) + '" y="' + (H2 - 4) + '" text-anchor="end" fill="var(--tx3)" font-size="10">升息 →</text>' +
-        '<text x="' + m2 + '" y="' + (H2 - 4) + '" fill="var(--tx3)" font-size="10">← 降息</text>' +
-        '<text x="12" y="' + cy + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + cy + ')">PMI 3M 均值（50 为界）→</text>';
+      sv += '<text x="' + (W2 - m2) + '" y="' + (H2 - 4) + '" text-anchor="end" fill="var(--tx3)" font-size="10">利率上行 →</text>' +
+        '<text x="' + m2 + '" y="' + (H2 - 4) + '" fill="var(--tx3)" font-size="10">← 利率下行</text>' +
+        '<text x="12" y="' + cy + '" text-anchor="middle" fill="var(--tx3)" font-size="10" transform="rotate(-90 12 ' + cy + ')">PMI 偏离趋势 z3（σ）→</text>';
       $("rateClockChart").innerHTML = sv + "</svg>";
       $("rateClockDesc").innerHTML = "与美林时钟（增长×通胀）并列：本时钟横轴换成<b>利率方向</b>，更贴近 REITs 估值主因（P = 分派 ÷ (r<sub>f</sub> + 风险溢价)）。" +
-        "规则：|Δ10Y 60日| &lt; 10bp 不强行判象限 → 「利率走平·过渡期」，只给最近象限作参考；PMI 3月均值在 49.5–50.5 记为「边界」。" +
-        "当前：<b style=\"color:" + col + "\">" + escH(trans ? (RC.stateLabel || "利率走平·过渡期") + "（最近象限 " + (lq || "—") + "，参考）" : (q2 || "未判定") + " " + (RC.subState || "")) + "</b>" +
-        (g.boundary ? " · 增长<b>边界</b>" : "") + "。图中空心灰点 = 过渡期月份，实心彩点 = 确定象限月份。";
+        "规则（2026-09-30 校准）：利率轴进入线 max(5bp, 0.7σ)、退出线为其一半、5 日确认；增长轴 z3 ±0.5σ 进入 / ±0.25σ 退出；任一轴走平或趋势附近为过渡期，只给最近象限作参考。" +
+        "当前：<b style=\"color:" + col + "\">" + escH(RC.summary || "") + "</b>" + (trans ? "（最近象限 " + escH(lq || "—") + "，参考）" : " → " + escH((q2 || "") + " " + (RC.subState || ""))) +
+        "。图中空心灰点 = 过渡期月份，实心彩点 = 确定象限月份。";
+    })();
+
+    // 社融脉冲 · 领先预警（单独卡片，不并入增长轴；cycle.tsfImpulse）
+    (function renderTsfImpulse() {
+      var el = $("tsfImpulseDetail"), sp = $("tsfImpulseSpark"), st = $("tsfImpulseStamp");
+      if (!el) return;
+      var T = CY.tsfImpulse;
+      if (DS) dsApply($("tsfImpulseCard"), DS.fromTsfImpulse(T));
+      if (!T || T.status !== "ok") {
+        el.innerHTML = '<div class="tsf-pending">' + (DS ? "" : '<span class="rc-tag rc-tag-ref">待接入</span> ') + escH((T && T.reason) || "社融 / 名义 GDP 真实序列未接入") + "</div>";
+        if (sp) sp.innerHTML = "";
+        if (st) st.textContent = "";
+        return;
+      }
+      if (st) st.textContent = "· " + (T.asOfLabel || ("数据截至 " + T.asOf));
+      var v = T.value, fl = T.lastFlip;
+      el.innerHTML = '<div class="tsf-row"><div class="tsf-big num" id="tsfImpulseValue">' + (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(2) + '<small>%</small></div>' +
+        '<div class="tsf-side"><div class="tsf-asof" id="tsfImpulseAsOf">' + escH(T.asOfLabel || "") + "</div>" +
+        '<div class="tsf-meta">上月 ' + (T.prev != null ? (T.prev > 0 ? "+" : "") + T.prev.toFixed(2) + "%" : "—") + " · 3 个月变化 " + (T.change3m != null ? (T.change3m > 0 ? "+" : "") + T.change3m.toFixed(2) + "pp" : "—") +
+        (fl ? " · 最近翻转 <b>" + escH(fl.month + " " + fl.direction) + "</b>" : "") + "</div></div></div>" +
+        (T.staleNote ? '<div class="tsf-stale">' + escH(T.staleNote) + "</div>" : "") +
+        '<p class="tsf-read">' + escH(T.interpretation || "") + "</p>" +
+        '<p class="rc-foot">口径：' + escH(T.formula || "") + " · 数据：" + escH(((T.sources || {}).tsf) || "") + "；" + escH(((T.sources || {}).gdp) || "") +
+        (T.seriesOrigin && (T.seriesOrigin.tsf === "cache" || T.seriesOrigin.gdp === "cache") ? " · ⚠️ 本次取数失败，沿用缓存" : "") + "</p>";
+      function drawSpark() {
+        var S = T.series || [];
+        if (!sp || S.length < 2) return;
+        var W = 320, Hh = 96, pl = 4, pr = 4, pt = 8, pb = 16;
+        var vals = S.map(function (r) { return r[1]; });
+        var mx = Math.max.apply(null, vals.map(Math.abs).concat([0.5]));
+        function x(i) { return pl + i * (W - pl - pr) / (S.length - 1); }
+        function y(val) { return pt + (Hh - pt - pb) / 2 * (1 - val / mx); }
+        var s = '<svg viewBox="0 0 ' + W + " " + Hh + '" width="100%" height="100%" preserveAspectRatio="none" role="img" aria-label="社融脉冲近 ' + S.length + ' 个月">' +
+          '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + y(0) + '" y2="' + y(0) + '" stroke="var(--line2)" stroke-dasharray="3 3"/>' +
+          '<path d="M' + x(0) + "," + y(0) + " " + S.map(function (r, i) { return "L" + x(i).toFixed(1) + "," + y(r[1]).toFixed(1); }).join(" ") + " L" + x(S.length - 1) + "," + y(0) + 'Z" fill="var(--gro)" fill-opacity=".10"/>' +
+          '<polyline fill="none" stroke="var(--gro)" stroke-width="1.6" points="' + S.map(function (r, i) { return x(i).toFixed(1) + "," + y(r[1]).toFixed(1); }).join(" ") + '"/>' +
+          '<circle cx="' + x(S.length - 1) + '" cy="' + y(vals[vals.length - 1]) + '" r="3" fill="var(--gro)"/>' +
+          '<text x="' + pl + '" y="' + (Hh - 3) + '" font-size="9" fill="var(--tx3)">' + escH(S[0][0]) + "</text>" +
+          '<text x="' + (W - pr) + '" y="' + (Hh - 3) + '" font-size="9" fill="var(--tx3)" text-anchor="end">' + escH(S[S.length - 1][0]) + "</text></svg>";
+        sp.innerHTML = s;
+      }
+      if (sp && "IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (ents) {
+          if (ents.some(function (e) { return e.isIntersecting; })) { io.disconnect(); drawSpark(); }
+        }, { rootMargin: "200px" });
+        io.observe(sp);
+      } else drawSpark();
     })();
 
     // 美国 REITs 长期走势（对数轴 + NBER 衰退带 + 耦合统计）

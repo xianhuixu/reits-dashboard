@@ -2,7 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const { clockPriorRows, inZone } = require("../allocation-tools.js");
+const { clockPriorRows, inZone, clockHeadline } = require("../allocation-tools.js");
 
 const root = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(root, f), "utf8");
@@ -41,21 +41,79 @@ test("transitional without lean quadrant behaves like undetermined", () => {
   assert.ok(rows.every((r) => !r.inDanger && !r.inBest && r.status !== "reference"));
 });
 
-test("committed rateClock: transitional ⇒ no quadrant, flat, low confidence, only reference flags", () => {
-  const rc = JSON.parse(read("cycle_judgment.json")).rateClock;
+test("committed rateClock follows calibrated rules (dynamic dead band + growth z3 hysteresis)", () => {
+  const cy = JSON.parse(read("cycle_judgment.json"));
+  const rc = cy.rateClock;
   if (rc.status !== "ok") return;
   assert.ok(["definite", "transitional", "undetermined"].includes(rc.state));
+  assert.equal(rc.methodVersion, "2026-09-30");
+  assert.ok(rc.thresholdBp >= 5);
+  assert.ok(Math.abs(rc.exitBp - rc.thresholdBp / 2) < 0.051);
+  assert.ok(!("boundary" in (rc.growth || {})), "旧 49.5–50.5 边界规则已移除");
   if (rc.state === "transitional") {
     assert.equal(rc.quadrant, null);
-    assert.equal(rc.rateDir, "flat");
     assert.equal(rc.confidence, "低");
-    assert.equal(rc.stateLabel, "利率走平·过渡期");
-    assert.ok(Math.abs(rc.d10y60bp) < 10);
+    assert.match(rc.stateLabel, /过渡期/);
     assert.ok((rc.conflictFlags || []).every((f) => f.level === "reference"));
+  } else if (rc.state === "definite") {
+    assert.ok(["up", "down"].includes(rc.rateDir));
+    assert.ok([1, -1].includes(rc.growth.state));
   }
+  assert.match(rc.summary, /增长.+· 利率/);
+  if (rc.growth.critical) assert.match(rc.summary, /临界/);
+  assert.match(rc.rateDistance.label, /距/);
   const app = read("app.js");
   assert.match(app, /reference: "参考"/);
   assert.match(app, /rc-trans/);
+  assert.match(app, /信号切换/);
+  assert.match(app, /rateClockGrowthDist/);
+});
+
+test("clockHeadline renders summary, 信号切换 tag, 临界 tag and methodology note", () => {
+  const clock = { status: "ok", summary: "增长高于趋势（临界）· 利率下行", growth: { critical: true },
+    rateDistance: { critical: false }, signalSwitch: { active: true, cause: "methodology", note: "9-30 起改用新口径，这次切换来自口径更新，不代表市场突变" } };
+  const h = clockHeadline(clock);
+  assert.match(h, /增长高于趋势（临界）· 利率下行/);
+  assert.match(h, /信号切换/);
+  assert.match(h, /rc-tag-warn">临界/);
+  assert.match(h, /口径更新，不代表市场突变/);
+  assert.equal(clockHeadline({ status: "unavailable" }), "");
+  assert.doesNotMatch(clockHeadline(Object.assign({}, clock, { signalSwitch: { active: false, note: "x" } })), /信号切换/);
+});
+
+test("Q2 definite: 产业园 watch, 消费 no conflict (current calibrated reading)", () => {
+  const rows = clockPriorRows(advice, { status: "ok", state: "definite", quadrant: "Q2", subState: "复苏/泡沫" });
+  assert.equal(rows.find((r) => r.sector === "产业园").status, "watch");
+  assert.notEqual(rows.find((r) => r.sector === "消费").status, "conflict");
+});
+
+test("data-status helper labels TSF impulse card: 缓存 · 数据截至 4月 / 待接入", () => {
+  const DS = require("../data-status.js");
+  const stale = DS.fromTsfImpulse({ status: "ok", asOf: "2026-04", monthsBehind: 5, seriesOrigin: { tsf: "live", gdp: "live" } });
+  assert.equal(DS.label(stale), "缓存 · 数据截至 4月");
+  const cached = DS.fromTsfImpulse({ status: "ok", asOf: "2026-08", monthsBehind: 1, seriesOrigin: { tsf: "cache" } });
+  assert.equal(cached.status, "cached");
+  assert.equal(DS.label(DS.fromTsfImpulse({ status: "ok", asOf: "2026-08", monthsBehind: 1, seriesOrigin: {} })), "");
+  assert.equal(DS.label(DS.fromTsfImpulse({ status: "pending", label: "待接入" })), "待接入");
+  assert.equal(DS.label(DS.make(DS.CACHED, { asOf: "2026-09-01" })), "缓存 · as-of 2026-09-01");
+});
+
+test("TSF impulse card: ok carries 数据截至 as-of, pending carries no numbers", () => {
+  const t = JSON.parse(read("cycle_judgment.json")).tsfImpulse;
+  assert.ok(t, "tsfImpulse present");
+  if (t.status === "ok") {
+    assert.match(t.asOfLabel, /数据截至 \d+月/);
+    assert.equal(t.series[t.series.length - 1][0], t.asOf);
+    assert.equal(typeof t.value, "number");
+  } else {
+    assert.equal(t.status, "pending");
+    assert.equal(t.label, "待接入");
+    assert.equal(t.value, null);
+  }
+  const html = read("index.html"), app = read("app.js");
+  ["tsfImpulseCard", "tsfImpulseDetail", "tsfImpulseSpark"].forEach((id) => assert.match(html, new RegExp(`id="${id}"`)));
+  assert.match(app, /IntersectionObserver/);
+  assert.match(app, /待接入/);
 });
 
 test("Q4 stagflation zone only matches stagflation sub-state", () => {

@@ -36,7 +36,7 @@
     return zone && zone.length ? zone.map(function (z) { return z === "Q4-stagflation" ? "Q4·滞胀" : z; }).join(" / ") : "未给出";
   }
   /** advice.clockSectorPrior × sectorViews × 当前 rateClock → 表格行（纯函数，便于测试）。
-   * 过渡期（利率走平，|Δ10Y 60日| < 10bp）不判定象限：按最近象限推演，命中时 status=reference（软提示「参考」），不产生 conflict/watch。
+   * 过渡期（利率走平或增长趋势附近，2026-09-30 校准口径）不判定象限：按最近象限推演，命中时 status=reference（软提示「参考」），不产生 conflict/watch。
    * @param {any} advice @param {any} clock @returns {Array<any>} */
   function clockPriorRows(advice, clock) {
     var views = {};
@@ -66,7 +66,18 @@
     if (/超配/.test(a)) return /标配|偏超配/.test(a) ? "alloc-ow-lite" : "alloc-ow";
     return "alloc-n";
   }
-  if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone, allocClass: allocClass };
+  function escText(v) { return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  /** 时钟摘要行（配置页状态行与周期页共用口径）：「增长高于趋势（临界）· 利率下行」+ 信号切换/临界标签 + 口径说明。
+   * @param {any} clock @returns {string} HTML */
+  function clockHeadline(clock) {
+    if (!clock || clock.status !== "ok" || !clock.summary) return "";
+    var sw = clock.signalSwitch && clock.signalSwitch.active ? clock.signalSwitch : null;
+    var crit = !!((clock.growth && clock.growth.critical) || (clock.rateDistance && clock.rateDistance.critical));
+    return '<span class="clock-state-line"><b>' + escText(clock.summary) + "</b>" +
+      (sw ? '<span class="rc-tag rc-tag-warn">信号切换</span>' : "") + (crit ? '<span class="rc-tag rc-tag-warn">临界</span>' : "") + "</span>" +
+      (sw ? '<br><span class="rc-switch-note" style="display:inline">' + escText(sw.note) + "</span>" : "");
+  }
+  if (typeof module !== "undefined" && module.exports) module.exports = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone, allocClass: allocClass, clockHeadline: clockHeadline };
   if (!root.document) return;
   root.ReitsAllocation = { allocClass: allocClass };
   var doc = root.document;
@@ -137,16 +148,18 @@
     var live = clock && clock.status === "ok";
     var trans = live && clock.state === "transitional";
     var gr = (clock && clock.growth) || {};
-    var gNote = gr.boundary ? "；增长<b>边界</b>（PMI 3月均 " + esc(gr.pmi3m) + " 处 49.5–50.5）" : "";
+    var gNote = gr.critical ? "；增长<b>临界</b>（z3 " + esc(gr.z3) + "σ，" + esc((gr.distance || {}).label || "") + "）" : "";
+    var headline = clockHeadline(clock);
+    var distTxt = clock && clock.rateDistance ? "；" + esc(clock.rateDistance.label) : "";
     function pr(v) { return v == null ? "—" : v + "%"; }
-    state.innerHTML = trans ?
-      "当前状态：<b>" + esc(clock.stateLabel || "利率走平·过渡期") + "</b> · 最近象限 " + esc((clock.leanQuadrant || "—") + " " + (clock.leanQuadrantName || clock.leanSubState || "")) +
-        "（参考，Δ10Y " + esc((clock.d10y60bp > 0 ? "+" : "") + clock.d10y60bp) + "bp/60日，在 ±10bp 死区内；asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "低") + "）" + gNote +
+    state.innerHTML = (headline ? headline + "<br>" : "") + (trans ?
+      "当前状态：<b>" + esc(clock.stateLabel || "过渡期") + "</b> · 最近象限 " + esc((clock.leanQuadrant || "—") + " " + (clock.leanQuadrantName || clock.leanSubState || "")) +
+        "（参考，Δ10Y " + esc((clock.d10y60bp > 0 ? "+" : "") + clock.d10y60bp) + "bp/60日" + distTxt + "；asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "低") + "）" + gNote +
         " · 美国先验（最近象限，仅参考）" + pr(clock.leanUsPriorAnnualReturn) + " · 过渡期不判硬冲突，命中项标「参考」" :
       live && clock.quadrant ?
-      "当前象限：<b>" + esc(clock.quadrant + " " + (clock.subState || clock.quadrantName || "")) + "</b>（asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "—") + "）" + gNote +
+      "当前象限：<b>" + esc(clock.quadrant + " " + (clock.subState || clock.quadrantName || "")) + "</b>（asOf " + esc(clock.asOf) + "，置信度 " + esc(clock.confidence || "—") + distTxt + "）" + gNote +
         " · 美国先验本象限整体年化总回报 " + pr(clock.usPriorAnnualReturn) + " · 橙色标记 = 学派超配但落在美国先验雷区" :
-      "当前象限未判定（" + esc((clock && (clock.statusNote || clock.status)) || "行情核心数据未含 rateClock") + "），下表仅展示静态先验。";
+      "当前象限未判定（" + esc((clock && (clock.statusNote || clock.status)) || "行情核心数据未含 rateClock") + "），下表仅展示静态先验。");
     var LBL = { conflict: "冲突", watch: "复核", reference: "参考", "static": "待实证", ok: "—" };
     table.innerHTML = '<table class="matrix research-table"><thead><tr><th scope="col">中国板块</th><th scope="col">学派观点</th><th scope="col">美国类比（假设）</th><th scope="col">最佳象限</th><th scope="col">雷区</th><th scope="col">类比置信</th><th scope="col">冲突</th></tr></thead><tbody>' +
       rows.map(function (r) {
