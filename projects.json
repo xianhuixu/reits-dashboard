@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-30 18:57:19",
+ "updated": "2026-09-30 23:59:35",
  "ndrc": [
   {
    "name": "上海地产租赁住房新购入项目",
@@ -203,9 +203,9 @@
    "name": "汇添富上海地产租赁住房封闭式基础设施证券投资基金",
    "manager": "汇添富基金管理股份有限公司",
    "assetType": "基础设施",
-   "status": "已申报",
-   "acceptDate": "",
-   "updateDate": "2026-09-29",
+   "status": "已受理",
+   "acceptDate": "2026-09-30",
+   "updateDate": "2026-09-30",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=72c49c7e1ec847fea999460058302391"
   },
   {
@@ -320,9 +320,9 @@
    "name": "中金开元旅业封闭式商业不动产证券投资基金",
    "manager": "中金基金管理有限公司",
    "assetType": "商业不动产",
-   "status": "已反馈",
+   "status": "已申报",
    "acceptDate": "2026-04-30",
-   "updateDate": "2026-09-06",
+   "updateDate": "2026-09-30",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=9c0e79ff1731437c8cb7571366675723"
   },
   {
