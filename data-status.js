@@ -22,7 +22,7 @@
   /** @param {string} status @param {{asOf?:any,note?:string,source?:string}} [extra] */
   function make(status, extra) {
     extra = extra || {};
-    return { status: status, asOf: normAsOf(extra.asOf), note: extra.note || "", source: extra.source || "" };
+    return { status: status, asOf: normAsOf(extra.asOf), note: extra.note || "", source: extra.source || "", display: extra.display || "" };
   }
   /** 任意 status 字符串 → 四态之一；未知状态视为 pending（宁可标注，不冒充 live）。 */
   function fromStatus(status, asOf, note) {
@@ -57,6 +57,17 @@
     if (!leg) return make(PENDING, { asOf: asOf, note: "闸门腿未计算" });
     return leg.status === "ok" ? make(LIVE, { asOf: leg.to || asOf }) : fromStatus(leg.status, asOf, leg.note);
   }
+  /** cycle.tsfImpulse（社融脉冲）：pending → 待接入；取数走缓存或源滞后 >2 个月 → 「缓存 · 数据截至 X月」。 */
+  function fromTsfImpulse(T) {
+    if (!T || T.status !== "ok") return make(PENDING, { note: (T && T.reason) || "社融 / 名义 GDP 真实序列未接入" });
+    var o = T.seriesOrigin || {};
+    var cached = Object.keys(o).some(function (k) { return o[k] === "cache"; });
+    var disp = "数据截至 " + (T.asOf ? parseInt(String(T.asOf).slice(5, 7), 10) + "月" : "—");
+    if (cached || (T.monthsBehind != null && T.monthsBehind > 2)) {
+      return make(CACHED, { asOf: T.asOf, display: disp, note: cached ? "本次取数失败，沿用缓存序列" : (T.staleNote || "数据源更新滞后") });
+    }
+    return make(LIVE, { asOf: T.asOf });
+  }
   /** 中证 REITs 指数：stale=true → 缓存（as-of 取数据自带日期，缺失时仅显示「缓存」）。 */
   function fromMarketIndex(mi) {
     if (!mi || mi.close == null) return make(PENDING, { note: "指数行情待接入" });
@@ -88,7 +99,7 @@
   /** 角标文字：示例数据 / 待接入 / 缓存 · as-of X；live 返回空串。 */
   function label(s) {
     if (isLive(s)) return "";
-    if (s.status === CACHED) return LABEL.cached + (s.asOf ? " · as-of " + s.asOf : "");
+    if (s.status === CACHED) return LABEL.cached + (s.display ? " · " + s.display : s.asOf ? " · as-of " + s.asOf : "");
     return LABEL[s.status] || LABEL.pending;
   }
   function title(s) {
@@ -111,7 +122,7 @@
   }
   var api = { LIVE: LIVE, SEED: SEED, PENDING: PENDING, CACHED: CACHED, make: make, fromStatus: fromStatus, fromPanel: fromPanel,
     fromBetas: fromBetas, fromRateClock: fromRateClock, fromGateLeg: fromGateLeg, fromMarketIndex: fromMarketIndex,
-    fromTenders: fromTenders, fromFundamentals: fromFundamentals, label: label, title: title, badgeHtml: badgeHtml,
+    fromTenders: fromTenders, fromTsfImpulse: fromTsfImpulse, fromFundamentals: fromFundamentals, label: label, title: title, badgeHtml: badgeHtml,
     isLive: isLive, worst: worst, normAsOf: normAsOf };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (!root.document) return;

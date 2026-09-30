@@ -17,7 +17,7 @@
       "CSC强于大市与CICC趋势未确立取交集：结构性偏多+分批+闸门约束",
       "板块超配以advice.sectorViews为准，cycle.mapping降级为宏观注释",
       "产业园/仓储：战术卫星、战略非底仓；加仓绑定出租率/续租边际证据",
-      "增长×利率时钟（cycle.rateClock）与 clockSectorPrior 仅作宏观背景层；冲突自动产出 conflictFlag，不直接改变 sectorViews；|Δ10Y 60日|<10bp 为「利率走平·过渡期」，不判象限，只按最近象限给「参考」提示，硬冲突只来自确定象限"
+      "增长×利率时钟（cycle.rateClock，2026-09-30 校准口径）与 clockSectorPrior 仅作宏观背景层；冲突自动产出 conflictFlag，不直接改变 sectorViews；利率轴用动态死区（进入 max(5bp,0.7σ)、退出为其一半、5 日确认），增长轴用 PMI 偏离趋势 z3（±0.5 进入 / ±0.25 退出）；任一轴走平或趋势附近为「过渡期」，不判象限，只按最近象限给「参考」提示，硬冲突只来自确定象限；距切换线很近时标「临界」并降置信度；社融脉冲（cycle.tsfImpulse）为单独领先预警，只看方向，不改仓位"
     ]
   },
   "asOfMarket": "2026-09-09",
