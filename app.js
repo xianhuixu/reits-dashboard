@@ -1306,7 +1306,7 @@ LAZY.research.push(function () {
       else if (/受理|申报/.test(s)) c = "var(--accent)";
       else if (/问询|反馈/.test(s)) c = "var(--warn)";
       else if (/通过|生效/.test(s)) c = "var(--tilt-pos)";
-      return '<span class="sec-tag" style="color:' + c + '">' + esc(s) + "</span>";
+      return '<span class="sec-tag' + (c === "var(--risk)" ? " tone-risk" : "") + '" style="color:' + c + '">' + esc(s) + "</span>";
     }
     function fillTable(tableId, metaId, thead, rows, meta) {
       document.querySelector(tableId + " thead").innerHTML = thead;
@@ -2161,7 +2161,7 @@ LAZY.research.push(function () {
       return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
         '<b style="font-size:13px">' + t.sector + '</b><span style="font-size:11px;color:var(--tx3)">' + members.length + " 只</span></div>" +
         '<div style="margin:6px 0">' + t.metrics.map(function (m2) { return '<span class="metric-pill gray">' + m2 + "</span>"; }).join("") + "</div>" +
-        '<div style="font-size:11px;color:var(--risk);margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
+        '<div class="tone-risk" style="font-size:11px;margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
     }).join("") + "</div>";
 
     // 分派达成监测
@@ -2177,7 +2177,7 @@ LAZY.research.push(function () {
           return "<tr><td class='l'>" + (r ? r.name : f.code) + "</td>" +
             '<td class="num">' + (a == null ? "—" : a + "%") + "</td>" +
             '<td class="num">' + (f.distYield == null ? "—" : f.distYield + "%") + "</td>" +
-            '<td style="color:' + st[1] + '">' + st[0] + "</td>" +
+            '<td' + (st[1] === "var(--risk)" ? ' class="tone-risk"' : "") + ' style="color:' + st[1] + '">' + st[0] + "</td>" +
             "<td class='l' style='color:var(--tx3);font-size:11px'>" + (f.note || "") + "</td></tr>";
         }).join("") + "</tbody></table>";
     }
