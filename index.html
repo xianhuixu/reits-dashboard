@@ -36,9 +36,9 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
   document.documentElement.dataset.theme = t;
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=20260930-status">
+<link rel="stylesheet" href="styles.css?v=20260930-cvd">
 <link rel="stylesheet" href="research-layout.css?v=20260930-status">
-<link rel="stylesheet" href="workspace.css?v=20260930-status">
+<link rel="stylesheet" href="workspace.css?v=20260930-cvd">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
@@ -325,7 +325,7 @@ window.__PANEL_READY = fetch("data_panel_l1l7.json").then(function (r) {
 <section class="view" id="v-track" hidden>
   <div class="card">
     <h2>宏观 → 行业 → 个股：各赛道关注指标与红线</h2>
-    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span style="color:var(--risk)">紫</span>=触发红线 / <span style="color:var(--warn)">橙</span>=接近 / <span style="color:var(--tilt-pos)">蓝</span>=正常，灰=待更新</p>
+    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span style="color:var(--risk)">⚠ 品红</span>=触发红线 / <span style="color:var(--warn)">橙</span>=接近 / <span style="color:var(--tilt-pos)">蓝</span>=正常，灰=待更新</p>
     <div id="trackGrid"></div>
   </div>
   <div class="card">

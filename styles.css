@@ -244,7 +244,7 @@ svg text { font-family: inherit; }
 .news-item:hover { background: rgba(37,99,235,.03); }
 .news-item .nt { flex: 0 0 68px; }
 .news-item .nt span { font-size: 11px; padding: 3px 10px; border-radius: 999px; white-space: nowrap; font-weight: 500; }
-.nt-政策监管 { background: color-mix(in srgb, var(--risk) 10%, transparent); color: var(--risk); }
+.nt-政策监管 { background: color-mix(in srgb, var(--tx) 8%, transparent); color: var(--tx); }
 .nt-拟上市 { background: rgba(37,99,235,.1); color: var(--accent); }
 .nt-申报动态 { background: rgba(124,58,237,.1); color: var(--gro); }
 .nt-上市公告 { background: color-mix(in srgb, var(--def) 12%, transparent); color: var(--def); }
@@ -252,7 +252,7 @@ svg text { font-family: inherit; }
 .nt-市场观点 { background: rgba(110,119,129,.12); color: var(--tx2); }
 .nt-机构间REITs { background: rgba(8,145,178,.1); color: #0891b2; }
 .nt-招投标 { background: rgba(37,99,235,.1); color: #2563eb; }
-.nt-分红公告 { background: color-mix(in srgb, var(--alloc-ow) 10%, transparent); color: var(--alloc-ow); }
+.nt-分红公告 { background: color-mix(in srgb, var(--tilt-pos) 10%, transparent); color: var(--tilt-pos); }
 .nt-解禁 { background: rgba(212,160,23,.1); color: var(--gold); }
 .nt-扩募\/战配 { background: rgba(124,58,237,.1); color: var(--gro); }
 .act-name { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 8px; background: rgba(37,99,235,.06); color: var(--accent); margin-bottom: 6px; font-weight: 600; }
@@ -490,9 +490,9 @@ main { min-width: 0; }
 .bias-fill { height:100%; background:linear-gradient(90deg, rgba(184,134,11,.35), var(--gold)); border-radius:999px; }
 .horizon-tags { margin-top:6px; font-size:12px; }
 .advice-chip { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; margin:2px 2px 0 0; border:1px solid var(--line); background:var(--bg); color:var(--tx2); }
-.advice-chip.chip-ow { background:color-mix(in srgb, var(--alloc-ow) 12%, transparent); color:var(--alloc-ow); border-color:color-mix(in srgb, var(--alloc-ow) 28%, transparent); }
+.advice-chip.chip-ow { background:var(--alloc-ow); color:var(--alloc-ow-tx); border-color:var(--alloc-ow); }
 .advice-chip.chip-sel { background:rgba(37,99,235,.08); color:var(--accent); border-color:rgba(37,99,235,.22); }
-.advice-chip.chip-uw { background:color-mix(in srgb, var(--alloc-uw) 12%, transparent); color:var(--alloc-uw); border-color:color-mix(in srgb, var(--alloc-uw) 28%, transparent); }
+.advice-chip.chip-uw { background:var(--alloc-uw); color:var(--alloc-uw-tx); border-color:var(--alloc-uw); }
 .horizon-trig { font-size:11.5px; color:var(--tx2); margin-top:6px; line-height:1.55; }
 .up-ish { color:var(--up); font-weight:600; }
 .dn-ish { color:var(--down); font-weight:600; }
@@ -522,46 +522,66 @@ main { min-width: 0; }
 
 /* ===================================================================   语义色板（2026-09-30）
    · 红 / 绿（--up / --down）只用于价格涨跌（A 股惯例：红涨绿跌）。
-   · 配置倾向：超配 = 深蓝 · 标配 = 中性灰 · 低配 = 琥珀（色盲友好，亮度差可辨）。
-   · 研判正 / 负倾向（成立、正常、偏强 / 未成立、偏弱）沿用同一蓝 / 琥珀轴。
-   · 预警 / 风险：橙 = 预警、接近阈值；紫 = 风险、红线已触发。
+   · 配置倾向：单一冷色阶，超配 = 深蓝 · 标配 = 蓝灰 · 低配 = 浅蓝灰；标签另带 ↑ / ↗ / → / ↓ 符号。
+   · 研判正 / 负倾向（成立、正常、偏强 / 未成立、偏弱）：深蓝 / 紫灰（冷色），另有 ✓ / ✗ 文字。
+   · 暖色只用于预警 / 风险：橙 = 预警、接近阈值；品红 = 风险、红线已触发（带 ⚠ / ▲ 图标）。
+   · 色盲校验（Machado 2009 / Chrome 视觉缺陷模拟）：见 PR「palette-cvd」中的 ΔE2000 表。
    · 标记：冲突 = 橙底描边；复核 = 青；参考 = 灰色虚线。
    · 数据状态：示例 / 待接入 / 缓存 统一灰调角标（见 data-status.js）。
    顺序须为 :root → eye → dark，以便主题块覆盖默认值。
    ========================================================================== */
 :root {
-  --alloc-ow: #1d4ed8; --alloc-n: #64748b; --alloc-uw: #b45309;
-  --tilt-pos: var(--alloc-ow); --tilt-neu: var(--alloc-n); --tilt-neg: var(--alloc-uw);
-  --warn: #c2410c; --risk: #7e22ce;
+  /* 配置倾向：单一冷色阶（深 → 浅）。*-bg 为标签底色，*-tx 为标签文字色 */
+  --alloc-ow: #1e3a8a; --alloc-ow-tx: #ffffff;
+  --alloc-n: #5b6f8c;  --alloc-n-tx: #ffffff;
+  --alloc-uw: #c5cee6; --alloc-uw-tx: #34425e;
+  --tilt-pos: #1e3a8a; --tilt-neu: #5b6f8c; --tilt-neg: #736d99;
+  /* 暖色只留给预警 / 风险 */
+  --warn: #c2410c; --risk: #95306d;
   --flag-conflict: #c2410c; --flag-watch: #0e7490; --flag-ref: #64748b;
   --clk-boom: #ea580c; --clk-recov: #0891b2; --clk-reces: #3b82f6; --clk-stag: #9333ea;
   --ds-tx: #57606a; --ds-bg: #eef1f4; --ds-line: #c6ccd4; --ds-tint: rgba(110,119,129,.045);
 }
 [data-theme="eye"] {
-  --alloc-ow: #1e40af; --alloc-n: #5f6b63; --alloc-uw: #a15c07;
-  --warn: #b43f0b; --risk: #6b21a8;
+  --alloc-ow: #1e3a8a; --alloc-ow-tx: #ffffff;
+  --alloc-n: #5a6e84;  --alloc-n-tx: #ffffff;
+  --alloc-uw: #c9d3e3; --alloc-uw-tx: #33415a;
+  --tilt-pos: #1e3a8a; --tilt-neu: #5a6e84; --tilt-neg: #6f6892;
+  --warn: #b43f0b; --risk: #8f2e5a;
   --flag-conflict: #b43f0b; --flag-watch: #0f6a7a; --flag-ref: #5f6b63;
   --ds-tx: #4e5b50; --ds-bg: #e4ebdf; --ds-line: #b9c6b2; --ds-tint: rgba(78,91,80,.05);
 }
 [data-theme="dark"] {
-  --alloc-ow: #79a8ff; --alloc-n: #9aa4b2; --alloc-uw: #f0b43c;
-  --warn: #fb923c; --risk: #c89bff;
+  /* 深色底上「强调度」随亮度：超配最亮、低配最暗 */
+  --alloc-ow: #7aa7ff; --alloc-ow-tx: #0b1a33;
+  --alloc-n: #5d6f8f;  --alloc-n-tx: #eef3fb;
+  --alloc-uw: #2e3b55; --alloc-uw-tx: #b7c3da;
+  --tilt-pos: #7aa7ff; --tilt-neu: #9aa6ba; --tilt-neg: #b3a9d9;
+  --warn: #fb923c; --risk: #fab4fd;
   --flag-conflict: #fb923c; --flag-watch: #3fc7da; --flag-ref: #8b98a9;
   --clk-boom: #fb923c; --clk-recov: #22c1d6; --clk-reces: #6ea8fe; --clk-stag: #b98cff;
   --ds-tx: #aab6c6; --ds-bg: #243349; --ds-line: #3c4e68; --ds-tint: rgba(148,163,184,.05);
 }
 
-/* 配置倾向标签 */
-.alloc-chip { display: inline-block; font-size: 11.5px; line-height: 1.5; padding: 1px 9px; border-radius: 999px; font-weight: 600; border: 1px solid transparent; white-space: nowrap; }
-.alloc-ow { color: var(--alloc-ow); background: color-mix(in srgb, var(--alloc-ow) 13%, transparent); border-color: color-mix(in srgb, var(--alloc-ow) 30%, transparent); }
-.alloc-ow-lite { color: var(--alloc-ow); background: transparent; border-color: color-mix(in srgb, var(--alloc-ow) 40%, transparent); }
-.alloc-n { color: var(--alloc-n); background: color-mix(in srgb, var(--alloc-n) 12%, transparent); }
-.alloc-uw { color: var(--alloc-uw); background: color-mix(in srgb, var(--alloc-uw) 13%, transparent); border-color: color-mix(in srgb, var(--alloc-uw) 30%, transparent); }
-/* 预警 / 风险 / 标记 */
+/* 配置倾向标签：颜色 + 方向符号双重编码（↑超配 / ↗偏超配 / →标配 / ↓低配），符号对读屏隐藏 */
+.alloc-chip { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; line-height: 1.5; padding: 1px 9px; border-radius: 999px; font-weight: 600; border: 1px solid transparent; white-space: nowrap; }
+.alloc-chip::before { font-weight: 700; }
+.alloc-ow { color: var(--alloc-ow-tx); background: var(--alloc-ow); border-color: var(--alloc-ow); }
+.alloc-ow::before, .advice-chip.chip-ow::before { content: "↑" / ""; }
+.alloc-ow-lite { color: var(--tilt-pos); background: transparent; border-color: var(--tilt-pos); }
+.alloc-ow-lite::before { content: "↗" / ""; }
+.alloc-n { color: var(--alloc-n-tx); background: var(--alloc-n); border-color: var(--alloc-n); }
+.alloc-n::before { content: "→" / ""; }
+.alloc-uw { color: var(--alloc-uw-tx); background: var(--alloc-uw); border-color: color-mix(in srgb, var(--alloc-uw-tx) 25%, transparent); }
+.alloc-uw::before, .advice-chip.chip-uw::before { content: "↓" / ""; }
+/* 预警 / 风险：风险额外加 ⚠ / ▲ 图标，不只靠颜色 */
 .tone-warn { color: var(--warn); } .tone-risk { color: var(--risk); }
+.tone-risk::before { content: "⚠ " / ""; }
+.metric-pill.risk::before, .ist-bad::before { content: "▲ " / ""; }
 .tone-pos { color: var(--tilt-pos); } .tone-neg { color: var(--tilt-neg); }
 .flag-chip { display: inline-block; font-size: 11px; padding: 0 7px; border-radius: 6px; font-weight: 600; border: 1px solid currentColor; }
 .flag-conflict { color: var(--flag-conflict); background: color-mix(in srgb, var(--flag-conflict) 10%, transparent); }
+.flag-conflict::before { content: "! " / ""; }
 .flag-watch { color: var(--flag-watch); }
 .flag-reference, .flag-background { color: var(--flag-ref); border-style: dashed; }
 

@@ -11,7 +11,7 @@
 ## 数据状态标注与语义色（2026-09-30）
 
 - **数据状态角标**：`data-status.js`（`window.ReitsDataStatus`）把各 JSON 已有的 `status` / `asOf` / `seedMeta` / `stale` 字段统一映射为 live / 示例数据 / 待接入 / 缓存 · as-of X。非 live 模块在右上角显示角标并灰化（虚线边框、图表去饱和）。当前覆盖：L2 分权利差（seed）、Beta 面板、REITs 投资时钟与升息快于租金闸门的产权利差分位腿、招投标（stale / degraded）、中证 REITs 指数（stale）、赛道运营数据与分派监测（fundamentals 为空）、压力测试（纯假设，HTML 以 `data-ds-status="seed"` 声明）。新模块只需调用 `ReitsDataStatus.apply(el, state)`。
-- **语义色**：红 / 绿（`--up` / `--down`）只表示价格涨跌（红涨绿跌）。配置倾向用 `--alloc-ow`（超配，深蓝）/ `--alloc-n`（标配，灰）/ `--alloc-uw`（低配，琥珀）；研判正负沿用同一蓝 / 琥珀轴（`--tilt-pos` / `--tilt-neg`）；预警 `--warn`（橙）、风险 / 红线 `--risk`（紫）；冲突 / 复核 / 参考标记用 `--flag-conflict` / `--flag-watch` / `--flag-ref`。三套主题各自定义。
+- **语义色**：红 / 绿（`--up` / `--down`）只表示价格涨跌（红涨绿跌）。配置倾向用单一冷色阶 `--alloc-ow`（超配，深蓝）/ `--alloc-n`（标配，蓝灰）/ `--alloc-uw`（低配，浅蓝灰），标签同时带 ↑ / ↗ / → / ↓ 符号，不只靠颜色；研判正负用 `--tilt-pos`（深蓝）/ `--tilt-neg`（紫灰）；暖色只留给预警 `--warn`（橙）和风险 / 红线 `--risk`（品红，带 ⚠ / ▲ 图标）。配色已在 Chrome 视觉缺陷模拟（红色盲 / 绿色盲 / 蓝色盲 / 全色盲）下校验；冲突 / 复核 / 参考标记用 `--flag-conflict` / `--flag-watch` / `--flag-ref`。三套主题各自定义。
 - **资产重估判断**：完整版（理论回溯、排他性预测、四项条件↔因子映射）只在「周期分析」页；「策略信号」页保留摘要与跳转链接。
 - Cloudflare 镜像：`deploy_cf.sh` 已加入 `data-status.js`；`.github/workflows/*` 的 `cp` 清单也需加入 `data-status.js`（本次 token 无 workflow 权限，未改；缺失时页面降级为不显示角标，其余功能不受影响）。
 

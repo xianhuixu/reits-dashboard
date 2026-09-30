@@ -122,3 +122,53 @@ test("pages load the status helper before app.js and dedupe 资产重估判断",
   assert.doesNotMatch(html, /id="revalSignalMap"/);
   assert.match(read("deploy_cf.sh"), /data-status\.js/);
 });
+
+// ---- 色盲友好色板（Machado 2009 severity 1.0，与 Chrome Emulation.setEmulatedVisionDeficiency 同矩阵） ----
+const CVD = {
+  normal: [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
+  protanopia: [[0.152286, 1.052583, -0.204868], [0.114503, 0.786281, 0.099216], [-0.003882, -0.048116, 1.051998]],
+  deuteranopia: [[0.367322, 0.860646, -0.227968], [0.280085, 0.672501, 0.047413], [-0.01182, 0.04294, 0.968881]],
+  tritanopia: [[1.255528, -0.076749, -0.178779], [-0.078411, 0.930809, 0.147602], [0.004733, 0.691367, 0.3039]],
+};
+const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+function labOf(h, m) {
+  const l = hexRgb(h).map(lin);
+  const s = m.map((r) => Math.min(1, Math.max(0, r[0] * l[0] + r[1] * l[1] + r[2] * l[2])));
+  const X = (0.4124 * s[0] + 0.3576 * s[1] + 0.1805 * s[2]) / 0.95047, Y = 0.2126 * s[0] + 0.7152 * s[1] + 0.0722 * s[2], Z = (0.0193 * s[0] + 0.1192 * s[1] + 0.9505 * s[2]) / 1.08883;
+  const f = (t) => (t > 0.008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116);
+  return [116 * f(Y) - 16, 500 * (f(X) - f(Y)), 200 * (f(Y) - f(Z))];
+}
+const dE76 = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+function themeVars(css, selector) {
+  const i = css.lastIndexOf(selector + " {\n  /*") >= 0 ? css.lastIndexOf(selector + " {\n  /*") : css.lastIndexOf(selector + " {\n  --alloc-ow");
+  const block = css.slice(i, css.indexOf("}", i));
+  const out = {};
+  block.replace(/--([\w-]+):\s*(#[0-9a-fA-F]{6})/g, (_, k, v) => { out[k] = v; });
+  return out;
+}
+
+test("allocation ramp is one cool hue, warm colours only for warn / risk, risk distinct under CVD", () => {
+  const css = read("styles.css");
+  const up = { ":root": "#c13f4a", '[data-theme="eye"]': "#b83445", '[data-theme="dark"]': "#ff929b" };
+  for (const sel of [":root", '[data-theme="eye"]', '[data-theme="dark"]']) {
+    const v = themeVars(css, sel);
+    ["alloc-ow", "alloc-n", "alloc-uw", "warn", "risk"].forEach((k) => assert.ok(v[k], sel + " " + k));
+    for (const k of ["alloc-ow", "alloc-n", "alloc-uw"]) {
+      const [L, a, b] = labOf(v[k], CVD.normal);
+      const hue = (Math.atan2(b, a) * 180 / Math.PI + 360) % 360;
+      assert.ok(hue > 230 && hue < 300, `${sel} ${k} should be cool blue (hue ${hue.toFixed(0)})`);
+      assert.ok(L >= 0);
+    }
+    for (const [name, m] of Object.entries(CVD)) {
+      const d = (x, y) => dE76(labOf(x, m), labOf(y, m));
+      assert.ok(d(v["alloc-uw"], v.warn) > 30, `${sel} ${name}: 低配 vs 预警`);
+      assert.ok(d(v["alloc-ow"], v.risk) > 10, `${sel} ${name}: 超配 vs 风险`);
+      assert.ok(d(v.risk, up[sel]) > 10, `${sel} ${name}: 风险 vs 上涨红`);
+    }
+  }
+  assert.match(css, /\.alloc-ow::before[^{]*\{ content: "↑"/);
+  assert.match(css, /\.alloc-n::before \{ content: "→"/);
+  assert.match(css, /\.alloc-uw::before[^{]*\{ content: "↓"/);
+  assert.match(css, /\.tone-risk::before \{ content: "⚠ "/);
+});
