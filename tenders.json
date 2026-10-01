@@ -1,20 +1,19 @@
 {
-  "checkedAt": "2026-10-01T15:13:36+08:00",
+  "checkedAt": "2026-10-01T18:49:37+08:00",
   "lastSuccessAt": "2026-10-01T09:47:33+08:00",
   "status": "failed",
-  "schedule": "云端每日09:20/18:20；本机补充09:50/18:50（北京时间；Mac需开机联网）",
+  "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
   "latestBulletinDate": "2026-09-30",
   "sources": [
     {
-      "status": "failed",
-      "error": "公开列表未加载：访问验证、登录限制或源站异常；不等同于无新增公告",
       "id": "ctbpsp",
-      "name": "中国招标投标公共服务平台（新站）",
-      "checkedAt": "2026-10-01T15:13:36+08:00",
+      "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
+      "status": "failed",
       "count": 0,
-      "latestBulletinDate": null,
-      "lastSuccessAt": "2026-10-01T09:47:33+08:00"
+      "checkedAt": "2026-10-01T18:49:37+08:00",
+      "lastSuccessAt": null,
+      "latestBulletinDate": null
     },
     {
       "status": "failed",
