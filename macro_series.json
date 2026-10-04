@@ -1,10 +1,10 @@
 {
  "_comment": "真实宏观序列缓存（update_cycle_data.py 自动写入；不得手工编辑/插值）。供 rateClock、社融脉冲、rateRentGate、Beta 的 Δ10Y 敏感度与经营权期限匹配利差使用",
- "updated": "2026-10-03",
+ "updated": "2026-10-04",
  "cgb10y": {
   "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
   "asOf": "2026-09-30",
-  "fetchedAt": "2026-10-03",
+  "fetchedAt": "2026-10-04",
   "unit": "%",
   "start": "2015-01-01",
   "origin": "live",
@@ -2951,7 +2951,7 @@
  "pmi": {
   "source": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI 总指数（国家统计局；该接口无新订单分项）",
   "asOf": "2026-09",
-  "fetchedAt": "2026-10-03",
+  "fetchedAt": "2026-10-04",
   "origin": "live",
   "series": [
    {"month": "2008-01", "value": 53.0},
@@ -3184,7 +3184,7 @@
  "tsf": {
   "source": "商务部数据中心 data.mofcom.gov.cn 社会融资规模增量（月度，亿元；akshare macro_china_shrzgm 同源）",
   "asOf": "2026-04",
-  "fetchedAt": "2026-10-03",
+  "fetchedAt": "2026-10-04",
   "unit": "亿元",
   "origin": "live",
   "series": [
@@ -3329,7 +3329,7 @@
  "gdp": {
   "source": "东方财富数据中心 RPT_ECONOMY_GDP · 国内生产总值累计值（国家统计局，亿元；季度差分为单季）",
   "asOf": "2026-06",
-  "fetchedAt": "2026-10-03",
+  "fetchedAt": "2026-10-04",
   "unit": "亿元（年内累计）",
   "origin": "live",
   "series": [
@@ -3420,7 +3420,7 @@
  "cgbCurve": {
   "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · 中债国债收益率 2Y(EMM00588704)/5Y(EMM00166462)/10Y(EMM00166466)/30Y(EMM00166469)",
   "origin": "live",
-  "fetchedAt": "2026-10-03",
+  "fetchedAt": "2026-10-04",
   "unit": "%",
   "asOf": "2026-09-30",
   "points": [
