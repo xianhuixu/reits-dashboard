@@ -46,6 +46,10 @@ jobs:
         continue-on-error: true
         run: python fetch_projects.py
 
+      - name: 预渲染结论横幅
+        continue-on-error: true
+        run: python3 scripts/prerender_banner.py
+
       - name: 提交并推送数据变更
         run: |
           git config user.name "github-actions[bot]"
