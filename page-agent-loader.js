@@ -8,6 +8,7 @@
  *      2) 自带密钥（BYOK）：用户填自己的 OpenAI 兼容端点（如阿里云百炼 DashScope），
  *         仅保存在访问者浏览器 localStorage，不上传任何服务器
  *  - CDN 双保险：jsDelivr 主源 + npmmirror 国内镜像自动回退
+ *  - 加载策略：优先 fetch+注入（绕过个别环境对跨域 script 标签的阻塞），失败退化为 script 标签
  * ============================================================ */
 (function () {
   'use strict';
@@ -15,6 +16,7 @@
   var VERSION = '1.12.4';
   var CDN_PRIMARY = 'https://cdn.jsdelivr.net/npm/page-agent@' + VERSION + '/dist/iife/page-agent.demo.js?autoInit=false';
   var CDN_MIRROR = 'https://registry.npmmirror.com/page-agent/' + VERSION + '/files/dist/iife/page-agent.demo.js?autoInit=false';
+  var SCRIPT_TIMEOUT = 12000;
 
   var LS_KEY = 'rd-ai-config';
 
@@ -54,34 +56,70 @@
     try { localStorage.removeItem(LS_KEY); } catch (e) { /* ignore */ }
   }
 
-  /* 依次尝试多个 CDN，全部失败才 reject */
-  function loadScript(urls) {
+  /* 依次尝试多个 CDN；单个 URL 内部先 fetch+注入，失败退化为 script 标签（带超时） */
+  function loadEngine(urls) {
     return new Promise(function (resolve, reject) {
       var i = 0;
       function tryNext() {
         if (i >= urls.length) { reject(new Error('all-cdn-failed')); return; }
+        var url = urls[i++];
+        fetch(url)
+          .then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.text();
+          })
+          .then(function (code) {
+            var s = document.createElement('script');
+            s.textContent = code;
+            document.head.appendChild(s);
+            if (typeof window.PageAgent === 'function') { resolve(); return; }
+            s.remove();
+            tryNext();
+          })
+          .catch(function () { viaScriptTag(url); });
+      }
+      function viaScriptTag(url) {
         var s = document.createElement('script');
-        s.src = urls[i++];
+        s.src = url;
         s.async = true;
         s.crossOrigin = 'anonymous';
-        s.onload = function () { resolve(); };
-        s.onerror = function () { s.remove(); tryNext(); };
+        var done = false;
+        function once(ok) {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          if (ok && typeof window.PageAgent === 'function') { resolve(); }
+          else { s.remove(); tryNext(); }
+        }
+        var timer = setTimeout(function () { once(false); }, SCRIPT_TIMEOUT);
+        s.onload = function () { once(true); };
+        s.onerror = function () { once(false); };
         document.head.appendChild(s);
       }
       tryNext();
     });
   }
 
-  /* ---------- 启动按钮 ---------- */
+  /* ---------- 启动按钮 + 设置齿轮 ---------- */
 
   function buildLauncher() {
+    var wrap = document.createElement('div');
+    wrap.id = 'rdAiWrap';
     var btn = document.createElement('button');
     btn.id = 'rdAiLauncher';
     btn.type = 'button';
     btn.setAttribute('aria-label', '打开 AI 助手');
     btn.textContent = 'AI';
-    document.body.appendChild(btn);
-    return btn;
+    var gear = document.createElement('button');
+    gear.id = 'rdAiGear';
+    gear.type = 'button';
+    gear.setAttribute('aria-label', '重新配置 AI 助手');
+    gear.textContent = '⚙';
+    gear.hidden = true;
+    wrap.appendChild(gear);
+    wrap.appendChild(btn);
+    document.body.appendChild(wrap);
+    return { btn: btn, gear: gear };
   }
 
   /* ---------- 设置卡片 ---------- */
@@ -119,6 +157,7 @@
     $('rdAiClose').addEventListener('click', hideCard);
     $('rdAiDemo').addEventListener('click', function () {
       saveCfg(DEMO_CFG);
+      syncGear();
       bootAgent(DEMO_CFG);
     });
     $('rdAiSave').addEventListener('click', function () {
@@ -128,6 +167,7 @@
       if (!apiKey) { toast('请填写 API Key（或改用上方演示模式）'); return; }
       var cfg = { mode: 'custom', baseURL: baseURL, apiKey: apiKey, model: model };
       saveCfg(cfg);
+      syncGear();
       bootAgent(cfg);
     });
     $('rdAiReset').addEventListener('click', function () {
@@ -135,15 +175,24 @@
       if (window.__rdAgent && window.__rdAgent.dispose) { try { window.__rdAgent.dispose(); } catch (e) {} }
       window.__rdAgent = null;
       updateResetVisibility();
+      syncGear();
       toast('已清除配置');
     });
     return wrap;
   }
 
+  function prefillForm() {
+    var cfg = loadCfg();
+    if (!cfg || cfg.mode !== 'custom') return;
+    if (cfg.baseURL) $('rdAiBase').value = cfg.baseURL;
+    if (cfg.model) $('rdAiModel').value = cfg.model;
+    if (cfg.apiKey) $('rdAiKey').value = cfg.apiKey;
+  }
+
   function showCard() {
-    var card = $('rdAiCard');
-    card.hidden = false;
+    prefillForm();
     updateResetVisibility();
+    $('rdAiCard').hidden = false;
   }
   function hideCard() { $('rdAiCard').hidden = true; }
   function updateResetVisibility() {
@@ -174,10 +223,7 @@
 
   function bootAgent(cfg) {
     if (!bootPromise) {
-      bootPromise = loadScript([CDN_PRIMARY, CDN_MIRROR]).then(function () {
-        if (typeof window.PageAgent !== 'function') throw new Error('PageAgent unavailable');
-        return true;
-      });
+      bootPromise = loadEngine([CDN_PRIMARY, CDN_MIRROR]);
     }
     toast('正在加载 AI 引擎…');
     bootPromise.then(function () {
@@ -206,12 +252,17 @@
 
   function injectStyles() {
     var css =
-      '#rdAiLauncher{position:fixed;right:22px;bottom:22px;z-index:2147483639;width:48px;height:48px;' +
-        'border-radius:50%;border:none;cursor:pointer;font:700 15px/1 system-ui,sans-serif;color:#fff;' +
+      '#rdAiWrap{position:fixed;right:22px;bottom:22px;z-index:2147483639}' +
+      '#rdAiLauncher{width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;' +
+        'font:700 15px/1 system-ui,sans-serif;color:#fff;' +
         'background:var(--accent,#2563eb);box-shadow:0 4px 16px rgba(0,0,0,.28);' +
         'transition:transform .15s ease,box-shadow .15s ease}' +
       '#rdAiLauncher:hover{transform:scale(1.08);box-shadow:0 6px 22px rgba(0,0,0,.34)}' +
       '#rdAiLauncher:active{transform:scale(.96)}' +
+      '#rdAiGear{position:absolute;top:-6px;left:-6px;width:22px;height:22px;border-radius:50%;' +
+        'border:1px solid var(--line,#d0d7de);background:var(--panel,#fff);color:var(--tx3,#6e7781);' +
+        'font-size:11px;line-height:1;cursor:pointer;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.18)}' +
+      '#rdAiGear:hover{color:var(--accent,#2563eb)}' +
       '#rdAiCard{position:fixed;right:22px;bottom:82px;z-index:2147483639;width:330px;max-width:calc(100vw - 32px);' +
         'background:var(--panel,#fff);color:var(--tx,#0d1117);border:1px solid var(--line,#d0d7de);' +
         'border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.25);padding:16px 16px 12px;' +
@@ -234,7 +285,7 @@
         'background:var(--panel2,#f5f7fa);border:1px solid var(--line,#d0d7de);border-radius:8px;color:var(--tx,#0d1117)}' +
       '#rdAiCard .rd-ai-foot{margin-top:10px;text-align:right}' +
       '#rdAiCard .rd-ai-link{border:none;background:none;color:var(--tx3,#6e7781);font-size:12px;cursor:pointer;text-decoration:underline}' +
-      '#rdAiToast{position:fixed;right:22px;bottom:82px;z-index:2147483639;max-width:calc(100vw - 32px);' +
+      '#rdAiToast{position:fixed;right:22px;bottom:82px;z-index:2147483646;max-width:calc(100vw - 32px);' +
         'background:#1f2937;color:#fff;padding:9px 14px;border-radius:10px;font:12.5px/1.5 system-ui,sans-serif;' +
         'box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transform:translateY(6px);' +
         'transition:opacity .2s ease,transform .2s ease}' +
@@ -247,17 +298,27 @@
 
   /* ---------- 启动 ---------- */
 
+  var gearBtn = null;
+  function syncGear() { if (gearBtn) gearBtn.hidden = !loadCfg(); }
+
   function init() {
     injectStyles();
-    var btn = buildLauncher();
+    var ui = buildLauncher();
+    gearBtn = ui.gear;
     buildCard();
-    btn.addEventListener('click', function () {
+    syncGear();
+    ui.btn.addEventListener('click', function () {
       var cfg = loadCfg();
       if (cfg) bootAgent(cfg);
       else {
         var card = $('rdAiCard');
         if (card.hidden) showCard(); else hideCard();
       }
+    });
+    ui.gear.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var card = $('rdAiCard');
+      if (card.hidden) showCard(); else hideCard();
     });
   }
 
