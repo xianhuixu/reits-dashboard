@@ -667,3 +667,18 @@ main { min-width: 0; }
 .tsf-pending { font-size: 12.5px; color: var(--tx3); }
 .clock-state-line .rc-tag { margin-left: 4px; vertical-align: 1px; }
 @media (max-width: 900px) { .rc-axes, .tsf-grid { grid-template-columns: 1fr; } }
+
+/* 经营权披露 IRR：暂无披露空心点（同置信度中形态）+ 极端行 */
+.oper-irr-pending { margin-top: 8px; min-height: 28px; }
+.oper-irr-pending-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 11.5px; color: var(--tx3); }
+.oper-irr-pending-label { font-weight: 600; color: var(--tx2); }
+.oper-irr-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: transparent; border: 1.5px solid var(--tx3);
+  display: inline-block; opacity: .85;
+}
+.oper-irr-pending-legend { margin-left: 4px; }
+.oper-irr-agg-note { margin-top: 8px; }
+tr.oper-irr-extreme td { background: color-mix(in srgb, var(--warn) 8%, transparent); }
+tr.oper-irr-review td { outline: 1px dashed var(--tx3); outline-offset: -1px; }
+#operIrrTable th[data-no-sort], #operIrrTable td[data-no-sort] { cursor: default; }

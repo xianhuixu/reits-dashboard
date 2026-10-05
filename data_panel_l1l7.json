@@ -1,12 +1,12 @@
 {
-  "updated": "2026-10-05 21:04:31",
+  "updated": "2026-10-05 21:21:57",
   "asOfTrade": "2026-09-30",
   "source": "PPT seed (刘伟/Shu WU 《REITs二级投研数据面板》修改日 2026-09-24)",
-  "note": "产权序列（propertyYieldSeries / propertySpread）为 scripts/build_spread.py 真实数据；经营权 IRR 序列、bond10ySeries 月度锚点、sectorSnapshot、benchmarksNormalized 仍为 PPT SEED。经营权利差 = IRR−10Y（非 TTM）；市值加权。",
+  "note": "产权序列为 scripts/build_spread.py 真实数据；经营权披露 IRR 截面为 scripts/build_oper_irr.py（2025 年末口径）；经营权 IRR 月度时序 / sectorSnapshot 等仍为 PPT SEED。经营权利差主口径 = 基金披露 IRR − 期限匹配国债；不回写结论横幅。",
   "seedMeta": {
     "pptxModified": "2026-09-24T08:37:48",
     "liveFetch": false,
-    "operatingSpreadFormula": "IRR - bond10y (NOT ttm)",
+    "operatingSpreadFormula": "IRR - term-matched CGB (disclosed YE2025 cross-section; series still seed IRR-10Y)",
     "propertySpreadFormula": "ttmYield - bond10y (live, scripts/build_spread.py)",
     "weighting": "mcap-weighted (PPT); series are panel aggregates, not equal-weight",
     "terminalAnchors": {
@@ -2896,7 +2896,14 @@
         "years": 20,
         "yield": 1.8703
       }
-    ]
+    ],
+    "disclosedCrossSection": {
+      "status": "ok",
+      "label": "2025 年末口径",
+      "asOf": "2025-12-31",
+      "n": 24,
+      "note": "截面披露口径已接入；市值加权 live IRR 时序仍待接入"
+    }
   },
   "propertySpread": {
     "asOf": "2026-09-30",

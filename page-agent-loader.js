@@ -159,7 +159,7 @@
     gear.type = 'button';
     gear.setAttribute('aria-label', 'AI 助手设置');
     gear.title = '设置（自带密钥 / 清除）';
-    gear.textContent = '⚙';
+    gear.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false"><path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.07 7.07 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.81 8.48a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.93 14.1a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.43.34.68.24l2.39-.96c.5.4 1.05.71 1.63.94l.36 2.54c.05.24.25.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.23 1.12-.54 1.63-.94l2.39.96c.25.1.54 0 .68-.24l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>';
     wrap.appendChild(gear);
     wrap.appendChild(btn);
     document.body.appendChild(wrap);
@@ -326,23 +326,29 @@
 
   function injectStyles() {
     var css =
-      /* 桌面：右上、顶栏下方，避开结论横幅与四张状态卡；移动：右下小按钮 */
-      '#rdAiWrap{position:fixed;z-index:2147483639;display:flex;flex-direction:column;align-items:flex-end;gap:6px;' +
+      /* 桌面：右上横排（设置在左、AI 在右），避免小圆点叠在 AI 角上像未读角标；移动：右下 */
+      '#rdAiWrap{position:fixed;z-index:2147483639;display:flex;flex-direction:row;align-items:center;gap:8px;' +
         'right:max(12px, env(safe-area-inset-right, 0px));' +
         'top:72px}' +
-      '@media (max-width:640px){#rdAiWrap{top:auto;bottom:max(16px, env(safe-area-inset-bottom, 0px));right:max(12px, env(safe-area-inset-right, 0px))}}' +
+      '@media (max-width:640px){#rdAiWrap{top:auto;bottom:max(16px, env(safe-area-inset-bottom, 0px));right:max(12px, env(safe-area-inset-right, 0px));flex-direction:row;gap:8px}}' +
       '#rdAiLauncher{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;' +
         'font:700 14px/1 system-ui,sans-serif;color:#fff;' +
         'background:var(--accent,#2563eb);box-shadow:0 4px 16px rgba(0,0,0,.28);' +
-        'transition:transform .15s ease,box-shadow .15s ease}' +
+        'transition:transform .15s ease,box-shadow .15s ease;' +
+        'position:relative}' +
+      /* 保险：清掉任何伪元素角标 / 未读计数 */
+      '#rdAiLauncher::before,#rdAiLauncher::after,#rdAiWrap::before,#rdAiWrap::after{content:none!important;display:none!important}' +
       '@media (max-width:640px){#rdAiLauncher{width:40px;height:40px;font-size:13px}}' +
       '#rdAiLauncher:hover{transform:scale(1.08);box-shadow:0 6px 22px rgba(0,0,0,.34)}' +
       '#rdAiLauncher:active{transform:scale(.96)}' +
-      '#rdAiGear{position:static;width:22px;height:22px;border-radius:50%;' +
+      /* 设置钮：独立控件，不用叠角小圆（易被看成未读 0） */
+      '#rdAiGear{position:static;width:32px;height:32px;border-radius:10px;' +
         'border:1px solid var(--line,#d0d7de);background:var(--panel,#fff);color:var(--tx3,#6e7781);' +
-        'font-size:11px;line-height:1;cursor:pointer;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.18)}' +
-      '#rdAiGear:hover{color:var(--accent,#2563eb)}' +
-      '#rdAiGear.rd-ai-gear-on{color:var(--accent,#2563eb);border-color:var(--accent,#2563eb)}' +
+        'display:inline-flex;align-items:center;justify-content:center;' +
+        'font-size:0;line-height:0;cursor:pointer;padding:0;box-shadow:0 2px 8px rgba(0,0,0,.12)}' +
+      '#rdAiGear svg{display:block}' +
+      '#rdAiGear:hover{color:var(--accent,#2563eb);border-color:var(--accent,#2563eb)}' +
+      '#rdAiGear.rd-ai-gear-on{color:var(--accent,#2563eb);border-color:var(--accent,#2563eb);background:var(--panel2,#f5f7fa)}' +
       /* 设置卡：桌面在按钮下方；移动靠顶部，避开「退回中性确认」与底栏 */
       '#rdAiCard{position:fixed;z-index:2147483639;width:330px;max-width:calc(100vw - 24px);' +
         'right:max(12px, env(safe-area-inset-right, 0px));top:124px;' +
@@ -377,9 +383,14 @@
         'transition:opacity .2s ease,transform .2s ease}' +
       '@media (max-width:640px){#rdAiToast{top:auto;bottom:64px}}' +
       '#rdAiToast.show{opacity:1;transform:translateY(0)}' +
-      /* page-agent 面板：移动端抬高，避开底栏与安全区；深色/护眼下略贴合站点变量 */
+      /* page-agent 面板：桌面略抬高；移动端限制展开高度，避免盖住时钟卡「退回中性确认」 */
       '#page-agent-runtime_agent-panel{bottom:max(24px, env(safe-area-inset-bottom, 0px)) !important}' +
-      '@media (max-width:640px){#page-agent-runtime_agent-panel{bottom:max(64px, calc(16px + env(safe-area-inset-bottom, 0px))) !important}}' +
+      '@media (max-width:640px){' +
+        /* 面板贴底但留出 AI 按钮；展开历史严格封顶，避免盖住时钟卡「退回中性确认」 */
+        '#page-agent-runtime_agent-panel{bottom:max(76px, calc(24px + env(safe-area-inset-bottom, 0px))) !important}' +
+        '#page-agent-runtime_agent-panel [class*="_historySection_"]{max-height:min(16vh, 130px) !important}' +
+        '#page-agent-runtime_agent-panel [class*="_historySectionWrapper_"]{max-height:min(16vh, 130px) !important}' +
+      '}' +
       '[data-theme="dark"] #page-agent-runtime_agent-panel,[data-theme="eye"] #page-agent-runtime_agent-panel{' +
         '--color-1:var(--accent,#58a6ff);--color-2:var(--gro,#bc8cff)}';
     var style = document.createElement('style');

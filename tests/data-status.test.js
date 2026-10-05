@@ -37,7 +37,7 @@ test("labels: 示例数据 / 待接入 / 缓存 · as-of X / 滞后 · 数据截
   assert.doesNotMatch(html, /<b>/);
 });
 
-test("propertySpread live → fromPropertySpread live; lagged never looks live; whole panel still seed for 经营权", () => {
+test("propertySpread live → fromPropertySpread live; lagged never looks live; whole panel still seed for 月度时序", () => {
   const panel = JSON.parse(read("data_panel_l1l7.json"));
   assert.equal(panel.propertySpread.status, "ok");
   assert.equal(DS.fromPropertySpread(panel).status, "live");
@@ -48,9 +48,27 @@ test("propertySpread live → fromPropertySpread live; lagged never looks live; 
   const L = DS.fromPropertySpread(lag);
   assert.equal(L.status, "lagged");
   assert.equal(DS.label(L), "滞后 · 数据截至 " + panel.propertySpread.asOf.slice(5));
-  assert.equal(DS.fromPanel(panel).status, "seed"); // 经营权仍 SEED，整面板仍 seed
+  assert.equal(DS.fromPanel(panel).status, "seed"); // 月度时序仍 SEED，整面板仍 seed
   assert.equal(DS.fromPanel(null).status, "pending");
   assert.equal(DS.fromPanel({ asOfTrade: "2026-10-01", source: "chinabond live", seedMeta: { liveFetch: true } }).status, "live");
+});
+
+test("operatingDisclosedIrr live → fromOperatingDisclosedIrr live; lagged never live; missing → pending", () => {
+  const panel = JSON.parse(read("data_panel_l1l7.json"));
+  assert.ok(panel.operatingDisclosedIrr);
+  assert.equal(panel.operatingDisclosedIrr.status, "ok");
+  assert.equal(panel.operatingDisclosedIrr.label, "2025 年末口径");
+  assert.equal(panel.operatingDisclosedIrr.summary.feedsBanner, false);
+  const S = DS.fromOperatingDisclosedIrr(panel);
+  assert.equal(S.status, "live");
+  assert.equal(S.asOf, "2025-12-31");
+  const lag = JSON.parse(JSON.stringify(panel));
+  lag.operatingDisclosedIrr.status = "lagged";
+  lag.operatingDisclosedIrr.lagReason = "曲线刷新失败";
+  const L = DS.fromOperatingDisclosedIrr(lag);
+  assert.equal(L.status, "lagged");
+  assert.match(DS.label(L), /滞后 · 数据截至 12-31/);
+  assert.equal(DS.fromOperatingDisclosedIrr({}).status, "pending");
 });
 
 test("rateRentGate spread leg live/lagged → matching badge; pending → 待接入", () => {
