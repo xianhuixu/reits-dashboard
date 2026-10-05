@@ -67,9 +67,11 @@ window.__loadECharts = function () {
   if (!/^#\/?detail\//.test(location.hash || "")) document.documentElement.classList.add("is-home");
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=20261005-operirr">
+<link rel="preload" href="fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts.css?v=20261005-designr1">
+<link rel="stylesheet" href="styles.css?v=20261005-designr1">
 <link rel="stylesheet" href="research-layout.css?v=20260930-status">
-<link rel="stylesheet" href="workspace.css?v=20261005-operirr">
+<link rel="stylesheet" href="workspace.css?v=20261005-designr1">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
@@ -153,8 +155,10 @@ window.__loadECharts = function () {
   <section class="ov-hero" id="ovHero" aria-labelledby="ovHeadline">
     <div class="ov-hero-main">
       <p class="ov-kicker">一句话结论 <span class="ov-kicker-src">利率时钟 × 配置页学派立场</span></p>
-      <h2 class="ov-headline" id="ovHeadline"><span class="ov-skel">利率时钟读取中</span><span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance"><span class="ov-skel">配置结论读取中</span></span></h2>
-      <p class="ov-basis" id="ovBasis"><span class="ov-basis-main ov-skel">依据：时钟读取中</span></p>
+      <!-- design-r1: static prerender of last known conclusion for LCP; workspace.js replaces on data ready.
+           Full build-time inject needs workflow edit — see docs/deferred/banner-prerender-workflow.md -->
+      <h2 class="ov-headline" id="ovHeadline">利率下行<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">产权标配·偏多观察</span></h2>
+      <p class="ov-basis" id="ovBasis"><span class="ov-basis-main">依据：时钟·利率下行</span></p>
       <p class="ov-sub num" id="ovSub"><span id="ovUpdated">数据更新于 —</span><span id="ovSwitchTag"></span></p>
       <p class="ov-switch-note ov-switch-note-plain" id="ovSwitchNote">时钟每日按 10Y 国债 60 日变化与 PMI 偏离趋势自动判定</p>
     </div>
@@ -185,7 +189,7 @@ window.__loadECharts = function () {
       <button class="range-btn" data-r="ret20">20日</button>
       <span class="hm-legend" aria-hidden="true"><i style="background:#c2413d"></i>▲涨<i style="background:#7a8494"></i>平<i style="background:#1f7a5c"></i>▼跌</span>
     </div>
-    <div id="hmSummary" style="display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2);margin-bottom:10px;font-variant-numeric:tabular-nums"></div>
+    <div id="hmSummary" class="hm-summary"></div>
     <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:10px"></div>
     <div id="treemap" class="chart-box" style="position:relative;width:100%;height:360px"></div>
   </div>
@@ -325,7 +329,7 @@ window.__loadECharts = function () {
     <div class="legend" id="legendUsLong"></div>
     <div id="chartUsLong" style="height:400px"></div>
     <div class="table-scroll" id="usCoupleStats" style="margin-top:14px"></div>
-    <p id="usCoupleText" style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:10px"></p>
+    <p id="usCoupleText" class="note-block"></p>
   </div>
   <div class="card">
     <h2>美国 REITs 代表标的个体长期走势（对数轴 · 各自上市起点=100）</h2>
@@ -373,18 +377,18 @@ window.__loadECharts = function () {
     <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
     <div id="revalPanel"></div>
     <div class="grid" style="margin-top:14px;margin-bottom:0">
-      <div style="background:var(--panel2);border-radius:10px;padding:12px 14px">
-        <h3 style="font-size:12.5px;margin-bottom:6px">📖 对过去二级市场涨跌的解释（理论回溯）</h3>
-        <p style="font-size:12px;color:var(--tx2);line-height:1.7">
+      <div class="callout-box">
+        <h3>📖 对过去二级市场涨跌的解释（理论回溯）</h3>
+        <p>
         <b>2021 上市初期</b>：供给稀缺 + 打新情绪 → 高溢价（情绪定价，非重估）；<br>
         <b>2022-2024</b>：估值消化期——产业园/仓储租金下行下修现金流预期，叠加流动性折价，价格回归分派率锚；<br>
         <b>2024 末-2025</b>：10Y 国债破 2% 历史低位 + 资产荒，利差扩至 3-6% 历史高分位 → 保险/OCI 资金入场，<b>重估真正启动</b>（利率驱动，符合理论）；<br>
         <b>2026 上半年</b>：扩募常态化 + 商业不动产准入 + REITs 指数基金获批，重估扩散；<br>
         <b>近期回调</b>：资金情绪主导，与基本面趋稳背离——验证"重估未全面完成、仍处初期反复阶段"。</p>
       </div>
-      <div style="background:var(--panel2);border-radius:10px;padding:12px 14px">
-        <h3 style="font-size:12.5px;margin-bottom:6px">🔭 排他性预测（可被证伪，逐季验证）</h3>
-        <p style="font-size:12px;color:var(--tx2);line-height:1.7">
+      <div class="callout-box">
+        <h3>🔭 排他性预测（可被证伪，逐季验证）</h3>
+        <p>
         若重估假说成立，应观察到：① 利差继续压缩（平均分派率 - 10Y 向历史 25% 分位回落）；② 成交额中枢持续抬升（60/250 日量比 >1）；③ 上涨从防御型扩散到周期型/扩张型（市场宽度 >50%）；④ 全市场价格分位均值站上 50%。<br>
         <b>证伪条件</b>：10Y 快速升破 2%（利率反转）→ 假说失效，债性定价逻辑受冲击，应系统性降低仓位。该判断已纳入"策略信号"因子体系与下方配置建议的触发/退出条件。</p>
       </div>
@@ -394,7 +398,7 @@ window.__loadECharts = function () {
     <h2>海外先验 · 美国 REITs 投资时钟（年化总回报 %）</h2>
     <p class="note" id="osMatrixNote"></p>
     <div class="table-scroll" id="osMatrix"></div>
-    <h3 style="font-size:13px;margin:16px 0 6px">分业态最佳投资期 / 雷区（仅原文文字区间，不含点值）</h3>
+    <h3 class="panel-subhead panel-subhead-spaced">分业态最佳投资期 / 雷区（仅原文文字区间，不含点值）</h3>
     <p class="note" id="osClockSectorsNote"></p>
     <div class="table-scroll" id="osClockSectors"></div>
   </div>
@@ -461,7 +465,7 @@ window.__loadECharts = function () {
       <h2>参考标尺：全市场 avgYield − 10Y（非产权锚）</h2>
       <p class="note">仅作历史粗览 · <b>不是</b>产权估值主锚（学派：产权用市值加权 TTM−10Y，经营权用 IRR−10Y）· 请以策略分类页「L2 分权利差」双时序为准 · 见 <a href="#v-strategy" data-jump-view="strategy">产权 vs 经营权旁 L2 图</a></p>
       <div id="spreadGauge" style="margin-top:14px"></div>
-      <p style="font-size:12px;color:var(--tx2);line-height:1.75;margin-top:12px">
+      <p class="note-block" style="margin-top:12px">
         <b>历史锚点（粗口径）</b>：2021 年初约 350BP → 2025 年中约 170BP → 近端随行情变动。<br>
         <b>使用限制</b>：统一 avgYield 已被分权破局重估学派否决作为产权专用锚；经营权更不得用现金分派率冒充 IRR 利差。正式分位与走阔归因见 L2 面板。</p>
     </div>
@@ -496,23 +500,23 @@ window.__loadECharts = function () {
   <div class="card panel-l2" id="panelL2Spreads">
     <h2>L2 分权利差时序 · 产权 TTM−10Y / 经营权 IRR−期限匹配国债</h2>
     <p class="note" id="panelL2Note">市值加权分派/IRR 与 10Y 国债利差 · 面积=利差 · 虚线=历史分位 · 对齐分权破局重估学派 · 数据 as-of 见角标</p>
-    <p class="panel-l2-stamp" id="panelL2Stamp" style="font-size:11.5px;color:var(--tx3);margin:0 0 10px"></p>
+    <p class="panel-l2-stamp" id="panelL2Stamp"></p>
     <div class="grid">
       <div>
-        <h3 style="font-size:13px;margin:0 0 6px">产权 · TTM 分派率 − 10Y</h3>
-        <p class="note" style="margin-bottom:8px">主轴：TTM / 10Y（%）· 右轴：利差分位 · 禁止用下方 avgYield 单点替代本图</p>
+        <h3 class="panel-subhead">产权 · TTM 分派率 − 10Y</h3>
+        <p class="note note-tight">主轴：TTM / 10Y（%）· 右轴：利差分位 · 禁止用下方 avgYield 单点替代本图</p>
         <div id="chartL2Property" style="height:320px"></div>
-        <h3 style="font-size:13px;margin:16px 0 6px">产权 · 业态利差与分派同比</h3>
-        <p class="note" style="margin-bottom:8px">利差 bp · 全样本分位 · 分派同比（TTM 对 TTM，截面中位数 ±2%）· 分位≥80% 且分派下滑 → <span class="rc-tag rc-tag-warn">⚠ 疑似价值陷阱</span></p>
+        <h3 class="panel-subhead panel-subhead-spaced">产权 · 业态利差与分派同比</h3>
+        <p class="note note-tight">利差 bp · 全样本分位 · 分派同比（TTM 对 TTM，截面中位数 ±2%）· 分位≥80% 且分派下滑 → <span class="rc-tag rc-tag-warn">⚠ 疑似价值陷阱</span></p>
         <div id="sectorSpreadHost" class="table-scroll"></div>
       </div>
       <div>
-        <h3 style="font-size:13px;margin:0 0 6px">经营权 · 基金披露 IRR − 期限匹配国债 <span class="rc-tag rc-tag-ref" id="operIrrBadge">2025 年末口径</span></h3>
-        <p class="note" style="margin-bottom:8px">主口径 = <b>基金披露 IRR − 按 WAL（否则剩余年限）插值的中债国债</b>（2/5/10/30Y，曲线取 2025-12-31）· 自算 IRR 仅悬浮提示 · <span id="panelL2TermStatus" class="l2-term-status">加载中…</span></p>
+        <h3 class="panel-subhead">经营权 · 基金披露 IRR − 期限匹配国债 <span class="rc-tag rc-tag-ref" id="operIrrBadge">2025 年末口径</span></h3>
+        <p class="note note-tight">主口径 = <b>基金披露 IRR − 按 WAL（否则剩余年限）插值的中债国债</b>（2/5/10/30Y，曲线取 2025-12-31）· 自算 IRR 仅悬浮提示 · <span id="panelL2TermStatus" class="l2-term-status">加载中…</span></p>
         <div id="chartL2Operating" style="height:320px"></div>
         <div id="operIrrPendingStrip" class="oper-irr-pending" aria-label="暂无披露"></div>
-        <h3 style="font-size:13px;margin:16px 0 6px">经营权 · 个券披露利差与年末以来价格</h3>
-        <p class="note" style="margin-bottom:8px">利差列不可排序 · 业态不汇总（口径不统一）· 年末以来价格变动 = 现价 / 2025-12-31 − 1 · 极端利差只看自身变化</p>
+        <h3 class="panel-subhead panel-subhead-spaced">经营权 · 个券披露利差与年末以来价格</h3>
+        <p class="note note-tight">利差列不可排序 · 业态不汇总（口径不统一）· 年末以来价格变动 = 现价 / 2025-12-31 − 1 · 极端利差只看自身变化</p>
         <div id="operIrrTableHost" class="table-scroll"></div>
       </div>
     </div>
@@ -520,7 +524,7 @@ window.__loadECharts = function () {
   <div class="card" id="betaPanel">
     <h2>股 / 债 Beta 定位 · 偏股 vs 偏债（周频回归）</h2>
     <p class="note" id="betaNote">周频收益对沪深300（000300.SH）与上证国债（000012.SH）回归 · 104 周主窗口 + 52 周滚动 · 中国 REITs 股性普遍很低，分类用<b>截面相对排序</b>（z(股Beta)−z(债Beta) 三分位），不用「Beta&gt;1」 · 与人工「防御 / 周期 / 扩张」标签对照，标出不一致个券</p>
-    <p class="panel-l2-stamp" id="betaStamp" style="font-size:11.5px;color:var(--tx3);margin:0 0 10px"></p>
+    <p class="panel-l2-stamp" id="betaStamp"></p>
     <div class="grid" style="margin-bottom:0">
       <div><div id="betaScatter" style="height:360px"></div></div>
       <div><div id="betaRolling" style="height:360px"></div></div>
@@ -853,7 +857,7 @@ window.__loadECharts = function () {
   <div class="card">
     <h2 style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">项目清单 <span class="note" id="instCount" style="font-weight:400"></span>
       <input id="instSearch" placeholder="搜索项目名称 / 计划管理人 / 原始权益人" autocomplete="off"
-        style="margin-left:auto;width:260px;max-width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:7px 14px;font:inherit;font-size:12.5px;font-weight:400;color:var(--tx)"></h2>
+        class="inst-search-inline"></h2>
     <p class="note">来源：上交所债券项目信息平台 / 深交所固定收益信息平台（公开数据整理，感谢 tingdall/reits-dashboard 数据模型）· 点击表头排序 · 状态每日更新</p>
     <div class="filters" id="instStatusFilter" style="margin-bottom:8px"></div>
     <div class="table-scroll" style="max-height:620px;overflow:auto">

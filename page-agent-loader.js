@@ -310,6 +310,7 @@
         hideCard();
         hideToast();
         if (agent.panel && typeof agent.panel.show === 'function') agent.panel.show();
+        watchAgentPanel();
       } catch (e) {
         console.error('[rd-ai] init failed:', e);
         hideToast();
@@ -324,7 +325,48 @@
     });
   }
 
+
+  var panelWatcher = null;
+  function isAgentPanelOpen(el) {
+    if (!el) return false;
+    if (el.hidden) return false;
+    var st = window.getComputedStyle(el);
+    if (st.display === 'none' || st.visibility === 'hidden' || Number(st.opacity) === 0) return false;
+    /* page-agent uses data-state / aria-hidden / class toggles across versions */
+    if (el.getAttribute('aria-hidden') === 'true') return false;
+    var ds = el.getAttribute('data-state') || el.getAttribute('data-status') || '';
+    if (/clos|hid|collaps/i.test(ds)) return false;
+    var rect = el.getBoundingClientRect();
+    return rect.width > 40 && rect.height > 40;
+  }
+  function setPanelOpenClass(open) {
+    document.documentElement.classList.toggle('rd-ai-panel-open', !!open);
+  }
+  function watchAgentPanel() {
+    var el = document.getElementById('page-agent-runtime_agent-panel');
+    if (!el) {
+      /* panel may mount a tick later */
+      if (!watchAgentPanel._tries) watchAgentPanel._tries = 0;
+      if (watchAgentPanel._tries++ < 40) setTimeout(watchAgentPanel, 100);
+      return;
+    }
+    watchAgentPanel._tries = 0;
+    setPanelOpenClass(isAgentPanelOpen(el));
+    if (panelWatcher) try { panelWatcher.disconnect(); } catch (e) {}
+    panelWatcher = new MutationObserver(function () {
+      setPanelOpenClass(isAgentPanelOpen(el));
+    });
+    panelWatcher.observe(el, { attributes: true, attributeFilter: ['class', 'style', 'hidden', 'data-state', 'data-status', 'aria-hidden'], childList: false, subtree: true });
+    /* also poll lightly — some builds animate opacity without attribute churn */
+    if (watchAgentPanel._timer) clearInterval(watchAgentPanel._timer);
+    watchAgentPanel._timer = setInterval(function () {
+      var cur = document.getElementById('page-agent-runtime_agent-panel');
+      setPanelOpenClass(isAgentPanelOpen(cur));
+    }, 600);
+  }
+
   function injectStyles() {
+
     var css =
       /* 桌面：右上横排（设置在左、AI 在右），避免小圆点叠在 AI 角上像未读角标；移动：右下 */
       '#rdAiWrap{position:fixed;z-index:2147483639;display:flex;flex-direction:row;align-items:center;gap:8px;' +
@@ -377,7 +419,7 @@
       '#rdAiCard .rd-ai-link{border:none;background:none;color:var(--tx3,#6e7781);font-size:12px;cursor:pointer;text-decoration:underline}' +
       '#rdAiToast{position:fixed;z-index:2147483646;max-width:calc(100vw - 32px);' +
         'right:max(12px, env(safe-area-inset-right, 0px));top:124px;' +
-        'background:var(--tx,#1f2937);color:var(--panel,#fff);padding:9px 14px;border-radius:10px;' +
+        'background:var(--toast-bg,var(--tx,#17243c));color:var(--toast-fg,var(--panel,#fff));padding:9px 14px;border-radius:10px;' +
         'font:12.5px/1.5 system-ui,sans-serif;border:1px solid var(--line2,transparent);' +
         'box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transform:translateY(6px);' +
         'transition:opacity .2s ease,transform .2s ease}' +
@@ -391,8 +433,17 @@
         '#page-agent-runtime_agent-panel [class*="_historySection_"]{max-height:min(16vh, 130px) !important}' +
         '#page-agent-runtime_agent-panel [class*="_historySectionWrapper_"]{max-height:min(16vh, 130px) !important}' +
       '}' +
+      /* design-r1: panel + badges follow site tokens (dark / eye first-class) */
       '[data-theme="dark"] #page-agent-runtime_agent-panel,[data-theme="eye"] #page-agent-runtime_agent-panel{' +
-        '--color-1:var(--accent,#58a6ff);--color-2:var(--gro,#bc8cff)}';
+        '--color-1:var(--accent);--color-2:var(--gro,#bc8cff);' +
+        'color:var(--tx);background:var(--panel)!important;border-color:var(--line)!important}' +
+      '[data-theme="dark"] #page-agent-runtime_agent-panel input,[data-theme="eye"] #page-agent-runtime_agent-panel input,' +
+      '[data-theme="dark"] #page-agent-runtime_agent-panel textarea,[data-theme="eye"] #page-agent-runtime_agent-panel textarea{' +
+        'background:var(--panel2)!important;color:var(--tx)!important;border-color:var(--line)!important}' +
+      /* 面板打开时藏蓝色启动钮，避免压住输入框右下角；齿轮一并收起 */
+      'html.rd-ai-panel-open #rdAiLauncher,html.rd-ai-panel-open #rdAiGear{opacity:0;pointer-events:none;transform:scale(.9)}' +
+      'html.rd-ai-panel-open #rdAiWrap{pointer-events:none}' +
+      '@media (prefers-reduced-motion:reduce){html.rd-ai-panel-open #rdAiLauncher,html.rd-ai-panel-open #rdAiGear{transform:none}}';
     var style = document.createElement('style');
     style.id = 'rdAiStyles';
     style.textContent = css;

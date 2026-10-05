@@ -73,7 +73,7 @@ body { padding: 18px 28px 44px; max-width: 1600px; }
 .scenario-form label { font-size: 12px; color: var(--tx2); }
 .scenario-form input, .scenario-form select { display: block; width: 100%; margin-top: 5px; }
 .scenario-form input:disabled { opacity: .5; }
-.scenario-value { font: 600 42px/1.4 ui-monospace, "SFMono-Regular", Consolas, monospace; display: block; margin: 12px 0; }
+.scenario-value { font: 600 var(--fs-4, 28px)/1.4 var(--font-data, "IBM Plex Sans", sans-serif); font-variant-numeric: tabular-nums; display: block; margin: 12px 0; }
 .scenario-error { display: block; font-size: 14px; color: var(--warn); margin: 12px 0; }
 .scenario-output p { color: var(--tx2); font-size: 12px; }
 .reference-list { padding-left: 24px; columns: 2; column-gap: 36px; margin: 18px 0; }
