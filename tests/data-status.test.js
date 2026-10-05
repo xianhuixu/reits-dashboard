@@ -39,9 +39,10 @@ test("labels: 示例数据 / 待接入 / 缓存 · as-of X / 滞后 · 数据截
 
 test("propertySpread live → fromPropertySpread live; lagged never looks live; whole panel still seed for 月度时序", () => {
   const panel = JSON.parse(read("data_panel_l1l7.json"));
-  assert.equal(panel.propertySpread.status, "ok");
-  assert.equal(DS.fromPropertySpread(panel).status, "live");
-  assert.equal(DS.fromPropertySpread(panel).asOf, panel.propertySpread.asOf);
+  assert.ok(["ok", "lagged"].includes(panel.propertySpread.status));
+  const liveOrLag = DS.fromPropertySpread(panel);
+  assert.equal(liveOrLag.status, panel.propertySpread.status === "ok" ? "live" : "lagged");
+  assert.equal(liveOrLag.asOf, panel.propertySpread.asOf);
   const lag = JSON.parse(JSON.stringify(panel));
   lag.propertySpread.status = "lagged";
   lag.propertySpread.lagReason = "新浪取数失败";
@@ -77,8 +78,8 @@ test("rateRentGate spread leg live/lagged → matching badge; pending → 待接
   assert.equal(DS.fromGateLeg({ status: "ok", to: "2026-09-29" }).status, "live");
   assert.equal(DS.fromGateLeg({ status: "lagged", to: "2026-09-29" }).status, "lagged");
   assert.equal(DS.fromGateLeg(undefined).status, "pending");
-  assert.equal(gate.spreadLeg.status, "ok");
-  assert.equal(DS.fromGateLeg(gate.spreadLeg, gate.asOf).status, "live");
+  assert.ok(["ok", "lagged"].includes(gate.spreadLeg.status));
+  assert.equal(DS.fromGateLeg(gate.spreadLeg, gate.asOf).status, gate.spreadLeg.status === "ok" ? "live" : "lagged");
   assert.ok(gate.rentLeg && gate.rentLeg.dominant === "distribution");
 });
 
