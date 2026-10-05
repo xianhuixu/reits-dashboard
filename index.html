@@ -502,6 +502,9 @@ window.__loadECharts = function () {
         <h3 style="font-size:13px;margin:0 0 6px">产权 · TTM 分派率 − 10Y</h3>
         <p class="note" style="margin-bottom:8px">主轴：TTM / 10Y（%）· 右轴：利差分位 · 禁止用下方 avgYield 单点替代本图</p>
         <div id="chartL2Property" style="height:320px"></div>
+        <h3 style="font-size:13px;margin:16px 0 6px">产权 · 业态利差与分派同比</h3>
+        <p class="note" style="margin-bottom:8px">利差 bp · 全样本分位 · 分派同比（TTM 对 TTM，截面中位数 ±2%）· 分位≥80% 且分派下滑 → <span class="rc-tag rc-tag-warn">⚠ 疑似价值陷阱</span></p>
+        <div id="sectorSpreadHost" class="table-scroll"></div>
       </div>
       <div>
         <h3 style="font-size:13px;margin:0 0 6px">经营权 · 中债 IRR − 期限匹配国债</h3>
@@ -876,11 +879,11 @@ window.__loadECharts = function () {
 
 <script src="ui-utils.js" defer></script>
 <!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
-<script src="data-status.js?v=20260930-1" defer></script>
-<script src="allocation-tools.js?v=20260930-layout" defer></script>
-<script src="workspace.js?v=20260930-polish" defer></script>
+<script src="data-status.js?v=20261005-spread" defer></script>
+<script src="allocation-tools.js?v=20261005-spread" defer></script>
+<script src="workspace.js?v=20261005-spread" defer></script>
 <script src="tender-feed.js?v=20260930-status" defer></script>
-<script src="app.js?v=20260930-polish" defer></script>
+<script src="app.js?v=20261005-spread" defer></script>
 <script src="geography/map.js?v=20260930-lazy" defer></script>
 <!-- 页内 AI 助手（page-agent，alibaba 开源）：懒加载，首次点击右下角 AI 按钮时才拉取引擎 -->
 <script src="page-agent-loader.js?v=20261005-3" defer></script>

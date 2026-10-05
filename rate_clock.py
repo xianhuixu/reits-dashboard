@@ -878,8 +878,10 @@ def spread_pctile_change(rows: list[dict], lookback_days: int = 60):
 def rate_rent_gate(series: list[dict], panel: dict | None) -> dict:
     """10Y 60日升 ≥25bp 且 产权利差分位 60日降 ≥20pp → 升级利率风险、估值闸门降级。
 
-    产权利差分位目前只有 data_panel_l1l7.json 的 SEED 插值（seedMeta.liveFetch=false），
-    该腿记为 pending data；利率腿用真实 10Y。利率腿明确未满足时，整体为 not_triggered（AND 条件）。
+    产权利差分位腿读 data_panel_l1l7.json.propertySpread（scripts/build_spread.py 真实序列，滚动 3 年分位 60 交易日变化）：
+    status=ok → 腿 ok；status=lagged（取数失败沿用上一日）→ 腿 lagged（照算，但标「滞后」，不冒充 live）。
+    没有 propertySpread 时退回旧逻辑：seedMeta.liveFetch 非 True（SEED）→ pending data。
+    租金端 rentLeg：利率顺风（10Y 一年均值变化）vs 分派拖累（TTM 分派率 × 分派同比中位数），只作说明，不改 AND 触发条件。
     """
     out = {
         "rule": f"Δ10Y({RATE_LOOKBACK}交易日) ≥ +{GATE_RATE_UP_BP:.0f}bp 且 产权利差分位 {RATE_LOOKBACK}日下降 ≥ {GATE_SPREAD_PCTILE_DROP_PP:.0f}pp",
@@ -891,8 +893,23 @@ def rate_rent_gate(series: list[dict], panel: dict | None) -> dict:
     else:
         rate_leg = {"status": "ok", "d10y60bp": chg, "from": d0, "to": d1, "met": chg >= GATE_RATE_UP_BP,
                     "source": CGB10Y_SOURCE}
-    live = bool(panel and (panel.get("seedMeta") or {}).get("liveFetch") is True)
-    if not live:
+    ps = (panel or {}).get("propertySpread") or None
+    rent_leg = None
+    if ps and ps.get("status") in ("ok", "lagged"):
+        g = ps.get("gate60d") or {}
+        leg_status = "ok" if ps["status"] == "ok" else "lagged"
+        if g.get("pctileChangePP") is None:
+            spread_leg = {"status": "pending data", "note": "产权利差滚动 3 年分位不足 60 个交易日"}
+        else:
+            spread_leg = {"status": leg_status, "pctileChangePP": g["pctileChangePP"], "from": g.get("from"), "to": g.get("to"),
+                          "basis": g.get("basis"), "met": g["pctileChangePP"] <= -GATE_SPREAD_PCTILE_DROP_PP,
+                          "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"}
+            if leg_status == "lagged":
+                spread_leg["note"] = ps.get("lagReason") or "取数失败，沿用上一次成功数据"
+        rv = ps.get("rentVsRate") or {}
+        if rv.get("status") == "ok":
+            rent_leg = dict(rv, status=leg_status)
+    elif not bool(panel and (panel.get("seedMeta") or {}).get("liveFetch") is True):
         spread_leg = {"status": "pending data",
                       "note": "产权利差分位仅有 data_panel_l1l7.json SEED 插值（非真实），待中债/中证 live 序列接入"}
     else:
@@ -902,13 +919,21 @@ def rate_rent_gate(series: list[dict], panel: dict | None) -> dict:
         else:
             spread_leg = {"status": "ok", "pctileChangePP": pc, "from": s0, "to": s1,
                           "met": pc <= -GATE_SPREAD_PCTILE_DROP_PP}
+    spread_usable = spread_leg["status"] in ("ok", "lagged")
     if rate_leg["status"] == "ok" and not rate_leg["met"]:
         status = "not_triggered"
-    elif rate_leg["status"] == "ok" and spread_leg["status"] == "ok":
+    elif rate_leg["status"] == "ok" and spread_usable:
         status = "triggered" if spread_leg["met"] else "not_triggered"
     else:
         status = "pending data"
-    data_status = "complete" if (rate_leg["status"] == "ok" and spread_leg["status"] == "ok") else "partial"
+    if rate_leg["status"] == "ok" and spread_leg["status"] == "ok":
+        data_status = "complete"
+    elif rate_leg["status"] == "ok" and spread_leg["status"] == "lagged":
+        data_status = "lagged"
+    else:
+        data_status = "partial"
     out.update({"status": status, "dataStatus": data_status, "rateLeg": rate_leg, "spreadLeg": spread_leg,
                 "asOf": rate_leg.get("to")})
+    if rent_leg:
+        out["rentLeg"] = rent_leg
     return out
