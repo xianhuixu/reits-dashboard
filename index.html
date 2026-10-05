@@ -169,10 +169,10 @@ window.__loadECharts = function () {
     </div>
   </section>
   <div class="ov-cards" id="ovCards" aria-label="市场状态卡片">
-    <article class="ov-card" id="ovCardClock"><h3>投资时钟</h3><div class="ov-big ov-skel">—</div></article>
-    <article class="ov-card" id="ovCardSpread"><h3>产权利差分位</h3><div class="ov-big ov-skel">—</div></article>
-    <article class="ov-card" id="ovCardMarket"><h3>市场今日</h3><div class="ov-big ov-skel">—</div></article>
-    <article class="ov-card" id="ovCardTsf"><h3>社融脉冲 · 领先预警</h3><div class="ov-big ov-skel">—</div></article>
+    <article class="ov-card is-loading" id="ovCardClock" aria-busy="true"><h3>投资时钟</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
+    <article class="ov-card is-loading" id="ovCardSpread" aria-busy="true"><h3>产权利差分位</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
+    <article class="ov-card is-loading" id="ovCardMarket" aria-busy="true"><h3>市场今日</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
+    <article class="ov-card is-loading" id="ovCardTsf" aria-busy="true"><h3>社融脉冲 · 领先预警</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
   </div>
 
   <!-- 第二层 · 证据：图表在进入视口时才初始化（IntersectionObserver），容器定高防 CLS -->
@@ -182,16 +182,20 @@ window.__loadECharts = function () {
     <div class="card" id="heatmapCard">
     <h2>资产类别全景热力图</h2>
     <p class="note">色块大小 ∝ 成交额（日涨跌=当日，5日/20日=区间日均）· 颜色 = 成交额加权区间涨跌幅 · 区间：<span id="hmRangeLabel">日涨跌</span></p>
-    <div class="filters" id="hmSectorChips" style="margin-bottom:8px"></div>
-    <div class="filters" id="hmRange" style="margin-bottom:8px">
+    <div class="filters filters-tight" id="hmSectorChips"></div>
+    <div class="filters filters-tight" id="hmRange">
       <button class="range-btn on" data-r="pct">日涨跌</button>
       <button class="range-btn" data-r="ret5">5日</button>
       <button class="range-btn" data-r="ret20">20日</button>
-      <span class="hm-legend" aria-hidden="true"><i style="background:#c2413d"></i>▲涨<i style="background:#7a8494"></i>平<i style="background:#1f7a5c"></i>▼跌</span>
+      <span class="hm-legend" aria-hidden="true"><i class="hm-leg-up"></i>▲涨<i class="hm-leg-flat"></i>平<i class="hm-leg-dn"></i>▼跌</span>
     </div>
     <div id="hmSummary" class="hm-summary"></div>
-    <div id="hmCrumb" style="display:flex;align-items:center;gap:10px;margin-bottom:10px"></div>
-    <div id="treemap" class="chart-box" style="position:relative;width:100%;height:360px"></div>
+    <div id="hmCrumb" class="hm-crumb"></div>
+    <div id="treemap" class="chart-box chart-box-hm is-loading" aria-busy="true">
+      <div class="hm-skel" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="hm-empty" hidden>暂无行情色块 · 等待数据</div>
+      <div class="hm-error" hidden>热力图加载失败 · 请刷新重试</div>
+    </div>
   </div>
   </div>
   <div class="ov-grid2 ov-grid2-wide">
@@ -478,7 +482,7 @@ window.__loadECharts = function () {
   <div class="card">
     <h2>现在如何操作：四步操作流程</h2>
     <p class="note">对过去可解释（四因子归因）→ 对未来可预测（排他性条件逐季验证）→ 对现在可操作（规则化触发/退出）· 与"配置建议与风险"页的触发条件一致</p>
-    <div class="grid3" style="margin-bottom:0" id="opSteps"></div>
+    <div class="grid3 grid-flush" id="opSteps"></div>
   </div>
 </section>
 
@@ -489,12 +493,12 @@ window.__loadECharts = function () {
     <div class="card">
       <h2>策略组合等权指数（区间起点 = 100）</h2>
       <p class="note">按投资策略分类（防御型 / 周期型 / 扩张型）等权构建 · 点击图例切换</p>
-      <div id="chartStrategy" style="height:300px"></div>
+      <div id="chartStrategy" class="chart-h-300"></div>
     </div>
     <div class="card">
       <h2>产权 vs 经营权 · 等权价格</h2>
       <p class="note">等权价格指数（区间起点 = 100）· 估值利差见下方 L2 分权双时序</p>
-      <div id="chartRight" style="height:300px"></div>
+      <div id="chartRight" class="chart-h-300"></div>
     </div>
   </div>
   <div class="card panel-l2" id="panelL2Spreads">
@@ -505,7 +509,7 @@ window.__loadECharts = function () {
       <div>
         <h3 class="panel-subhead">产权 · TTM 分派率 − 10Y</h3>
         <p class="note note-tight">主轴：TTM / 10Y（%）· 右轴：利差分位 · 禁止用下方 avgYield 单点替代本图</p>
-        <div id="chartL2Property" style="height:320px"></div>
+        <div id="chartL2Property" class="chart-h-320"></div>
         <h3 class="panel-subhead panel-subhead-spaced">产权 · 业态利差与分派同比</h3>
         <p class="note note-tight">利差 bp · 全样本分位 · 分派同比（TTM 对 TTM，截面中位数 ±2%）· 分位≥80% 且分派下滑 → <span class="rc-tag rc-tag-warn">⚠ 疑似价值陷阱</span></p>
         <div id="sectorSpreadHost" class="table-scroll"></div>
@@ -513,7 +517,7 @@ window.__loadECharts = function () {
       <div>
         <h3 class="panel-subhead">经营权 · 基金披露 IRR − 期限匹配国债 <span class="rc-tag rc-tag-ref" id="operIrrBadge">2025 年末口径</span></h3>
         <p class="note note-tight">主口径 = <b>基金披露 IRR − 按 WAL（否则剩余年限）插值的中债国债</b>（2/5/10/30Y，曲线取 2025-12-31）· 自算 IRR 仅悬浮提示 · <span id="panelL2TermStatus" class="l2-term-status">加载中…</span></p>
-        <div id="chartL2Operating" style="height:320px"></div>
+        <div id="chartL2Operating" class="chart-h-320"></div>
         <div id="operIrrPendingStrip" class="oper-irr-pending" aria-label="暂无披露"></div>
         <h3 class="panel-subhead panel-subhead-spaced">经营权 · 个券披露利差与年末以来价格</h3>
         <p class="note note-tight">利差列不可排序 · 业态不汇总（口径不统一）· 年末以来价格变动 = 现价 / 2025-12-31 − 1 · 极端利差只看自身变化</p>
@@ -525,12 +529,12 @@ window.__loadECharts = function () {
     <h2>股 / 债 Beta 定位 · 偏股 vs 偏债（周频回归）</h2>
     <p class="note" id="betaNote">周频收益对沪深300（000300.SH）与上证国债（000012.SH）回归 · 104 周主窗口 + 52 周滚动 · 中国 REITs 股性普遍很低，分类用<b>截面相对排序</b>（z(股Beta)−z(债Beta) 三分位），不用「Beta&gt;1」 · 与人工「防御 / 周期 / 扩张」标签对照，标出不一致个券</p>
     <p class="panel-l2-stamp" id="betaStamp"></p>
-    <div class="grid" style="margin-bottom:0">
-      <div><div id="betaScatter" style="height:360px"></div></div>
-      <div><div id="betaRolling" style="height:360px"></div></div>
+    <div class="grid grid-flush">
+      <div><div id="betaScatter" class="chart-h-360"></div></div>
+      <div><div id="betaRolling" class="chart-h-360"></div></div>
     </div>
-    <div class="table-scroll" id="betaSectorTable" style="margin-top:12px"></div>
-    <div class="table-scroll" id="betaDisagree" style="margin-top:12px"></div>
+    <div class="table-scroll table-gap" id="betaSectorTable"></div>
+    <div class="table-scroll table-gap" id="betaDisagree"></div>
   </div>
   <div class="card">
     <h2>策略 × 板块 今日表现矩阵（平均日涨跌 %）</h2>

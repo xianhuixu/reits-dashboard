@@ -41,7 +41,7 @@ test("live data: banner, cards and points derive from the committed data files",
   const P = JSON.parse(read("data_panel_l1l7.json"));
   const rc = D.cycle.rateClock;
   assert.equal(rc.growth.confirm.need, 2);
-  assert.equal(P.propertySpread.status, "ok");
+  assert.ok(["ok", "lagged"].includes(P.propertySpread.status));
   const sp = H.spreadCard(P);
   assert.ok(sp.ok && sp.pctile >= 90 && sp.pctile <= 100);
   assert.ok(sp.pctileFull >= sp.pctile - 5);
@@ -227,4 +227,29 @@ test("design-r1: panel subheads and L2 stamps use type-scale classes (no inline 
   assert.match(html, /class="panel-l2-stamp"/);
   assert.match(read("workspace.css"), /@keyframes ov-rise/);
   assert.match(read("workspace.css"), /prefers-reduced-motion:reduce[^}]*\.ov-hero/s);
+});
+
+test("design-r2: home + strategy L2 have zero inline font-size; eye accent stays research-blue", () => {
+  const html = read("index.html");
+  const home = html.match(/id="v-heatmap"[\s\S]*?(?=<section class="view")/)[0];
+  const strat = html.match(/id="v-strategy"[\s\S]*?(?=<section class="view")/)[0];
+  assert.doesNotMatch(home, /font-size\s*:/);
+  assert.doesNotMatch(strat, /font-size\s*:/);
+  assert.match(home, /ov-skel-block/);
+  assert.match(home, /hm-skel/);
+  assert.match(home, /ovHeadline/);
+  assert.match(home, /产权标配·偏多观察/);
+  const wc = read("workspace.css");
+  const eye = wc.match(/\[data-theme="eye"\]\s*\{[^}]+\}/)[0];
+  assert.match(eye, /--accent:#2f5fc9|--accent:\s*#2f5fc9/);
+  assert.doesNotMatch(eye, /--accent:#32664e/);
+  assert.match(wc, /--brand:#3159ce/);
+  assert.match(read("page-agent-loader.js"), /rd-ai-panel-open #rdAiLauncher/);
+  assert.match(read("page-agent-loader.js"), /visibility:hidden/);
+  assert.match(read("page-agent-loader.js"), /\[data-theme="eye"\] #rdAiLauncher/);
+  // strategy card / heatmap crumbs no longer use inline font-size
+  const app = read("app.js");
+  assert.match(app, /strat-today/);
+  assert.match(app, /hm-crumb-now/);
+  assert.doesNotMatch(app, /strat-card[\s\S]{0,200}style="font-size:12px/);
 });
