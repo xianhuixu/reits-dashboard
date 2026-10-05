@@ -29,7 +29,7 @@
     },
     "propertyLive": true,
     "propertySource": "live（scripts/build_spread.py）",
-    "note": "产权序列已 live；经营权 / 部分 L1–L7 锚点仍为 SEED"
+    "note": "产权序列（propertyYieldSeries / propertySpread）为真实数据；经营权 IRR 序列、bond10ySeries 月度锚点、sectorSnapshot 仍为 SEED"
   },
   "bond10ySeries": [
     {
@@ -3394,8 +3394,8 @@
         "valueTrap": false
       }
     ],
-    "status": "ok",
-    "updated": "2026-10-05 21:00:25",
+    "status": "lagged",
+    "updated": "2026-10-05 13:12:48",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
@@ -3406,16 +3406,32 @@
         "failed": []
       },
       "dists": {
-        "ok": 57,
+        "ok": 52,
         "failed": [
-          "508048.SH"
+          "508085.SH",
+          "180503.SZ",
+          "180606.SZ",
+          "508017.SH",
+          "508010.SH",
+          "508080.SH"
         ]
       },
       "units": {
-        "ok": 54,
-        "failed": []
+        "ok": 49,
+        "failed": [
+          "508031.SH",
+          "180602.SZ",
+          "180603.SZ",
+          "180305.SZ",
+          "180306.SZ",
+          "508600.SH",
+          "508601.SH",
+          "508602.SH",
+          "508603.SH"
+        ]
       },
-      "elapsedS": 271
-    }
+      "elapsedS": 353.9
+    },
+    "lagReason": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
   }
 }

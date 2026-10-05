@@ -103,7 +103,7 @@
       "y10": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
       "pmi": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI 总指数（国家统计局；该接口无新订单分项）"
     },
-    "computedAt": "2026-09-30",
+    "computedAt": "2026-10-05",
     "status": "ok",
     "asOf": "2026-09-30",
     "y10": 1.6822,
@@ -791,7 +791,7 @@
       "downgradeTo": "partial"
     },
     "status": "not_triggered",
-    "dataStatus": "complete",
+    "dataStatus": "lagged",
     "rateLeg": {
       "status": "ok",
       "d10y60bp": -5.6,
@@ -801,17 +801,18 @@
       "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
     },
     "spreadLeg": {
-      "status": "ok",
+      "status": "lagged",
       "pctileChangePP": 14.9,
       "from": "2026-07-07",
       "to": "2026-09-30",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
-      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
+      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
+      "note": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
     },
     "asOf": "2026-09-30",
     "rentLeg": {
-      "status": "ok",
+      "status": "lagged",
       "asOf": "2026-09-30",
       "y10Avg1y": 1.777,
       "y10AvgPrev1y": 1.787,
@@ -840,7 +841,7 @@
       "tsf": "live",
       "gdp": "live"
     },
-    "computedAt": "2026-09-30",
+    "computedAt": "2026-10-05",
     "status": "ok",
     "label": null,
     "asOf": "2026-04",
@@ -853,8 +854,8 @@
       "month": "2026-04",
       "direction": "正转负"
     },
-    "monthsBehind": 5,
-    "staleNote": "社融源最新只到 2026-04，较当前滞后 5 个月",
+    "monthsBehind": 6,
+    "staleNote": "社融源最新只到 2026-04，较当前滞后 6 个月",
     "series": [
       [
         "2023-05",
