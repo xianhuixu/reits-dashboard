@@ -41,8 +41,10 @@ test("live data: banner, cards and points derive from the committed data files",
   const P = JSON.parse(read("data_panel_l1l7.json"));
   const rc = D.cycle.rateClock;
   assert.equal(rc.growth.confirm.need, 2);
+  assert.equal(P.propertySpread.status, "ok");
   const sp = H.spreadCard(P);
-  assert.ok(sp.ok && sp.pctile >= 0 && sp.pctile <= 100);
+  assert.ok(sp.ok && sp.pctile >= 90 && sp.pctile <= 100);
+  assert.ok(sp.pctileFull >= sp.pctile - 5);
   const m = H.marketCard(D);
   assert.equal(m.up + m.down + m.flat, D.reits.filter((r) => Number.isFinite(r.pct)).length);
   const t = H.tsfCard(D.cycle.tsfImpulse);
@@ -79,18 +81,25 @@ test("stamps and signed numbers use the dashboard formats", () => {
   assert.equal(H.sgnNum(0.12, 2), "+0.12");
 });
 
-test("advice: stance, recommendation rows and red lines", () => {
+test("advice: stanceOverride, recommendation rows and red lines", () => {
   const adv = JSON.parse(read("advice.json"));
   const D = JSON.parse(read("data.json"));
   const st = A.schoolStance(adv);
-  assert.match(st.text, /产权.+ · 经营权/);
+  assert.equal(st.override, "产权标配·偏多观察");
+  assert.equal(st.text, "产权标配·偏多观察");
+  assert.equal(st.property.label, "标配");
+  assert.equal(st.property.cls, "alloc-n");
   const rec = A.recommendationRows(adv, A.sectorRights(D.reits));
+  const prop = rec.rows.find((r) => r.kind === "right" && r.name === "产权类");
+  assert.equal(prop.alloc.label, "标配");
+  assert.equal(prop.alloc.cls, "alloc-n");
   assert.equal(rec.hasPrev, !!adv.previous);
-  assert.ok(rec.rows.some((r) => r.kind === "right") && rec.rows.some((r) => r.kind === "sector"));
+  assert.ok(rec.rows.some((r) => r.kind === "sector"));
   if (!rec.hasPrev) rec.rows.forEach((r) => assert.equal(r.change, null));
   const rl = A.redlines(D.cycle, adv);
   assert.deepEqual(rl.map((r) => r.id), ["rate_up", "rate_rent", "tsf_turn", "distribution"]);
   assert.equal(rl[3].status, "pending");
+  assert.match(rl[1].current, /分位腿|顺风/);
   rl.filter((r) => r.progress != null).forEach((r) => assert.ok(r.progress >= 0 && r.progress <= 1));
 });
 
@@ -121,16 +130,30 @@ test("shape-based colour: prices carry ▲▼ without fills, warnings are outlin
 });
 
 // ---------------- 2026-09-30 团队反馈：结论横幅依据行 ----------------
-const STANCE = "结构性偏多：产权超配 · 经营权标配";
+const STANCE = "产权标配·偏多观察";
 const liveData = () => JSON.parse(read("data.json"));
+const liveAdvice = () => JSON.parse(read("advice.json"));
+const livePanel = () => JSON.parse(read("data_panel_l1l7.json"));
 
-test("banner conclusion is rate direction → school stance, with rationale line", () => {
-  const m = H.bannerModel(liveData(), STANCE, JSON.parse(read("data_panel_l1l7.json")));
+test("banner conclusion is rate → stanceOverride; spread basis hidden while distributions decline", () => {
+  const adv = liveAdvice(), panel = livePanel();
+  const m = H.bannerModel(liveData(), STANCE, panel, adv);
   assert.equal(m.conclusion, "利率下行 → " + STANCE);
-  assert.equal(m.basis, "依据：时钟·利率下行");
+  assert.equal(m.basis, "依据：时钟·利率下行"); // 分派同比下滑 → 第二条依据不进 basis
+  assert.match(m.spreadSkip, /利差分位暂不参与/);
+  assert.match(m.spreadSkip, /分派同比下滑|数据滞后/);
+  assert.match(m.overrideNote || "", /降档理由|顺风|拖累/);
   assert.equal(m.aux, "辅助：社融脉冲转负（低置信，数据截至 4 月）");
-  // 增长侧状态（含「临界」）不进横幅
   assert.doesNotMatch([m.conclusion, m.basis, m.aux].join("|"), /增长|临界|趋势|PMI|z3/);
+  // 分派企稳 + live → 第二条依据出现
+  const ok = JSON.parse(JSON.stringify(panel));
+  ok.propertySpread.status = "ok";
+  ok.propertySpread.distYoY.medianPct = 1.0;
+  ok.propertySpread.distYoY.state = "企稳";
+  const m2 = H.bannerModel(liveData(), STANCE, ok, adv);
+  assert.match(m2.basis, /产权利差分位 \d+%（滚动3年）/);
+  assert.equal(m2.spreadSkip, null);
+  assert.ok(m2.used.includes("propertySpread"));
 });
 
 test("growth state never changes the banner", () => {
@@ -146,13 +169,13 @@ test("growth state never changes the banner", () => {
 test("seed / pending modules are excluded from banner derivation", () => {
   const d = liveData();
   const base = H.bannerModel(d, STANCE);
-  // 产权利差分位（SEED）无论分位高低都不影响结论与依据
+  // 产权利差分位（SEED / 无 propertySpread）无论分位高低都不进第二条依据
   for (const pctile of [0.01, 0.5, 0.99]) {
     const seedPanel = { source: "seed", seedMeta: { liveFetch: false }, propertyYieldSeries: [{ pctile, spread: 1 }] };
     const m = H.bannerModel(d, STANCE, seedPanel);
     assert.deepEqual([m.conclusion, m.basis, m.aux], [base.conclusion, base.basis, base.aux]);
-    assert.ok(m.excluded.includes("propertySpread:seed"));
-    assert.ok(!m.used.some((u) => /spread/i.test(u)));
+    assert.ok(m.excluded.some((e) => /propertySpread/.test(e)));
+    assert.ok(!m.used.includes("propertySpread"));
   }
   // 社融脉冲 pending → 不给辅助依据
   const d2 = liveData(); d2.cycle.tsfImpulse = { status: "pending" };

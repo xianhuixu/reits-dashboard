@@ -8,7 +8,7 @@ const { allocClass } = require("../allocation-tools");
 const root = path.join(__dirname, "..");
 const read = (f) => fs.readFileSync(path.join(root, f), "utf8");
 
-test("status strings map to live / seed / pending / cached", () => {
+test("status strings map to live / seed / pending / cached / lagged", () => {
   assert.equal(DS.fromStatus("ok").status, "live");
   assert.equal(DS.fromStatus("pending data").status, "pending");
   assert.equal(DS.fromStatus("unavailable").status, "pending");
@@ -16,16 +16,18 @@ test("status strings map to live / seed / pending / cached", () => {
   assert.equal(DS.fromStatus("stale").status, "cached");
   assert.equal(DS.fromStatus("degraded").status, "cached");
   assert.equal(DS.fromStatus("seed").status, "seed");
-  // 未知或缺失状态不冒充 live
+  assert.equal(DS.fromStatus("lagged").status, "lagged");
+  assert.equal(DS.fromStatus("滞后").status, "lagged");
   assert.equal(DS.fromStatus("weird-new-state").status, "pending");
   assert.equal(DS.fromStatus(null).status, "pending");
 });
 
-test("labels: 示例数据 / 待接入 / 缓存 · as-of X; live has no badge", () => {
+test("labels: 示例数据 / 待接入 / 缓存 · as-of X / 滞后 · 数据截至 MM-DD; live has no badge", () => {
   assert.equal(DS.label(DS.make("seed", { asOf: "2026-09-24" })), "示例数据");
   assert.equal(DS.label(DS.make("pending")), "待接入");
   assert.equal(DS.label(DS.make("cached", { asOf: "2026-09-29T09:47:32+08:00" })), "缓存 · as-of 2026-09-29");
   assert.equal(DS.label(DS.make("cached")), "缓存");
+  assert.equal(DS.label(DS.lagged("2026-09-29")), "滞后 · 数据截至 09-29");
   assert.equal(DS.label(DS.make("live")), "");
   assert.equal(DS.badgeHtml(DS.make("live")), "");
   const html = DS.badgeHtml(DS.make("seed", { asOf: "2026-09-24", note: 'a<b>"c' }), true);
@@ -35,21 +37,31 @@ test("labels: 示例数据 / 待接入 / 缓存 · as-of X; live has no badge", 
   assert.doesNotMatch(html, /<b>/);
 });
 
-test("committed L2 panel is seed (as-of 2026-09-24); live panel is not badged", () => {
+test("propertySpread live → fromPropertySpread live; lagged never looks live; whole panel still seed for 经营权", () => {
   const panel = JSON.parse(read("data_panel_l1l7.json"));
-  const s = DS.fromPanel(panel);
-  assert.equal(s.status, "seed");
-  assert.equal(s.asOf, panel.asOfTrade);
+  assert.equal(panel.propertySpread.status, "ok");
+  assert.equal(DS.fromPropertySpread(panel).status, "live");
+  assert.equal(DS.fromPropertySpread(panel).asOf, panel.propertySpread.asOf);
+  const lag = JSON.parse(JSON.stringify(panel));
+  lag.propertySpread.status = "lagged";
+  lag.propertySpread.lagReason = "新浪取数失败";
+  const L = DS.fromPropertySpread(lag);
+  assert.equal(L.status, "lagged");
+  assert.equal(DS.label(L), "滞后 · 数据截至 " + panel.propertySpread.asOf.slice(5));
+  assert.equal(DS.fromPanel(panel).status, "seed"); // 经营权仍 SEED，整面板仍 seed
   assert.equal(DS.fromPanel(null).status, "pending");
   assert.equal(DS.fromPanel({ asOfTrade: "2026-10-01", source: "chinabond live", seedMeta: { liveFetch: true } }).status, "live");
 });
 
-test("rateRentGate spread leg pending → 待接入; rate leg ok → live", () => {
+test("rateRentGate spread leg live/lagged → matching badge; pending → 待接入", () => {
   const gate = JSON.parse(read("data.json")).cycle.rateRentGate;
   assert.equal(DS.fromGateLeg({ status: "pending data" }, "2026-09-29").status, "pending");
   assert.equal(DS.fromGateLeg({ status: "ok", to: "2026-09-29" }).status, "live");
+  assert.equal(DS.fromGateLeg({ status: "lagged", to: "2026-09-29" }).status, "lagged");
   assert.equal(DS.fromGateLeg(undefined).status, "pending");
-  if (gate && gate.spreadLeg && gate.spreadLeg.status !== "ok") assert.equal(DS.fromGateLeg(gate.spreadLeg, gate.asOf).status, "pending");
+  assert.equal(gate.spreadLeg.status, "ok");
+  assert.equal(DS.fromGateLeg(gate.spreadLeg, gate.asOf).status, "live");
+  assert.ok(gate.rentLeg && gate.rentLeg.dominant === "distribution");
 });
 
 test("beta panel pending when not computed; rate clock cached when series from cache", () => {

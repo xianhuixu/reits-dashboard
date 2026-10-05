@@ -4,7 +4,8 @@
 - 10年期国债收益率（东方财富数据中心「中美国债收益率」接口，纯 urllib，无第三方依赖）
 - 增长×利率 REITs 投资时钟 rateClock（10Y 60日变化动态死区+滞回 × PMI 偏离趋势 z 分数，见 rate_clock.py / docs/rate-clock.md）
 - 社融脉冲领先预警 tsfImpulse（商务部数据中心社融增量 + 东财名义 GDP）
-- 升息快于租金闸门 rateRentGate（利率腿真实；产权利差分位腿待 live 数据）
+- 产权利差真实序列 data_panel_l1l7.json.propertySpread（scripts/build_spread.py --refresh；新浪/东财抓取失败 → 沿用缓存、status=lagged）
+- 升息快于租金闸门 rateRentGate（利率腿真实 10Y；产权利差分位腿 = propertySpread 滚动 3 年分位 60 日变化；租金端 rentLeg）
 - PMI、CPI 等 pm/cycles/clock 文字判定仍保留手动维护
 真实序列缓存在 macro_series.json（供 fetch_data*.py 计算 Δ10Y 敏感度）；取数失败时沿用缓存并标注 asOf，绝不插值。
 """
@@ -108,6 +109,22 @@ def dump_macro(macro) -> str:
                   r"{\1, \2}", txt) + "\n"
 
 
+def refresh_property_spread(refresh=True):
+    """产权利差（scripts/build_spread.py）：需在 macro_series.json 写入之后、闸门计算之前运行。
+    任何异常 → 保留上一次 propertySpread 并降为 lagged（绝不标 live）。返回最新面板。"""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import build_spread as bs
+    try:
+        return bs.run(refresh=refresh, write=True)
+    except Exception as e:  # noqa: BLE001
+        print(f"[warn] 产权利差计算失败，沿用上一次结果并标 lagged: {e!r}")
+        panel = _load(PANEL_JSON)
+        if panel and panel.get("propertySpread"):
+            bs.mark_lagged(panel, f"计算失败（{type(e).__name__}），沿用上一次成功数据")
+            bs.write_panel(panel)
+        return panel
+
+
 def apply_rate_clock(cycle, macro, advice, panel, today_str):
     y10 = (macro.get("cgb10y") or {}).get("series") or []
     pmi = (macro.get("pmi") or {}).get("series") or []
@@ -145,7 +162,8 @@ def update_cycle_data():
         macro = refresh_macro_series(today_str)
         if (macro.get("cgb10y") or {}).get("series"):
             MACRO_JSON.write_text(dump_macro(macro), encoding="utf-8")
-        apply_rate_clock(cycle, macro, _load(ADVICE_JSON), _load(PANEL_JSON), today_str)
+        panel = refresh_property_spread(refresh=True) or _load(PANEL_JSON)
+        apply_rate_clock(cycle, macro, _load(ADVICE_JSON), panel, today_str)
         rcb = cycle["rateClock"]
         print(f"[info] rateClock: {rcb.get('status')} {rcb.get('state')} {rcb.get('quadrant') or ('lean ' + str(rcb.get('leanQuadrant')))} {rcb.get('quadrantName')} "
               f"Δ10Y60={rcb.get('d10y60bp')}bp 阈值±{rcb.get('thresholdBp')}bp z3={(rcb.get('growth') or {}).get('z3')} "

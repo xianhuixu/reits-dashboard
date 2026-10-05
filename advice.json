@@ -701,6 +701,8 @@
       "downgradeTo": "partial"
     },
     "statusSource": "cycle_judgment.json → rateRentGate（update_cycle_data.py 每日自动计算；前端叠加显示，不改写本文件）",
-    "dataStatus": "利率腿=真实 10Y（东财/中债口径）；产权利差分位腿=pending data（data_panel_l1l7.json 仍为 SEED 插值）"
-  }
+    "dataStatus": "利率腿=真实 10Y；产权利差分位腿=propertySpread 滚动 3 年分位（scripts/build_spread.py）；租金端 rentLeg=利率顺风 vs 分派拖累"
+  },
+  "stanceOverride": "产权标配·偏多观察",
+  "stanceOverrideRationale": "利率顺风≈−1bp（10Y 一年均值 1.777% vs 前一年 1.788%）不足以覆盖分派拖累≈−20bp（TTM 分派率 4.83% × 分派同比中位数 −4.2%）；租金回落快过利率下行。点对点 10Y 同比 −22bp 仅作次要参考。"
 }

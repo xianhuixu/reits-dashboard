@@ -234,10 +234,41 @@ def check_cycle(errs):
     g = cy.get("rateRentGate")
     if not g or g.get("status") not in ("triggered", "not_triggered", "pending data"):
         errs.append("rateRentGate 缺失或 status 非法")
-    elif (g.get("spreadLeg") or {}).get("status") == "ok":
+    elif (g.get("spreadLeg") or {}).get("status") in ("ok", "lagged"):
         panel = load("data_panel_l1l7.json")
-        if (panel.get("seedMeta") or {}).get("liveFetch") is not True:
+        ps = panel.get("propertySpread") or {}
+        leg = g["spreadLeg"]["status"]
+        if ps.get("status") not in ("ok", "lagged") and (panel.get("seedMeta") or {}).get("liveFetch") is not True:
             errs.append("rateRentGate: 产权利差分位仍为 SEED，却被当作真实数据使用")
+        elif ps and leg == "ok" and ps.get("status") != "ok":
+            errs.append("rateRentGate: 产权利差数据滞后（lagged），闸门腿却标为 ok（实时）")
+
+
+def check_property_spread(errs):
+    """propertySpread：status ∈ {ok, lagged}；lagged 必须带 lagReason；分派同比 / 租金-利率 / 业态表结构完整。"""
+    panel = load("data_panel_l1l7.json")
+    ps = panel.get("propertySpread")
+    if not ps:
+        return
+    if ps.get("status") not in ("ok", "lagged"):
+        errs.append(f"propertySpread.status 非法 {ps.get('status')}")
+    if ps.get("status") == "lagged" and not ps.get("lagReason"):
+        errs.append("propertySpread lagged 必须写明 lagReason")
+    L = ps.get("latest") or {}
+    for k in ("ttmYieldMcap", "y10", "spreadBp", "pctRolling3y", "pctFull"):
+        if L.get(k) is None:
+            errs.append(f"propertySpread.latest.{k} 缺失")
+    if not ps.get("asOf") or not ps.get("source"):
+        errs.append("propertySpread 缺 asOf / source")
+    y = ps.get("distYoY") or {}
+    if y.get("n") and (y.get("state") not in ("下滑", "企稳", "增长") or y.get("tolerancePct") != 2.0):
+        errs.append("propertySpread.distYoY 状态 / 容差非法")
+    for r in ps.get("sectors") or []:
+        if r.get("valueTrap") and not ((r.get("pctFull") or 0) >= 80 and r.get("distState") == "下滑"):
+            errs.append(f"propertySpread 业态 {r.get('sector')} 价值陷阱标记与规则不符")
+    series = panel.get("propertyYieldSeries") or []
+    if series and series[-1].get("date") != ps.get("asOf"):
+        errs.append("propertyYieldSeries 最后一行日期须等于 propertySpread.asOf")
 
 
 def check_advice(errs):
@@ -290,7 +321,7 @@ def check_research(errs):
 
 def main() -> int:
     errs: list[str] = []
-    for fn in (check_overseas, check_cycle, check_advice, check_research):
+    for fn in (check_overseas, check_cycle, check_property_spread, check_advice, check_research):
         try:
             fn(errs)
         except Exception as e:  # noqa: BLE001

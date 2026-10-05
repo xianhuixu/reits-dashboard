@@ -605,6 +605,7 @@ main { min-width: 0; }
 .ds-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .6; }
 .ds-badge.ds-cached::before { border-radius: 1px; }
 .ds-badge.ds-pending::before { background: transparent; border: 1px solid currentColor; }
+.ds-badge.ds-lagged::before { border-radius: 1px; transform: rotate(45deg); width: 5px; height: 5px; }
 .ds-badge.ds-inline { margin: 0 4px; }
 .ds-badge.ds-corner { position: absolute; top: 12px; right: 14px; z-index: 2; pointer-events: auto; }
 [data-ds] { position: relative; }

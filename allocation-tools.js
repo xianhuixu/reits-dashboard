@@ -90,18 +90,25 @@
     var r = String((advice && advice.rating) || "").replace(/[（(].*$/, "").trim();
     return r || null;
   }
-  /** 学派立场：{rating, property, operating, text}，text 形如「结构性偏多：产权超配 · 经营权标配」。advice 缺失 → null。 */
+  /** 学派立场：{rating, property, operating, text, override}。
+   * 若 advice.stanceOverride 非空（如「产权标配·偏多观察」），横幅结论与产权配置行一律以此为准（Jason 可配置开关）。
+   * 否则 text 形如「结构性偏多：产权超配 · 经营权标配」。advice 缺失 → null。 */
   function schoolStance(advice) {
     if (!advice) return null;
     var rv = advice.rightsViews || {};
-    var p = rv["产权"] ? allocLabel(rv["产权"].view) : null;
+    var override = advice.stanceOverride ? String(advice.stanceOverride).trim() : null;
+    var p = override ? allocLabel(override) : (rv["产权"] ? allocLabel(rv["产权"].view) : null);
     var o = rv["经营权"] ? allocLabel(rv["经营权"].view) : null;
     var rating = ratingShort(advice);
-    var parts = [];
-    if (p) parts.push("产权" + p.label);
-    if (o) parts.push("经营权" + o.label);
-    var text = (rating || "") + (rating && parts.length ? "：" : "") + parts.join(" · ");
-    return { rating: rating, property: p, operating: o, text: text || null,
+    var text;
+    if (override) text = override;
+    else {
+      var parts = [];
+      if (p) parts.push("产权" + p.label);
+      if (o) parts.push("经营权" + o.label);
+      text = (rating || "") + (rating && parts.length ? "：" : "") + parts.join(" · ");
+    }
+    return { rating: rating, property: p, operating: o, text: text || null, override: override,
       school: (advice.school && advice.school.name) || null, asOfResearch: advice.asOfResearch || null };
   }
   /** 板块 → 权属（按行情样本中该板块多数个券的 right 字段）。 */
@@ -143,8 +150,12 @@
       var rv = (advice.rightsViews || {})[right];
       if (rv) {
         var pa = prevRights[right] ? prevRights[right].view : null;
-        rows.push({ kind: "right", name: right + "类", action: rv.view, alloc: allocLabel(rv.view), reason: rv.view,
-          prev: hasPrev && pa ? allocLabel(pa) : null, change: hasPrev ? changeOf(rv.view, pa) : null });
+        var action = (right === "产权" && advice.stanceOverride) ? advice.stanceOverride : rv.view;
+        var reason = (right === "产权" && advice.stanceOverride)
+          ? (advice.stanceOverrideRationale || ("stanceOverride：" + advice.stanceOverride + "（原观点：" + rv.view + "）"))
+          : rv.view;
+        rows.push({ kind: "right", name: right + "类", action: action, alloc: allocLabel(action), reason: reason,
+          prev: hasPrev && pa ? allocLabel(pa) : null, change: hasPrev ? changeOf(action, pa) : null });
       }
       groups[right].forEach(function (v) {
         var pv = prevSectors[v.sector];
@@ -185,11 +196,20 @@
     var need = 25;
     var rateOk = rl && rl.status === "ok" && rl.d10y60bp != null;
     var pend = [];
-    if (!sl || sl.status !== "ok") pend.push("产权利差分位腿（租金端）待接入");
+    if (!sl || (sl.status !== "ok" && sl.status !== "lagged")) pend.push("产权利差分位腿（租金端）待接入");
     if (!rateOk) pend.push("利率腿待接入");
+    var rent = gate && gate.rentLeg;
+    var curTxt = rateOk ? "利率腿 " + sgn(rl.d10y60bp) + "bp / 60 日" : "利率腿 待接入";
+    if (sl && (sl.status === "ok" || sl.status === "lagged") && sl.pctileChangePP != null) {
+      curTxt += " · 分位腿 " + sgn(sl.pctileChangePP, 1) + "pp / 60 日";
+    }
+    if (rent && rent.status && rent.status !== "pending" && rent.rateTailwindBp != null) {
+      curTxt += " · 顺风 " + sgn(rent.rateTailwindBp, 1) + "bp vs 拖累 " + sgn(rent.distDragBp, 1) + "bp（" + (rent.dominant === "distribution" ? "分派占优" : rent.dominant === "rate" ? "利率占优" : "相抵") + "）";
+    }
+    if (sl && sl.status === "lagged") pend.push("产权利差分位腿滞后 · 数据截至 " + ((sl.to || (gate && gate.asOf) || "").slice(5) || "—"));
     out.push({ id: "rate_rent", title: spec.label || "利率快过租金闸门",
       trigger: spec.rule || (gate && gate.rule) || "Δ10Y(60交易日) ≥ +25bp 且 产权利差分位 60 日下降 ≥ 20pp",
-      current: rateOk ? "利率腿 " + sgn(rl.d10y60bp) + "bp / 60 日" : "利率腿 待接入",
+      current: curTxt,
       distance: gate && gate.status === "triggered" ? "已触发" : rateOk ? "利率腿距触发 " + Math.max(0, need - rl.d10y60bp).toFixed(1) + "bp" : null,
       progress: rateOk ? clamp01(rl.d10y60bp / need) : null,
       status: gate && gate.status === "triggered" ? "triggered" : rateOk ? (need - rl.d10y60bp <= 5 ? "near" : "far") : "pending", pending: pend });
@@ -212,8 +232,29 @@
       current: "待接入", distance: null, progress: null, status: "pending", pending: ["逐券分派达成率（季度披露）未接入本页"] });
     return out;
   }
+  /** 策略页业态利差表行：利差 bp · 分位 · 分派同比 ▲▼；分位≥80% 且分派下滑 → 价值陷阱描边徽章。 */
+  function propertySectorRows(panel) {
+    var ps = panel && panel.propertySpread;
+    return (ps && ps.sectors) || [];
+  }
+  function sectorSpreadHtml(rows) {
+    if (!rows || !rows.length) return '<p class="note">业态利差待接入</p>';
+    return '<table class="matrix research-table" id="sectorSpreadTable"><thead><tr><th scope="col">业态</th><th scope="col">覆盖</th><th scope="col">利差 bp</th><th scope="col">分位</th><th scope="col">分派同比</th><th scope="col">标记</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        var y = r.distYoYPct, yTxt = y == null ? "—" : (y > 0 ? "▲ +" : y < 0 ? "▼ −" : "→ ") + (y == null ? "" : Math.abs(y).toFixed(1) + "%");
+        var yCls = y == null ? "" : y > 2 ? "up" : y < -2 ? "down" : "flat";
+        var badge = r.valueTrap ? '<span class="rc-tag rc-tag-warn">⚠ 疑似价值陷阱</span>' :
+          (r.shortHistory ? '<span class="flag-chip flag-reference">历史较短</span>' : "—");
+        return "<tr><td><strong>" + escText(r.sector) + "</strong></td><td class=\"num\">" + (r.nReits || "—") + " 只</td>" +
+          "<td class=\"num\">" + (r.spreadBp != null ? (r.spreadBp > 0 ? "+" : "") + r.spreadBp : "—") + "</td>" +
+          "<td class=\"num\">" + (r.pctFull != null ? Math.round(r.pctFull) + "%" : "—") + "</td>" +
+          "<td class=\"num " + yCls + " no-arrow\">" + yTxt + (r.distYoYN ? " <span class=\"adv-conf\">n=" + r.distYoYN + "</span>" : "") + "</td>" +
+          "<td>" + badge + "</td></tr>";
+      }).join("") + "</tbody></table>";
+  }
   var API = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone, allocClass: allocClass, clockHeadline: clockHeadline,
-    allocLabel: allocLabel, ratingShort: ratingShort, schoolStance: schoolStance, sectorRights: sectorRights, recommendationRows: recommendationRows, redlines: redlines };
+    allocLabel: allocLabel, ratingShort: ratingShort, schoolStance: schoolStance, sectorRights: sectorRights, recommendationRows: recommendationRows, redlines: redlines,
+    propertySectorRows: propertySectorRows, sectorSpreadHtml: sectorSpreadHtml };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   if (!root.document) return;
   root.ReitsAllocation = API;
@@ -311,7 +352,8 @@
     if (gateEl) {
       var st = g ? ({ triggered: "已触发", not_triggered: "未触发", "pending data": "待数据" }[g.status] || g.status) : "待数据";
       var legs = g ? "（利率腿：" + (g.rateLeg && g.rateLeg.status === "ok" ? (g.rateLeg.d10y60bp > 0 ? "+" : "") + g.rateLeg.d10y60bp + "bp/60日" + (g.rateLeg.met ? " 满足" : " 未满足") : "待数据") +
-        "；产权利差分位腿：" + (g.spreadLeg && g.spreadLeg.status === "ok" ? g.spreadLeg.pctileChangePP + "pp" : "pending data") + "）" : "";
+        "；产权利差分位腿：" + (g.spreadLeg && (g.spreadLeg.status === "ok" || g.spreadLeg.status === "lagged") ? g.spreadLeg.pctileChangePP + "pp" : "pending data") +
+        (g.rentLeg && g.rentLeg.status !== "pending" ? "；租金对照 顺风 " + g.rentLeg.rateTailwindBp + "bp / 拖累 " + g.rentLeg.distDragBp + "bp" : "") + "）" : "";
       var DS = root.ReitsDataStatus;
       var legBadge = DS ? DS.badgeHtml(g ? DS.fromGateLeg(g.spreadLeg, g.asOf) : DS.make(DS.PENDING, { note: "闸门未计算" }), true) : "";
       var eff = spec.effectsIfTriggered || {};
@@ -437,7 +479,7 @@
       doc.getElementById("advReadSpread").textContent = "产权利差 " + lp.spread.toFixed(2) + "%（历史 " + pct0(lp.pctile) + " 分位）" +
         (lo2 ? " · 经营权 " + lo2.spread.toFixed(2) + "%（" + pct0(lo2.pctile) + " 分位）" : "") + term;
     } else { sEl.innerHTML = '<p class="chart-placeholder">利差序列待接入</p>'; doc.getElementById("advReadSpread").textContent = "data_panel_l1l7.json 未加载。"; }
-    if (DS) DS.apply(doc.getElementById("advReasonSpread"), DS.fromPanel(P));
+    if (DS) DS.apply(doc.getElementById("advReasonSpread"), DS.fromPropertySpread ? DS.fromPropertySpread(P) : DS.fromPanel(P));
     // 股 / 债 Beta：配置页不主动拉研究数据包（契约：配置页只直读 advice.json + 核心行情）。
     // 若用户已访问过研究页（研究包已合并进 REITS_DATA），进入视口时直接复用；否则给出跳转入口。
     var bEl = doc.getElementById("advReasonBeta");

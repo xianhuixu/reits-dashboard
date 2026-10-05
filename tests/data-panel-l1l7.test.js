@@ -59,6 +59,20 @@ test("operating spread target = IRR − term-matched CGB (pending until remainin
   assert.match(html, /id="panelL2TermStatus"/);
 });
 
+test("propertySpread is live (rolling 3y pctile) and feeds L2 property series", () => {
+  const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
+  const ps = panel.propertySpread;
+  assert.ok(ps, "propertySpread present");
+  assert.ok(["ok", "lagged"].includes(ps.status));
+  assert.ok(ps.latest.pctRolling3y >= 90);
+  assert.ok(ps.latest.pctFull >= ps.latest.pctRolling3y - 5);
+  assert.equal(ps.distYoY.tolerancePct, 2);
+  assert.ok(ps.sectors.some((r) => r.valueTrap && r.sector === "产业园"));
+  assert.ok(ps.sectors.some((r) => r.shortHistory && r.sector === "数据中心"));
+  assert.equal(panel.propertyYieldSeries[panel.propertyYieldSeries.length - 1].date, ps.asOf);
+  assert.ok(panel.propertyYieldSeries.length > 100);
+});
+
 test("build_data_panel.py --check exits 0", () => {
   const r = spawnSync("python3", ["build_data_panel.py", "--check"], { cwd: root, encoding: "utf-8" });
   assert.equal(r.status, 0, r.stderr || r.stdout);

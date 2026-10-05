@@ -53,15 +53,26 @@
       confirm: cf ? { title: cf.title || "确认", count: cf.count || 0, need: cf.need || 2, label: cf.label || "" } : null,
       confidence: rc.confidence || null, quadrantName: rc.quadrant ? rc.quadrant + " " + (rc.quadrantName || "") : (rc.stateLabel || "") };
   }
-  /** 产权利差分位卡（data_panel_l1l7.json，当前为 SEED → 前端加「示例数据」角标）。 */
+  /** 产权利差分位卡：默认滚动 3 年分位；全样本分位放 title；propertySpread 真实序列优先。 */
   function spreadCard(panel) {
-    var s = panel && panel.propertyYieldSeries;
+    var ps = panel && panel.propertySpread, L = ps && ps.latest, s = panel && panel.propertyYieldSeries;
+    if (L && num(L.pctRolling3y)) {
+      var series = s || [], last = series.length ? series[series.length - 1] : null, prev = series.length > 3 ? series[series.length - 4] : null;
+      var pct = Math.round(L.pctRolling3y), full = num(L.pctFull) ? Math.round(L.pctFull) : null;
+      var delta = last && prev && num(last.pctile) && num(prev.pctile) ? Math.round((last.pctile - prev.pctile) * 100) : null;
+      return { ok: true, pctile: pct, pctileFull: full, spread: num(L.spreadBp) ? L.spreadBp / 100 : (last && last.spread),
+        asOf: (ps && ps.asOf) || (last && last.date) || null, delta: delta,
+        arrow: delta == null ? "" : delta > 0 ? "↑" : delta < 0 ? "↓" : "→",
+        tip: "滚动 3 年分位 " + pct + "%" + (full != null ? " · 2022 年以来全样本 " + full + "%（早期截面仅 2–6 只，噪音大）" : "") +
+          (num(L.ttmYieldMcap) ? " · TTM " + L.ttmYieldMcap + "% − 10Y " + L.y10 + "% = " + L.spreadBp + "bp" : "") };
+    }
     if (!s || !s.length || !num(s[s.length - 1].pctile)) return { ok: false };
-    var last = s[s.length - 1], prev = s.length > 3 ? s[s.length - 4] : null;
-    var pct = Math.round(last.pctile * 100);
-    var delta = prev && num(prev.pctile) ? Math.round((last.pctile - prev.pctile) * 100) : null;
-    return { ok: true, pctile: pct, spread: last.spread, asOf: last.date || panel.asOfTrade || null,
-      delta: delta, arrow: delta == null ? "" : delta > 0 ? "↑" : delta < 0 ? "↓" : "→" };
+    var last2 = s[s.length - 1], prev2 = s.length > 3 ? s[s.length - 4] : null;
+    var pct2 = Math.round(last2.pctile * 100);
+    var delta2 = prev2 && num(prev2.pctile) ? Math.round((last2.pctile - prev2.pctile) * 100) : null;
+    return { ok: true, pctile: pct2, pctileFull: last2.pctileFull != null ? Math.round(last2.pctileFull * 100) : null,
+      spread: last2.spread, asOf: last2.date || panel.asOfTrade || null, delta: delta2,
+      arrow: delta2 == null ? "" : delta2 > 0 ? "↑" : delta2 < 0 ? "↓" : "→", tip: "" };
   }
   /** 市场今日卡：指数日涨跌（缺失时用等权）、成交额、涨跌家数。 */
   function marketCard(data) {
@@ -103,27 +114,42 @@
   }
 
   // ---------------- 首页 / 配置页结论横幅（2026-09-30 团队反馈）----------------
-  // 结论 = 时钟利率方向 → 学派立场（advice.json）。增长侧状态不进横幅（「临界」只在时钟卡上）；
-  // 种子（seed）/ 待接入（pending）模块——如产权利差分位（data_panel SEED）——一律不参与结论与依据推导。
+  // 结论 = 时钟利率方向 → 学派立场 / stanceOverride（advice.json）。增长侧状态不进横幅（「临界」只在时钟卡上）。
+  // 产权利差分位第二条依据：仅当 propertySpread.status === live 且 分派同比中位数 > −2% 时显示；
+  // 否则在原位置留灰字说明原因（数据滞后 / 分派同比下滑）。种子 / 待接入模块不参与推导。
   var DSX = root.ReitsDataStatus || (typeof require === 'function' ? (function () { try { return require('./data-status.js'); } catch (e) { return null; } })() : null);
   function usable(s) { return !!s && (s.status === 'live' || s.status === 'cached'); }
   function monthLabel(asOf) { var m = /^\d{4}-(\d{2})/.exec(String(asOf || '')); return m ? Number(m[1]) + ' 月' : null; }
   /**
-   * @param {object} data   data.json（cycle.rateClock / cycle.tsfImpulse）
+   * @param {object} data   data.json（cycle.rateClock / cycle.tsfImpulse / cycle.rateRentGate）
    * @param {string|null} stance  学派立场文字（schoolStance(advice).text）；只来自 advice.json
-   * @param {object} [panel] data_panel_l1l7.json —— 仅用于记录「被排除」，从不参与推导
+   * @param {object} [panel] data_panel_l1l7.json —— propertySpread 决定第二条依据是否显示
+   * @param {object} [advice] advice.json —— stanceOverrideRationale 作降档解释
    */
-  function bannerModel(data, stance, panel) {
-    var cy = (data && data.cycle) || {}, rc = cy.rateClock, tsf = cy.tsfImpulse;
+  function bannerModel(data, stance, panel, advice) {
+    var cy = (data && data.cycle) || {}, rc = cy.rateClock, tsf = cy.tsfImpulse, gate = cy.rateRentGate;
     var used = [], excluded = [];
     var rcS = DSX && DSX.fromRateClock ? DSX.fromRateClock(rc) : { status: rc && rc.status === 'ok' ? 'live' : 'pending' };
     var rate = null;
     if (rc && rc.status === 'ok' && usable(rcS) && RATE_TXT[rc.rateDir]) { rate = RATE_TXT[rc.rateDir]; used.push('rateClock.rate'); }
     else excluded.push('rateClock');
-    // 产权利差分位：SEED / 未接入真实数据前不参与任何结论
+    var spreadBasis = null, spreadSkip = null;
+    var ps = panel && panel.propertySpread, pS = DSX && DSX.fromPropertySpread ? DSX.fromPropertySpread(panel) : (ps ? { status: ps.status === 'ok' ? 'live' : 'lagged' } : { status: 'seed' });
     if (panel !== undefined) {
-      var pS = DSX && DSX.fromPanel ? DSX.fromPanel(panel) : { status: 'seed' };
-      excluded.push('propertySpread:' + (pS ? pS.status : 'pending'));
+      if (ps && (ps.status === 'ok' || ps.status === 'lagged')) {
+        var yoy = (ps.distYoY || {}).medianPct, pct = (ps.latest || {}).pctRolling3y, live = pS.status === 'live';
+        var yoyOk = num(yoy) && yoy > -2;
+        if (live && yoyOk && num(pct)) { spreadBasis = '产权利差分位 ' + Math.round(pct) + '%（滚动3年）'; used.push('propertySpread'); }
+        else {
+          var why = !live ? '数据滞后' : '分派同比下滑';
+          if (!live && num(yoy) && yoy <= -2) why = '数据滞后 / 分派同比下滑';
+          spreadSkip = '利差分位暂不参与（' + why + '）';
+          excluded.push('propertySpread:' + (live ? 'distYoY' : pS.status));
+        }
+      } else {
+        excluded.push('propertySpread:' + (pS ? pS.status : 'pending'));
+        spreadSkip = '利差分位暂不参与（待接入真实序列）';
+      }
     }
     var aux = null;
     var tS = DSX && DSX.fromTsfImpulse ? DSX.fromTsfImpulse(tsf) : { status: tsf && tsf.status === 'ok' ? 'live' : 'pending' };
@@ -133,9 +159,18 @@
       aux = '辅助：社融脉冲' + (turned ? '转负' : '为负') + '（低置信' + (mo ? '，数据截至 ' + mo : '') + '）';
       used.push('tsfImpulse');
     } else excluded.push('tsfImpulse');
+    var basis = rate ? '依据：时钟·' + rate + (spreadBasis ? ' · ' + spreadBasis : '') : '依据：配置页学派立场';
+    // 降档说明：stanceOverride 生效时，用租金 vs 利率对照解释为什么不是「产权超配」
+    var overrideNote = null;
+    if (advice && advice.stanceOverride) {
+      var rl = (gate && gate.rentLeg) || (ps && ps.rentVsRate) || null;
+      if (rl && rl.status && rl.status !== 'pending' && num(rl.rateTailwindBp) && num(rl.distDragBp)) {
+        overrideNote = '降档理由：利率顺风 ' + sgnNum(rl.rateTailwindBp, 1) + 'bp（一年均值） vs 分派拖累 ' + sgnNum(rl.distDragBp, 1) + 'bp（' + (rl.text || '') + '）';
+      } else if (advice.stanceOverrideRationale) overrideNote = '降档理由：' + String(advice.stanceOverrideRationale).slice(0, 80);
+    }
     var conclusion = (rate || '时钟未判定') + ' → ' + (stance || '配置结论见配置页');
-    return { rate: rate, stance: stance || null, conclusion: conclusion,
-      basis: rate ? '依据：时钟·' + rate : '依据：配置页学派立场', aux: aux, used: used, excluded: excluded };
+    return { rate: rate, stance: stance || null, conclusion: conclusion, basis: basis, spreadBasis: spreadBasis,
+      spreadSkip: spreadSkip, overrideNote: overrideNote, aux: aux, used: used, excluded: excluded };
   }
   var HOME = {bannerModel:bannerModel, normalizedSeries:normalizedSeries, clockBanner:clockBanner, clockCard:clockCard, spreadCard:spreadCard, marketCard:marketCard, tsfCard:tsfCard, todayPoints:todayPoints, shortStamp:shortStamp, sgnNum:sgnNum, fmtAmount:fmtAmount};
   if (typeof module !== 'undefined' && module.exports) module.exports = HOME;
@@ -212,14 +247,17 @@
     el.setAttribute('role', 'link'); el.tabIndex = 0;
     el.setAttribute('aria-label', title + ' · 查看详情');
   }
-  function renderBanner(data, stance) {
+  function renderBanner(data, stance, panel, advice) {
     var rc = data.cycle && data.cycle.rateClock, b = clockBanner(rc), h = $('ovHeadline');
     if (!h) return;
-    // 结论只含利率方向 → 学派立场；增长侧（含「临界」）不进横幅
-    var m = bannerModel(data, stance || null);
+    // 结论只含利率方向 → 学派立场 / stanceOverride；增长侧（含「临界」）不进横幅
+    var m = bannerModel(data, stance || null, panel || null, advice || null);
     h.innerHTML = esc(m.rate || '时钟未判定') + '<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">' +
       (stance ? esc(stance) : '<span class="ov-skel">配置结论读取中</span>') + '</span>';
-    var basisHtml = '<span class="ov-basis-main">' + esc(m.basis) + '</span>' + (m.aux ? '<small class="ov-basis-aux">' + esc(m.aux) + '</small>' : '');
+    var basisHtml = '<span class="ov-basis-main">' + esc(m.basis) + '</span>' +
+      (m.spreadSkip ? '<small class="ov-basis-skip">' + esc(m.spreadSkip) + '</small>' : '') +
+      (m.overrideNote ? '<small class="ov-basis-note">' + esc(m.overrideNote) + '</small>' : '') +
+      (m.aux ? '<small class="ov-basis-aux">' + esc(m.aux) + '</small>' : '');
     ['ovBasis', 'advBasis'].forEach(function (id) { var el = $(id); if (el) { el.innerHTML = basisHtml; el.hidden = false; } });
     $('ovUpdated').textContent = '数据更新于 ' + shortStamp(data.updated || data.lastTradeDate);
     if (b.switchTag) {
@@ -235,14 +273,14 @@
       n2.classList.add('ov-switch-note-plain'); n2.hidden = false;
     }
   }
-  function renderHome(data, panel, stance) {
+  function renderHome(data, panel, stance, advice) {
     var rc = data.cycle && data.cycle.rateClock, DS = root.ReitsDataStatus;
     var rows = data.reits || [];
     var sectors = {}; rows.forEach(function (r) { if (r.sector) sectors[r.sector] = 1; });
     $('ovUniverse').textContent = '全市场 ' + rows.length + ' 只 · ' + Object.keys(sectors).length + ' 个业态';
     var rv = data.revaluation;
     if (rv && rv.stage) $('ovReval').innerHTML = '<button type="button" class="ov-link ov-link-sub" data-ov-view="cycle" data-ov-anchor="revalFull">资产重估：' + esc(rv.stage) + ' · ' + esc(rv.score) + '/4 →</button>';
-    renderBanner(data, stance || null);
+    renderBanner(data, stance || null, panel || null, advice || null);
     // 1 · 投资时钟
     var c = clockCard(rc), el = $('ovCardClock');
     if (el) {
@@ -266,12 +304,13 @@
     // 2 · 产权利差分位
     var sp = spreadCard(panel); el = $('ovCardSpread');
     if (el) {
-      cardShell(el, '产权利差分位', { 'data-ov-view': 'strategy', 'data-ov-anchor': 'panelL2Spreads' }, !sp.ok ? '<div class="ov-big">—</div><p class="ov-note">利差序列待接入</p>' :
+      cardShell(el, '产权利差分位', { 'data-ov-view': 'strategy', 'data-ov-anchor': 'panelL2Spreads', 'title': sp.tip || '' }, !sp.ok ? '<div class="ov-big">—</div><p class="ov-note">利差序列待接入</p>' :
         '<div class="ov-big">' + sp.pctile + '%<small>分位</small>' + (sp.arrow ? '<span class="ov-dir" aria-hidden="true">' + sp.arrow + '</span>' : '') + '</div>' +
-        '<p class="ov-note">利差 ' + (num(sp.spread) ? sp.spread.toFixed(2) + '%' : '—') + (sp.delta != null ? ' · 较 3 个月前 ' + sgnNum(sp.delta, 0) + 'pp' : '') + '</p>' +
-        '<div class="ov-bar" role="img" aria-label="历史分位 ' + sp.pctile + '%"><i style="width:' + sp.pctile + '%"></i></div>' +
-        '<p class="ov-note" style="margin-top:6px">分位越高 = 产权类相对债券越便宜</p><div class="ov-foot"><span>截至 ' + esc(sp.asOf || '—') + '</span></div>');
-      if (DS && DS.fromPanel) dsApply(el, DS.fromPanel(panel));
+        '<p class="ov-note">利差 ' + (num(sp.spread) ? sp.spread.toFixed(2) + '%' : '—') + (sp.delta != null ? ' · 较 3 个月前 ' + sgnNum(sp.delta, 0) + 'pp' : '') +
+        (sp.pctileFull != null ? ' · 全样本 ' + sp.pctileFull + '%' : '') + '</p>' +
+        '<div class="ov-bar" role="img" aria-label="滚动 3 年分位 ' + sp.pctile + '%"><i style="width:' + sp.pctile + '%"></i></div>' +
+        '<p class="ov-note" style="margin-top:6px">默认滚动 3 年分位；越高 = 相对债券越便宜</p><div class="ov-foot"><span>截至 ' + esc(sp.asOf || '—') + '</span></div>');
+      if (DS && DS.fromPropertySpread) dsApply(el, DS.fromPropertySpread(panel));
     }
     // 3 · 市场今日
     var m = marketCard(data); el = $('ovCardMarket');
@@ -428,8 +467,9 @@
       return Promise.all([soft(root.__PANEL_READY), advTimed]);
     }).then(function (res) {
       var data = root.REITS_DATA; if (!data || !$('ovHero')) return;
-      renderHome(data, root.REITS_DATA_PANEL || null, stanceOf(res[1]) || (res[1] ? '配置结论见配置页' : null));
-      if (!res[1]) advice.then(function (adv) { renderBanner(data, stanceOf(adv) || '配置结论见配置页'); });
+      var panel = root.REITS_DATA_PANEL || null, adv = res[1];
+      renderHome(data, panel, stanceOf(adv) || (adv ? '配置结论见配置页' : null), adv || null);
+      if (!adv) advice.then(function (a) { renderBanner(data, stanceOf(a) || '配置结论见配置页', panel, a); });
     }).catch(function (e) { if (root.console) console.warn('首屏渲染失败', e); });
   })();
   doc.addEventListener('DOMContentLoaded',init);

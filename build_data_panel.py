@@ -133,6 +133,7 @@ def main() -> None:
     # TODO: iFinD/Wind pull when credentials & codes confirmed
     macro = json.loads(MACRO_PATH.read_text(encoding="utf-8")) if MACRO_PATH.exists() else None
     panel[TERM_KEY] = term_matched_block(panel, macro)
+    # propertySpread 由 scripts/build_spread.py 写入；本脚本只刷新经营权期限匹配块，不得抹掉产权真实序列
     check_schema(panel)
     JSON_PATH.write_text(json.dumps(panel, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     write_js(panel)
