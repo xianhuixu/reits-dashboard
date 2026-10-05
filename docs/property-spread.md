@@ -7,4 +7,4 @@
 - **分派同比**：TTM 对 TTM，截面中位数，±2% 容差 → 下滑 / 企稳 / 增长。
 - **横幅第二条依据**：仅 `status=ok` 且分派同比中位数 > −2% 时显示「产权利差分位 X%（滚动3年）」；否则灰字说明原因。
 - **stanceOverride**：`advice.json` 可配置（当前「产权标配·偏多观察」）；横幅与配置表产权行以此为准。
-- **经营权 IRR**：仍待固收 PM 对账，不使用 `/workspace/reits_irr`。
+- **经营权披露 IRR**：见 `docs/operating-disclosed-irr.md`（`operatingDisclosedIrr`，2025 年末口径）；月度时序仍为 SEED。

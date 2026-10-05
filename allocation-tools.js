@@ -252,9 +252,62 @@
           "<td>" + badge + "</td></tr>";
       }).join("") + "</tbody></table>";
   }
+  /** 经营权披露 IRR 截面行（2025 年末口径）；主点只用披露值。 */
+  function operatingDisclosedRows(panel) {
+    var B = panel && panel.operatingDisclosedIrr;
+    return (B && B.items) || [];
+  }
+  function operatingPendingRows(panel) {
+    var B = panel && panel.operatingDisclosedIrr;
+    return (B && B.pending) || [];
+  }
+  /** 暂无披露：与「置信度中」同形态的灰色空心点条。 */
+  function operatingPendingStripHtml(rows) {
+    if (!rows || !rows.length) return "";
+    return '<div class="oper-irr-pending-inner"><span class="oper-irr-pending-label">暂无披露（' + rows.length + '）</span>' +
+      rows.map(function (r) {
+        return '<span class="oper-irr-dot" title="' + escText(r.code + " " + (r.name || "") + " · " + (r.reason || "暂无披露")) + '"></span>';
+      }).join("") +
+      '<span class="oper-irr-pending-legend">空心灰点 = 暂无披露（同置信度中）</span></div>';
+  }
+  function operatingDisclosedTableHtml(rows, summary) {
+    if (!rows || !rows.length) return '<p class="note">经营权披露 IRR 待接入</p>';
+    var head = '<table class="matrix research-table" id="operIrrTable"><thead><tr>' +
+      '<th scope="col" class="l">名称</th><th scope="col">业态</th>' +
+      '<th scope="col">披露 IRR</th><th scope="col">匹配国债</th>' +
+      '<th scope="col" data-no-sort="1" title="口径不统一，不做横向排序">利差 bp</th>' +
+      '<th scope="col">年末以来价格</th><th scope="col">标记</th></tr></thead><tbody>';
+    var body = rows.map(function (r) {
+      var chg = r.priceChangePct, chgTxt = chg == null ? "—" :
+        ((chg > 0 ? "▲ +" : chg < 0 ? "▼ −" : "→ ") + Math.abs(chg).toFixed(1) + "%");
+      var chgCls = chg == null ? "" : chg > 0 ? "up" : chg < 0 ? "down" : "flat";
+      var badges = [];
+      if (r.extreme) badges.push('<span class="rc-tag rc-tag-warn" title="只看自身变化，不做排名">极端 · 自身</span>');
+      if (r.reviewPending) badges.push('<span class="rc-tag rc-tag-ref">待复核</span>');
+      if (r.tenorSource === "remaining_years") badges.push('<span class="flag-chip flag-reference">期限=剩余年限</span>');
+      if (r.extrapolated) badges.push('<span class="flag-chip flag-reference">外推</span>');
+      var trCls = r.extreme ? ' class="oper-irr-extreme"' : (r.reviewPending ? ' class="oper-irr-review"' : "");
+      return "<tr" + trCls + "><td class=\"l\"><strong>" + escText((r.name || "").replace(/封闭式基础设施证券投资基金|REIT$/g, "REIT")) + "</strong>" +
+        '<div class="cell-note">' + escText(r.code) + "</div></td>" +
+        "<td>" + escText(r.sector || "—") + "</td>" +
+        "<td class=\"num\">" + (r.irrDisclosedPct != null ? r.irrDisclosedPct.toFixed(2) + "%" : "—") + "</td>" +
+        "<td class=\"num\">" + (r.matchedYieldPct != null ? r.matchedYieldPct.toFixed(2) + "%" : "—") + "</td>" +
+        "<td class=\"num\" data-no-sort=\"1\">" + (r.spreadBp != null ? (r.spreadBp > 0 ? "+" : "") + r.spreadBp : "—") + "</td>" +
+        "<td class=\"num " + chgCls + " no-arrow\">" + chgTxt + "</td>" +
+        "<td>" + (badges.length ? badges.join(" ") : "—") + "</td></tr>";
+    }).join("");
+    var foot = "</tbody></table>";
+    if (summary && summary.noSectorAverage) {
+      foot += '<p class="note oper-irr-agg-note">业态汇总：口径不统一，暂不汇总' +
+        (summary.extremeNote ? " · " + escText(summary.extremeNote) : "") + "</p>";
+    }
+    return head + body + foot;
+  }
   var API = { stress: stress, summarize: summarize, clockPriorRows: clockPriorRows, inZone: inZone, allocClass: allocClass, clockHeadline: clockHeadline,
     allocLabel: allocLabel, ratingShort: ratingShort, schoolStance: schoolStance, sectorRights: sectorRights, recommendationRows: recommendationRows, redlines: redlines,
-    propertySectorRows: propertySectorRows, sectorSpreadHtml: sectorSpreadHtml };
+    propertySectorRows: propertySectorRows, sectorSpreadHtml: sectorSpreadHtml,
+    operatingDisclosedRows: operatingDisclosedRows, operatingPendingRows: operatingPendingRows,
+    operatingPendingStripHtml: operatingPendingStripHtml, operatingDisclosedTableHtml: operatingDisclosedTableHtml };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   if (!root.document) return;
   root.ReitsAllocation = API;

@@ -1,6 +1,9 @@
+const fs = require("node:fs");
+const path = require("node:path");
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { stress, summarize } = require("../allocation-tools.js");
+const A = require("../allocation-tools.js");
+const { stress, summarize } = A;
 
 test("cash-only shocks pass through both valuation models", () => {
   for (const kind of ["property", "concession"]) {
@@ -32,4 +35,18 @@ test("market summary excludes missing returns and does not mutate source rows", 
   assert.deepEqual(summarize(rows, "产权"), {count: 3, valid: 1, ret20: 2});
   assert.deepEqual(summarize(rows, "经营权"), {count: 1, valid: 1, ret20: -4});
   assert.deepEqual(summarize([], "产权"), {count: 0, valid: 0, ret20: null});
+});
+
+const panel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "data_panel_l1l7.json"), "utf8"));
+
+test("operating disclosed table disables spread sort and hides sector average", () => {
+  const rows = A.operatingDisclosedRows(panel);
+  assert.ok(rows.length >= 21);
+  const html = A.operatingDisclosedTableHtml(rows, panel.operatingDisclosedIrr.summary);
+  assert.match(html, /data-no-sort="1"/);
+  assert.match(html, /口径不统一，暂不汇总/);
+  assert.match(html, /年末以来价格/);
+  const strip = A.operatingPendingStripHtml(A.operatingPendingRows(panel));
+  assert.match(strip, /暂无披露/);
+  assert.match(strip, /oper-irr-dot/);
 });

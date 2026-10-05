@@ -48,6 +48,14 @@
     if (B.status === "lagged") return lagged(B.asOf, B.lagReason);
     return fromStatus(B.status, B.asOf, B.lagReason);
   }
+  /** data_panel_l1l7.json.operatingDisclosedIrr（经营权披露 IRR 截面，2025 年末口径）：ok → live；lagged → 滞后；块缺失 → pending。不回写横幅。 */
+  function fromOperatingDisclosedIrr(P) {
+    var B = P && P.operatingDisclosedIrr;
+    if (!B) return make(PENDING, { note: "经营权披露 IRR 截面未接入" });
+    if (B.status === "ok") return make(LIVE, { asOf: B.asOf || (B.curve && B.curve.asOf), source: B.source });
+    if (B.status === "lagged") return lagged(B.asOf || (B.curve && B.curve.asOf), B.lagReason);
+    return fromStatus(B.status, B.asOf, B.lagReason);
+  }
   /** data_panel_l1l7.json：seedMeta.liveFetch === false 或 source 含 seed → 示例数据。 */
   function fromPanel(P) {
     if (!P) return make(PENDING, { note: "data_panel_l1l7.json 未加载" });
@@ -139,7 +147,7 @@
     return (list || []).filter(Boolean).reduce(function (acc, s) { return rank[s.status] > rank[acc.status] ? s : acc; }, make(LIVE));
   }
   var api = { LIVE: LIVE, SEED: SEED, PENDING: PENDING, CACHED: CACHED, LAGGED: LAGGED, make: make, lagged: lagged, fromStatus: fromStatus, fromPanel: fromPanel,
-    fromPropertySpread: fromPropertySpread,
+    fromPropertySpread: fromPropertySpread, fromOperatingDisclosedIrr: fromOperatingDisclosedIrr,
     fromBetas: fromBetas, fromRateClock: fromRateClock, fromGateLeg: fromGateLeg, fromMarketIndex: fromMarketIndex,
     fromTenders: fromTenders, fromTsfImpulse: fromTsfImpulse, fromFundamentals: fromFundamentals, label: label, title: title, badgeHtml: badgeHtml,
     isLive: isLive, worst: worst, normAsOf: normAsOf };

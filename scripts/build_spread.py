@@ -495,7 +495,11 @@ def apply_to_panel(panel: dict, res: dict, block: dict) -> dict:
     sm = panel.setdefault("seedMeta", {})
     sm["propertyLive"] = True
     sm["propertySource"] = "live（scripts/build_spread.py）"
-    sm["note"] = "产权序列（propertyYieldSeries / propertySpread）为真实数据；经营权 IRR 序列、bond10ySeries 月度锚点、sectorSnapshot 仍为 SEED"
+    sm["note"] = (
+        "产权序列（propertyYieldSeries / propertySpread）为真实数据；"
+        + ("经营权披露 IRR 截面（operatingDisclosedIrr）为 2025 年末口径真实数据；" if panel.get("operatingDisclosedIrr") else "")
+        + "经营权 IRR 月度时序、bond10ySeries 月度锚点、sectorSnapshot 仍为 SEED"
+    )
     return panel
 
 
