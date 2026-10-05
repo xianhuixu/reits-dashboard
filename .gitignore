@@ -41,3 +41,4 @@ test_batch.py
 validate.py
 report_tmp/
 icons/lion-v3-preview*.png
+.cf-deploy/
