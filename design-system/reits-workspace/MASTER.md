@@ -13,8 +13,8 @@
 - 默认浅色：背景 #F4F6FA，内容 #FFFFFF，主文 #17243C，次文 #5C6980，线 #E5EAF2。
 - 主色 #3159CE；深色侧栏 #15243D；选中态 #2B466D；品牌保留现有狮子标志。
 - 金色只用于研究标签和原品牌，不用作全页背景。涨跌沿用中国市场红涨绿跌，均配符号与数值。
-- 字体：中文 PingFang SC / Microsoft YaHei；标题 Avenir Next + 中文回退；数字 SFMono-Regular / Consolas，tabular-nums。该选择为中文与离线性能适配，不依赖Google字体连接。
-- 字号 12/13/14/16/20/28/32；正文16px，表格13px，注释12px。长段落限制阅读宽度。
+- 字体：拉丁 / 数字 = 自托管 IBM Plex Sans（variable，latin + latin-ext，font-display:swap）；中文回退 PingFang SC / Hiragino Sans GB / Microsoft YaHei。`--font-data` 与拉丁同族 + tabular-nums，不再用等宽代码字体做 KPI。
+- 字号三档：12 / 14 / 18+28（`--fs-1`…`--fs-4`）。长段落限制阅读宽度。
 - 圆角：控件6px，面板12px。单层轻阴影，仅用于浮层。
 - 间距：4/8/12/16/24/32。动效仅状态与交互120–180ms，无持续装饰动画。
 

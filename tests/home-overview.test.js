@@ -204,9 +204,27 @@ test("banner / advice rationale containers and clock card no-wrap fragments", ()
   assert.match(read("workspace.js"), /ov-nw/);
 });
 
-test("head: scripts deferred, no web fonts; stylesheets stay plain (inline critical CSS measured slower)", () => {
+test("head: scripts deferred; latin web font is self-hosted with font-display; no @font-face in styles/workspace", () => {
   const html = read("index.html");
   (html.match(/<script src="[^"]+"[^>]*>/g) || []).forEach((s) => assert.match(s, /\bdefer\b/, s));
-  assert.doesNotMatch(read("styles.css") + read("workspace.css"), /@font-face/, "no web fonts (font-display not needed)");
+  assert.doesNotMatch(read("styles.css") + read("workspace.css"), /@font-face/, "keep @font-face out of styles/workspace");
+  const fonts = read("fonts.css");
+  assert.match(fonts, /@font-face/);
+  assert.match(fonts, /font-display:\s*swap/);
+  assert.match(fonts, /IBM Plex Sans/);
+  assert.match(html, /fonts\.css/);
+  assert.match(html, /preload[^>]+ibm-plex-sans-latin-wght-normal\.woff2/);
+  assert.match(read("workspace.css"), /--fs-1:\s*12px/);
+  assert.match(read("workspace.css"), /--font-data:\s*var\(--font-latin\)/);
   assert.doesNotMatch(html, /critical-css/);
+});
+
+test("design-r1: panel subheads and L2 stamps use type-scale classes (no inline font-size)", () => {
+  const html = read("index.html");
+  assert.doesNotMatch(html, /style="[^"]*font-size/);
+  assert.match(html, /class="panel-subhead"/);
+  assert.match(html, /经营权 · 基金披露 IRR/);
+  assert.match(html, /class="panel-l2-stamp"/);
+  assert.match(read("workspace.css"), /@keyframes ov-rise/);
+  assert.match(read("workspace.css"), /prefers-reduced-motion:reduce[^}]*\.ov-hero/s);
 });
