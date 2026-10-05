@@ -242,7 +242,7 @@
   function pctSpan(v, d) { if (!num(v)) return '—'; var c = v > 0 ? 'up' : v < 0 ? 'down' : 'flat'; return '<span class="' + c + '">' + sgnNum(v, d == null ? 2 : d) + '%</span>'; }
   function dsApply(el, s) { if (root.ReitsDataStatus && root.ReitsDataStatus.apply) root.ReitsDataStatus.apply(el, s); }
   function cardShell(el, title, attrs, inner, state) {
-    el.classList.remove('is-loading', 'is-empty', 'is-error');
+    el.classList.remove('is-loading', 'is-empty', 'is-error', 'is-content-in');
     if (state === 'empty') el.classList.add('is-empty');
     else if (state === 'error') el.classList.add('is-error');
     el.removeAttribute('aria-busy');
@@ -250,6 +250,9 @@
     Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
     el.setAttribute('role', 'link'); el.tabIndex = 0;
     el.setAttribute('aria-label', title + ' · 查看详情');
+    // design-r3: 150–200ms fade when real content replaces skeleton
+    if (typeof el.offsetWidth === 'number') void el.offsetWidth;
+    el.classList.add('is-content-in');
   }
   function cardSkeletonHtml(title) {
     return '<h3>' + esc(title) + '</h3>' +

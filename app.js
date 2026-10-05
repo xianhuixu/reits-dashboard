@@ -1052,7 +1052,8 @@ LAZY.research.push(function () {
   function setTreemapState(state) {
     var el = $("treemap");
     if (!el) return;
-    el.classList.remove("is-loading", "is-empty", "is-error");
+    var wasLoading = el.classList.contains("is-loading");
+    el.classList.remove("is-loading", "is-empty", "is-error", "is-content-in");
     el.removeAttribute("aria-busy");
     var sk = el.querySelector(".hm-skel");
     var em = el.querySelector(".hm-empty");
@@ -1063,6 +1064,11 @@ LAZY.research.push(function () {
     if (state === "loading") { el.classList.add("is-loading"); el.setAttribute("aria-busy", "true"); }
     else if (state === "empty") el.classList.add("is-empty");
     else if (state === "error") el.classList.add("is-error");
+    else if (wasLoading) {
+      // design-r3: fade skeleton → content
+      if (typeof el.offsetWidth === "number") void el.offsetWidth;
+      el.classList.add("is-content-in");
+    }
   }
   function renderTreemap() {
     var items = hmData();
@@ -2631,13 +2637,17 @@ LAZY.research.push(function () {
   // ---- Tab 切换 ----
   // ---- 研究二级菜单切换已并入左侧导航 ----
 
-  // ---- 入场动画：卡片错峰 + KPI 数字滚动 ----
+  // ---- 入场动画：卡片错峰 + KPI 数字滚动（design-r3: idle，不挡首屏） ----
   function stagger(scope) {
     if (!scope) return;
     scope.querySelectorAll(".card").forEach(function (c, i) { c.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); });
   }
-  document.querySelectorAll(".view, #v-heatmap, #v-advice").forEach(function (v) { stagger(v); });
-  document.querySelectorAll(".kpi").forEach(function (k, i) { k.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); k.classList.add("anim"); });
+  function runEntryMotion() {
+    document.querySelectorAll(".view, #v-heatmap, #v-advice").forEach(function (v) { stagger(v); });
+    document.querySelectorAll(".kpi").forEach(function (k, i) { k.style.setProperty("--d", Math.min(i * 50, 250) + "ms"); k.classList.add("anim"); });
+  }
+  if ("requestIdleCallback" in window) requestIdleCallback(runEntryMotion, { timeout: 2000 });
+  else setTimeout(runEntryMotion, 1);
 
   // 主题切换时，若个券详情已展开则同步重渲染其图表
   registerChart(function () {

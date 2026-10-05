@@ -216,7 +216,13 @@ test("head: scripts deferred; latin web font is self-hosted with font-display; n
   assert.match(html, /preload[^>]+ibm-plex-sans-latin-wght-normal\.woff2/);
   assert.match(read("workspace.css"), /--fs-1:\s*12px/);
   assert.match(read("workspace.css"), /--font-data:\s*var\(--font-latin\)/);
-  assert.doesNotMatch(html, /critical-css/);
+  // design-r3: critical path CSS for banner + 4 cards is inlined for LCP
+  assert.match(html, /id="critical-css"/);
+  const crit = html.match(/<style id="critical-css">([\s\S]*?)<\/style>/);
+  assert.ok(crit, "critical-css style block present");
+  assert.match(crit[1], /\.ov-headline/);
+  assert.match(crit[1], /\.ov-cards/);
+  assert.match(crit[1], /\.ov-hero/);
 });
 
 test("design-r1: panel subheads and L2 stamps use type-scale classes (no inline font-size)", () => {
@@ -253,3 +259,36 @@ test("design-r2: home + strategy L2 have zero inline font-size; eye accent stays
   assert.match(app, /hm-crumb-now/);
   assert.doesNotMatch(app, /strat-card[\s\S]{0,200}style="font-size:12px/);
 });
+
+test("design-r3: chart/scroll utilities replace height inline; skeleton fades in; idle non-FP scripts", () => {
+  const html = read("index.html");
+  const wc = read("workspace.css");
+  const app = read("app.js");
+  const ws = read("workspace.js");
+  assert.match(wc, /\.chart-h-sm\s*\{\s*height:\s*300px/);
+  assert.match(wc, /\.chart-h-md\s*\{\s*height:\s*380px/);
+  assert.match(wc, /\.chart-h-lg\s*\{\s*height:\s*400px/);
+  assert.match(wc, /\.scroll-panel\s*\{/);
+  assert.match(html, /class="chart-h-sm"/);
+  assert.match(html, /class="chart-h-md"/);
+  assert.match(html, /class="chart-h-lg"/);
+  assert.match(html, /scroll-panel scroll-panel-/);
+  assert.doesNotMatch(html, /style="[^"]*(?:max-)?height\s*:/);
+  assert.doesNotMatch(html, /style="/);
+  assert.match(wc, /@keyframes ov-content-in/);
+  assert.match(wc, /is-content-in/);
+  assert.match(ws, /is-content-in/);
+  assert.match(app, /is-content-in/);
+  assert.match(html, /requestIdleCallback/);
+  assert.match(html, /page-agent-loader\.js/);
+  assert.match(html, /geography\/map\.js/);
+  assert.doesNotMatch(html, /<script src="tender-feed\.js[^"]*" defer/);
+  assert.doesNotMatch(html, /<script src="geography\/map\.js[^"]*" defer/);
+  assert.match(app, /runEntryMotion/);
+  const panel = JSON.parse(read("data_panel_l1l7.json"));
+  assert.ok(panel.operatingDisclosedIrr);
+  assert.equal(panel.operatingDisclosedIrr.status, "ok");
+  assert.ok((panel.operatingDisclosedIrr.items || []).length >= 20);
+  assert.match(read("docs/deferred/banner-prerender-workflow.md"), /design-r3 \(PR #24\)/);
+});
+
