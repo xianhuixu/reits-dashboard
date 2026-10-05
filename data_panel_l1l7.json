@@ -2859,23 +2859,23 @@
     "interpolation": "cgb_curve.interp_yield / term_matched_spread（tests/test_cgb_curve.py）",
     "creditSpreadAAplus": "未接入：AA+ 信用利差无易得的免费日频源，本期跳过",
     "curve": {
-      "asOf": "2026-09-29",
+      "asOf": "2026-09-30",
       "points": [
         [
           2,
-          1.259
+          1.2665
         ],
         [
           5,
-          1.3948
+          1.409
         ],
         [
           10,
-          1.667
+          1.6822
         ],
         [
           30,
-          2.0735
+          2.1
         ]
       ],
       "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · 中债国债收益率 2Y(EMM00588704)/5Y(EMM00166462)/10Y(EMM00166466)/30Y(EMM00166469)",
@@ -2884,28 +2884,21 @@
     "curvePreview": [
       {
         "years": 3,
-        "yield": 1.3043
+        "yield": 1.314
       },
       {
         "years": 7,
-        "yield": 1.5037
+        "yield": 1.5183
       },
       {
         "years": 15,
-        "yield": 1.7686
+        "yield": 1.7866
       },
       {
         "years": 20,
-        "yield": 1.8703
+        "yield": 1.8911
       }
-    ],
-    "disclosedCrossSection": {
-      "status": "ok",
-      "label": "2025 年末口径",
-      "asOf": "2025-12-31",
-      "n": 24,
-      "note": "截面披露口径已接入；市值加权 live IRR 时序仍待接入"
-    }
+    ]
   },
   "propertySpread": {
     "asOf": "2026-09-30",

@@ -241,11 +241,21 @@
   function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function pctSpan(v, d) { if (!num(v)) return '—'; var c = v > 0 ? 'up' : v < 0 ? 'down' : 'flat'; return '<span class="' + c + '">' + sgnNum(v, d == null ? 2 : d) + '%</span>'; }
   function dsApply(el, s) { if (root.ReitsDataStatus && root.ReitsDataStatus.apply) root.ReitsDataStatus.apply(el, s); }
-  function cardShell(el, title, attrs, inner) {
+  function cardShell(el, title, attrs, inner, state) {
+    el.classList.remove('is-loading', 'is-empty', 'is-error');
+    if (state === 'empty') el.classList.add('is-empty');
+    else if (state === 'error') el.classList.add('is-error');
+    el.removeAttribute('aria-busy');
     el.innerHTML = '<h3>' + esc(title) + '</h3><span class="ov-go" aria-hidden="true">详情 →</span>' + inner;
     Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
     el.setAttribute('role', 'link'); el.tabIndex = 0;
     el.setAttribute('aria-label', title + ' · 查看详情');
+  }
+  function cardSkeletonHtml(title) {
+    return '<h3>' + esc(title) + '</h3>' +
+      '<div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div>' +
+      '<div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div>' +
+      '<div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div>';
   }
   function renderBanner(data, stance, panel, advice) {
     var rc = data.cycle && data.cycle.rateClock, b = clockBanner(rc), h = $('ovHeadline');
@@ -285,7 +295,8 @@
     var c = clockCard(rc), el = $('ovCardClock');
     if (el) {
       var inner;
-      if (!c.ok) inner = '<div class="ov-big ov-big-text">' + esc(c.big) + '</div><p class="ov-note">' + esc(c.note) + '</p>';
+      var cardState = null;
+      if (!c.ok) { cardState = 'empty'; inner = '<div class="ov-state-empty"><div class="ov-big ov-big-text">' + esc(c.big) + '</div><p class="ov-note">' + esc(c.note) + '</p></div>'; }
       else {
         inner = '<div class="ov-mini-clock" aria-hidden="true">' + c.cells.map(function (x) { return '<span class="' + (x.on ? 'on' : x.lean ? 'lean' : '') + '">' + x.label + '</span>'; }).join('') + '</div>' +
           '<div class="ov-big ov-big-text">' + esc(c.big) + ' <span class="ov-dir" aria-hidden="true">' + esc(c.arrow) + '</span></div>' +
@@ -298,18 +309,24 @@
         }
         inner += '<div class="ov-foot">' + (c.confidence ? '<span class="ov-pill ov-pill-grey">置信度 ' + esc(c.confidence) + '</span>' : '') + '<span>' + esc(c.quadrantName) + '</span></div>';
       }
-      cardShell(el, '投资时钟', { 'data-ov-view': 'cycle', 'data-ov-anchor': 'rateClockRow' }, inner);
+      cardShell(el, '投资时钟', { 'data-ov-view': 'cycle', 'data-ov-anchor': 'rateClockRow' }, inner, cardState);
       if (DS && DS.fromRateClock) dsApply(el, DS.fromRateClock(rc));
     }
     // 2 · 产权利差分位
     var sp = spreadCard(panel); el = $('ovCardSpread');
     if (el) {
-      cardShell(el, '产权利差分位', { 'data-ov-view': 'strategy', 'data-ov-anchor': 'panelL2Spreads', 'title': sp.tip || '' }, !sp.ok ? '<div class="ov-big">—</div><p class="ov-note">利差序列待接入</p>' :
-        '<div class="ov-big">' + sp.pctile + '%<small>分位</small>' + (sp.arrow ? '<span class="ov-dir" aria-hidden="true">' + sp.arrow + '</span>' : '') + '</div>' +
-        '<p class="ov-note">利差 ' + (num(sp.spread) ? sp.spread.toFixed(2) + '%' : '—') + (sp.delta != null ? ' · 较 3 个月前 ' + sgnNum(sp.delta, 0) + 'pp' : '') +
-        (sp.pctileFull != null ? ' · 全样本 ' + sp.pctileFull + '%' : '') + '</p>' +
-        '<div class="ov-bar" role="img" aria-label="滚动 3 年分位 ' + sp.pctile + '%"><i style="width:' + sp.pctile + '%"></i></div>' +
-        '<p class="ov-note" style="margin-top:6px">默认滚动 3 年分位；越高 = 相对债券越便宜</p><div class="ov-foot"><span>截至 ' + esc(sp.asOf || '—') + '</span></div>');
+      var spInner, spState = null;
+      if (!sp.ok) {
+        spState = 'empty';
+        spInner = '<div class="ov-state-empty"><div class="ov-big">—</div><p class="ov-note">利差序列待接入</p></div>';
+      } else {
+        spInner = '<div class="ov-big">' + sp.pctile + '%<small>分位</small>' + (sp.arrow ? '<span class="ov-dir" aria-hidden="true">' + sp.arrow + '</span>' : '') + '</div>' +
+          '<p class="ov-note">利差 ' + (num(sp.spread) ? sp.spread.toFixed(2) + '%' : '—') + (sp.delta != null ? ' · 较 3 个月前 ' + sgnNum(sp.delta, 0) + 'pp' : '') +
+          (sp.pctileFull != null ? ' · 全样本 ' + sp.pctileFull + '%' : '') + '</p>' +
+          '<div class="ov-bar" role="img" aria-label="滚动 3 年分位 ' + sp.pctile + '%"><i style="width:' + sp.pctile + '%"></i></div>' +
+          '<p class="ov-note ov-note-gap">默认滚动 3 年分位；越高 = 相对债券越便宜</p><div class="ov-foot"><span>截至 ' + esc(sp.asOf || '—') + '</span></div>';
+      }
+      cardShell(el, '产权利差分位', { 'data-ov-view': 'strategy', 'data-ov-anchor': 'panelL2Spreads', 'title': sp.tip || '' }, spInner, spState);
       if (DS && DS.fromPropertySpread) dsApply(el, DS.fromPropertySpread(panel));
     }
     // 3 · 市场今日
@@ -326,11 +343,17 @@
     // 4 · 社融脉冲
     var tsf = data.cycle && data.cycle.tsfImpulse, t = tsfCard(tsf); el = $('ovCardTsf');
     if (el) {
-      cardShell(el, '社融脉冲 · 领先预警', { 'data-ov-view': 'cycle', 'data-ov-anchor': 'tsfImpulseCard' }, !t.ok ? '<div class="ov-big">—</div><p class="ov-note">社融序列待接入</p>' :
-        '<div class="ov-big">' + noSignNum(t.value, 2) + '%' + (t.arrow ? '<span class="ov-dir" aria-hidden="true">' + t.arrow + '</span>' : '') + '</div>' +
-        '<p class="ov-note">上期 ' + (t.prev != null ? noSignNum(t.prev, 2) + '%' : '—') + '</p>' +
-        '<p class="ov-note"><b>' + esc(t.read) + '</b></p>' +
-        '<div class="ov-foot"><span class="ov-pill">领先 5–7 个月</span><span>数据截至 ' + esc(t.asOf || '—') + (t.monthsBehind ? '（滞后 ' + t.monthsBehind + ' 个月）' : '') + '</span></div>');
+      var tInner, tState = null;
+      if (!t.ok) {
+        tState = 'empty';
+        tInner = '<div class="ov-state-empty"><div class="ov-big">—</div><p class="ov-note">社融序列待接入</p></div>';
+      } else {
+        tInner = '<div class="ov-big">' + noSignNum(t.value, 2) + '%' + (t.arrow ? '<span class="ov-dir" aria-hidden="true">' + t.arrow + '</span>' : '') + '</div>' +
+          '<p class="ov-note">上期 ' + (t.prev != null ? noSignNum(t.prev, 2) + '%' : '—') + '</p>' +
+          '<p class="ov-note"><b>' + esc(t.read) + '</b></p>' +
+          '<div class="ov-foot"><span class="ov-pill">领先 5–7 个月</span><span>数据截至 ' + esc(t.asOf || '—') + (t.monthsBehind ? '（滞后 ' + t.monthsBehind + ' 个月）' : '') + '</span></div>';
+      }
+      cardShell(el, '社融脉冲 · 领先预警', { 'data-ov-view': 'cycle', 'data-ov-anchor': 'tsfImpulseCard' }, tInner, tState);
       if (DS && DS.fromTsfImpulse) dsApply(el, DS.fromTsfImpulse(tsf));
     }
     // 今日要点

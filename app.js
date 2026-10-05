@@ -273,8 +273,8 @@ LAZY.research.push(function () {
     var color = ST_COLOR[st];
     return '<div class="card strat-card" style="border-top-color:' + color + '">' +
       '<span class="tag">' + ST_DESC[st][0] + '</span>' +
-      '<div class="big num ' + cls(a) + '">' + fmt(a) + ' <span style="font-size:12px;color:var(--tx3)">今日</span></div>' +
-      '<div class="num" style="font-size:12px;color:var(--tx2)">20日 ' + fmt(a20) + ' · ' + list.length + ' 只</div>' +
+      '<div class="big num ' + cls(a) + '">' + fmt(a) + ' <span class="strat-today">今日</span></div>' +
+      '<div class="num strat-sub">20日 ' + fmt(a20) + ' · ' + list.length + ' 只</div>' +
       '<ul><li>' + ST_DESC[st][1] + '</li><li>' + ST_DESC[st][2] + '</li></ul></div>';
   }).join("");
 
@@ -757,7 +757,7 @@ LAZY.research.push(function () {
     $("betaDisagree").innerHTML = dis.length ?
       '<table class="matrix"><thead><tr><th class="l">量化分类与人工标签不一致</th><th class="l">板块</th><th>人工标签</th><th>期望</th><th>量化分类</th><th>股 Beta</th><th>债 Beta</th><th>Δ10Y +10bp</th></tr></thead><tbody>' +
       dis.map(function (r) {
-        return "<tr><td class='l'><b>" + escH(r.name) + "</b> <span style='color:var(--tx3);font-size:11px'>" + r.code + "</span></td><td class='l'>" + escH(r.sector) + "</td><td><span class='st-tag st-" + r.strategy + "'>" + escH(r.strategy) + "</span></td><td>" + escH(r.expected) +
+        return "<tr><td class='l'><b>" + escH(r.name) + "</b> <span class='cell-code'>" + r.code + "</span></td><td class='l'>" + escH(r.sector) + "</td><td><span class='st-tag st-" + r.strategy + "'>" + escH(r.strategy) + "</span></td><td>" + escH(r.expected) +
           "</td><td><span class='flag-chip flag-conflict'>" + escH(r.cls) + "</span></td><td class='num'>" + f3(r.betaEq) + "</td><td class='num'>" + f3(r.betaBond) + "</td><td class='num'>" + (r.sens10y == null ? "—" : f3(r.sens10y) + "%") + "</td></tr>";
       }).join("") + "</tbody></table>" :
       '<p class="note">量化偏股/偏债分类与人工「防御 / 周期 / 扩张」标签无相反一端的冲突</p>';
@@ -775,7 +775,7 @@ LAZY.research.push(function () {
         allList = allList.concat(list);
         if (!list.length) { row += "<td style='color:var(--tx3)'>·</td>"; return; }
         var a = avgOf(list.map(function (r) { return r.pct; }));
-        row += '<td class="num ' + cls(a) + '">' + fmt(a) + ' <span style="color:var(--tx3);font-size:10px">(' + list.length + ")</span></td>";
+        row += '<td class="num ' + cls(a) + '">' + fmt(a) + ' <span class="cell-count">(' + list.length + ")</span></td>";
       });
       var aa = avgOf(allList.map(function (r) { return r.pct; }));
       row += '<td class="num ' + cls(aa) + '" style="font-weight:600">' + fmt(aa) + "</td>";
@@ -1049,19 +1049,45 @@ LAZY.research.push(function () {
     if (ret < -0.0001) return tmMix("#5aa88f", "#14624c", t);   // 跌：浅墨绿 → 深墨绿
     return "#8a93a0";                                            // 平：中性灰
   }
+  function setTreemapState(state) {
+    var el = $("treemap");
+    if (!el) return;
+    el.classList.remove("is-loading", "is-empty", "is-error");
+    el.removeAttribute("aria-busy");
+    var sk = el.querySelector(".hm-skel");
+    var em = el.querySelector(".hm-empty");
+    var er = el.querySelector(".hm-error");
+    if (sk) sk.hidden = state !== "loading";
+    if (em) em.hidden = state !== "empty";
+    if (er) er.hidden = state !== "error";
+    if (state === "loading") { el.classList.add("is-loading"); el.setAttribute("aria-busy", "true"); }
+    else if (state === "empty") el.classList.add("is-empty");
+    else if (state === "error") el.classList.add("is-error");
+  }
   function renderTreemap() {
     var items = hmData();
     var th = chartTheme();
     var pool = hmDrill
       ? D.reits.filter(function (r) { return r.sector === hmDrill; })
       : D.reits.filter(function (r) { return !hmSector || r.sector === hmSector; });
+    if (!D || !D.reits || !D.reits.length) {
+      setTreemapState("empty");
+      $("hmSummary").innerHTML = "";
+      $("hmCrumb").innerHTML = '<span class="hm-crumb-hint">暂无个券行情</span>';
+      return;
+    }
+    if (!items || !items.length) {
+      setTreemapState("empty");
+    } else {
+      setTreemapState(null);
+    }
     var up = pool.filter(function (r) { return r.pct > 0; }).length;
     var dn = pool.filter(function (r) { return r.pct < 0; }).length;
     var fl = pool.length - up - dn;
     $("hmSummary").innerHTML = "<span>下跌 <b class='down'>" + dn + "</b></span><span>平 <b>" + fl + "</b></span><span>上涨 <b class='up'>" + up + "</b></span>";
     $("hmCrumb").innerHTML = hmDrill
-      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span style="font-size:12px;color:var(--tx2)">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 点击个券色块直达「个券透视」</span>'
-      : '<span style="font-size:11.5px;color:var(--tx3)">点击板块色块可下钻查看该板块全部个券</span>';
+      ? '<button class="range-btn" id="hmBack">‹ 返回全部板块</button><span class="hm-crumb-now">当前：<b>' + hmDrill + '</b> 板块 · ' + pool.length + ' 只个券（面积 ∝ 成交额 · 颜色 = 涨跌幅）· 点击个券色块直达「个券透视」</span>'
+      : '<span class="hm-crumb-hint">点击板块色块可下钻查看该板块全部个券</span>';
     document.querySelectorAll("#hmSectorChips .chip").forEach(function (x) {
       x.classList.toggle("on", (x.dataset.s || "") === (hmDrill || hmSector || ""));
     });

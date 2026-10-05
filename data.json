@@ -4251,7 +4251,7 @@
     "downgradeTo": "partial"
    },
    "status": "not_triggered",
-   "dataStatus": "complete",
+   "dataStatus": "lagged",
    "rateLeg": {
     "status": "ok",
     "d10y60bp": -5.6,
@@ -4267,11 +4267,12 @@
     "to": "2026-09-30",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
     "met": false,
-    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
+    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
+    "note": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
    },
    "asOf": "2026-09-30",
    "rentLeg": {
-    "status": "ok",
+    "status": "lagged",
     "asOf": "2026-09-30",
     "y10Avg1y": 1.777,
     "y10AvgPrev1y": 1.787,

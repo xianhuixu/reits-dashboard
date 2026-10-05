@@ -309,7 +309,9 @@
         var agent = ensureAgent(cfg);
         hideCard();
         hideToast();
+        setPanelOpenClass(true);
         if (agent.panel && typeof agent.panel.show === 'function') agent.panel.show();
+        watchAgentPanel();
       } catch (e) {
         console.error('[rd-ai] init failed:', e);
         hideToast();
@@ -324,7 +326,51 @@
     });
   }
 
+
+  var panelWatcher = null;
+  function isAgentPanelOpen(el) {
+    if (!el) return false;
+    if (el.hidden) return false;
+    var st = window.getComputedStyle(el);
+    if (st.display === 'none' || st.visibility === 'hidden') return false;
+    if (el.getAttribute('aria-hidden') === 'true') return false;
+    var ds = el.getAttribute('data-state') || el.getAttribute('data-status') || '';
+    if (/clos|hid|collaps/i.test(ds)) return false;
+    var cls = el.className || '';
+    if (/\b(open|expanded|visible|show)\b/i.test(cls) && !/\b(clos|hid|collaps)\b/i.test(cls)) return true;
+    /* opacity can animate; treat non-zero + sized as open */
+    if (Number(st.opacity) === 0) return false;
+    var rect = el.getBoundingClientRect();
+    return rect.width > 40 && rect.height > 40;
+  }
+  function setPanelOpenClass(open) {
+    document.documentElement.classList.toggle('rd-ai-panel-open', !!open);
+  }
+  function watchAgentPanel() {
+    var el = document.getElementById('page-agent-runtime_agent-panel');
+    if (!el) {
+      /* panel may mount a tick later */
+      if (!watchAgentPanel._tries) watchAgentPanel._tries = 0;
+      if (watchAgentPanel._tries++ < 40) setTimeout(watchAgentPanel, 100);
+      return;
+    }
+    watchAgentPanel._tries = 0;
+    setPanelOpenClass(isAgentPanelOpen(el));
+    if (panelWatcher) try { panelWatcher.disconnect(); } catch (e) {}
+    panelWatcher = new MutationObserver(function () {
+      setPanelOpenClass(isAgentPanelOpen(el));
+    });
+    panelWatcher.observe(el, { attributes: true, attributeFilter: ['class', 'style', 'hidden', 'data-state', 'data-status', 'aria-hidden'], childList: false, subtree: true });
+    /* also poll lightly — some builds animate opacity without attribute churn */
+    if (watchAgentPanel._timer) clearInterval(watchAgentPanel._timer);
+    watchAgentPanel._timer = setInterval(function () {
+      var cur = document.getElementById('page-agent-runtime_agent-panel');
+      setPanelOpenClass(isAgentPanelOpen(cur));
+    }, 600);
+  }
+
   function injectStyles() {
+
     var css =
       /* 桌面：右上横排（设置在左、AI 在右），避免小圆点叠在 AI 角上像未读角标；移动：右下 */
       '#rdAiWrap{position:fixed;z-index:2147483639;display:flex;flex-direction:row;align-items:center;gap:8px;' +
@@ -333,9 +379,14 @@
       '@media (max-width:640px){#rdAiWrap{top:auto;bottom:max(16px, env(safe-area-inset-bottom, 0px));right:max(12px, env(safe-area-inset-right, 0px));flex-direction:row;gap:8px}}' +
       '#rdAiLauncher{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;' +
         'font:700 14px/1 system-ui,sans-serif;color:#fff;' +
-        'background:var(--accent,#2563eb);box-shadow:0 4px 16px rgba(0,0,0,.28);' +
-        'transition:transform .15s ease,box-shadow .15s ease;' +
+        'background:var(--brand,var(--accent,#3159ce));box-shadow:0 4px 16px rgba(0,0,0,.28);' +
+        'transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease,visibility .15s ease;' +
         'position:relative}' +
+      /* eye-care: force research-blue on AI entry */
+      '[data-theme="eye"] #rdAiLauncher,[data-theme="eye"] #rdAiCard .rd-ai-btn-primary{' +
+        'background:var(--brand,#3159ce)!important}' +
+      '[data-theme="eye"] #rdAiGear:hover,[data-theme="eye"] #rdAiGear.rd-ai-gear-on{' +
+        'color:var(--brand,#3159ce)!important;border-color:var(--brand,#3159ce)!important}' +
       /* 保险：清掉任何伪元素角标 / 未读计数 */
       '#rdAiLauncher::before,#rdAiLauncher::after,#rdAiWrap::before,#rdAiWrap::after{content:none!important;display:none!important}' +
       '@media (max-width:640px){#rdAiLauncher{width:40px;height:40px;font-size:13px}}' +
@@ -377,7 +428,7 @@
       '#rdAiCard .rd-ai-link{border:none;background:none;color:var(--tx3,#6e7781);font-size:12px;cursor:pointer;text-decoration:underline}' +
       '#rdAiToast{position:fixed;z-index:2147483646;max-width:calc(100vw - 32px);' +
         'right:max(12px, env(safe-area-inset-right, 0px));top:124px;' +
-        'background:var(--tx,#1f2937);color:var(--panel,#fff);padding:9px 14px;border-radius:10px;' +
+        'background:var(--toast-bg,var(--tx,#17243c));color:var(--toast-fg,var(--panel,#fff));padding:9px 14px;border-radius:10px;' +
         'font:12.5px/1.5 system-ui,sans-serif;border:1px solid var(--line2,transparent);' +
         'box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;pointer-events:none;transform:translateY(6px);' +
         'transition:opacity .2s ease,transform .2s ease}' +
@@ -391,8 +442,23 @@
         '#page-agent-runtime_agent-panel [class*="_historySection_"]{max-height:min(16vh, 130px) !important}' +
         '#page-agent-runtime_agent-panel [class*="_historySectionWrapper_"]{max-height:min(16vh, 130px) !important}' +
       '}' +
+      /* design-r1: panel + badges follow site tokens (dark / eye first-class) */
       '[data-theme="dark"] #page-agent-runtime_agent-panel,[data-theme="eye"] #page-agent-runtime_agent-panel{' +
-        '--color-1:var(--accent,#58a6ff);--color-2:var(--gro,#bc8cff)}';
+        '--color-1:var(--accent);--color-2:var(--gro,#bc8cff);' +
+        'color:var(--tx);background:var(--panel)!important;border-color:var(--line)!important}' +
+      '[data-theme="dark"] #page-agent-runtime_agent-panel input,[data-theme="eye"] #page-agent-runtime_agent-panel input,' +
+      '[data-theme="dark"] #page-agent-runtime_agent-panel textarea,[data-theme="eye"] #page-agent-runtime_agent-panel textarea{' +
+        'background:var(--panel2)!important;color:var(--tx)!important;border-color:var(--line)!important}' +
+      /* 面板打开时彻底藏启动钮/齿轮，避免压住输入框右下角 */
+      'html.rd-ai-panel-open #rdAiLauncher,html.rd-ai-panel-open #rdAiGear{' +
+        'display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;' +
+        'transform:scale(.9);width:0!important;height:0!important;min-width:0!important;' +
+        'padding:0!important;margin:0!important;border:0!important;overflow:hidden!important}' +
+      'html.rd-ai-panel-open #rdAiWrap{pointer-events:none;gap:0}' +
+      '@media (prefers-reduced-motion:reduce){html.rd-ai-panel-open #rdAiLauncher,html.rd-ai-panel-open #rdAiGear{transform:none}}' +
+      /* eye panel accent stays brand blue, not teal */
+      '[data-theme="eye"] #page-agent-runtime_agent-panel{' +
+        '--color-1:var(--brand,#3159ce)!important;--color-2:var(--brand,#3159ce)!important}';
     var style = document.createElement('style');
     style.id = 'rdAiStyles';
     style.textContent = css;
