@@ -465,7 +465,15 @@ LAZY.research.push(function () {
   function renderL2SpreadCharts() {
     var P = window.REITS_DATA_PANEL;
     var stamp = $("panelL2Stamp");
-    if (DS) dsApply($("panelL2Spreads"), DS.fromPanel(P));
+    var ps = P && P.propertySpread;
+    if (DS) {
+      // 产权真实 + 经营权仍 SEED → 整卡取 worst（产权 live/lagged，经营权 seed）
+      var propS = DS.fromPropertySpread(P);
+      var opS = (P && P.operatingIrrSeries && (!(P.seedMeta) || P.seedMeta.liveFetch === false))
+        ? DS.make(DS.SEED, { asOf: P.asOfTrade, note: "经营权 IRR 序列仍为 SEED" })
+        : DS.make(DS.LIVE);
+      dsApply($("panelL2Spreads"), DS.worst([propS, opS]));
+    }
     if (!P || !P.propertyYieldSeries || !P.operatingIrrSeries) {
       if (stamp) stamp.textContent = "L2 面板数据未加载（data_panel_l1l7.json）";
       ["chartL2Property", "chartL2Operating"].forEach(function (id) {
@@ -475,9 +483,11 @@ LAZY.research.push(function () {
       return;
     }
     if (stamp) {
-      var src = P.source || "data_panel_l1l7";
-      var seed = P.seedMeta && P.seedMeta.liveFetch === false ? " · SEED（非 live）" : "";
-      stamp.textContent = "asOfTrade " + (P.asOfTrade || "—") + " · updated " + (P.updated || "—") + " · " + src + seed;
+      var L = ps && ps.latest, propNote = ps
+        ? ("产权 " + (ps.status === "ok" ? "live" : ps.status) + " · 滚动3年分位 " + (L && L.pctRolling3y != null ? L.pctRolling3y + "%" : "—") +
+           "（全样本 " + (L && L.pctFull != null ? L.pctFull + "%" : "—") + "） · asOf " + (ps.asOf || "—"))
+        : "产权 SEED";
+      stamp.textContent = propNote + " · 经营权仍为 SEED IRR−10Y · updated " + (P.updated || "—");
     }
     var bondMap = {};
     (P.bond10ySeries || []).forEach(function (r) { bondMap[r.date] = r.ytm; });
@@ -486,7 +496,7 @@ LAZY.research.push(function () {
       var th = chartTheme();
       var dates = rows.map(function (r) { return r.date; });
       var yld = rows.map(function (r) { return r[yieldKey]; });
-      var bond = rows.map(function (r) { return bondMap[r.date] != null ? bondMap[r.date] : null; });
+      var bond = rows.map(function (r) { return r.y10 != null ? r.y10 : (bondMap[r.date] != null ? bondMap[r.date] : null); });
       var spread = rows.map(function (r) { return r.spread; });
       var pctile = rows.map(function (r) { return r.pctile != null ? +(r.pctile * 100).toFixed(1) : null; });
       var last = rows[rows.length - 1] || {};
@@ -508,7 +518,10 @@ LAZY.research.push(function () {
               if (p.seriesName && p.data != null) lines.push(p.marker + p.seriesName + "：" + p.data);
             });
             if (r.spread != null) lines.push("利差：" + r.spread.toFixed(2) + "%（" + Math.round(r.spread * 100) + "BP）");
-            if (r.pctile != null) lines.push("历史分位：" + (r.pctile * 100).toFixed(1) + "%");
+            if (r.pctile != null) lines.push("滚动 3 年分位：" + (r.pctile * 100).toFixed(1) + "%");
+            if (r.pctileFull != null) lines.push("2022 年以来全样本：" + (r.pctileFull * 100).toFixed(1) + "%");
+            if (r.y10 != null) lines.push("10Y：" + Number(r.y10).toFixed(3) + "%");
+            if (r.n != null) lines.push("覆盖 " + r.n + " 只");
             return lines.join("<br>");
           }
         },
@@ -554,6 +567,10 @@ LAZY.research.push(function () {
     }
     paint("chartL2Property", P.propertyYieldSeries, "ttmYield", "产权 TTM", "#3b82f6");
     paint("chartL2Operating", P.operatingIrrSeries, "irr", "经营权 IRR", "#f59e0b");
+    var secEl = $("sectorSpreadHost");
+    if (secEl && window.ReitsAllocation && window.ReitsAllocation.sectorSpreadHtml) {
+      secEl.innerHTML = window.ReitsAllocation.sectorSpreadHtml(window.ReitsAllocation.propertySectorRows(P));
+    }
   }
 
   function scheduleL2() {
@@ -1861,7 +1878,8 @@ LAZY.research.push(function () {
       var gateTxt = !GT ? "未计算" :
         ({ triggered: "⚠️ 已触发 → 利率风险升级为「高」、估值闸门降为 partial", not_triggered: "未触发", "pending data": "待数据" }[GT.status] || GT.status) +
         "（利率腿 " + (GT.rateLeg && GT.rateLeg.status === "ok" ? bp(GT.rateLeg.d10y60bp) + (GT.rateLeg.met ? " ✓" : " ✗") : "待数据") +
-        " · 产权利差分位腿 " + (GT.spreadLeg && GT.spreadLeg.status === "ok" ? GT.spreadLeg.pctileChangePP + "pp" : "pending data：SEED 非真实") + "）";
+        " · 产权利差分位腿 " + (GT.spreadLeg && (GT.spreadLeg.status === "ok" || GT.spreadLeg.status === "lagged") ? GT.spreadLeg.pctileChangePP + "pp" + (GT.spreadLeg.status === "lagged" ? "（滞后）" : "") : "pending data") +
+        (GT.rentLeg && GT.rentLeg.status !== "pending" ? " · 租金对照：顺风 " + GT.rentLeg.rateTailwindBp + "bp vs 拖累 " + GT.rentLeg.distDragBp + "bp" : "") + "）";
       var rot = RC.rotation || {};
       var refTag = trans ? '<span class="rc-tag rc-tag-ref">参考</span>' : "";
       var sw = RC.signalSwitch && RC.signalSwitch.active ? RC.signalSwitch : null;

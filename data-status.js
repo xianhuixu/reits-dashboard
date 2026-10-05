@@ -1,17 +1,20 @@
 /* 全站数据状态标注：把 JSON 里既有的 status / as-of / seed 字段统一映射为
- *   live（实时，不加标）· seed（示例数据）· pending（待接入）· cached（缓存 · as-of X）
+ *   live（实时，不加标）· seed（示例数据）· pending（待接入）· cached（缓存 · as-of X）· lagged（滞后 · 数据截至 MM-DD）
  * 纯函数可在 node 下测试；浏览器端挂在 window.ReitsDataStatus。只读数据，不改数据。 */
 (function (root) {
   "use strict";
-  var LIVE = "live", SEED = "seed", PENDING = "pending", CACHED = "cached";
-  var LABEL = { seed: "示例数据", pending: "待接入", cached: "缓存" };
+  var LIVE = "live", SEED = "seed", PENDING = "pending", CACHED = "cached", LAGGED = "lagged";
+  var LABEL = { seed: "示例数据", pending: "待接入", cached: "缓存", lagged: "滞后" };
   var STATUS_MAP = {
     ok: LIVE, live: LIVE, fresh: LIVE, triggered: LIVE, not_triggered: LIVE,
     seed: SEED, placeholder: SEED, sample: SEED, demo: SEED, example: SEED,
     pending: PENDING, "pending data": PENDING, pending_data: PENDING, unavailable: PENDING, missing: PENDING,
     "待计算": PENDING, "待数据": PENDING, "待接入": PENDING, na: PENDING, "n/a": PENDING, none: PENDING,
-    cached: CACHED, cache: CACHED, stale: CACHED, degraded: CACHED, failed: CACHED, fallback: CACHED
+    cached: CACHED, cache: CACHED, stale: CACHED, degraded: CACHED, failed: CACHED, fallback: CACHED,
+    lagged: LAGGED, lag: LAGGED, "滞后": LAGGED
   };
+  /** 「2026-09-29」→「09-29」 */
+  function mmdd(v) { var m = /^\d{4}-(\d{2})-(\d{2})/.exec(String(v || "")); return m ? m[1] + "-" + m[2] : null; }
   /** 规范化 as-of：ISO 时间取日期部分，空值返回 null。 */
   function normAsOf(v) {
     if (v == null || v === "") return null;
@@ -24,12 +27,26 @@
     extra = extra || {};
     return { status: status, asOf: normAsOf(extra.asOf), note: extra.note || "", source: extra.source || "", display: extra.display || "" };
   }
-  /** 任意 status 字符串 → 四态之一；未知状态视为 pending（宁可标注，不冒充 live）。 */
+  /** 任意 status 字符串 → 五态之一；未知状态视为 pending（宁可标注，不冒充 live）。 */
   function fromStatus(status, asOf, note) {
     if (status == null || status === "") return make(PENDING, { asOf: asOf, note: note || "状态缺失" });
     var key = String(status).trim().toLowerCase();
     var st = Object.prototype.hasOwnProperty.call(STATUS_MAP, key) ? STATUS_MAP[key] : PENDING;
+    if (st === LAGGED) return lagged(asOf, note);
     return make(st, { asOf: asOf, note: note });
+  }
+  /** 滞后：抓取失败沿用上一日值 → 「滞后 · 数据截至 MM-DD」（绝不显示为 live）。 */
+  function lagged(asOf, note) {
+    var d = mmdd(asOf);
+    return make(LAGGED, { asOf: asOf, note: note || "本次抓取失败，沿用上一次成功数据", display: d ? "数据截至 " + d : "" });
+  }
+  /** data_panel_l1l7.json.propertySpread（产权利差真实序列）：ok → live；lagged → 滞后 · 数据截至 MM-DD；块缺失 → 回退整面板状态（SEED）。 */
+  function fromPropertySpread(P) {
+    var B = P && P.propertySpread;
+    if (!B) return fromPanel(P);
+    if (B.status === "ok") return make(LIVE, { asOf: B.asOf, source: B.source });
+    if (B.status === "lagged") return lagged(B.asOf, B.lagReason);
+    return fromStatus(B.status, B.asOf, B.lagReason);
   }
   /** data_panel_l1l7.json：seedMeta.liveFetch === false 或 source 含 seed → 示例数据。 */
   function fromPanel(P) {
@@ -55,7 +72,7 @@
   /** cycle.rateRentGate 的产权利差分位腿（spreadLeg）：pending data → 待接入。 */
   function fromGateLeg(leg, asOf) {
     if (!leg) return make(PENDING, { asOf: asOf, note: "闸门腿未计算" });
-    return leg.status === "ok" ? make(LIVE, { asOf: leg.to || asOf }) : fromStatus(leg.status, asOf, leg.note);
+    return leg.status === "ok" ? make(LIVE, { asOf: leg.to || asOf }) : fromStatus(leg.status, leg.to || asOf, leg.note);
   }
   /** cycle.tsfImpulse（社融脉冲）：pending → 待接入；取数走缓存或源滞后 >2 个月 → 「缓存 · 数据截至 X月」。 */
   function fromTsfImpulse(T) {
@@ -100,12 +117,13 @@
   function label(s) {
     if (isLive(s)) return "";
     if (s.status === CACHED) return LABEL.cached + (s.display ? " · " + s.display : s.asOf ? " · as-of " + s.asOf : "");
+    if (s.status === LAGGED) return LABEL.lagged + (s.display ? " · " + s.display : "");
     return LABEL[s.status] || LABEL.pending;
   }
   function title(s) {
     if (isLive(s)) return "";
     var parts = [label(s)];
-    if (s.status !== CACHED && s.asOf) parts.push("as-of " + s.asOf);
+    if (s.status !== CACHED && s.status !== LAGGED && s.asOf) parts.push("as-of " + s.asOf);
     if (s.note) parts.push(s.note);
     return parts.join(" · ");
   }
@@ -115,12 +133,13 @@
     if (isLive(s)) return "";
     return '<span class="ds-badge ds-' + s.status + (inline ? " ds-inline" : "") + '" title="' + esc(title(s)) + '">' + esc(label(s)) + "</span>";
   }
-  /** 汇总多个状态：任一非 live 即取最「弱」者（pending > seed > cached）。 */
+  /** 汇总多个状态：任一非 live 即取最「弱」者（pending > seed > lagged > cached）。 */
   function worst(list) {
-    var rank = { live: 0, cached: 1, seed: 2, pending: 3 };
+    var rank = { live: 0, cached: 1, lagged: 1.5, seed: 2, pending: 3 };
     return (list || []).filter(Boolean).reduce(function (acc, s) { return rank[s.status] > rank[acc.status] ? s : acc; }, make(LIVE));
   }
-  var api = { LIVE: LIVE, SEED: SEED, PENDING: PENDING, CACHED: CACHED, make: make, fromStatus: fromStatus, fromPanel: fromPanel,
+  var api = { LIVE: LIVE, SEED: SEED, PENDING: PENDING, CACHED: CACHED, LAGGED: LAGGED, make: make, lagged: lagged, fromStatus: fromStatus, fromPanel: fromPanel,
+    fromPropertySpread: fromPropertySpread,
     fromBetas: fromBetas, fromRateClock: fromRateClock, fromGateLeg: fromGateLeg, fromMarketIndex: fromMarketIndex,
     fromTenders: fromTenders, fromTsfImpulse: fromTsfImpulse, fromFundamentals: fromFundamentals, label: label, title: title, badgeHtml: badgeHtml,
     isLive: isLive, worst: worst, normAsOf: normAsOf };

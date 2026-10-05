@@ -328,6 +328,26 @@ class RateRentGateTests(unittest.TestCase):
     def test_missing_series_pending(self):
         self.assertEqual(rc.rate_rent_gate([], None)["status"], "pending data")
 
+    def test_property_spread_block_feeds_spread_and_rent_legs(self):
+        panel = {
+            "propertySpread": {
+                "status": "ok", "asOf": "2026-09-29",
+                "gate60d": {"pctileChangePP": -25.0, "from": "2026-07-01", "to": "2026-09-29", "basis": "滚动 3 年"},
+                "rentVsRate": {"status": "ok", "rateTailwindBp": 1.0, "distDragBp": -20.0, "dominant": "distribution", "text": "分派拖累占优"},
+            }
+        }
+        g = rc.rate_rent_gate(daily([1.6 + i * 0.006 for i in range(100)]), panel)
+        self.assertEqual(g["status"], "triggered")
+        self.assertEqual(g["spreadLeg"]["status"], "ok")
+        self.assertTrue(g["spreadLeg"]["met"])
+        self.assertEqual(g["rentLeg"]["dominant"], "distribution")
+        panel["propertySpread"]["status"] = "lagged"
+        panel["propertySpread"]["lagReason"] = "取数失败"
+        g2 = rc.rate_rent_gate(daily([1.7] * 100), panel)
+        self.assertEqual(g2["spreadLeg"]["status"], "lagged")
+        self.assertEqual(g2["dataStatus"], "lagged")
+        self.assertEqual(g2["status"], "not_triggered")  # 利率腿未满足
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -117,7 +117,10 @@ class UpdateCycleOfflineTests(unittest.TestCase):
         self.assertEqual(rc["growth"]["z3"], committed["growth"]["z3"])
         self.assertEqual(cycle["tsfImpulse"]["value"], committed_cycle["tsfImpulse"]["value"])
         self.assertEqual(rc["asOf"], macro["cgb10y"]["asOf"])
-        self.assertEqual(cycle["rateRentGate"]["spreadLeg"]["status"], "pending data")  # SEED 面板不得当真实
+        # 产权利差已接真实序列 → 闸门腿 ok（或 lagged）；SEED 面板不得当真实的断言已由 check_property_spread 覆盖
+        self.assertIn(cycle["rateRentGate"]["spreadLeg"]["status"], ("ok", "lagged", "pending data"))
+        if self.panel.get("propertySpread", {}).get("status") in ("ok", "lagged"):
+            self.assertIn(cycle["rateRentGate"]["spreadLeg"]["status"], ("ok", "lagged"))
 
 
 if __name__ == "__main__":
