@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-05 21:49:46",
+ "updated": "2026-10-05 22:20:27",
  "lastTradeDate": "2026-09-30",
  "count": 88,
  "sectors": [
@@ -4279,10 +4279,10 @@
     "y10Now": 1.682,
     "y10YearAgo": 1.861,
     "pointToPointBp": -17.8,
-    "ttmYieldMcap": 4.5,
-    "distYoYMedianPct": -5.93,
-    "distDragBp": -26.7,
-    "netBp": -25.7,
+    "ttmYieldMcap": 4.83,
+    "distYoYMedianPct": -4.16,
+    "distDragBp": -20.1,
+    "netBp": -19.0,
     "dominant": "distribution",
     "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
