@@ -67,12 +67,44 @@ window.__loadECharts = function () {
   if (!/^#\/?detail\//.test(location.hash || "")) document.documentElement.classList.add("is-home");
 })();
 </script>
+<!-- design-r3: critical path for LCP candidate (#ovHeadline) + 4 status cards; full CSS still loads below -->
+<style id="critical-css">
+:root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2128;--line:rgba(139,148,158,.12);--line2:rgba(139,148,158,.22);--tx:#e6edf3;--tx2:#9ea7b3;--tx3:#6e7681;--accent:#58a6ff;--brand:#58a6ff;--radius:12px;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);--fs-1:12px;--fs-2:14px;--fs-3:18px;--fs-4:28px;--font-body:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;--ease:cubic-bezier(.22,.9,.28,1)}
+html[data-theme="light"]{--bg:#f0f2f5;--panel:#fff;--panel2:#f5f7fa;--line:#e8eaed;--line2:#d0d4dc;--tx:#0d1117;--tx2:#3d444d;--tx3:#6e7781;--accent:#2563eb;--brand:#2563eb;--shadow:0 1px 2px rgba(13,17,23,.04),0 4px 12px rgba(13,17,23,.04)}
+html[data-theme="eye"]{--bg:#e8f0e0;--panel:#f5faf0;--panel2:#eef5e6;--line:#d0dcc4;--line2:#b8c8a8;--tx:#1a2e15;--tx2:#4a6340;--tx3:#7a8f6e;--accent:#2f5fc9;--brand:#3159ce}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);-webkit-font-smoothing:antialiased}
+.ov-tier{display:flex;align-items:center;gap:10px;margin:22px 0 10px;font-size:11px;letter-spacing:1.5px;color:var(--tx3);font-weight:600}
+.ov-tier::after{content:"";flex:1;border-top:1px dashed var(--line2)}
+.ov-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;background:var(--panel);border:1px solid var(--line2);border-left:4px solid var(--accent);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);min-height:132px}
+.ov-hero-main{min-width:0;flex:1}
+.ov-kicker{font-size:var(--fs-1);color:var(--tx3);margin:0 0 6px;letter-spacing:.5px}
+.ov-headline{font-size:var(--fs-3);line-height:1.45;font-weight:650;letter-spacing:-.2px;margin:0;min-height:32px;overflow-wrap:anywhere}
+.ov-headline .ov-arrow{color:var(--tx3);font-weight:500;margin:0 6px}
+.ov-headline .ov-stance{color:var(--accent);display:inline-block}
+.ov-basis{margin:6px 0 0;font-size:13px;line-height:1.55;color:var(--tx);display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-height:20px}
+.ov-sub{margin:6px 0 0;font-size:var(--fs-1);color:var(--tx3)}
+.ov-hero-side{text-align:right;font-size:var(--fs-1);color:var(--tx2);display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.ov-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:16px}
+.ov-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px 14px;box-shadow:var(--shadow);min-height:212px;display:flex;flex-direction:column}
+.ov-card h3{font-size:var(--fs-1);font-weight:600;color:var(--tx3);margin:0;padding-right:70px}
+.ov-skel-block{display:block;border-radius:8px;background:var(--panel2);color:transparent!important}
+.ov-skel-line{height:12px;margin:8px 0 0;max-width:78%}
+.ov-skel-line.short{max-width:42%;height:10px}
+.ov-skel-kpi{height:28px;width:56%;margin:12px 0 6px}
+@media(max-width:1180px){.ov-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){.ov-hero{flex-direction:column;align-items:flex-start;padding:14px 16px;gap:10px;min-height:300px}.ov-hero-side{text-align:left;align-items:flex-start;flex-direction:row;flex-wrap:wrap}.ov-cards{gap:10px;margin-top:12px}}
+@media(max-width:380px){.ov-cards{grid-template-columns:1fr}}
+</style>
 <link rel="preload" href="fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="fonts.css?v=20261005-designr1">
-<link rel="stylesheet" href="styles.css?v=20261005-designr1">
-<link rel="stylesheet" href="research-layout.css?v=20260930-status">
-<link rel="stylesheet" href="workspace.css?v=20261005-designr1">
-<link rel="stylesheet" href="geography/map.css?v=20260928-2">
+<link rel="stylesheet" href="fonts.css?v=20261005-designr3">
+<link rel="stylesheet" href="styles.css?v=20261005-designr3">
+<link rel="stylesheet" href="workspace.css?v=20261005-designr3">
+<link rel="stylesheet" href="research-layout.css?v=20261005-designr3" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="research-layout.css?v=20261005-designr3"></noscript>
+<link rel="stylesheet" href="geography/map.css?v=20261005-designr3" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="geography/map.css?v=20261005-designr3"></noscript>
+
 </head>
 <body>
 <a class="skip-link" href="#workspaceMain">跳到主要内容</a>
@@ -261,7 +293,7 @@ window.__loadECharts = function () {
     <p class="note">政策监管 · 机构间REITs · 招投标 · 拟上市与申报 · 上市项目公告 · 扩募动态 · 市场观点 · 来源：东方财富新闻检索 / 微信公众号（搜狗微信）/ 中国招标投标公共服务平台，每日更新 · 近 30 日</p>
     <div id="tenderStatus" class="tender-status" role="status">招投标来源状态加载中…</div>
     <div class="filters" id="newsFilter"></div>
-    <div id="newsFeed" style="max-height:520px;overflow:auto"></div>
+    <div id="newsFeed" class="scroll-panel scroll-panel-lg"></div>
   </div>
 </section>
 
@@ -269,13 +301,13 @@ window.__loadECharts = function () {
   <div class="card">
     <h2>发改委基础设施 REITs 推荐项目清单（2026 年以来）</h2>
     <p class="note">来源：全国投资项目在线审批监管平台 · 每日更新</p>
-    <div class="table-scroll" style="max-height:560px;overflow:auto">
+    <div class="table-scroll scroll-panel scroll-panel-xl">
       <table class="matrix" id="projectTableNdrc">
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <div class="note" id="projectMetaNdrc" style="margin:10px 0 0"></div>
+    <div class="note mt-10-flush" id="projectMetaNdrc"></div>
   </div>
 </section>
 
@@ -283,13 +315,13 @@ window.__loadECharts = function () {
   <div class="card">
     <h2>上交所 REITs 受理项目清单（2026 年以来）</h2>
     <p class="note">来源：上海证券交易所 REITs 项目动态 · 点击项目名称跳转交易所详情页 · 每日更新</p>
-    <div class="table-scroll" style="max-height:560px;overflow:auto">
+    <div class="table-scroll scroll-panel scroll-panel-xl">
       <table class="matrix" id="projectTableSse">
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <div class="note" id="projectMetaSse" style="margin:10px 0 0"></div>
+    <div class="note mt-10-flush" id="projectMetaSse"></div>
   </div>
 </section>
 
@@ -297,13 +329,13 @@ window.__loadECharts = function () {
   <div class="card">
     <h2>深交所 REITs 受理项目清单（2026 年以来）</h2>
     <p class="note">来源：深交所公募 REITs 信息平台 · 点击项目名称跳转交易所详情页 · 每日更新</p>
-    <div class="table-scroll" style="max-height:560px;overflow:auto">
+    <div class="table-scroll scroll-panel scroll-panel-xl">
       <table class="matrix" id="projectTableSzse">
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <div class="note" id="projectMetaSzse" style="margin:10px 0 0"></div>
+    <div class="note mt-10-flush" id="projectMetaSzse"></div>
   </div>
 </section>
 
@@ -311,13 +343,13 @@ window.__loadECharts = function () {
   <div class="card">
     <h2>商业不动产 REIT 受理项目清单（上交所 + 深交所汇总 · 2026 年以来）</h2>
     <p class="note">汇总上交所、深交所 2026 年以来受理的商业不动产 REIT 项目 · 点击项目名称跳转交易所详情页 · 每日更新</p>
-    <div class="table-scroll" style="max-height:560px;overflow:auto">
+    <div class="table-scroll scroll-panel scroll-panel-xl">
       <table class="matrix" id="projectTableCommercial">
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <div class="note" id="projectMetaCommercial" style="margin:10px 0 0"></div>
+    <div class="note mt-10-flush" id="projectMetaCommercial"></div>
   </div>
 </section>
 </div><!-- /pg-pano -->
@@ -331,20 +363,20 @@ window.__loadECharts = function () {
     <h2>美国 REITs 代表标的长期走势（对数轴 · 起点=100）</h2>
     <p class="note">防御型（净租赁/医疗/住宅）· 周期型（工业物流/购物中心）· 扩张型（数据中心/通信铁塔）等权合成指数 · 灰带 = NBER 美国经济衰退期 · 数据自 1990 年起，iFinD 每日更新（美股收盘数据次一交易日同步，<span id="usLongAsOf"></span>）· 用于验证三大类资产分类与经济周期的长周期耦合关系 · 注：扩张型由 American Tower（1998 年起）与 Equinix（2001 年起）合成，Equinix 在科网泡沫期曾深度回撤（对数轴下端）；2005-2009 年 Equinix iFinD 行情缺失，以断线如实呈现，2008 年回撤无从计算（显示"—"）</p>
     <div class="legend" id="legendUsLong"></div>
-    <div id="chartUsLong" style="height:400px"></div>
-    <div class="table-scroll" id="usCoupleStats" style="margin-top:14px"></div>
+    <div id="chartUsLong" class="chart-h-lg"></div>
+    <div class="table-scroll" id="usCoupleStats"></div>
     <p id="usCoupleText" class="note-block"></p>
   </div>
   <div class="card">
     <h2>美国 REITs 代表标的个体长期走势（对数轴 · 各自上市起点=100）</h2>
     <p class="note">7 只代表标的：Prologis（工业物流）· Realty Income（净租赁）· American Tower（通信铁塔）· Equinix（数据中心）· AvalonBay（住宅）· Welltower（医疗）· Simon Property（购物中心）· 颜色对应三大资产类别 · 灰带 = NBER 衰退期 · 数据自 1990 年起，iFinD 每日更新 · Equinix 2005-2009 年 iFinD 行情缺失，以断线如实呈现</p>
     <div class="legend" id="legendUsMembers"></div>
-    <div id="chartUsMembers" style="height:380px"></div>
-    <div class="table-scroll" id="usMemberStats" style="margin-top:14px"></div>
+    <div id="chartUsMembers" class="chart-h-md"></div>
+    <div class="table-scroll" id="usMemberStats"></div>
   </div>
   <div class="grid">
     <div class="card">
-      <h2>四大经典周期定位 <span class="note" style="display:inline" id="cycleUpdated"></span></h2>
+      <h2>四大经典周期定位 <span class="note note-inline" id="cycleUpdated"></span></h2>
       <p class="note">手动月度判定 + 数据佐证 · 进度条为该周期当前阶段的相对位置</p>
       <div id="cycleGrid"></div>
     </div>
@@ -357,7 +389,7 @@ window.__loadECharts = function () {
   </div>
   <div class="grid" id="rateClockRow">
     <div class="card">
-      <h2>REITs 投资时钟 · 增长 × 利率方向 <span class="note" style="display:inline" id="rateClockStamp"></span></h2>
+      <h2>REITs 投资时钟 · 增长 × 利率方向 <span class="note note-inline" id="rateClockStamp"></span></h2>
       <p class="note">杜丽虹 2021 框架中国化（2026-09-30 校准）：利率轴 = 10Y 国债 60 交易日变化，动态死区 max(5bp, 0.7σ) + 滞回 + 5 日确认 · 增长轴 = 制造业 PMI 偏离近 36 月均值的 z 分数（3 月均，±0.5σ 进入 / ±0.25σ 退出）· 美国先验 = 1994 年以来美国权益型 REITs 年化总回报 · <b>仅作宏观背景层</b>，板块观点以「配置与风险」为准</p>
       <div id="rateClockDetail"></div>
     </div>
@@ -369,7 +401,7 @@ window.__loadECharts = function () {
     </div>
   </div>
   <div class="card tsf-card" id="tsfImpulseCard">
-    <h2>社融脉冲 · 领先预警 <span class="note" style="display:inline" id="tsfImpulseStamp"></span></h2>
+    <h2>社融脉冲 · 领先预警 <span class="note note-inline" id="tsfImpulseStamp"></span></h2>
     <p class="note">（近 12 个月社融增量 − 上年同期）/ 近 4 季名义 GDP · 单独预警，<b>不并入</b>增长轴 · 只看方向</p>
     <div class="tsf-grid">
       <div id="tsfImpulseDetail"></div>
@@ -380,7 +412,7 @@ window.__loadECharts = function () {
     <h2 id="revalFull">资产重估判断（"资产重估理论"框架 · 每日自动验证）</h2>
     <p class="note">研究思路：观察现象 → 提出假说 → 推导<b>排他性</b>预测 → 用数据系统验证。假说：实体回报下降 + 流动性过剩 → 资金溢出追逐类债高分红资产 → REITs 系统性重估</p>
     <div id="revalPanel"></div>
-    <div class="grid" style="margin-top:14px;margin-bottom:0">
+    <div class="grid grid-flush-top">
       <div class="callout-box">
         <h3>📖 对过去二级市场涨跌的解释（理论回溯）</h3>
         <p>
@@ -409,7 +441,7 @@ window.__loadECharts = function () {
   <div class="card">
     <h2>对中国 REITs 的映射结论（3-5 年维度）</h2>
     <p class="note" id="mappingConclusion"></p>
-    <div id="mappingCards" class="grid3" style="margin-bottom:0"></div>
+    <div id="mappingCards" class="grid3 mb-0"></div>
   </div>
 </section>
 
@@ -417,7 +449,7 @@ window.__loadECharts = function () {
 <section class="view" id="v-track" hidden>
   <div class="card">
     <h2>宏观 → 行业 → 个股：各赛道关注指标与红线</h2>
-    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span style="color:var(--risk)">⚠ 品红</span>=触发红线 / <span style="color:var(--warn)">橙</span>=接近 / <span style="color:var(--tilt-pos)">蓝</span>=正常，灰=待更新</p>
+    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span class="tone-risk-text">⚠ 品红</span>=触发红线 / <span class="tone-warn-text">橙</span>=接近 / <span class="tone-pos-text">蓝</span>=正常，灰=待更新</p>
     <div id="trackGrid"></div>
   </div>
   <div class="card">
@@ -435,13 +467,13 @@ window.__loadECharts = function () {
     <div class="card">
       <h2>相关性热力矩阵（日收益率 Pearson，近约 130 交易日）</h2>
       <p class="note">蓝 = 正相关，琥珀 = 负相关，颜色越深相关性越强（红绿仅用于价格涨跌） · 中证红利 iFinD 无数据，以深证红利替代</p>
-      <div id="allocDonut" style="margin-bottom:10px"></div>
+      <div id="allocDonut" class="mb-10"></div>
       <div class="table-scroll" id="corrMatrix"></div>
     </div>
     <div class="card">
       <h2>股性 - 债性定位</h2>
       <p class="note">X = 与国债指数相关性（债性）· Y = 与沪深300相关性（股性）· 回归口径（周频 Beta、偏股/偏债相对分类）见 <a href="#v-strategy" data-jump-view="strategy">策略分类「股/债 Beta 定位」</a></p>
-      <div id="corrScatter" style="height:380px"></div>
+      <div id="corrScatter" class="chart-h-md"></div>
     </div>
   </div>
   <div class="card">
@@ -468,8 +500,8 @@ window.__loadECharts = function () {
     <div class="card">
       <h2>参考标尺：全市场 avgYield − 10Y（非产权锚）</h2>
       <p class="note">仅作历史粗览 · <b>不是</b>产权估值主锚（学派：产权用市值加权 TTM−10Y，经营权用 IRR−10Y）· 请以策略分类页「L2 分权利差」双时序为准 · 见 <a href="#v-strategy" data-jump-view="strategy">产权 vs 经营权旁 L2 图</a></p>
-      <div id="spreadGauge" style="margin-top:14px"></div>
-      <p class="note-block" style="margin-top:12px">
+      <div id="spreadGauge" class="mt-14"></div>
+      <p class="note-block mt-12">
         <b>历史锚点（粗口径）</b>：2021 年初约 350BP → 2025 年中约 170BP → 近端随行情变动。<br>
         <b>使用限制</b>：统一 avgYield 已被分权破局重估学派否决作为产权专用锚；经营权更不得用现金分派率冒充 IRR 利差。正式分位与走阔归因见 L2 面板。</p>
     </div>
@@ -549,7 +581,7 @@ window.__loadECharts = function () {
     <div class="card">
       <h2>板块等权指数走势（区间起点 = 100）</h2>
       <p class="note">点击图例切换板块显示</p>
-      <div id="chartSector" style="height:300px"></div>
+      <div id="chartSector" class="chart-h-sm"></div>
     </div>
     <div class="card">
       <h2>板块今日表现</h2>
@@ -599,7 +631,7 @@ window.__loadECharts = function () {
   <div class="card reval-summary-card">
     <h2>资产重估 · 摘要</h2>
     <div class="reval-summary" id="revalSignalSummary"></div>
-    <p class="note" style="margin:8px 0 0">四项排他性条件分别映射利差 / 资金面 / 情绪因子与个券历史分位 · 完整判断（理论回溯、排他性预测、因子映射）见 <a href="#v-cycle" data-jump-view="cycle">周期分析「资产重估判断」→</a></p>
+    <p class="note mt-8-flush">四项排他性条件分别映射利差 / 资金面 / 情绪因子与个券历史分位 · 完整判断（理论回溯、排他性预测、因子映射）见 <a href="#v-cycle" data-jump-view="cycle">周期分析「资产重估判断」→</a></p>
   </div>
   <div class="grid">
     <div class="card">
@@ -614,7 +646,7 @@ window.__loadECharts = function () {
         <button class="range-btn" data-t="成交异动">异动</button>
         <button class="range-btn" data-t="突破250日线">破线</button>
       </div>
-      <div id="eventFlow" style="max-height:420px;overflow:auto"></div>
+      <div id="eventFlow" class="scroll-panel scroll-panel-sm"></div>
     </div>
     <div class="card">
       <h2>信号历史回测（全历史样本）</h2>
@@ -640,7 +672,7 @@ window.__loadECharts = function () {
     <h2>分红 / 解禁 / 扩募战配公告监测（近 30 日 · 逐券官方公告）</h2>
     <p class="note">数据源：基金管理人官方公告（每日更新）· 分红季布局、解禁抛压、扩募战配机会的个券级决策参考 · 点击标题查看公告原文</p>
     <div class="filters" id="corpActionFilter"></div>
-    <div id="corpActions" style="max-height:460px;overflow:auto"></div>
+    <div id="corpActions" class="scroll-panel scroll-panel-md"></div>
   </div>
   <div class="card signal">
     <h3>🧭 顺周期动态配置框架（防御型 / 周期型 / 扩张型）</h3>
@@ -859,12 +891,12 @@ window.__loadECharts = function () {
 <section class="view" id="v-inst">
   <div class="kpis" id="instKpis"></div>
   <div class="card">
-    <h2 style="display:flex;align-items:baseline;gap:14px;flex-wrap:wrap">项目清单 <span class="note" id="instCount" style="font-weight:400"></span>
+    <h2 class="heading-row">项目清单 <span class="note fw-400" id="instCount"></span>
       <input id="instSearch" placeholder="搜索项目名称 / 计划管理人 / 原始权益人" autocomplete="off"
         class="inst-search-inline"></h2>
     <p class="note">来源：上交所债券项目信息平台 / 深交所固定收益信息平台（公开数据整理，感谢 tingdall/reits-dashboard 数据模型）· 点击表头排序 · 状态每日更新</p>
-    <div class="filters" id="instStatusFilter" style="margin-bottom:8px"></div>
-    <div class="table-scroll" style="max-height:620px;overflow:auto">
+    <div class="filters mb-8" id="instStatusFilter"></div>
+    <div class="table-scroll scroll-panel scroll-panel-xxl">
       <table class="matrix" id="instTbl">
         <thead><tr>
           <th class="l">项目名称</th><th>交易所</th><th class="l">计划管理人</th>
@@ -874,7 +906,7 @@ window.__loadECharts = function () {
         <tbody></tbody>
       </table>
     </div>
-    <div class="note" id="instMeta" style="margin:10px 0 0"></div>
+    <div class="note mt-10-flush" id="instMeta"></div>
   </div>
 </section>
 </div><!-- /pg-inst -->
@@ -891,13 +923,28 @@ window.__loadECharts = function () {
 
 <script src="ui-utils.js" defer></script>
 <!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
-<script src="data-status.js?v=20261005-operirr" defer></script>
-<script src="allocation-tools.js?v=20261005-operirr" defer></script>
-<script src="workspace.js?v=20261005-operirr" defer></script>
-<script src="tender-feed.js?v=20260930-status" defer></script>
-<script src="app.js?v=20261005-operirr" defer></script>
-<script src="geography/map.js?v=20260930-lazy" defer></script>
-<!-- 页内 AI 助手（page-agent，alibaba 开源）：懒加载，首次点击右下角 AI 按钮时才拉取引擎 -->
-<script src="page-agent-loader.js?v=20261005-4" defer></script>
+<script src="data-status.js?v=20261005-designr3" defer></script>
+<script src="allocation-tools.js?v=20261005-designr3" defer></script>
+<script src="workspace.js?v=20261005-designr3" defer></script>
+<script src="app.js?v=20261005-designr3" defer></script>
+<!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
+<script>
+(function () {
+  var srcs = [
+    "tender-feed.js?v=20261005-designr3",
+    "geography/map.js?v=20261005-designr3",
+    "page-agent-loader.js?v=20261005-designr3"
+  ];
+  function load(src) {
+    var s = document.createElement("script");
+    s.src = src;
+    s.async = true;
+    document.body.appendChild(s);
+  }
+  function go() { srcs.forEach(load); }
+  if ("requestIdleCallback" in window) requestIdleCallback(go, { timeout: 2500 });
+  else window.addEventListener("load", function () { setTimeout(go, 1); });
+})();
+</script>
 </body>
 </html>
