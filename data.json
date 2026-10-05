@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-05 21:36:10",
+ "updated": "2026-10-05 22:04:18",
  "lastTradeDate": "2026-09-30",
  "count": 88,
  "sectors": [
@@ -3456,7 +3456,9 @@
   "code": "932047.CSI",
   "name": "中证REITs全收益",
   "close": 949.12,
-  "pct": 0.15
+  "pct": 0.15,
+  "stale": true,
+  "staleNote": "实时数据获取失败，显示为最近一次成功数据"
  },
  "cycle": {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
@@ -4251,7 +4253,7 @@
     "downgradeTo": "partial"
    },
    "status": "not_triggered",
-   "dataStatus": "lagged",
+   "dataStatus": "complete",
    "rateLeg": {
     "status": "ok",
     "d10y60bp": -5.6,
@@ -4262,17 +4264,16 @@
    },
    "spreadLeg": {
     "status": "ok",
-    "pctileChangePP": 5.4,
+    "pctileChangePP": 14.9,
     "from": "2026-07-07",
     "to": "2026-09-30",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
     "met": false,
-    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-    "note": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
+    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
    },
    "asOf": "2026-09-30",
    "rentLeg": {
-    "status": "lagged",
+    "status": "ok",
     "asOf": "2026-09-30",
     "y10Avg1y": 1.777,
     "y10AvgPrev1y": 1.787,
@@ -4280,10 +4281,10 @@
     "y10Now": 1.682,
     "y10YearAgo": 1.861,
     "pointToPointBp": -17.8,
-    "ttmYieldMcap": 4.5,
-    "distYoYMedianPct": -5.93,
-    "distDragBp": -26.7,
-    "netBp": -25.7,
+    "ttmYieldMcap": 4.83,
+    "distYoYMedianPct": -4.16,
+    "distDragBp": -20.1,
+    "netBp": -19.0,
     "dominant": "distribution",
     "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
