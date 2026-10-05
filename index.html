@@ -67,9 +67,9 @@ window.__loadECharts = function () {
   if (!/^#\/?detail\//.test(location.hash || "")) document.documentElement.classList.add("is-home");
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=20260930-polish">
+<link rel="stylesheet" href="styles.css?v=20261005-operirr">
 <link rel="stylesheet" href="research-layout.css?v=20260930-status">
-<link rel="stylesheet" href="workspace.css?v=20260930-polish">
+<link rel="stylesheet" href="workspace.css?v=20261005-operirr">
 <link rel="stylesheet" href="geography/map.css?v=20260928-2">
 </head>
 <body>
@@ -507,9 +507,13 @@ window.__loadECharts = function () {
         <div id="sectorSpreadHost" class="table-scroll"></div>
       </div>
       <div>
-        <h3 style="font-size:13px;margin:0 0 6px">经营权 · 中债 IRR − 期限匹配国债</h3>
-        <p class="note" style="margin-bottom:8px">目标口径 = <b>IRR − 按剩余期限插值的中债国债收益率</b>（2/5/10/30Y，非 TTM）· <span id="panelL2TermStatus" class="l2-term-status">待接入：图中暂为 SEED IRR−10Y</span></p>
+        <h3 style="font-size:13px;margin:0 0 6px">经营权 · 基金披露 IRR − 期限匹配国债 <span class="rc-tag rc-tag-ref" id="operIrrBadge">2025 年末口径</span></h3>
+        <p class="note" style="margin-bottom:8px">主口径 = <b>基金披露 IRR − 按 WAL（否则剩余年限）插值的中债国债</b>（2/5/10/30Y，曲线取 2025-12-31）· 自算 IRR 仅悬浮提示 · <span id="panelL2TermStatus" class="l2-term-status">加载中…</span></p>
         <div id="chartL2Operating" style="height:320px"></div>
+        <div id="operIrrPendingStrip" class="oper-irr-pending" aria-label="暂无披露"></div>
+        <h3 style="font-size:13px;margin:16px 0 6px">经营权 · 个券披露利差与年末以来价格</h3>
+        <p class="note" style="margin-bottom:8px">利差列不可排序 · 业态不汇总（口径不统一）· 年末以来价格变动 = 现价 / 2025-12-31 − 1 · 极端利差只看自身变化</p>
+        <div id="operIrrTableHost" class="table-scroll"></div>
       </div>
     </div>
   </div>
@@ -879,11 +883,11 @@ window.__loadECharts = function () {
 
 <script src="ui-utils.js" defer></script>
 <!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
-<script src="data-status.js?v=20261005-spread" defer></script>
-<script src="allocation-tools.js?v=20261005-spread" defer></script>
-<script src="workspace.js?v=20261005-spread" defer></script>
+<script src="data-status.js?v=20261005-operirr" defer></script>
+<script src="allocation-tools.js?v=20261005-operirr" defer></script>
+<script src="workspace.js?v=20261005-operirr" defer></script>
 <script src="tender-feed.js?v=20260930-status" defer></script>
-<script src="app.js?v=20261005-spread" defer></script>
+<script src="app.js?v=20261005-operirr" defer></script>
 <script src="geography/map.js?v=20260930-lazy" defer></script>
 <!-- 页内 AI 助手（page-agent，alibaba 开源）：懒加载，首次点击右下角 AI 按钮时才拉取引擎 -->
 <script src="page-agent-loader.js?v=20261005-4" defer></script>

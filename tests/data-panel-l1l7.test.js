@@ -35,8 +35,9 @@ test("operating spread is IRR-based (not TTM) in docs and last row", () => {
   const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
   const blob = JSON.stringify(panel.seedMeta || {}) + (panel.note || "");
   assert.match(blob, /IRR/i);
-  assert.match(panel.seedMeta.operatingSpreadFormula || "", /IRR\s*-\s*bond10y/i);
-  assert.match(panel.seedMeta.operatingSpreadFormula || "", /NOT\s+ttm/i);
+  assert.match(panel.seedMeta.operatingSpreadFormula || "", /IRR/i);
+  assert.match(panel.seedMeta.operatingSpreadFormula || "", /term-matched|bond10y/i);
+  assert.doesNotMatch(panel.seedMeta.operatingSpreadFormula || "", /\bTTM\b/);
   const last = panel.operatingIrrSeries[panel.operatingIrrSeries.length - 1];
   assert.equal(typeof last.irr, "number");
   assert.equal(typeof last.spread, "number");
@@ -57,6 +58,26 @@ test("operating spread target = IRR − term-matched CGB (pending until remainin
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
   assert.match(html, /IRR − 期限匹配国债/);
   assert.match(html, /id="panelL2TermStatus"/);
+});
+
+test("operatingDisclosedIrr is YE2025 disclosed primary and does not feed banner", () => {
+  const panel = JSON.parse(fs.readFileSync(panelPath, "utf8"));
+  const od = panel.operatingDisclosedIrr;
+  assert.ok(od, "operatingDisclosedIrr present");
+  assert.equal(od.status, "ok");
+  assert.equal(od.label, "2025 年末口径");
+  assert.equal(od.curve.asOf, "2025-12-31");
+  assert.equal(od.summary.feedsBanner, false);
+  assert.equal(od.coverage.disclosed + od.coverage.pending, 30);
+  assert.ok(od.items.every((r) => r.irrDisclosedPct != null && r.spreadBp != null));
+  assert.ok(od.items.some((r) => r.code === "180201.SZ" && r.sector === "高速公路"));
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  assert.match(html, /id="operIrrTableHost"/);
+  assert.match(html, /id="operIrrPendingStrip"/);
+  assert.match(html, /2025 年末口径/);
+  const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
+  assert.match(app, /paintOperatingDisclosed/);
+  assert.match(app, /fromOperatingDisclosedIrr/);
 });
 
 test("propertySpread is live (rolling 3y pctile) and feeds L2 property series", () => {
@@ -83,6 +104,7 @@ test("UI mounts L2 chart containers and demotes avgYield gauge copy", () => {
   const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
   assert.match(html, /id="chartL2Property"/);
   assert.match(html, /id="chartL2Operating"/);
+  assert.match(html, /id="operIrrTableHost"/);
   assert.match(html, /data_panel_l1l7\.json/);
   assert.match(html, /非产权锚/);
   assert.match(app, /renderL2SpreadCharts/);

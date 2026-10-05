@@ -467,14 +467,13 @@ LAZY.research.push(function () {
     var stamp = $("panelL2Stamp");
     var ps = P && P.propertySpread;
     if (DS) {
-      // 产权真实 + 经营权仍 SEED → 整卡取 worst（产权 live/lagged，经营权 seed）
+      // 产权真实 + 经营权披露截面真实 → worst；月度时序仍 SEED 但不拖累角标
       var propS = DS.fromPropertySpread(P);
-      var opS = (P && P.operatingIrrSeries && (!(P.seedMeta) || P.seedMeta.liveFetch === false))
-        ? DS.make(DS.SEED, { asOf: P.asOfTrade, note: "经营权 IRR 序列仍为 SEED" })
-        : DS.make(DS.LIVE);
+      var opS = DS.fromOperatingDisclosedIrr ? DS.fromOperatingDisclosedIrr(P)
+        : DS.make(DS.SEED, { asOf: P.asOfTrade, note: "经营权披露 IRR 待接入" });
       dsApply($("panelL2Spreads"), DS.worst([propS, opS]));
     }
-    if (!P || !P.propertyYieldSeries || !P.operatingIrrSeries) {
+    if (!P || !P.propertyYieldSeries) {
       if (stamp) stamp.textContent = "L2 面板数据未加载（data_panel_l1l7.json）";
       ["chartL2Property", "chartL2Operating"].forEach(function (id) {
         var el = $(id);
@@ -487,7 +486,12 @@ LAZY.research.push(function () {
         ? ("产权 " + (ps.status === "ok" ? "live" : ps.status) + " · 滚动3年分位 " + (L && L.pctRolling3y != null ? L.pctRolling3y + "%" : "—") +
            "（全样本 " + (L && L.pctFull != null ? L.pctFull + "%" : "—") + "） · asOf " + (ps.asOf || "—"))
         : "产权 SEED";
-      stamp.textContent = propNote + " · 经营权仍为 SEED IRR−10Y · updated " + (P.updated || "—");
+      var OD = P.operatingDisclosedIrr, opNote = OD
+        ? ("经营权披露 " + (OD.status === "ok" ? "live" : OD.status) + " · " + (OD.label || "2025 年末口径") +
+           " · " + ((OD.coverage && OD.coverage.disclosed) || 0) + "/" + ((OD.coverage && OD.coverage.universe) || 0) +
+           " · 曲线 " + ((OD.curve && OD.curve.asOf) || OD.asOf || "—"))
+        : "经营权披露待接入";
+      stamp.textContent = propNote + " · " + opNote + " · updated " + (P.updated || "—");
     }
     var bondMap = {};
     (P.bond10ySeries || []).forEach(function (r) { bondMap[r.date] = r.ytm; });
@@ -558,19 +562,108 @@ LAZY.research.push(function () {
       echSet(id, dualSpreadOption(rows, yieldKey, yieldLabel, color));
     }
 
-    var TM = P.operatingSpreadTermMatched, tmEl = $("panelL2TermStatus");
-    if (tmEl && TM) {
-      var pts = (TM.curve && TM.curve.points) || [];
-      tmEl.textContent = (TM.status === "ok" ? "已接入" : (TM.label || "待接入")) +
-        (pts.length ? " · 中债曲线 " + (TM.curve.asOf || "") + "：" + pts.map(function (p) { return p[0] + "Y " + Number(p[1]).toFixed(2) + "%"; }).join(" / ") : "") +
-        (TM.status !== "ok" && TM.pendingReason ? " · " + TM.pendingReason : "");
+    var OD = P.operatingDisclosedIrr, TM = P.operatingSpreadTermMatched, tmEl = $("panelL2TermStatus");
+    if (tmEl) {
+      if (OD && OD.curve && OD.curve.points && OD.curve.points.length) {
+        tmEl.textContent = (OD.label || "2025 年末口径") + " · 中债曲线 " + (OD.curve.asOf || "") + "：" +
+          OD.curve.points.map(function (p) { return p[0] + "Y " + Number(p[1]).toFixed(2) + "%"; }).join(" / ") +
+          " · 披露 " + ((OD.coverage && OD.coverage.disclosed) || 0) + " / 暂无 " + ((OD.coverage && OD.coverage.pending) || 0) +
+          " · 不回写横幅";
+      } else if (TM) {
+        var pts = (TM.curve && TM.curve.points) || [];
+        tmEl.textContent = (TM.status === "ok" ? "已接入" : (TM.label || "待接入")) +
+          (pts.length ? " · 中债曲线 " + (TM.curve.asOf || "") + "：" + pts.map(function (p) { return p[0] + "Y " + Number(p[1]).toFixed(2) + "%"; }).join(" / ") : "") +
+          (TM.status !== "ok" && TM.pendingReason ? " · " + TM.pendingReason : "");
+      }
     }
+    var badge = $("operIrrBadge");
+    if (badge && OD && OD.badge) badge.textContent = OD.badge;
     paint("chartL2Property", P.propertyYieldSeries, "ttmYield", "产权 TTM", "#3b82f6");
-    paint("chartL2Operating", P.operatingIrrSeries, "irr", "经营权 IRR", "#f59e0b");
+    paintOperatingDisclosed("chartL2Operating", OD);
+    var strip = $("operIrrPendingStrip");
+    if (strip && window.ReitsAllocation && window.ReitsAllocation.operatingPendingStripHtml) {
+      strip.innerHTML = window.ReitsAllocation.operatingPendingStripHtml(window.ReitsAllocation.operatingPendingRows(P));
+    }
+    var opTbl = $("operIrrTableHost");
+    if (opTbl && window.ReitsAllocation && window.ReitsAllocation.operatingDisclosedTableHtml) {
+      opTbl.innerHTML = window.ReitsAllocation.operatingDisclosedTableHtml(window.ReitsAllocation.operatingDisclosedRows(P), OD && OD.summary);
+    }
     var secEl = $("sectorSpreadHost");
     if (secEl && window.ReitsAllocation && window.ReitsAllocation.sectorSpreadHtml) {
       secEl.innerHTML = window.ReitsAllocation.sectorSpreadHtml(window.ReitsAllocation.propertySectorRows(P));
     }
+  }
+
+  /** 经营权披露 IRR 截面散点：业态 × 利差 bp；自算 IRR 只在 tooltip。 */
+  function paintOperatingDisclosed(id, OD) {
+    var el = $(id);
+    if (!el) return;
+    if (!OD || !OD.items || !OD.items.length) {
+      el.innerHTML = '<div class="empty">经营权披露 IRR 待接入</div>';
+      return;
+    }
+    var th = chartTheme();
+    var sectors = [];
+    OD.items.forEach(function (r) { if (r.sector && sectors.indexOf(r.sector) < 0) sectors.push(r.sector); });
+    var colors = { "高速公路": "#f59e0b", "能源": "#34d399", "市政环保": "#60a5fa" };
+    var series = sectors.map(function (sec) {
+      var pts = OD.items.filter(function (r) { return r.sector === sec; }).map(function (r) {
+        return {
+          value: [sectors.indexOf(sec), r.spreadBp],
+          itemStyle: r.extreme ? { color: "var(--risk)", borderColor: "var(--risk)", borderWidth: 1 } :
+            (r.reviewPending ? { color: colors[sec] || "#f59e0b", borderColor: th.tx3, borderWidth: 1, borderType: "dashed" } :
+              { color: colors[sec] || "#f59e0b" }),
+          raw: r
+        };
+      });
+      return {
+        name: sec, type: "scatter", symbolSize: 11, data: pts,
+        itemStyle: { color: colors[sec] || "#f59e0b" }
+      };
+    });
+    echSet(id, {
+      color: sectors.map(function (s) { return colors[s] || "#f59e0b"; }),
+      title: {
+        text: OD.label || "2025 年末口径", left: 8, top: 4,
+        textStyle: { color: th.tx2, fontSize: 11, fontWeight: 600 }
+      },
+      tooltip: {
+        trigger: "item",
+        backgroundColor: th.tipBg, borderColor: th.tipBd,
+        textStyle: { color: th.tx, fontSize: 11 },
+        formatter: function (p) {
+          var r = (p.data && p.data.raw) || {};
+          var lines = [r.name || p.name, "代码 " + (r.code || "—"), "业态 " + (r.sector || "—")];
+          if (r.irrDisclosedPct != null) lines.push("披露 IRR：" + r.irrDisclosedPct.toFixed(2) + "%");
+          if (r.matchedYieldPct != null) lines.push("匹配国债：" + r.matchedYieldPct.toFixed(2) + "%（" + (r.tenorSource || "") + " " + (r.tenorYears != null ? r.tenorYears.toFixed(1) + "Y" : "") + "）");
+          if (r.spreadBp != null) lines.push("利差：" + (r.spreadBp > 0 ? "+" : "") + r.spreadBp + "bp");
+          if (r.priceChangePct != null) lines.push("年末以来价格：" + (r.priceChangePct > 0 ? "+" : "") + r.priceChangePct.toFixed(1) + "%");
+          if (r.selfIrrPct != null) lines.push("自算 IRR（参考）：" + r.selfIrrPct.toFixed(2) + "% · " + (r.selfIrrNote || "对账偏高，中位约 280bp"));
+          if (r.extreme) lines.push("⚠ 极端利差：只看自身变化，不做横向排名");
+          return lines.join("<br>");
+        }
+      },
+      legend: { top: 0, right: 8, textStyle: { color: th.tx2, fontSize: 11 } },
+      grid: { left: 56, right: 24, top: 36, bottom: 36 },
+      xAxis: {
+        type: "category", data: sectors,
+        axisLabel: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.grid } }
+      },
+      yAxis: {
+        type: "value", name: "利差 bp", scale: true,
+        axisLabel: { color: th.tx3, fontSize: 10 },
+        splitLine: { lineStyle: { color: th.grid } },
+        nameTextStyle: { color: th.tx3, fontSize: 10 }
+      },
+      series: series,
+      graphic: [{
+        type: "text", right: 16, bottom: 8,
+        style: {
+          text: "不回写横幅 · 曲线 " + ((OD.curve && OD.curve.asOf) || OD.asOf || ""),
+          fill: th.tx3, fontSize: 10
+        }
+      }]
+    });
   }
 
   function scheduleL2() {
