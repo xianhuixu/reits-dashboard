@@ -1833,19 +1833,28 @@ LAZY.research.push(function () {
       ];
       var fName = { rate: "利率", val: "估值", fund: "资金", base: "基本面" };
       var arrow = { "↑": '<b style="color:var(--up)">↑</b>', "↓": '<b style="color:var(--down)">↓</b>', "→": '<b style="color:var(--tx3)">→</b>' };
-      if ($("stageGrid")) $("stageGrid").innerHTML = stages.map(function (s, i) {
-        var chips = Object.keys(s.f).map(function (k) {
-          return '<span style="display:inline-flex;align-items:center;gap:3px;font-size:10.5px;background:var(--bg);border-radius:6px;padding:2px 7px">' + fName[k] + " " + arrow[s.f[k]] + "</span>";
-        }).join(" ");
-        return '<div class="card" style="background:var(--panel2)">' +
-          '<div style="display:flex;justify-content:space-between;align-items:baseline">' +
-          '<span style="font-size:11px;color:var(--tx3)">' + s.p + "</span>" +
-          '<span class="num" style="font-size:13.5px;font-weight:700;color:var(--' + s.cls + ')">' + s.perf + "</span></div>" +
-          '<div style="font-size:13px;font-weight:650;margin:5px 0">' + (i + 1) + ". " + s.name + "</div>" +
-          '<div style="margin-bottom:7px">' + chips + "</div>" +
-          '<div style="font-size:11.5px;color:var(--tx2);line-height:1.65">' + s.logic + "</div>" +
-          '<div style="font-size:10.5px;color:var(--tx3);margin-top:7px">主导矛盾：<b style="color:var(--tx2)">' + s.main + "</b></div></div>";
-      }).join("");
+      // 沿用既有复盘数据；时间轴与解释面板仅改变信息呈现。
+      function stageText(value) { return String(value).replace(/[&<>"']/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+      if ($("stageGrid")) {
+        $("stageGrid").innerHTML = stages.map(function (s, i) {
+          return '<button type="button" class="review-stage-tab" data-stage-index="' + i + '" aria-controls="stageDetail" aria-pressed="false"><span class="review-stage-date">' + stageText(s.p) + '</span><b>' + stageText(s.name) + '</b><span class="review-stage-return ' + s.cls + '">' + stageText(s.perf) + '</span></button>';
+        }).join("");
+        function showStage(index, focus) {
+          var s = stages[index], buttons = $("stageGrid").querySelectorAll("button");
+          buttons.forEach(function (button, i) { button.classList.toggle("on", i === index); button.setAttribute("aria-pressed", String(i === index)); });
+          if ($("stageDetail")) $("stageDetail").innerHTML = '<div><span class="review-stage-date">' + stageText(s.p) + '</span><h3>' + stageText(s.name) + '</h3><p>' + stageText(s.logic) + '</p></div><aside><span>主导矛盾</span><b>' + stageText(s.main) + '</b><div class="review-factor-row">' + Object.keys(s.f).map(function (k) { return '<span>' + fName[k] + ' ' + arrow[s.f[k]] + '</span>'; }).join("") + '</div></aside>';
+          if (focus) { buttons[index].focus({preventScroll:true}); buttons[index].scrollIntoView({block:"nearest",inline:"nearest",behavior:"auto"}); }
+          else { var timeline = $("stageGrid"); timeline.scrollLeft = Math.max(0, buttons[index].offsetLeft - timeline.offsetLeft - timeline.clientWidth + buttons[index].offsetWidth); }
+        }
+        $("stageGrid").querySelectorAll("button").forEach(function (button, i) {
+          button.addEventListener("click", function () { showStage(i, false); });
+          button.addEventListener("keydown", function (e) {
+            var next = e.key === "ArrowRight" ? (i + 1) % stages.length : e.key === "ArrowLeft" ? (i + stages.length - 1) % stages.length : e.key === "Home" ? 0 : e.key === "End" ? stages.length - 1 : null;
+            if (next !== null) { e.preventDefault(); showStage(next, true); }
+          });
+        });
+        showStage(stages.length - 1, false);
+      }
       if ($("stageMatrix")) $("stageMatrix").innerHTML =
         '<table class="tbl"><thead><tr><th>阶段</th><th>利率中枢</th><th>估值溢价</th><th>资金面</th><th>基本面</th><th style="text-align:left">主导逻辑</th></tr></thead><tbody>' +
         stages.map(function (s) {

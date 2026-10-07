@@ -46,6 +46,9 @@ jobs:
         continue-on-error: true
         run: python fetch_projects.py
 
+      - name: 生成首页轻量市场序列
+        run: python3 scripts/build_market_series.py
+
       - name: 预渲染结论横幅
         continue-on-error: true
         run: python3 scripts/prerender_banner.py
@@ -89,9 +92,9 @@ jobs:
             echo "未配置 CLOUDFLARE_API_TOKEN，跳过 Cloudflare 同步"
             exit 0
           fi
-          rm -rf .cf-deploy && mkdir .cf-deploy
-          cp index.html app.js styles.css research-layout.css allocation-tools.js workspace.css workspace.js tender-feed.js ui-utils.js _headers .cf-deploy/
-          cp tenders.json data.json data_research.json news.json corp_actions.json projects.json reits_snapshot.json advice.json data_panel_l1l7.json .cf-deploy/
-          cp -r lib icons research geography .cf-deploy/
+          DEPLOY_DIR=$(mktemp -d)
+          cp index.html app.js styles.css research-layout.css allocation-tools.js workspace.css workspace.js tender-feed.js ui-utils.js data-status.js page-agent-loader.js fonts.css _headers "$DEPLOY_DIR/"
+          cp tenders.json data.json data_research.json market-series.json news.json corp_actions.json projects.json reits_snapshot.json advice.json data_panel_l1l7.json "$DEPLOY_DIR/"
+          cp -r lib icons research geography fonts "$DEPLOY_DIR/"
           npm i -D wrangler --no-save
-          npx wrangler pages deploy .cf-deploy --project-name=reits-dashboard --branch=main --commit-dirty=true
+          npx wrangler pages deploy "$DEPLOY_DIR" --project-name=reits-dashboard --branch=main --commit-dirty=true

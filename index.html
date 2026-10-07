@@ -70,7 +70,7 @@ window.__loadECharts = function () {
 <!-- design-r3: critical path for LCP candidate (#ovHeadline) + 4 status cards; full CSS still loads below -->
 <style id="critical-css">
 :root{--bg:#0d1117;--panel:#161b22;--panel2:#1c2128;--line:rgba(139,148,158,.12);--line2:rgba(139,148,158,.22);--tx:#e6edf3;--tx2:#9ea7b3;--tx3:#6e7681;--accent:#58a6ff;--brand:#58a6ff;--radius:12px;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 16px rgba(0,0,0,.3);--fs-1:12px;--fs-2:14px;--fs-3:18px;--fs-4:28px;--font-body:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;--ease:cubic-bezier(.22,.9,.28,1)}
-html[data-theme="light"]{--bg:#f0f2f5;--panel:#fff;--panel2:#f5f7fa;--line:#e8eaed;--line2:#d0d4dc;--tx:#0d1117;--tx2:#3d444d;--tx3:#6e7781;--accent:#2563eb;--brand:#2563eb;--shadow:0 1px 2px rgba(13,17,23,.04),0 4px 12px rgba(13,17,23,.04)}
+html[data-theme="light"]{--bg:#f1f3f7;--panel:#fff;--panel2:#f5f7fb;--line:#e1e6ef;--line2:#c9d3e2;--tx:#17243a;--tx2:#47576e;--tx3:#607087;--accent:#2b57d9;--brand:#2b57d9;--shadow:0 2px 5px #16274404}
 html[data-theme="eye"]{--bg:#e8f0e0;--panel:#f5faf0;--panel2:#eef5e6;--line:#d0dcc4;--line2:#b8c8a8;--tx:#1a2e15;--tx2:#4a6340;--tx3:#7a8f6e;--accent:#2f5fc9;--brand:#3159ce}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);-webkit-font-smoothing:antialiased}
@@ -95,15 +95,17 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 @media(max-width:1180px){.ov-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:767px){.ov-hero{flex-direction:column;align-items:flex-start;padding:14px 16px;gap:10px;min-height:300px}.ov-hero-side{text-align:left;align-items:flex-start;flex-direction:row;flex-wrap:wrap}.ov-cards{gap:10px;margin-top:12px}}
 @media(max-width:380px){.ov-cards{grid-template-columns:1fr}}
+.market-lead{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px}.market-lead .ov-hero{min-height:332px;flex-direction:column;align-items:stretch;padding:27px 30px 22px;background:#162b49;color:#f2f6fc;border:1px solid #263c5e;border-radius:14px}.ov-hero .ov-rate-label{display:block;font-size:14px;color:#aabddb;margin-bottom:7px}.ov-hero .ov-headline{font-size:30px;min-height:0}.ov-hero .ov-arrow{display:none}.ov-hero .ov-headline .ov-stance{color:#fff;display:block}.lead-trend{min-height:332px}.ov-cards .ov-card{min-height:258px}@media(max-width:1023px){.market-lead{grid-template-columns:1fr}.market-lead .ov-hero{min-height:300px}}@media(max-width:767px){.market-lead .ov-hero{min-height:342px;padding:24px 21px 20px}.ov-cards{grid-template-columns:1fr}.ov-cards .ov-card{min-height:0}}
 </style>
 <link rel="preload" href="fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css?v=20261005-designr3">
 <link rel="stylesheet" href="styles.css?v=20261005-designr3">
-<link rel="stylesheet" href="workspace.css?v=20261005-designr3">
 <link rel="stylesheet" href="research-layout.css?v=20261005-designr3" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="research-layout.css?v=20261005-designr3"></noscript>
 <link rel="stylesheet" href="geography/map.css?v=20261005-designr3" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="geography/map.css?v=20261005-designr3"></noscript>
+<!-- 工作台样式在研究与地图组件之后，防止旧版页面布局覆盖导航和主题。 -->
+<link rel="stylesheet" href="workspace.css?v=20261007-studio2">
 
 </head>
 <body>
@@ -182,17 +184,18 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 
 <!-- ============ 市场总览（设计师线框 2026-09-30：结论 → 证据 → 明细） ============ -->
 <section class="view" id="v-heatmap">
-  <div class="ov-tier" aria-hidden="true">结论</div>
+  <div class="ov-tier" aria-hidden="true">市场判断</div>
+  <div class="market-lead">
   <!-- 第一层 · 结论：纯 HTML/CSS（首屏不含任何图表）。数据由 workspace.js 从 data.json / advice.json / data_panel 派生 -->
   <section class="ov-hero" id="ovHero" aria-labelledby="ovHeadline">
     <div class="ov-hero-main">
-      <p class="ov-kicker">一句话结论 <span class="ov-kicker-src">利率时钟 × 配置页学派立场</span></p>
+      <p class="ov-kicker">配置视角 <span class="ov-kicker-src">利率时钟 × 估值观察</span></p>
       <!-- design-r1: static prerender of last known conclusion for LCP; workspace.js replaces on data ready.
            Full build-time inject needs workflow edit — see docs/deferred/banner-prerender-workflow.md -->
-      <h2 class="ov-headline" id="ovHeadline">利率下行<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">产权标配·偏多观察</span></h2>
-      <p class="ov-basis" id="ovBasis"><span class="ov-basis-main">依据：时钟·利率下行</span></p>
+      <h2 class="ov-headline" id="ovHeadline"><span class="ov-rate-label">利率下行</span><span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">产权标配·偏多观察</span></h2>
+      <p class="ov-basis-summary" id="ovBasisSummary">依据：时钟·利率下行<small>利差分位暂不参与（分派同比下滑）</small></p>
       <p class="ov-sub num" id="ovSub"><span id="ovUpdated">数据更新于 —</span><span id="ovSwitchTag"></span></p>
-      <p class="ov-switch-note ov-switch-note-plain" id="ovSwitchNote">时钟每日按 10Y 国债 60 日变化与 PMI 偏离趋势自动判定</p>
+      <details class="ov-method"><summary id="ovMethodLabel">判断依据与口径</summary><div><p class="ov-basis" id="ovBasis"><span class="ov-basis-main">依据：时钟·利率下行</span></p><p class="ov-switch-note ov-switch-note-plain" id="ovSwitchNote">时钟每日按 10Y 国债 60 日变化与 PMI 偏离趋势自动判定</p></div></details>
     </div>
     <div class="ov-hero-side" id="ovHeroSide">
       <p class="num" id="ovUniverse">全市场 — 只</p>
@@ -200,20 +203,22 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
       <button type="button" class="ov-link" data-ov-page="advice">查看配置建议 →</button>
     </div>
   </section>
+    <article class="card trend-panel lead-trend"><div class="panel-heading"><div><h2>市场走势</h2><p>全市场等权价格指数 · 区间起点 = 100</p></div><div class="segmented" id="workspaceRange" aria-label="指数观察窗口"><button data-days="20">20日</button><button data-days="60" class="on" aria-pressed="true">60日</button><button data-days="250">250日</button></div></div><div class="trend-headline"><strong id="workspaceTrendValue">—</strong><span id="workspaceTrendChange"></span><span class="trend-period" id="workspaceTrendPeriod">正在载入历史序列</span></div><div id="workspaceTrend" role="img" aria-label="等权价格指数走势图"><p class="chart-placeholder">历史序列加载中…</p></div><details class="chart-data-details"><summary>查看图表数据</summary><div class="table-scroll"><table id="workspaceTrendTable"><thead><tr><th>日期</th><th>区间归一化指数</th></tr></thead><tbody></tbody></table></div></details></article>
+  </div>
   <div class="ov-cards" id="ovCards" aria-label="市场状态卡片">
     <article class="ov-card is-loading" id="ovCardClock" aria-busy="true"><h3>投资时钟</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
     <article class="ov-card is-loading" id="ovCardSpread" aria-busy="true"><h3>产权利差分位</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
-    <article class="ov-card is-loading" id="ovCardMarket" aria-busy="true"><h3>市场今日</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
+    <article class="ov-card is-loading" id="ovCardMarket" aria-busy="true"><h3>最近交易日</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
     <article class="ov-card is-loading" id="ovCardTsf" aria-busy="true"><h3>社融脉冲 · 领先预警</h3><div class="ov-skel-block ov-skel-kpi" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line" aria-hidden="true">&nbsp;</div><div class="ov-skel-block ov-skel-line short" aria-hidden="true">&nbsp;</div></article>
   </div>
 
   <!-- 第二层 · 证据：图表在进入视口时才初始化（IntersectionObserver），容器定高防 CLS -->
-  <div class="ov-tier" id="ovEvidence">证据</div>
+  <div class="ov-tier" id="ovEvidence">市场证据</div>
   <div class="ov-grid2">
     <article class="card sector-panel"><div class="panel-heading"><div><h2>板块表现</h2><p>板块内等权涨跌幅 · 点击条目查看热力图下钻</p></div><div class="segmented" id="sectorRange" aria-label="板块表现区间"><button data-k="pct" class="on" aria-pressed="true">今日</button><button data-k="ret20" aria-pressed="false">近 1 月</button></div></div><div id="workspaceSectors" class="sector-comparison"><p class="chart-placeholder">板块数据加载中…</p></div></article>
     <div class="card" id="heatmapCard">
-    <h2>资产类别全景热力图</h2>
-    <p class="note">色块大小 ∝ 成交额（日涨跌=当日，5日/20日=区间日均）· 颜色 = 成交额加权区间涨跌幅 · 区间：<span id="hmRangeLabel">日涨跌</span></p>
+    <h2>资金与价格分布</h2>
+    <p class="note">面积 = 成交额 · 颜色 = 成交额加权涨跌幅 · <span id="hmRangeLabel">日涨跌</span>；5日/20日按日均成交额</p>
     <div class="filters filters-tight" id="hmSectorChips"></div>
     <div class="filters filters-tight" id="hmRange">
       <button class="range-btn on" data-r="pct">日涨跌</button>
@@ -230,18 +235,15 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
     </div>
   </div>
   </div>
-  <div class="ov-grid2 ov-grid2-wide">
-    <article class="card trend-panel"><div class="panel-heading"><div><h2>市场走势</h2><p>全市场等权价格指数 · 区间起点 = 100</p></div><div class="segmented" id="workspaceRange" aria-label="指数观察窗口"><button data-days="20">20日</button><button data-days="60" class="on" aria-pressed="true">60日</button><button data-days="250">250日</button></div></div><div class="trend-headline"><strong id="workspaceTrendValue">—</strong><span id="workspaceTrendChange"></span><span class="trend-period" id="workspaceTrendPeriod">正在载入历史序列</span></div><div id="workspaceTrend" role="img" aria-label="等权价格指数走势图"><p class="chart-placeholder">历史序列加载中…</p></div><details class="chart-data-details"><summary>查看图表数据</summary><div class="table-scroll"><table id="workspaceTrendTable"><thead><tr><th>日期</th><th>区间归一化指数</th></tr></thead><tbody></tbody></table></div></details></article>
-    <article class="card ov-points" id="ovPointsCard"><div class="panel-heading"><div><h2>今日要点</h2><p>最多 3 条 · 由当日行情与信号自动生成</p></div></div><ul class="ov-points-list" id="ovPoints"><li class="ov-skel">加载中…</li></ul><button type="button" class="text-button" data-jump-view="news">全部事件信息流 →</button></article>
-  </div>
+  <article class="card ov-points" id="ovPointsCard"><div class="panel-heading"><div><h2>交易日观察</h2><p>由最新交易日行情与信号生成</p></div><button type="button" class="text-button" data-jump-view="news">事件信息流 →</button></div><ul class="ov-points-list" id="ovPoints"><li class="ov-skel">加载中…</li></ul></article>
 
   <!-- 第三层 · 明细：默认折叠；展开时才初始化（地图 geo 数据异步加载） -->
-  <div class="ov-tier">明细 · 默认折叠</div>
-  <details class="ov-fold" id="foldGeo">
+  <div class="ov-tier">发行主体与市场结构</div>
+  <details class="ov-fold" id="foldGeo" open>
     <summary><span>原始权益人地图 · 地域分布</span><span class="ov-fold-act">展开</span></summary>
   <article class="card geo-panel" id="assetGeography" aria-labelledby="geoTitle">
     <div class="geo-heading"><div><div class="geo-kicker">ORIGINATOR GEOGRAPHY</div><h2 id="geoTitle">REITs 原始权益人地图</h2><p>按发起人／原始权益人注册城市定位，观察供给主体的地域分布。</p></div><span id="geoCoverage" class="geo-coverage">地理索引载入中…</span></div>
-    <div id="geoSectorLegend" class="geo-sector-legend" aria-label="资产类别图例与筛选"></div>
+    <div id="geoSectorLegend" class="geo-sector-legend" role="group" aria-label="资产类别图例与筛选"></div>
     <div class="geo-toolbar">
       <label>省级地区<select id="geoProvince"><option value="">全部地区</option></select></label>
       <label class="geo-search">查找主体<input id="geoSearch" type="search" placeholder="基金、原始权益人或注册城市" autocomplete="off"></label>
@@ -489,7 +491,8 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
   <div class="card">
     <h2>二级市场阶段划分与四因子归因（2021.06 – 至今）</h2>
     <p class="note">分析框架：资产重估理论 + 四因子归因（利率中枢 / 估值溢价 / 资金面 / 基本面）· 定价锚：P = 分派 ÷（无风险利率 + 风险溢价），利率下行分母变小、价格系统性上移，反向亦然 · 方法论来源：《公募REITs研究方法论与投资策略深度研究报告》《资产重估理论深度研究报告》</p>
-    <div class="grid3" id="stageGrid"></div>
+    <div class="review-timeline" id="stageGrid" role="group" aria-label="选择市场阶段"></div>
+    <article class="review-stage-detail" id="stageDetail" aria-live="polite"></article>
   </div>
   <div class="card">
     <h2>四因子统一归因矩阵</h2>
@@ -896,7 +899,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
         class="inst-search-inline"></h2>
     <p class="note">来源：上交所债券项目信息平台 / 深交所固定收益信息平台（公开数据整理，感谢 tingdall/reits-dashboard 数据模型）· 点击表头排序 · 状态每日更新</p>
     <div class="filters mb-8" id="instStatusFilter"></div>
-    <div class="table-scroll scroll-panel scroll-panel-xxl">
+    <div class="table-scroll scroll-panel scroll-panel-xxl" tabindex="0" role="region" aria-label="机构间市场项目表格">
       <table class="matrix" id="instTbl">
         <thead><tr>
           <th class="l">项目名称</th><th>交易所</th><th class="l">计划管理人</th>
@@ -925,14 +928,14 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
 <script src="data-status.js?v=20261005-designr3" defer></script>
 <script src="allocation-tools.js?v=20261005-designr3" defer></script>
-<script src="workspace.js?v=20261005-designr3" defer></script>
-<script src="app.js?v=20261005-designr3" defer></script>
+<script src="workspace.js?v=20261007-studio2" defer></script>
+<script src="app.js?v=20261007-studio2" defer></script>
 <!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
 <script>
 (function () {
   var srcs = [
     "tender-feed.js?v=20261005-designr3",
-    "geography/map.js?v=20261005-designr3",
+    "geography/map.js?v=20261007-studio2",
     "page-agent-loader.js?v=20261005-designr3"
   ];
   function load(src) {
