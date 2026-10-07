@@ -6,6 +6,7 @@ Run in CI after data refresh (needs workflow edit — see docs/deferred/banner-p
 from __future__ import annotations
 
 import json
+from html import escape
 import re
 import subprocess
 import sys
@@ -27,7 +28,7 @@ const m = H.bannerModel(D, st.text, P, adv);
 const rate = m.rate || "时钟未判定";
 const stance = m.stance || "配置结论见配置页";
 const basis = m.basis || "依据：配置页学派立场";
-process.stdout.write(JSON.stringify({ rate, stance, basis }));
+process.stdout.write(JSON.stringify({ rate, stance, basis, spreadSkip: m.spreadSkip }));
 """
 
 
@@ -36,27 +37,34 @@ def main() -> int:
     data = json.loads(out)
     html_path = ROOT / "index.html"
     html = html_path.read_text(encoding="utf-8")
+    # 预渲染与浏览器共享版式；数据文本必须转义为安全的 HTML。
     headline = (
-        f'{data["rate"]}<span class="ov-arrow" aria-hidden="true">→</span>'
-        f'<span class="ov-stance">{data["stance"]}</span>'
+        f'<span class="ov-rate-label">{escape(data["rate"])}</span><span class="ov-arrow" aria-hidden="true">→</span>'
+        f'<span class="ov-stance">{escape(data["stance"])}</span>'
     )
-    basis = f'<span class="ov-basis-main">{data["basis"]}</span>'
+    basis = f'<span class="ov-basis-main">{escape(data["basis"])}</span>'
+    summary = escape(data["basis"]) + (f'<small>{escape(data["spreadSkip"])}</small>' if data.get("spreadSkip") else "")
     html2, n1 = re.subn(
         r'(<h2 class="ov-headline" id="ovHeadline">)(.*?)(</h2>)',
-        r"\1" + headline + r"\3",
+        lambda match: match.group(1) + headline + match.group(3),
         html,
         count=1,
         flags=re.S,
     )
     html2, n2 = re.subn(
         r'(<p class="ov-basis" id="ovBasis">)(.*?)(</p>)',
-        r"\1" + basis + r"\3",
+        lambda match: match.group(1) + basis + match.group(3),
         html2,
         count=1,
         flags=re.S,
     )
-    if n1 != 1 or n2 != 1:
-        print("failed to locate ovHeadline/ovBasis", n1, n2, file=sys.stderr)
+    html2, n3 = re.subn(
+        r'(<p class="ov-basis-summary" id="ovBasisSummary">)(.*?)(</p>)',
+        lambda match: match.group(1) + summary + match.group(3),
+        html2, count=1, flags=re.S,
+    )
+    if n1 != 1 or n2 != 1 or n3 != 1:
+        print("failed to locate banner fields", n1, n2, n3, file=sys.stderr)
         return 1
     html_path.write_text(html2, encoding="utf-8")
     print("prerendered:", data)

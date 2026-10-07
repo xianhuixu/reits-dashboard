@@ -103,7 +103,7 @@ test("advice: stanceOverride, recommendation rows and red lines", () => {
   rl.filter((r) => r.progress != null).forEach((r) => assert.ok(r.progress >= 0 && r.progress <= 1));
 });
 
-test("home first screen is chart-free and ECharts loads lazily", () => {
+test("home text is independent of charts and the adjacent market chart loads progressively", () => {
   const html = read("index.html");
   const hero = html.slice(html.indexOf('id="v-heatmap"'), html.indexOf('id="ovEvidence"'));
   assert.match(hero, /id="ovHero"/);
@@ -291,4 +291,3 @@ test("design-r3: chart/scroll utilities replace height inline; skeleton fades in
   assert.ok((panel.operatingDisclosedIrr.items || []).length >= 20);
   assert.match(read("docs/deferred/banner-prerender-workflow.md"), /design-r3 \(PR #24\)/);
 });
-

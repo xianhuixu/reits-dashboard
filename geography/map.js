@@ -84,11 +84,12 @@
     var labels=['北京市','上海市','深圳市','重庆市','成都市'];
     cities.slice().reverse().forEach(function (g) {
       var p=xy(registry.cities[g.name].coordinates), r=5+Math.sqrt(g.count)*3;
-      var button=svgEl('g',{transform:'translate('+p.join(',')+') scale('+markerScale+')',tabindex:0,role:'button','aria-label':g.name+'，'+g.count+'只基金，查看项目','aria-pressed':String(selected===g.name),class:'geo-marker'+(selected===g.name?' is-selected':'')},parent);
+      var shortCity=g.name.replace(/市$|藏族自治州$/g,'');
+      var button=svgEl('g',{transform:'translate('+p.join(',')+') scale('+markerScale+')',tabindex:0,role:'button','aria-label':g.count+' '+shortCity+'，'+g.name+'原始权益人注册地，查看基金','aria-pressed':String(selected===g.name),class:'geo-marker'+(selected===g.name?' is-selected':'')},parent);
       svgEl('circle',{r:r+5,class:'geo-halo'},button);
       var mix=sectorCounts(g.rows).sort(function(a,b){return sectors.indexOf(a.sector)-sectors.indexOf(b.sector);});
       var circumference=2*Math.PI*r, total=mix.reduce(function(n,s){return n+s.count;},0), offset=0;
-      mix.forEach(function(s){var length=circumference*s.count/total;svgEl('circle',{r:r,fill:'none',stroke:sectorColor(s.sector),'stroke-width':r*2,'stroke-dasharray':length+' '+circumference,'stroke-dashoffset':-offset,transform:'rotate(-90)'},button);offset+=length;});
+      mix.forEach(function(s){var length=circumference*s.count/total;svgEl('circle',{r:r,fill:'none',stroke:sectorColor(s.sector),'stroke-width':r*.7,'stroke-dasharray':length+' '+circumference,'stroke-dashoffset':-offset,transform:'rotate(-90)'},button);offset+=length;});
       svgEl('circle',{r:r*.62,class:'geo-dot'},button);
       var n=svgEl('text',{'text-anchor':'middle',dy:3.5,class:'geo-number'},button);n.textContent=g.count;
       if(zoom>1 || labels.includes(g.name)) {
@@ -105,7 +106,7 @@
   function renderRank() {
     var groups=groupLocations(rows,registry,mode), max=groups.length?groups[0].count:1;
     $('geoRank').innerHTML=groups.map(function (g,i) {
-      return '<button class="geo-rank-row '+(selected===g.name?'is-selected':'')+'" data-place="'+esc(g.name)+'" aria-label="'+esc(g.name)+'，'+g.count+'只基金"><span class="geo-rank-num">'+String(i+1).padStart(2,'0')+'</span><span class="geo-rank-name">'+esc(g.name.replace(/市$|省$/g,''))+'</span><span class="geo-rank-track"><i style="width:'+g.count/max*100+'%"></i></span><b>'+g.count+'</b></button>';
+      return '<button class="geo-rank-row '+(selected===g.name?'is-selected':'')+'" data-place="'+esc(g.name)+'"><span class="geo-rank-num">'+String(i+1).padStart(2,'0')+'</span><span class="geo-rank-name">'+esc(g.name.replace(/市$|省$/g,''))+'</span><span class="geo-rank-track"><i style="width:'+g.count/max*100+'%"></i></span><b>'+g.count+'</b></button>';
     }).join('') || '<p class="geo-empty">没有符合筛选条件的已收录地点。</p>';
     $('geoRank').querySelectorAll('button').forEach(function (button) { button.addEventListener('click',function () {
       if(mode==='city') chooseCity(button.dataset.place);
@@ -187,7 +188,12 @@
     el.addEventListener('toggle',function h(){if(el.open){el.removeEventListener('toggle',h);fn();}});
   }
   function start(){
-    watch('foldGeo',loadMap);
+    watch('foldGeo',function(){
+      // 默认展开仍按可见性加载底图，避免下方地图争抢首屏带宽。
+      if(!root.IntersectionObserver){loadMap();return;}
+      var io=new IntersectionObserver(function(entries){if(entries.some(function(entry){return entry.isIntersecting;})){io.disconnect();loadMap();}},{rootMargin:'240px'});
+      io.observe(host);
+    });
     watch('foldStructure',function(){loadBase().catch(fail);});
   }
   if(doc.readyState==='loading') doc.addEventListener('DOMContentLoaded',start); else start();

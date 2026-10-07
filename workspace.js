@@ -219,20 +219,31 @@
   root.ReitsWorkspace = {selectAdviceForTarget:selectAdviceForTarget,pageChanged:pageChanged};
   function renderTrend() {
     var rows = normalizedSeries(series, days), el = $('workspaceTrend');
-    if (!rows.length || !root.echarts) { el.textContent = '历史序列暂不可用，请稍后刷新。'; return; }
-    if (!chart) { el.textContent = ''; chart = root.echarts.init(el); }
-    var css = getComputedStyle(doc.documentElement), color = css.getPropertyValue('--accent').trim();
+    if (!rows.length) { el.textContent = '历史序列暂不可用，请稍后刷新。'; return; }
+    if (!el.clientWidth) return;
+    // 首页单序列图使用原生 SVG；复杂研究图表继续按需使用 ECharts。
+    if (!chart) chart = {resize:renderTrend};
     var last = rows[rows.length - 1];
     $('workspaceTrendValue').textContent = last.value.toFixed(2);
     $('workspaceTrendChange').textContent = signed(last.value - 100);
     $('workspaceTrendChange').className = last.value > 100 ? 'up' : last.value < 100 ? 'down' : 'flat';
     $('workspaceTrendPeriod').textContent = rows[0].date + ' — ' + last.date;
-    el.setAttribute('aria-label', '全市场等权价格指数，区间首日100，区间变化' + signed(last.value - 100));
-    chart.setOption({animation:false,grid:{left:42,right:12,top:18,bottom:28},
-      tooltip:{trigger:'axis',valueFormatter:function(v){return Number(v).toFixed(2);}},
-      xAxis:{type:'category',data:rows.map(function(r){return r.date;}),boundaryGap:false,axisTick:{show:false},axisLine:{show:false},axisLabel:{color:css.getPropertyValue('--tx3').trim(),fontSize:10,formatter:function(v){return v.slice(5);}}},
-      yAxis:{type:'value',scale:true,splitNumber:3,axisLabel:{color:css.getPropertyValue('--tx3').trim(),fontSize:10},splitLine:{lineStyle:{color:css.getPropertyValue('--grid').trim(),type:'dashed'}}},
-      series:[{name:'等权价格指数',type:'line',data:rows.map(function(r){return r.value;}),showSymbol:false,lineStyle:{width:2.5,color:color},itemStyle:{color:color},areaStyle:{color:color,opacity:.07}}]});
+    var summary='全市场等权价格指数，区间首日100，区间变化'+signed(last.value-100)+'。左右键查看日期。';
+    el.setAttribute('aria-label',summary); el.setAttribute('role','group'); el.tabIndex=0;
+    var w=Math.max(280,el.clientWidth), h=Math.max(160,el.clientHeight), left=35, right=w-12, top=12, bottom=h-28;
+    var values=rows.map(function(r){return r.value;}), min=Math.min.apply(null,values), max=Math.max.apply(null,values), pad=Math.max((max-min)*.1,.2);
+    var low=min-pad, high=max+pad, x=function(i){return left+i/Math.max(1,rows.length-1)*(right-left);}, y=function(v){return bottom-(v-low)/(high-low)*(bottom-top);};
+    var points=rows.map(function(r,i){return x(i).toFixed(2)+','+y(r.value).toFixed(2);});
+    var grid='';
+    for(var t=0;t<4;t++){var v=low+(high-low)*t/3, gy=y(v);grid+='<line class="trend-grid" x1="'+left+'" x2="'+right+'" y1="'+gy+'" y2="'+gy+'"/><text class="trend-axis" x="'+(left-8)+'" y="'+(gy+3)+'" text-anchor="end">'+v.toFixed(high-low<4?1:0)+'</text>';}
+    [0,Math.floor((rows.length-1)/2),rows.length-1].forEach(function(i){grid+='<text class="trend-axis" x="'+x(i)+'" y="'+(h-7)+'" text-anchor="'+(i===0?'start':i===rows.length-1?'end':'middle')+'">'+esc(rows[i].date.slice(5))+'</text>';});
+    el.innerHTML='<svg class="trend-svg" viewBox="0 0 '+w+' '+h+'" aria-hidden="true"><defs><linearGradient id="marketTrendFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".13"/><stop offset="1" stop-color="var(--accent)" stop-opacity=".01"/></linearGradient></defs>'+grid+'<path fill="url(#marketTrendFill)" d="M'+left+','+bottom+' L'+points.join(' L')+' L'+right+','+bottom+'Z"/><polyline class="trend-line" points="'+points.join(' ')+'"/><circle class="trend-endpoint" cx="'+x(rows.length-1)+'" cy="'+y(last.value)+'" r="3"/><g class="trend-cursor" visibility="hidden"><line x1="0" x2="0" y1="'+top+'" y2="'+bottom+'"/><circle r="4"/></g></svg><div class="trend-tooltip" hidden><b></b><span></span></div>';
+    var svg=el.querySelector('svg'), cursor=el.querySelector('.trend-cursor'), tip=el.querySelector('.trend-tooltip'), index=rows.length-1;
+    function inspect(i,keyboard){index=Math.max(0,Math.min(rows.length-1,i));var point=rows[index],px=x(index),py=y(point.value);cursor.setAttribute('visibility','visible');var line=cursor.querySelector('line');line.setAttribute('x1',px);line.setAttribute('x2',px);var dot=cursor.querySelector('circle');dot.setAttribute('cx',px);dot.setAttribute('cy',py);tip.hidden=false;tip.style.left=Math.min(w-142,Math.max(8,px-65))+'px';tip.style.top='0px';tip.querySelector('b').textContent=point.date;tip.querySelector('span').textContent='等权指数 '+point.value.toFixed(2);if(keyboard)el.setAttribute('aria-label',summary+' '+point.date+'，'+point.value.toFixed(2));}
+    el.onpointermove=function(e){var box=svg.getBoundingClientRect(),px=(e.clientX-box.left)*w/box.width;inspect(Math.round((px-left)/(right-left)*(rows.length-1)),false);};
+    el.onpointerleave=function(){cursor.setAttribute('visibility','hidden');tip.hidden=true;};
+    el.onkeydown=function(e){var next=e.key==='ArrowLeft'?index-1:e.key==='ArrowRight'?index+1:e.key==='Home'?0:e.key==='End'?rows.length-1:null;if(next!==null){e.preventDefault();inspect(next,true);}};
+    el.onblur=function(){cursor.setAttribute('visibility','hidden');tip.hidden=true;el.setAttribute('aria-label',summary);};
     $('workspaceTrendTable').querySelector('tbody').replaceChildren();
     rows.forEach(function(r){var tr=doc.createElement('tr'); [r.date,r.value.toFixed(2)].forEach(function(v){var td=doc.createElement('td');td.textContent=v;tr.append(td);});$('workspaceTrendTable').querySelector('tbody').append(tr);});
   }
@@ -249,7 +260,8 @@
     el.innerHTML = '<h3>' + esc(title) + '</h3><span class="ov-go" aria-hidden="true">详情 →</span>' + inner;
     Object.keys(attrs).forEach(function (k) { el.setAttribute(k, attrs[k]); });
     el.setAttribute('role', 'link'); el.tabIndex = 0;
-    el.setAttribute('aria-label', title + ' · 查看详情');
+    // 可见数据本身构成链接名称，避免短标签遮蔽完整状态。
+    el.removeAttribute('aria-label');
     // design-r3: 150–200ms fade when real content replaces skeleton
     if (typeof el.offsetWidth === 'number') void el.offsetWidth;
     el.classList.add('is-content-in');
@@ -265,13 +277,16 @@
     if (!h) return;
     // 结论只含利率方向 → 学派立场 / stanceOverride；增长侧（含「临界」）不进横幅
     var m = bannerModel(data, stance || null, panel || null, advice || null);
-    h.innerHTML = esc(m.rate || '时钟未判定') + '<span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">' +
+    var headlineHtml = '<span class="ov-rate-label">' + esc(m.rate || '时钟未判定') + '</span><span class="ov-arrow" aria-hidden="true">→</span><span class="ov-stance">' +
       (stance ? esc(stance) : '<span class="ov-skel">配置结论读取中</span>') + '</span>';
+    if (h.innerHTML !== headlineHtml) h.innerHTML = headlineHtml;
     var basisHtml = '<span class="ov-basis-main">' + esc(m.basis) + '</span>' +
       (m.spreadSkip ? '<small class="ov-basis-skip">' + esc(m.spreadSkip) + '</small>' : '') +
       (m.overrideNote ? '<small class="ov-basis-note">' + esc(m.overrideNote) + '</small>' : '') +
       (m.aux ? '<small class="ov-basis-aux">' + esc(m.aux) + '</small>' : '');
     ['ovBasis', 'advBasis'].forEach(function (id) { var el = $(id); if (el) { el.innerHTML = basisHtml; el.hidden = false; } });
+    if ($('ovBasisSummary')) $('ovBasisSummary').innerHTML = esc(m.basis) + (m.spreadSkip ? '<small>' + esc(m.spreadSkip) + '</small>' : '');
+    if ($('ovMethodLabel')) $('ovMethodLabel').textContent = m.overrideNote ? '判断依据与口径 · 含降档说明' : '判断依据与口径';
     $('ovUpdated').textContent = '数据更新于 ' + shortStamp(data.updated || data.lastTradeDate);
     if (b.switchTag) {
       $('ovSwitchTag').innerHTML = '<span class="ov-tag-switch" title="时钟读数较上一交易日发生切换">信号切换</span>';
@@ -335,7 +350,7 @@
     // 3 · 市场今日
     var m = marketCard(data); el = $('ovCardMarket');
     if (el) {
-      cardShell(el, '市场今日', { 'data-ov-view': 'sector', 'data-ov-anchor': 'v-sector' },
+      cardShell(el, '最近交易日', { 'data-ov-view': 'sector', 'data-ov-anchor': 'v-sector' },
         '<div class="ov-big">' + pctSpan(m.pct) + '</div>' +
         '<p class="ov-note">' + esc(m.name) + (m.code ? ' ' + esc(m.code) : '') + (m.close != null ? ' · ' + m.close.toFixed(2) : '') + '</p>' +
         '<p class="ov-note">成交额 <b>' + fmtAmount(m.amount) + '</b></p>' +
@@ -412,7 +427,7 @@
       var bar = doc.createElement('i'); bar.style.width = Math.abs(r.value) / max * 100 + '%'; bar.style.background = 'var(--' + (r.value >= 0 ? 'up' : 'down') + ')'; track.append(bar);
       var value = doc.createElement('span'); value.className = 'sector-value ' + (r.value > 0 ? 'up' : r.value < 0 ? 'down' : 'flat'); value.textContent = sgnNum(r.value, 2) + '%';
       b.append(label, track, value);
-      b.setAttribute('aria-label', r.name + ' ' + (sectorKey === 'pct' ? '今日' : '近 1 月') + ' ' + value.textContent);
+      b.title = r.name + ' ' + (sectorKey === 'pct' ? '最近交易日' : '近 1 月') + ' ' + value.textContent;
       b.addEventListener('click', function () { var chip = Array.from(doc.querySelectorAll('#hmSectorChips button')).find(function (x) { return x.dataset.s === r.name; }); if (chip) chip.click(); $('heatmapCard').scrollIntoView({ block: 'start' }); });
       $('workspaceSectors').append(b);
     });
@@ -421,9 +436,10 @@
     var el = $('workspaceTrend'), started = false;
     function start() {
       if (started) return; started = true;
-      var load = root.__loadECharts ? root.__loadECharts() : Promise.resolve();
-      Promise.all([fetch('data_research.json').then(function (r) { if (!r.ok) throw new Error('历史数据加载失败'); return r.json(); }), load])
-        .then(function (res) { series = res[0].series; renderTrend(); })
+      function history(url){return fetch(url).then(function(r){if(!r.ok)throw new Error('历史数据加载失败');return r.json();});}
+      history('market-series.json').then(function(data){if(data.asOf!==(root.REITS_DATA||{}).lastTradeDate)throw new Error('轻量序列时点不匹配');return data;})
+        .catch(function(){return history('data_research.json').then(function(data){return data.series;});})
+        .then(function(data){series=data;renderTrend();})
         .catch(function (error) { el.textContent = '历史序列暂不可用，请刷新重试。'; console.warn(error.message); });
     }
     if (!root.IntersectionObserver) return start();
@@ -457,6 +473,7 @@
     }
 
     $('sidebarToggle').addEventListener('click',function(){drawer(true);});
+    $('tbNav').addEventListener('click',function(e){if(e.target.closest('button[data-pg]'))drawer(false);});
     $('sidebarScrim').addEventListener('click',function(){drawer(false);$('sidebarToggle').focus();});
     doc.addEventListener('keydown',function(e){
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {e.preventDefault();drawer(false);$('gSearch').focus();}

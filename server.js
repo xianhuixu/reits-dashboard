@@ -2,6 +2,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const zlib = require("zlib");
 
 const args = process.argv.slice(2);
 function arg(name, dflt) {
@@ -15,7 +16,7 @@ const host = arg("host", "127.0.0.1");
 const root = __dirname;
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8", ".css": "text/css; charset=utf-8",
-  ".svg": "image/svg+xml", ".png": "image/png", ".csv": "text/csv; charset=utf-8" };
+  ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2", ".csv": "text/csv; charset=utf-8" };
 // 静态资源（echarts、图标、缓存数据）允许短时缓存；HTML 始终 no-cache 以便开发刷新
 const CACHEABLE_EXTS = new Set([".js", ".css", ".svg", ".png", ".json", ".csv"]);
 const CACHE_HEADER = "public, max-age=3600, must-revalidate";
@@ -29,7 +30,14 @@ http.createServer((req, res) => {
     if (err) { res.writeHead(404); return res.end("Not found"); }
     const ext = path.extname(file);
     const cache = (ext === ".html" || !CACHEABLE_EXTS.has(ext)) ? "no-store" : CACHE_HEADER;
-    res.writeHead(200, { "Content-Type": MIME[ext] || "application/octet-stream", "Cache-Control": cache });
-    res.end(data);
+    const headers = { "Content-Type": MIME[ext] || "application/octet-stream", "Cache-Control": cache, "Vary": "Accept-Encoding" };
+    // 本地预览与正式托管使用相同的文本压缩条件；原始文件仅只读访问。
+    if (/\bgzip\b/.test(req.headers["accept-encoding"] || "") && [".html", ".js", ".css", ".json", ".svg"].includes(ext)) {
+      zlib.gzip(data, (compressionError, compressed) => {
+        if (compressionError) { res.writeHead(200, headers); return res.end(data); }
+        res.writeHead(200, { ...headers, "Content-Encoding": "gzip", "Content-Length": compressed.length });
+        res.end(compressed);
+      });
+    } else { res.writeHead(200, headers); res.end(data); }
   });
 }).listen(port, host, () => console.log(`REITs dashboard: http://${host}:${port}/`));
