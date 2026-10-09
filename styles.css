@@ -1,4 +1,5 @@
 :root {
+  --space-3: 24px;
   --bg: #f0f2f5; --panel: #ffffff; --panel2: #f5f7fa; --line: #e8eaed;
   --line2: #d0d4dc;
   --tx: #0d1117; --tx2: #3d444d; --tx3: #6e7781;
@@ -673,6 +674,17 @@ main { min-width: 0; }
 .clock-state-line .rc-tag { margin-left: 4px; vertical-align: 1px; }
 @media (max-width: 900px) { .rc-axes, .tsf-grid { grid-template-columns: 1fr; } }
 
+/* L2 产权 / 经营权：单列全宽堆叠（取消 2fr/1fr） */
+.panel-l2-stack {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3, 24px);
+  margin-bottom: 0;
+  min-width: 0;
+}
+.panel-l2-stack > * { min-width: 0; }
+.panel-l2-prop { min-width: 0; }
+
 /* 经营权披露 IRR：折叠分区 + 暂无披露空心点 + 极端行 */
 .panel-l2 .note, .panel-l2 .l2-term-status { overflow-wrap: anywhere; word-break: break-word; }
 
@@ -734,8 +746,71 @@ tr.oper-irr-extreme td { background: color-mix(in srgb, var(--warn) 8%, transpar
 tr.oper-irr-review td { outline: 1px dashed var(--tx3); outline-offset: -1px; }
 #operIrrTable th[data-no-sort], #operIrrTable td[data-no-sort] { cursor: default; }
 
+/* 折叠态勿用 content-visibility 裁掉多行摘要（窄屏尤其） */
+.panel-l2 .l2-fold:not([open]) {
+  content-visibility: visible;
+  contain-intrinsic-size: auto none;
+}
+
+/* 个券表：横向滚动 + 名称列 sticky；标记列不被挤没 */
+#operIrrTableHost.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-inline: contain;
+}
+#operIrrTable {
+  width: max-content;
+  min-width: 100%;
+  table-layout: auto;
+}
+#operIrrTable th,
+#operIrrTable td {
+  white-space: nowrap;
+}
+#operIrrTable th.l,
+#operIrrTable td.l {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--panel);
+  box-shadow: 1px 0 0 var(--line);
+  min-width: 9.5em;
+  max-width: 14em;
+  white-space: normal;
+}
+#operIrrTable thead th.l {
+  z-index: 3;
+  background: var(--th-bg);
+}
+#operIrrTable tbody tr:hover td.l { background: color-mix(in srgb, var(--accent) 6%, var(--panel)); }
+#operIrrTable td.l .cell-note { white-space: nowrap; }
+#operIrrTable th:last-child,
+#operIrrTable td:last-child {
+  white-space: nowrap;
+  min-width: 7.5em;
+}
+
 @media (max-width: 420px) {
-  .panel-l2 .l2-fold > summary { padding: 10px 12px; }
+  .panel-l2 .l2-fold > summary {
+    padding: 10px 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    min-height: 0;
+  }
+  .panel-l2 .l2-fold > summary > span:first-child {
+    flex: 1 1 100%;
+  }
   .l2-fold-body { margin: 0 10px 10px; }
-  .oper-irr-sum { display: block; width: 100%; margin-top: 2px; }
+  .oper-irr-sum {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+    line-height: 1.45;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .panel-l2 .l2-fold > summary .ov-fold-act {
+    margin-left: auto;
+  }
 }
