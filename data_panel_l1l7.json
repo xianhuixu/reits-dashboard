@@ -2363,12 +2363,12 @@
       "n": 53
     },
     {
-      "date": "2026-10-08",
-      "ttmYield": 4.839,
+      "date": "2026-10-09",
+      "ttmYield": 4.893,
       "y10": 1.69,
-      "spread": 3.1491,
-      "pctile": 0.9477,
-      "pctileFull": 0.9652,
+      "spread": 3.2029,
+      "pctile": 0.9615,
+      "pctileFull": 0.9744,
       "n": 53
     }
   ],
@@ -2910,7 +2910,7 @@
     ]
   },
   "propertySpread": {
-    "asOf": "2026-10-08",
+    "asOf": "2026-10-09",
     "coverage": {
       "included": 53,
       "mcapWeighted": 53,
@@ -2981,31 +2981,31 @@
       ]
     },
     "latest": {
-      "ttmYieldMcap": 4.839,
-      "ttmYieldMedian": 4.894,
+      "ttmYieldMcap": 4.893,
+      "ttmYieldMedian": 5.08,
       "y10": 1.69,
-      "spreadBp": 314.9,
-      "spreadMedianBp": 320.4,
-      "pctRolling3y": 94.8,
-      "pctFull": 96.5,
-      "pctSinceN10": 94.7,
-      "pctRolling3yMedian": 98.2,
-      "pctFullMedian": 98.8,
+      "spreadBp": 320.3,
+      "spreadMedianBp": 339.0,
+      "pctRolling3y": 96.1,
+      "pctFull": 97.4,
+      "pctSinceN10": 96.1,
+      "pctRolling3yMedian": 99.6,
+      "pctFullMedian": 99.7,
       "defaultPct": "pctRolling3y"
     },
     "gate60d": {
-      "pctileChangePP": 11.7,
-      "from": "2026-07-08",
-      "to": "2026-10-08",
+      "pctileChangePP": 13.1,
+      "from": "2026-07-09",
+      "to": "2026-10-09",
       "basis": "滚动 3 年分位（市值加权），60 个交易日"
     },
     "distYoY": {
-      "asOf": "2026-10-08",
-      "yearAgo": "2025-10-08",
+      "asOf": "2026-10-09",
+      "yearAgo": "2025-10-09",
       "n": 33,
-      "medianPct": -0.8,
-      "nDown": 16,
-      "nUp": 13,
+      "medianPct": -0.79,
+      "nDown": 15,
+      "nUp": 14,
       "tolerancePct": 2.0,
       "state": "企稳",
       "method": "TTM 对 TTM（每只 t 与 t−365 天的 TTM 分派；两端均有值 = 分派记录满一年）· 截面中位数（市值加权会被新发大盘首年分派带偏）· ±2% 容差",
@@ -3018,17 +3018,17 @@
           "state": "下滑"
         },
         {
-          "sector": "产业园",
-          "n": 14,
-          "medianPct": -7.0,
-          "nDown": 8,
-          "state": "下滑"
-        },
-        {
           "sector": "保租房",
           "n": 6,
           "medianPct": -5.0,
           "nDown": 3,
+          "state": "下滑"
+        },
+        {
+          "sector": "产业园",
+          "n": 14,
+          "medianPct": -2.5,
+          "nDown": 7,
           "state": "下滑"
         },
         {
@@ -3079,14 +3079,6 @@
           "ttmNow": 0.08924,
           "ttmYearAgo": 0.11611,
           "yoyPct": -23.14
-        },
-        {
-          "code": "508088.SH",
-          "name": "国泰海通东久新经济产业园REIT",
-          "sector": "产业园",
-          "ttmNow": 0.12175,
-          "ttmYearAgo": 0.15536,
-          "yoyPct": -21.63
         },
         {
           "code": "180502.SZ",
@@ -3265,6 +3257,14 @@
           "yoyPct": 26.87
         },
         {
+          "code": "508088.SH",
+          "name": "国泰海通东久新经济产业园REIT",
+          "sector": "产业园",
+          "ttmNow": 0.2023,
+          "ttmYearAgo": 0.15536,
+          "yoyPct": 30.21
+        },
+        {
           "code": "508010.SH",
           "name": "中金重庆两江产业园REIT",
           "sector": "产业园",
@@ -3308,17 +3308,17 @@
     },
     "rentVsRate": {
       "status": "ok",
-      "asOf": "2026-10-08",
+      "asOf": "2026-10-09",
       "y10Avg1y": 1.776,
-      "y10AvgPrev1y": 1.785,
-      "rateTailwindBp": 0.9,
+      "y10AvgPrev1y": 1.784,
+      "rateTailwindBp": 0.8,
       "y10Now": 1.69,
-      "y10YearAgo": 1.861,
-      "pointToPointBp": -17.1,
-      "ttmYieldMcap": 4.84,
-      "distYoYMedianPct": -0.8,
+      "y10YearAgo": 1.847,
+      "pointToPointBp": -15.7,
+      "ttmYieldMcap": 4.89,
+      "distYoYMedianPct": -0.79,
       "distDragBp": -3.9,
-      "netBp": -3.0,
+      "netBp": -3.1,
       "dominant": "distribution",
       "text": "分派拖累占优：租金（分派）回落快过利率下行",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
@@ -3327,27 +3327,27 @@
       {
         "sector": "产业园",
         "nReits": 20,
-        "yieldMcap": 5.817,
-        "spreadBp": 412.7,
-        "spreadMedianBp": 414.8,
-        "pctFull": 99.1,
-        "historyDays": 1645,
+        "yieldMcap": 6.024,
+        "spreadBp": 433.4,
+        "spreadMedianBp": 424.7,
+        "pctFull": 100.0,
+        "historyDays": 1646,
         "since": "2022-04-07",
         "shortHistory": false,
-        "distYoYPct": -7.0,
+        "distYoYPct": -2.5,
         "distYoYN": 14,
-        "distNDown": 8,
+        "distNDown": 7,
         "distState": "下滑",
         "valueTrap": true
       },
       {
         "sector": "仓储物流",
         "nReits": 11,
-        "yieldMcap": 5.777,
-        "spreadBp": 408.7,
-        "spreadMedianBp": 320.4,
-        "pctFull": 94.0,
-        "historyDays": 1646,
+        "yieldMcap": 5.79,
+        "spreadBp": 410.0,
+        "spreadMedianBp": 321.0,
+        "pctFull": 94.2,
+        "historyDays": 1647,
         "since": "2022-04-06",
         "shortHistory": false,
         "distYoYPct": -8.1,
@@ -3359,11 +3359,11 @@
       {
         "sector": "数据中心",
         "nReits": 2,
-        "yieldMcap": 5.609,
-        "spreadBp": 392.0,
-        "spreadMedianBp": 367.7,
-        "pctFull": 13.5,
-        "historyDays": 58,
+        "yieldMcap": 5.657,
+        "spreadBp": 396.7,
+        "spreadMedianBp": 372.8,
+        "pctFull": 18.4,
+        "historyDays": 59,
         "since": "2026-08-11",
         "shortHistory": true,
         "distYoYPct": null,
@@ -3375,11 +3375,11 @@
       {
         "sector": "消费",
         "nReits": 12,
-        "yieldMcap": 4.228,
-        "spreadBp": 253.8,
-        "spreadMedianBp": 240.2,
-        "pctFull": 74.3,
-        "historyDays": 794,
+        "yieldMcap": 4.233,
+        "spreadBp": 254.3,
+        "spreadMedianBp": 241.1,
+        "pctFull": 74.5,
+        "historyDays": 795,
         "since": "2024-08-05",
         "shortHistory": false,
         "distYoYPct": 6.1,
@@ -3391,11 +3391,11 @@
       {
         "sector": "保租房",
         "nReits": 8,
-        "yieldMcap": 3.249,
-        "spreadBp": 155.9,
-        "spreadMedianBp": 161.3,
-        "pctFull": 65.1,
-        "historyDays": 1130,
+        "yieldMcap": 3.243,
+        "spreadBp": 155.3,
+        "spreadMedianBp": 161.2,
+        "pctFull": 64.9,
+        "historyDays": 1131,
         "since": "2023-09-04",
         "shortHistory": false,
         "distYoYPct": -5.0,
@@ -3406,7 +3406,7 @@
       }
     ],
     "status": "ok",
-    "updated": "2026-10-08 16:22:12",
+    "updated": "2026-10-09 08:46:22",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
@@ -3417,8 +3417,11 @@
         "failed": []
       },
       "dists": {
-        "ok": 58,
-        "failed": []
+        "ok": 56,
+        "failed": [
+          "180102.SZ",
+          "508068.SH"
+        ]
       },
       "units": {
         "ok": 54,
@@ -3429,7 +3432,7 @@
           "508603.SH"
         ]
       },
-      "elapsedS": 213.6
+      "elapsedS": 192.9
     }
   },
   "operatingDisclosedIrr": {
