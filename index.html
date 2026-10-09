@@ -549,14 +549,34 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
         <p class="note note-tight">利差 bp · 全样本分位 · 分派同比（TTM 对 TTM，截面中位数 ±2%）· 分位≥80% 且分派下滑 → <span class="rc-tag rc-tag-warn">⚠ 疑似价值陷阱</span></p>
         <div id="sectorSpreadHost" class="table-scroll"></div>
       </div>
-      <div>
-        <h3 class="panel-subhead">经营权 · 基金披露 IRR − 期限匹配国债 <span class="rc-tag rc-tag-ref" id="operIrrBadge">2025 年末口径</span></h3>
-        <p class="note note-tight">主口径 = <b>基金披露 IRR − 按 WAL（否则剩余年限）插值的中债国债</b>（2/5/10/30Y，曲线取 2025-12-31）· 自算 IRR 仅悬浮提示 · <span id="panelL2TermStatus" class="l2-term-status">加载中…</span></p>
-        <div id="chartL2Operating" class="chart-h-320"></div>
-        <div id="operIrrPendingStrip" class="oper-irr-pending" aria-label="暂无披露"></div>
-        <h3 class="panel-subhead panel-subhead-spaced">经营权 · 个券披露利差与年末以来价格</h3>
-        <p class="note note-tight">利差列不可排序 · 业态不汇总（口径不统一）· 年末以来价格变动 = 现价 / 2025-12-31 − 1 · 极端利差只看自身变化</p>
-        <div id="operIrrTableHost" class="table-scroll"></div>
+      <div class="oper-irr-col">
+        <details class="ov-fold l2-fold" id="foldOperChart" open>
+          <summary>
+            <span>经营权 · 基金披露 IRR − 期限匹配国债 <span class="rc-tag rc-tag-ref" id="operIrrBadge">2025 年末口径</span></span>
+            <span class="ov-fold-act">展开</span>
+          </summary>
+          <div class="l2-fold-body">
+            <details class="l2-kaliber" id="foldOperChartKaliber">
+              <summary>口径说明</summary>
+              <p class="note note-tight">主口径 = <b>基金披露 IRR − 按 WAL（否则剩余年限）插值的中债国债</b>（2/5/10/30Y，曲线取 2025-12-31）· 自算 IRR 仅悬浮提示 · <span id="panelL2TermStatus" class="l2-term-status">加载中…</span></p>
+            </details>
+            <div id="chartL2Operating" class="chart-h-320"></div>
+            <div id="operIrrPendingStrip" class="oper-irr-pending" aria-label="暂无披露"></div>
+          </div>
+        </details>
+        <details class="ov-fold l2-fold" id="foldOperTable">
+          <summary>
+            <span>个券披露利差 <span class="oper-irr-sum" id="operIrrTableSummary"></span></span>
+            <span class="ov-fold-act">展开</span>
+          </summary>
+          <div class="l2-fold-body">
+            <details class="l2-kaliber" id="foldOperTableKaliber">
+              <summary>口径说明</summary>
+              <p class="note note-tight">利差列不可排序 · 业态不汇总（口径不统一）· 年末以来价格变动 = 现价 / 2025-12-31 − 1 · 极端利差只看自身变化</p>
+            </details>
+            <div id="operIrrTableHost" class="table-scroll"></div>
+          </div>
+        </details>
       </div>
     </div>
   </div>

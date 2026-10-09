@@ -74,6 +74,10 @@ test("operatingDisclosedIrr is YE2025 disclosed primary and does not feed banner
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
   assert.match(html, /id="operIrrTableHost"/);
   assert.match(html, /id="operIrrPendingStrip"/);
+  assert.match(html, /id="foldOperChart"/);
+  assert.match(html, /id="foldOperTable"/);
+  assert.match(html, /id="operIrrTableSummary"/);
+  assert.match(html, /口径说明/);
   assert.match(html, /2025 年末口径/);
   const app = fs.readFileSync(path.join(root, "app.js"), "utf8");
   assert.match(app, /paintOperatingDisclosed/);

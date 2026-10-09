@@ -50,3 +50,12 @@ test("operating disclosed table disables spread sort and hides sector average", 
   assert.match(strip, /暂无披露/);
   assert.match(strip, /oper-irr-dot/);
 });
+
+test("operating disclosed fold summary uses disclosed count and medians", () => {
+  const s = A.operatingDisclosedSummary(panel);
+  assert.match(s, /\d+ 只有披露/);
+  assert.match(s, /中位利差/);
+  assert.match(s, /年末以来中位/);
+  assert.equal(A.operatingDisclosedSummary(panel), A.operatingDisclosedSummary(panel.operatingDisclosedIrr));
+  assert.equal(A.operatingDisclosedSummary(null), "");
+});

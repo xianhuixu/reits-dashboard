@@ -578,6 +578,7 @@ LAZY.research.push(function () {
     }
     var badge = $("operIrrBadge");
     if (badge && OD && OD.badge) badge.textContent = OD.badge;
+    wireOperIrrFolds();
     paint("chartL2Property", P.propertyYieldSeries, "ttmYield", "产权 TTM", "#3b82f6");
     paintOperatingDisclosed("chartL2Operating", OD);
     var strip = $("operIrrPendingStrip");
@@ -588,10 +589,41 @@ LAZY.research.push(function () {
     if (opTbl && window.ReitsAllocation && window.ReitsAllocation.operatingDisclosedTableHtml) {
       opTbl.innerHTML = window.ReitsAllocation.operatingDisclosedTableHtml(window.ReitsAllocation.operatingDisclosedRows(P), OD && OD.summary);
     }
+    var sumEl = $("operIrrTableSummary");
+    if (sumEl && window.ReitsAllocation && window.ReitsAllocation.operatingDisclosedSummary) {
+      sumEl.textContent = window.ReitsAllocation.operatingDisclosedSummary(OD) || "";
+    }
     var secEl = $("sectorSpreadHost");
     if (secEl && window.ReitsAllocation && window.ReitsAllocation.sectorSpreadHtml) {
       secEl.innerHTML = window.ReitsAllocation.sectorSpreadHtml(window.ReitsAllocation.propertySectorRows(P));
     }
+  }
+
+  /** 经营权散点 / 个券表 / 口径说明：details 折叠 + sessionStorage 记忆。 */
+  var _operIrrFoldsWired = false;
+  function wireOperIrrFolds() {
+    if (_operIrrFoldsWired) return;
+    var map = {
+      foldOperChart: "rd-fold-oper-chart",
+      foldOperTable: "rd-fold-oper-table",
+      foldOperChartKaliber: "rd-fold-oper-chart-kaliber",
+      foldOperTableKaliber: "rd-fold-oper-table-kaliber"
+    };
+    Object.keys(map).forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      var key = map[id];
+      try {
+        var saved = sessionStorage.getItem(key);
+        if (saved === "1") el.open = true;
+        else if (saved === "0") el.open = false;
+      } catch (e) { /* 隐私模式忽略 */ }
+      el.addEventListener("toggle", function () {
+        try { sessionStorage.setItem(key, el.open ? "1" : "0"); } catch (e2) { /* ignore */ }
+        if (el.open) setTimeout(ensureCharts, 60);
+      });
+    });
+    _operIrrFoldsWired = true;
   }
 
   /** 经营权披露 IRR 截面散点：业态 × 利差 bp；自算 IRR 只在 tooltip。 */

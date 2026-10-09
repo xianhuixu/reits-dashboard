@@ -270,6 +270,31 @@
       }).join("") +
       '<span class="oper-irr-pending-legend">空心灰点 = 暂无披露（同置信度中）</span></div>';
   }
+  /** 个券表折叠摘要：披露只数 · 中位利差 · 年末以来价格中位变动。 */
+  function _medianNum(arr) {
+    var a = (arr || []).filter(function (v) { return v != null && isFinite(v); }).slice().sort(function (x, y) { return x - y; });
+    if (!a.length) return null;
+    var m = Math.floor(a.length / 2);
+    return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+  }
+  function operatingDisclosedSummary(panelOrOd) {
+    var OD = panelOrOd && panelOrOd.operatingDisclosedIrr ? panelOrOd.operatingDisclosedIrr : panelOrOd;
+    if (!OD) return "";
+    var n = (OD.coverage && OD.coverage.disclosed != null)
+      ? OD.coverage.disclosed
+      : ((OD.items || []).length);
+    var medSpread = _medianNum((OD.items || []).map(function (r) { return r.spreadBp; }));
+    var medPx = (OD.summary && OD.summary.priceChangeMedianPct != null)
+      ? OD.summary.priceChangeMedianPct
+      : _medianNum((OD.items || []).map(function (r) { return r.priceChangePct; }));
+    var parts = [n + " 只有披露"];
+    if (medSpread != null) parts.push("中位利差 " + (medSpread > 0 ? "+" : "") + Math.round(medSpread) + " bp");
+    if (medPx != null) {
+      var sign = medPx > 0 ? "+" : (medPx < 0 ? "−" : "");
+      parts.push("年末以来中位 " + sign + Math.abs(medPx).toFixed(1) + "%");
+    }
+    return parts.join(" · ");
+  }
   function operatingDisclosedTableHtml(rows, summary) {
     if (!rows || !rows.length) return '<p class="note">经营权披露 IRR 待接入</p>';
     var head = '<table class="matrix research-table" id="operIrrTable"><thead><tr>' +
@@ -307,7 +332,8 @@
     allocLabel: allocLabel, ratingShort: ratingShort, schoolStance: schoolStance, sectorRights: sectorRights, recommendationRows: recommendationRows, redlines: redlines,
     propertySectorRows: propertySectorRows, sectorSpreadHtml: sectorSpreadHtml,
     operatingDisclosedRows: operatingDisclosedRows, operatingPendingRows: operatingPendingRows,
-    operatingPendingStripHtml: operatingPendingStripHtml, operatingDisclosedTableHtml: operatingDisclosedTableHtml };
+    operatingPendingStripHtml: operatingPendingStripHtml, operatingDisclosedTableHtml: operatingDisclosedTableHtml,
+    operatingDisclosedSummary: operatingDisclosedSummary };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   if (!root.document) return;
   root.ReitsAllocation = API;
