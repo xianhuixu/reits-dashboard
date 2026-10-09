@@ -644,9 +644,9 @@ LAZY.research.push(function () {
         }
       },
       legend: { top: 0, right: 8, textStyle: { color: th.tx2, fontSize: 11 } },
-      grid: { left: 56, right: 24, top: 36, bottom: 36 },
+      grid: { left: 12, right: 24, top: 40, bottom: 40, containLabel: true },
       xAxis: {
-        type: "category", data: sectors,
+        type: "category", data: sectors, boundaryGap: true,
         axisLabel: { color: th.tx3, fontSize: 10 }, axisLine: { lineStyle: { color: th.grid } }
       },
       yAxis: {
