@@ -99,7 +99,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 </style>
 <link rel="preload" href="fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css?v=20261005-designr3">
-<link rel="stylesheet" href="styles.css?v=20261009-operirr-overflow2">
+<link rel="stylesheet" href="styles.css?v=20261009-l2-stack-sticky">
 <link rel="stylesheet" href="research-layout.css?v=20261005-designr3" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="research-layout.css?v=20261005-designr3"></noscript>
 <link rel="stylesheet" href="geography/map.css?v=20261005-designr3" media="print" onload="this.media='all'">
@@ -540,8 +540,8 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
     <h2>L2 分权利差时序 · 产权 TTM−10Y / 经营权 IRR−期限匹配国债</h2>
     <p class="note" id="panelL2Note">市值加权分派/IRR 与 10Y 国债利差 · 面积=利差 · 虚线=历史分位 · 对齐分权破局重估学派 · 数据 as-of 见角标</p>
     <p class="panel-l2-stamp" id="panelL2Stamp"></p>
-    <div class="grid">
-      <div>
+    <div class="panel-l2-stack">
+      <div class="panel-l2-prop">
         <h3 class="panel-subhead">产权 · TTM 分派率 − 10Y</h3>
         <p class="note note-tight">主轴：TTM / 10Y（%）· 右轴：利差分位 · 禁止用下方 avgYield 单点替代本图</p>
         <div id="chartL2Property" class="chart-h-320"></div>
