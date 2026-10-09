@@ -2366,7 +2366,7 @@
       "date": "2026-10-09",
       "ttmYield": 4.896,
       "y10": 1.69,
-      "spread": 3.2065,
+      "spread": 3.2064,
       "pctile": 0.9601,
       "pctileFull": 0.9735,
       "n": 53
@@ -3327,8 +3327,8 @@
       {
         "sector": "产业园",
         "nReits": 20,
-        "yieldMcap": 6.038,
-        "spreadBp": 434.8,
+        "yieldMcap": 6.039,
+        "spreadBp": 434.9,
         "spreadMedianBp": 424.7,
         "pctFull": 100.0,
         "historyDays": 1646,
@@ -3344,7 +3344,7 @@
         "sector": "仓储物流",
         "nReits": 11,
         "yieldMcap": 5.79,
-        "spreadBp": 410.1,
+        "spreadBp": 410.0,
         "spreadMedianBp": 321.0,
         "pctFull": 94.2,
         "historyDays": 1647,
@@ -3375,10 +3375,10 @@
       {
         "sector": "消费",
         "nReits": 12,
-        "yieldMcap": 4.234,
-        "spreadBp": 254.4,
-        "spreadMedianBp": 241.3,
-        "pctFull": 74.7,
+        "yieldMcap": 4.233,
+        "spreadBp": 254.3,
+        "spreadMedianBp": 241.1,
+        "pctFull": 74.5,
         "historyDays": 795,
         "since": "2024-08-05",
         "shortHistory": false,
@@ -3405,93 +3405,41 @@
         "valueTrap": false
       }
     ],
-    "status": "lagged",
-    "updated": "2026-10-09 08:30:32",
+    "status": "ok",
+    "updated": "2026-10-09 08:58:12",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 46,
-        "failed": [
-          "508090.SH",
-          "508091.SH",
-          "508092.SH",
-          "508097.SH",
-          "180607.SZ",
-          "508012.SH",
-          "508084.SH",
-          "180106.SZ",
-          "508600.SH",
-          "508601.SH",
-          "508602.SH",
-          "508603.SH"
-        ]
+        "ok": 58,
+        "failed": []
       },
       "dists": {
-        "ok": 35,
+        "ok": 55,
         "failed": [
           "508056.SH",
-          "180301.SZ",
-          "508000.SH",
-          "180101.SZ",
-          "508019.SH",
-          "508085.SH",
-          "180601.SZ",
-          "180605.SZ",
-          "508080.SH",
-          "508060.SH",
-          "508082.SH",
-          "508090.SH",
-          "508091.SH",
-          "508092.SH",
-          "508097.SH",
-          "180607.SZ",
-          "508012.SH",
-          "508084.SH",
-          "180106.SZ",
-          "508600.SH",
-          "508601.SH",
-          "508602.SH",
-          "508603.SH"
+          "508099.SH",
+          "180102.SZ"
         ]
       },
       "units": {
-        "ok": 31,
+        "ok": 49,
         "failed": [
           "180301.SZ",
           "508098.SH",
-          "508000.SH",
-          "508088.SH",
-          "180105.SZ",
-          "508031.SH",
-          "180503.SZ",
-          "508017.SH",
-          "180901.SZ",
-          "180306.SZ",
-          "508002.SH",
-          "508005.SH",
-          "508003.SH",
-          "508048.SH",
-          "508082.SH",
-          "508090.SH",
-          "508091.SH",
-          "508092.SH",
-          "508097.SH",
-          "180607.SZ",
-          "508012.SH",
-          "508084.SH",
-          "180106.SZ",
+          "180302.SZ",
+          "180303.SZ",
+          "508099.SH",
           "508600.SH",
           "508601.SH",
           "508602.SH",
           "508603.SH"
         ]
       },
-      "elapsedS": 422.7
-    },
-    "lagReason": "新浪/东财取数覆盖不足（价格 46/58，分派 35/58），沿用缓存"
+      "elapsedS": 281.3
+    }
   },
   "operatingDisclosedIrr": {
     "status": "ok",
