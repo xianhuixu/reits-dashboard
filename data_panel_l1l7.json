@@ -2364,7 +2364,7 @@
     },
     {
       "date": "2026-10-09",
-      "ttmYield": 4.896,
+      "ttmYield": 4.893,
       "y10": 1.69,
       "spread": 3.2064,
       "pctile": 0.9601,
@@ -2981,20 +2981,20 @@
       ]
     },
     "latest": {
-      "ttmYieldMcap": 4.896,
+      "ttmYieldMcap": 4.893,
       "ttmYieldMedian": 5.08,
       "y10": 1.69,
-      "spreadBp": 320.6,
+      "spreadBp": 320.3,
       "spreadMedianBp": 339.0,
-      "pctRolling3y": 96.0,
-      "pctFull": 97.3,
-      "pctSinceN10": 96.0,
-      "pctRolling3yMedian": 98.3,
-      "pctFullMedian": 98.9,
+      "pctRolling3y": 96.1,
+      "pctFull": 97.4,
+      "pctSinceN10": 96.1,
+      "pctRolling3yMedian": 99.6,
+      "pctFullMedian": 99.7,
       "defaultPct": "pctRolling3y"
     },
     "gate60d": {
-      "pctileChangePP": 14.6,
+      "pctileChangePP": 13.1,
       "from": "2026-07-09",
       "to": "2026-10-09",
       "basis": "滚动 3 年分位（市值加权），60 个交易日"
@@ -3003,9 +3003,9 @@
       "asOf": "2026-10-09",
       "yearAgo": "2025-10-09",
       "n": 33,
-      "medianPct": -0.8,
-      "nDown": 16,
-      "nUp": 13,
+      "medianPct": -0.79,
+      "nDown": 15,
+      "nUp": 14,
       "tolerancePct": 2.0,
       "state": "企稳",
       "method": "TTM 对 TTM（每只 t 与 t−365 天的 TTM 分派；两端均有值 = 分派记录满一年）· 截面中位数（市值加权会被新发大盘首年分派带偏）· ±2% 容差",
@@ -3018,17 +3018,17 @@
           "state": "下滑"
         },
         {
-          "sector": "产业园",
-          "n": 14,
-          "medianPct": -7.0,
-          "nDown": 8,
-          "state": "下滑"
-        },
-        {
           "sector": "保租房",
           "n": 6,
           "medianPct": -5.0,
           "nDown": 3,
+          "state": "下滑"
+        },
+        {
+          "sector": "产业园",
+          "n": 14,
+          "medianPct": -2.5,
+          "nDown": 7,
           "state": "下滑"
         },
         {
@@ -3315,8 +3315,8 @@
       "y10Now": 1.69,
       "y10YearAgo": 1.847,
       "pointToPointBp": -15.7,
-      "ttmYieldMcap": 4.9,
-      "distYoYMedianPct": -0.8,
+      "ttmYieldMcap": 4.89,
+      "distYoYMedianPct": -0.79,
       "distDragBp": -3.9,
       "netBp": -3.1,
       "dominant": "distribution",
@@ -3334,9 +3334,9 @@
         "historyDays": 1646,
         "since": "2022-04-07",
         "shortHistory": false,
-        "distYoYPct": -7.0,
+        "distYoYPct": -2.5,
         "distYoYN": 14,
-        "distNDown": 8,
+        "distNDown": 7,
         "distState": "下滑",
         "valueTrap": true
       },
