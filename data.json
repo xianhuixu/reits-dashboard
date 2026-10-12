@@ -517,12 +517,12 @@
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -946,12 +946,12 @@
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -1375,12 +1375,12 @@
    "listDays": 501,
    "signals": {
     "liquidity": -2,
-    "sentiment": 2,
+    "sentiment": 0,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -1437,9 +1437,9 @@
    "ret20": -1.41,
    "ret60": -5.81,
    "macd": {
-    "dif": -0.0393,
-    "dea": -0.0365,
-    "hist": -0.0056,
+    "dif": -0.0407,
+    "dea": -0.0368,
+    "hist": -0.0079,
     "cross": null
    },
    "rsi14": 39.6,
@@ -1448,7 +1448,7 @@
    "amt5": 3831214.0,
    "amt20": 5361218.0,
    "amtRatio": 0.9,
-   "sinceIPO": -18.06,
+   "sinceIPO": -18.26,
    "volAnn": 12.5,
    "listDays": 501,
    "signals": {
@@ -2529,9 +2529,9 @@
    "ret20": -1.0,
    "ret60": -1.69,
    "macd": {
-    "dif": -0.024,
-    "dea": -0.0144,
-    "hist": -0.0193,
+    "dif": -0.0239,
+    "dea": -0.0143,
+    "hist": -0.019,
     "cross": null
    },
    "rsi14": 42.1,
@@ -2540,7 +2540,7 @@
    "amt5": 2384198.0,
    "amt20": 4114811.0,
    "amtRatio": 0.93,
-   "sinceIPO": -16.16,
+   "sinceIPO": -16.14,
    "volAnn": 7.9,
    "listDays": 501,
    "signals": {
@@ -2662,12 +2662,12 @@
    "listDays": 468,
    "signals": {
     "liquidity": -1,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -3119,8 +3119,8 @@
     "hist": 0.0439,
     "cross": null
    },
-   "rsi14": 53.1,
-   "pctRank": 12.3,
+   "rsi14": 54.8,
+   "pctRank": 12.7,
    "devMA250": null,
    "amt5": 341357.0,
    "amt20": 1032016.0,
@@ -4280,7 +4280,7 @@
     "y10Now": 1.686,
     "y10YearAgo": 1.847,
     "pointToPointBp": -16.0,
-    "ttmYieldMcap": 4.9,
+    "ttmYieldMcap": 4.87,
     "distYoYMedianPct": -0.8,
     "distDragBp": -3.9,
     "netBp": -3.1,
