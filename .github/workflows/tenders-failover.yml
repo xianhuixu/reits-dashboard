@@ -46,8 +46,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 安装 Scrapling（Camoufox 内核首次运行自动下载）
-        run: pip install scrapling
+      - name: 安装 Scrapling + Playwright
+        run: pip install scrapling playwright
+
+      - name: 安装 Chromium 及系统依赖
+        run: python -m playwright install --with-deps chromium
 
       - name: 新鲜度闸门
         id: gate
@@ -76,8 +79,9 @@ jobs:
               f.write(f'stale={str(stale).lower()}\n')
           EOF
 
-      - name: 验证 Scrapling 可过 WAF（仅首次验证）
+      - name: 探测 Scrapling 是否可过 WAF（遥测，不阻断接管）
         if: steps.gate.outputs.stale == 'true'
+        continue-on-error: true
         run: |
           python3 - <<'EOF'
           import fetch_bids_ctbpsp
