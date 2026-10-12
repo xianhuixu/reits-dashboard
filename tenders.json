@@ -1,19 +1,19 @@
 {
-  "checkedAt": "2026-10-12T09:47:32+08:00",
-  "lastSuccessAt": "2026-10-12T09:47:32+08:00",
+  "checkedAt": "2026-10-12T18:47:33+08:00",
+  "lastSuccessAt": "2026-10-12T18:47:33+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
-  "latestBulletinDate": "2026-10-10",
+  "latestBulletinDate": "2026-10-12",
   "sources": [
     {
       "id": "ctbpsp",
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 9,
-      "checkedAt": "2026-10-12T09:47:32+08:00",
-      "lastSuccessAt": "2026-10-12T09:47:32+08:00",
-      "latestBulletinDate": "2026-10-10"
+      "checkedAt": "2026-10-12T18:47:33+08:00",
+      "lastSuccessAt": "2026-10-12T18:47:33+08:00",
+      "latestBulletinDate": "2026-10-12"
     },
     {
       "status": "failed",
@@ -37,6 +37,36 @@
     }
   ],
   "items": [
+    {
+      "code": "ctb_66f7fc04b399",
+      "date": "2026-10-12",
+      "title": "徐州地铁集团有限公司轨道交通类REITs项目债项信用评级服务项目评标结果公示",
+      "summary": "来源：中国招标投标公共服务平台（江苏省 中标候选人公示 按10号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%BE%90%E5%B7%9E%E5%9C%B0%E9%93%81%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E8%BD%A8%E9%81%93%E4%BA%A4%E9%80%9A%E7%B1%BBREITs%E9%A1%B9%E7%9B%AE%E5%80%BA%E9%A1%B9%E4%BF%A1%E7%94%A8%E8%AF%84%E7%BA%A7%E6%9C%8D%E5%8A%A1",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_6e0eb976f6bd",
+      "date": "2026-10-12",
+      "title": "发行供水公募REITs中介机构选聘项目服务Ⅰ标段（二次）招标公告",
+      "summary": "来源：中国招标投标公共服务平台（陕西省 招标公告 按10号令规范发布 潜在投标人预测）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%8F%91%E8%A1%8C%E4%BE%9B%E6%B0%B4%E5%85%AC%E5%8B%9FREITs%E4%B8%AD%E4%BB%8B%E6%9C%BA%E6%9E%84%E9%80%89%E8%81%98%E9%A1%B9%E7%9B%AE%E6%9C%8D%E5%8A%A1%E2%85%A0%E6%A0%87%E6%AE%B5%EF%BC%88%E4%BA%8C%E6%AC%A1%EF%BC%89%E6%8B%9B%E6%A0%87",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
+    {
+      "code": "ctb_f0daf132aa4f",
+      "date": "2026-10-12",
+      "title": "发行供水公募REITs中介机构选聘项目中标候选人公示",
+      "summary": "来源：中国招标投标公共服务平台（陕西省 中标候选人公示 按10号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%8F%91%E8%A1%8C%E4%BE%9B%E6%B0%B4%E5%85%AC%E5%8B%9FREITs%E4%B8%AD%E4%BB%8B%E6%9C%BA%E6%9E%84%E9%80%89%E8%81%98%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC%E7%A4%BA",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
     {
       "code": "ctb_dacfafe6c575",
       "date": "2026-10-10",
