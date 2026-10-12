@@ -356,17 +356,17 @@
    "amt5": 1762658.0,
    "amt20": 3291563.0,
    "amtRatio": 1.08,
-   "sinceIPO": -30.62,
+   "sinceIPO": -30.38,
    "volAnn": 12.9,
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": -2,
+    "sentiment": -1,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -600,7 +600,7 @@
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -907,12 +907,12 @@
    "listDays": 371,
    "signals": {
     "liquidity": -2,
-    "sentiment": 2,
+    "sentiment": 1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": -3,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -2505,13 +2505,13 @@
    "volAnn": 11.3,
    "listDays": 501,
    "signals": {
-    "liquidity": 1,
+    "liquidity": 0,
     "sentiment": -1,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -2534,7 +2534,7 @@
     "hist": -0.019,
     "cross": null
    },
-   "rsi14": 42.3,
+   "rsi14": 42.1,
    "pctRank": 2.4,
    "devMA250": -4.02,
    "amt5": 2376935.0,
@@ -4481,7 +4481,7 @@
    },
    {
     "name": "市场宽度扩张",
-    "value": "20日上涨占比 46%",
+    "value": "20日上涨占比 44%",
     "ok": false,
     "desc": "重估应从防御型扩散至全市场"
    },
