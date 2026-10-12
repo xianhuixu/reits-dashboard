@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """股/债 Beta 与 Δ10Y 敏感度（杜丽虹 2021「偏股型 / 偏债型」方法的中国化）。
 
-- 周频（W-FRI 收盘）简单收益率；主窗口 104 周（数据不足时用可得周数，n<MIN_OBS 置空），滚动 52 周。
+- 周频（W-FRI 收盘）简单收益率；丢弃末日之后的未完成周；asOf=末日交易日（非未来周五标签）；主窗口 104 周（数据不足时用可得周数，n<MIN_OBS 置空），滚动 52 周。
 - betaEq  = Cov(r, r_沪深300)/Var(r_沪深300)；betaBond = Cov(r, r_上证国债)/Var(r_上证国债)。
 - sens10y = 周收益(%) 对 周 Δ10Y(bp) 回归斜率 × 10 → 「10Y 每上行 10bp 的周收益 %」（负值=利率敏感/偏债）。
 - 分类：中国 REITs 与股指相关性很低，Beta 普遍 ≪1，**不用 Beta>1 切分**；
@@ -81,9 +81,14 @@ def compute_betas(reit_close, bench_close, universe, y10=None, window: int = WIN
         return pending(f"缺少基准 {eq}/{bond} 日线")
     if reit_close is None or reit_close.empty:
         return pending("缺少 REITs 日线")
+    # 日频末日：W-FRI 会把「本周未完」标成未来周五；丢掉未完成周，asOf 用末日交易日
+    last_daily = pd.to_datetime(reit_close.index).max()
+    if bench_close is not None and len(bench_close):
+        last_daily = min(last_daily, pd.to_datetime(bench_close.index).max())
     rw = weekly_returns(reit_close)
     bw = weekly_returns(bench_close[[eq, bond]])
     idx = rw.index.intersection(bw.index)
+    idx = idx[idx <= last_daily]  # 剔除标签落在末日之后的未完成周
     rw, bw = rw.loc[idx], bw.loc[idx]
     dy = None
     if y10 is not None and len(y10):
@@ -161,7 +166,7 @@ def compute_betas(reit_close, bench_close, universe, y10=None, window: int = WIN
     n_weeks = int(rw_win.dropna(how="all").shape[0])
     return {
         "status": "ok",
-        "asOf": idx[-1].strftime("%Y-%m-%d") if len(idx) else None,
+        "asOf": pd.Timestamp(last_daily).strftime("%Y-%m-%d"),
         "window": window, "weeksAvailable": n_weeks, "rollWindow": roll, "minObs": min_obs,
         "frequency": "weekly (W-FRI close)",
         "benchmarks": {"equity": f"{eq} 沪深300", "bond": f"{bond} 上证国债指数",

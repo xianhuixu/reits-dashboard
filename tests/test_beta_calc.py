@@ -80,6 +80,19 @@ class BetaTests(unittest.TestCase):
         self.assertTrue(all(x["sens10y"] is None for x in out["byReit"]))
         self.assertTrue(out["sens10yStatus"].startswith("pending"))
 
+
+    def test_asof_uses_last_trade_not_future_friday(self):
+        """周中截断时 asOf 为末日交易日，且滚动日期不含未来周五标签。"""
+        close, bench, y10, uni = fixture()
+        # 截到周三：W-FRI 标签会落在该周周五（未来），旧逻辑会把它写进 asOf/rolling
+        cut = close.index[close.index.weekday == 2][-1]  # Wednesday
+        close, bench, y10 = close.loc[:cut], bench.loc[:cut], y10.loc[:cut]
+        out = bc.compute_betas(close, bench, uni, y10=y10)
+        self.assertEqual(out["status"], "ok")
+        self.assertEqual(out["asOf"], cut.strftime("%Y-%m-%d"))
+        self.assertLessEqual(out["asOf"], cut.strftime("%Y-%m-%d"))
+        self.assertTrue(all(d <= cut.strftime("%Y-%m-%d") for d in out["rolling"]["dates"]))
+
     def test_y10_from_macro(self):
         self.assertIsNone(bc.y10_series_from_macro({}))
         s = bc.y10_series_from_macro({"cgb10y": {"series": [{"date": "2026-01-02", "value": 1.8}]}})
