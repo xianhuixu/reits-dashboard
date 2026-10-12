@@ -42,16 +42,6 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: 安装 Scrapling + Playwright
-        run: pip install scrapling playwright
-
-      - name: 安装 Chromium 及系统依赖
-        run: python -m playwright install --with-deps chromium
-
       - name: 新鲜度闸门（管道活性检测）
         id: gate
         env:
@@ -78,6 +68,19 @@ jobs:
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f'stale={str(stale).lower()}\n')
           EOF
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.stale == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: 安装 Scrapling + Playwright
+        if: steps.gate.outputs.stale == 'true'
+        run: pip install scrapling playwright
+
+      - name: 安装 Chromium 及系统依赖
+        if: steps.gate.outputs.stale == 'true'
+        run: python -m playwright install --with-deps chromium
 
       - name: 容灾抓取并推送（复用服务器同款脚本）
         if: steps.gate.outputs.stale == 'true'
