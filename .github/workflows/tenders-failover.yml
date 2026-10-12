@@ -1,0 +1,125 @@
+name: 招投标容灾补抓
+# 设计定位：服务器 cron（每日 09:47/18:47，Scrapling）是主管道；
+# 本工作流是备胎 + 自愈机制——每次运行先检查 tenders.json 最新公告日期，
+# 数据新鲜就直接退出；发现陈旧（≥2 天）才抓取、合并、提交、推送，
+# 主管道任何原因断供后，最迟 13 小时内自动接管。
+# 旧版 tenders-update.yml（纯 requests/普通无头 Chrome）因无法过阿里云 WAF 已废弃删除。
+
+on:
+  schedule:
+    # 北京时间 09:52 / 18:52（UTC 01:52 / 10:52），比服务器晚 5 分钟，避免重复抓取
+    - cron: '52 1,10 * * *'
+  push:
+    # 工作流文件本身变更时立即触发一次（验证管道可用）
+    paths: [.github/workflows/tenders-failover.yml]
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '跳过新鲜度检查，强制抓取（true/false）'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: tenders-failover
+  cancel-in-progress: false
+
+jobs:
+  failover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 准备 main 分支与提交身份
+        run: |
+          git checkout -B main origin/main
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 安装 Scrapling（Camoufox 内核首次运行自动下载）
+        run: pip install scrapling
+
+      - name: 新鲜度闸门
+        id: gate
+        env:
+          FORCE: ${{ inputs.force }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'EOF'
+          import datetime
+          import json
+          import os
+
+          d = json.load(open('tenders.json', encoding='utf-8'))
+          latest = d.get('latestBulletinDate') or max(
+              (str(x.get('date', '')) for x in d.get('items', [])), default='')
+          try:
+              lag = (datetime.date.today() - datetime.date.fromisoformat(latest)).days
+          except ValueError:
+              lag = 999
+          force = os.environ.get('FORCE', 'false').lower() == 'true'
+          # TODO(validation): push 事件暂时强制抓取，用于首次验证 Actions 内抓取链路，验证后删除下一行
+          force = force or os.environ.get('EVENT_NAME', '') == 'push'
+          stale = force or lag >= 2
+          print(f'latest={latest or "(空)"} lag={lag}天 force={force} → {"执行抓取" if stale else "数据新鲜，退出"}')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'stale={str(stale).lower()}\n')
+          EOF
+
+      - name: 验证 Scrapling 可过 WAF（仅首次验证）
+        if: steps.gate.outputs.stale == 'true'
+        run: |
+          python3 - <<'EOF'
+          import fetch_bids_ctbpsp
+          items = fetch_bids_ctbpsp.fetch(30)
+          print(f'ctbpsp 实抓 {len(items)} 条（Actions 出口 IP）')
+          assert items, 'ctbpsp 在 Actions 环境抓取为空，可能 WAF 拦截了 GitHub 出口 IP'
+          EOF
+
+      - name: 容灾抓取并推送（复用服务器同款脚本）
+        if: steps.gate.outputs.stale == 'true'
+        run: python update_tenders_daily.py
+
+      - name: 显式请求 Pages 重建（兜底）
+        if: steps.gate.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
+
+      - name: 接管后复查新鲜度
+        id: recheck
+        if: always() && steps.gate.outputs.stale == 'true'
+        run: |
+          python3 - <<'EOF'
+          import datetime
+          import json
+
+          d = json.load(open('tenders.json', encoding='utf-8'))
+          latest = d.get('latestBulletinDate') or ''
+          try:
+              lag = (datetime.date.today() - datetime.date.fromisoformat(latest)).days
+          except ValueError:
+              lag = 999
+          print(f'接管后 latest={latest or "(空)"} lag={lag}天')
+          if lag >= 2:
+              raise SystemExit('接管后数据仍陈旧，触发告警')
+          EOF
+
+      - name: 持续陈旧则开 issue 告警
+        if: always() && steps.gate.outputs.stale == 'true' && steps.recheck.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "⚠️ 招投标信息流断供超2天（容灾接管失败）" \
+            --body "服务器 cron 与 GitHub 容灾工作流均未恢复数据，请检查 ctbpsp 反爬与管道状态。 $(date -u +%FT%TZ)" \
+            --label "ops-alert" || true
