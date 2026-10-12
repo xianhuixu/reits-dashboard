@@ -46,14 +46,16 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: 安装 Scrapling（Camoufox 内核首次运行自动下载）
-        run: pip install scrapling
+      - name: 安装 Scrapling + Playwright
+        run: pip install scrapling playwright
+
+      - name: 安装 Chromium 及系统依赖
+        run: python -m playwright install --with-deps chromium
 
       - name: 新鲜度闸门
         id: gate
         env:
           FORCE: ${{ inputs.force }}
-          EVENT_NAME: ${{ github.event_name }}
         run: |
           python3 - <<'EOF'
           import datetime
@@ -68,16 +70,15 @@ jobs:
           except ValueError:
               lag = 999
           force = os.environ.get('FORCE', 'false').lower() == 'true'
-          # TODO(validation): push 事件暂时强制抓取，用于首次验证 Actions 内抓取链路，验证后删除下一行
-          force = force or os.environ.get('EVENT_NAME', '') == 'push'
           stale = force or lag >= 2
           print(f'latest={latest or "(空)"} lag={lag}天 force={force} → {"执行抓取" if stale else "数据新鲜，退出"}')
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f'stale={str(stale).lower()}\n')
           EOF
 
-      - name: 验证 Scrapling 可过 WAF（仅首次验证）
+      - name: 探测 Scrapling 是否可过 WAF（遥测，不阻断接管）
         if: steps.gate.outputs.stale == 'true'
+        continue-on-error: true
         run: |
           python3 - <<'EOF'
           import fetch_bids_ctbpsp
@@ -88,6 +89,8 @@ jobs:
 
       - name: 容灾抓取并推送（复用服务器同款脚本）
         if: steps.gate.outputs.stale == 'true'
+        env:
+          TZ: Asia/Shanghai  # 让提交时间戳与公告日期使用北京时间
         run: python update_tenders_daily.py
 
       - name: 显式请求 Pages 重建（兜底）
@@ -111,8 +114,9 @@ jobs:
           except ValueError:
               lag = 999
           print(f'接管后 latest={latest or "(空)"} lag={lag}天')
-          if lag >= 2:
-              raise SystemExit('接管后数据仍陈旧，触发告警')
+          # 告警阈值放宽到 4 天：周末/短假期无新公告属正常（闸门阈值是 2 天）
+          if lag >= 4:
+              raise SystemExit('接管后数据仍停滞 ≥4 天，触发告警')
           EOF
 
       - name: 持续陈旧则开 issue 告警

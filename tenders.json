@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-12T09:14:11+08:00",
+  "checkedAt": "2026-10-12T09:36:48+08:00",
   "lastSuccessAt": "2026-10-12T09:14:11+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -9,11 +9,11 @@
     {
       "id": "ctbpsp",
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
-      "status": "ok",
-      "count": 9,
-      "checkedAt": "2026-10-12T09:14:11+08:00",
-      "lastSuccessAt": "2026-10-12T09:14:11+08:00",
-      "latestBulletinDate": "2026-10-10"
+      "status": "failed",
+      "count": 0,
+      "checkedAt": "2026-10-12T09:36:48+08:00",
+      "lastSuccessAt": null,
+      "latestBulletinDate": null
     },
     {
       "status": "failed",
