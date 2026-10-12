@@ -52,7 +52,7 @@ jobs:
       - name: 安装 Chromium 及系统依赖
         run: python -m playwright install --with-deps chromium
 
-      - name: 新鲜度闸门
+      - name: 新鲜度闸门（管道活性检测）
         id: gate
         env:
           FORCE: ${{ inputs.force }}
@@ -63,28 +63,20 @@ jobs:
           import os
 
           d = json.load(open('tenders.json', encoding='utf-8'))
-          latest = d.get('latestBulletinDate') or max(
-              (str(x.get('date', '')) for x in d.get('items', [])), default='')
+          # 活性信号：lastSuccessAt（每次成功抓取都会刷新）。
+          # 不用公告日期做信号——周末无新公告不代表管道故障，
+          # 而 lastSuccessAt 超过 36h 未更新 = 服务器 cron 确实断了。
+          raw = d.get('lastSuccessAt') or d.get('checkedAt') or ''
           try:
-              lag = (datetime.date.today() - datetime.date.fromisoformat(latest)).days
+              last = datetime.datetime.fromisoformat(raw).astimezone(datetime.timezone.utc)
+              age_h = (datetime.datetime.now(datetime.timezone.utc) - last).total_seconds() / 3600
           except ValueError:
-              lag = 999
+              age_h = 9999
           force = os.environ.get('FORCE', 'false').lower() == 'true'
-          stale = force or lag >= 2
-          print(f'latest={latest or "(空)"} lag={lag}天 force={force} → {"执行抓取" if stale else "数据新鲜，退出"}')
+          stale = force or age_h > 36
+          print(f'lastSuccessAt={raw or "(空)"} 距今 {age_h:.1f}h force={force} → {"执行抓取" if stale else "管道活跃，退出"}')
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f'stale={str(stale).lower()}\n')
-          EOF
-
-      - name: 探测 Scrapling 是否可过 WAF（遥测，不阻断接管）
-        if: steps.gate.outputs.stale == 'true'
-        continue-on-error: true
-        run: |
-          python3 - <<'EOF'
-          import fetch_bids_ctbpsp
-          items = fetch_bids_ctbpsp.fetch(30)
-          print(f'ctbpsp 实抓 {len(items)} 条（Actions 出口 IP）')
-          assert items, 'ctbpsp 在 Actions 环境抓取为空，可能 WAF 拦截了 GitHub 出口 IP'
           EOF
 
       - name: 容灾抓取并推送（复用服务器同款脚本）
@@ -99,7 +91,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds" || true
 
-      - name: 接管后复查新鲜度
+      - name: 接管后复查管道活性
         id: recheck
         if: always() && steps.gate.outputs.stale == 'true'
         run: |
@@ -108,15 +100,16 @@ jobs:
           import json
 
           d = json.load(open('tenders.json', encoding='utf-8'))
-          latest = d.get('latestBulletinDate') or ''
+          raw = d.get('lastSuccessAt') or d.get('checkedAt') or ''
           try:
-              lag = (datetime.date.today() - datetime.date.fromisoformat(latest)).days
+              last = datetime.datetime.fromisoformat(raw).astimezone(datetime.timezone.utc)
+              age_h = (datetime.datetime.now(datetime.timezone.utc) - last).total_seconds() / 3600
           except ValueError:
-              lag = 999
-          print(f'接管后 latest={latest or "(空)"} lag={lag}天')
-          # 告警阈值放宽到 4 天：周末/短假期无新公告属正常（闸门阈值是 2 天）
-          if lag >= 4:
-              raise SystemExit('接管后数据仍停滞 ≥4 天，触发告警')
+              age_h = 9999
+          print(f'接管后 lastSuccessAt={raw or "(空)"} 距今 {age_h:.1f}h')
+          # 已接管一次却仍 >60h 无成功记录 = 主备双挂，告警
+          if age_h > 60:
+              raise SystemExit('接管后管道仍无成功记录，触发告警')
           EOF
 
       - name: 持续陈旧则开 issue 告警
