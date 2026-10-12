@@ -64,22 +64,22 @@
   ],
   "matrix": {
    "全市场": {
-    "399324.SZ": 0.11,
+    "399324.SZ": 0.12,
     "000012.SH": 0.03,
     "000300.SH": 0.07,
-    "399393.SZ": 0.22,
+    "399393.SZ": 0.2,
     "399995.SZ": 0.2,
     "399808.SZ": 0.0,
     "399437.SZ": 0.13,
     "399353.SZ": 0.14,
     "399935.SZ": 0.02,
-    "000932.SH": 0.2
+    "000932.SH": 0.21
    },
    "防御型": {
     "399324.SZ": 0.15,
-    "000012.SH": 0.12,
+    "000012.SH": 0.13,
     "000300.SH": 0.11,
-    "399393.SZ": 0.25,
+    "399393.SZ": 0.24,
     "399995.SZ": 0.25,
     "399808.SZ": 0.05,
     "399437.SZ": 0.14,
@@ -88,10 +88,10 @@
     "000932.SH": 0.23
    },
    "周期型": {
-    "399324.SZ": 0.1,
-    "000012.SH": 0.0,
+    "399324.SZ": 0.11,
+    "000012.SH": 0.01,
     "000300.SH": 0.06,
-    "399393.SZ": 0.2,
+    "399393.SZ": 0.19,
     "399995.SZ": 0.18,
     "399808.SZ": -0.01,
     "399437.SZ": 0.12,
@@ -100,22 +100,22 @@
     "000932.SH": 0.19
    },
    "扩张型": {
-    "399324.SZ": 0.08,
+    "399324.SZ": 0.09,
     "000012.SH": 0.05,
     "000300.SH": 0.1,
-    "399393.SZ": 0.15,
+    "399393.SZ": 0.14,
     "399995.SZ": 0.12,
-    "399808.SZ": 0.04,
+    "399808.SZ": 0.05,
     "399437.SZ": 0.11,
     "399353.SZ": 0.05,
     "399935.SZ": 0.05,
-    "000932.SH": 0.18
+    "000932.SH": 0.19
    },
    "产业园": {
     "399324.SZ": 0.09,
     "000012.SH": -0.03,
     "000300.SH": 0.04,
-    "399393.SZ": 0.19,
+    "399393.SZ": 0.18,
     "399995.SZ": 0.17,
     "399808.SZ": -0.01,
     "399437.SZ": 0.11,
@@ -124,40 +124,40 @@
     "000932.SH": 0.16
    },
    "仓储物流": {
-    "399324.SZ": 0.06,
-    "000012.SH": -0.05,
+    "399324.SZ": 0.07,
+    "000012.SH": -0.04,
     "000300.SH": 0.02,
-    "399393.SZ": 0.16,
+    "399393.SZ": 0.15,
     "399995.SZ": 0.13,
     "399808.SZ": -0.05,
-    "399437.SZ": 0.06,
-    "399353.SZ": 0.08,
-    "399935.SZ": 0.0,
-    "000932.SH": 0.18
+    "399437.SZ": 0.07,
+    "399353.SZ": 0.07,
+    "399935.SZ": -0.0,
+    "000932.SH": 0.19
    },
    "保租房": {
     "399324.SZ": 0.11,
-    "000012.SH": 0.18,
+    "000012.SH": 0.19,
     "000300.SH": 0.06,
-    "399393.SZ": 0.18,
+    "399393.SZ": 0.16,
     "399995.SZ": 0.19,
-    "399808.SZ": 0.03,
+    "399808.SZ": 0.04,
     "399437.SZ": 0.1,
     "399353.SZ": 0.15,
     "399935.SZ": 0.02,
     "000932.SH": 0.2
    },
    "商业不动产": {
-    "399324.SZ": 0.04,
-    "000012.SH": -0.24,
+    "399324.SZ": 0.05,
+    "000012.SH": -0.23,
     "000300.SH": 0.11,
-    "399393.SZ": 0.09,
+    "399393.SZ": 0.07,
     "399995.SZ": 0.02,
-    "399808.SZ": 0.02,
+    "399808.SZ": 0.03,
     "399437.SZ": 0.16,
     "399353.SZ": -0.03,
-    "399935.SZ": 0.08,
-    "000932.SH": 0.04
+    "399935.SZ": 0.07,
+    "000932.SH": 0.05
    },
    "市政环保": {
     "399324.SZ": 0.21,
@@ -172,28 +172,28 @@
     "000932.SH": 0.29
    },
    "数据中心": {
-    "399324.SZ": 0.08,
+    "399324.SZ": 0.09,
     "000012.SH": 0.05,
     "000300.SH": 0.1,
-    "399393.SZ": 0.15,
+    "399393.SZ": 0.14,
     "399995.SZ": 0.12,
-    "399808.SZ": 0.04,
+    "399808.SZ": 0.05,
     "399437.SZ": 0.11,
     "399353.SZ": 0.05,
     "399935.SZ": 0.05,
-    "000932.SH": 0.18
+    "000932.SH": 0.19
    },
    "消费": {
     "399324.SZ": 0.1,
     "000012.SH": 0.08,
     "000300.SH": 0.05,
-    "399393.SZ": 0.21,
+    "399393.SZ": 0.2,
     "399995.SZ": 0.18,
-    "399808.SZ": -0.02,
+    "399808.SZ": -0.01,
     "399437.SZ": 0.08,
     "399353.SZ": 0.12,
     "399935.SZ": 0.01,
-    "000932.SH": 0.2
+    "000932.SH": 0.21
    },
    "能源": {
     "399324.SZ": 0.12,
@@ -217,7 +217,7 @@
     "399437.SZ": 0.21,
     "399353.SZ": 0.16,
     "399935.SZ": 0.05,
-    "000932.SH": 0.15
+    "000932.SH": 0.16
    }
   },
   "scatter": [
@@ -228,17 +228,17 @@
    },
    {
     "sector": "仓储物流",
-    "bond": -0.05,
+    "bond": -0.04,
     "equity": 0.02
    },
    {
     "sector": "保租房",
-    "bond": 0.18,
+    "bond": 0.19,
     "equity": 0.06
    },
    {
     "sector": "商业不动产",
-    "bond": -0.24,
+    "bond": -0.23,
     "equity": 0.11
    },
    {
@@ -272,65 +272,65 @@
     "sector": "保租房",
     "peerCode": "399393.SZ",
     "peerName": "国证地产",
-    "corr": 0.18,
-    "reitRet": -1.22,
-    "peerRet": -6.51
+    "corr": 0.16,
+    "reitRet": -0.63,
+    "peerRet": -7.52
    },
    {
     "sector": "产业园",
     "peerCode": "399995.SZ",
     "peerName": "基建工程",
     "corr": 0.17,
-    "reitRet": -26.61,
-    "peerRet": -14.58
+    "reitRet": -26.04,
+    "peerRet": -14.46
    },
    {
     "sector": "市政环保",
     "peerCode": "399995.SZ",
     "peerName": "基建工程",
     "corr": 0.24,
-    "reitRet": -5.49,
-    "peerRet": -14.58
+    "reitRet": -5.37,
+    "peerRet": -14.46
    },
    {
     "sector": "能源",
     "peerCode": "399808.SZ",
     "peerName": "中证新能",
     "corr": 0.04,
-    "reitRet": -10.08,
-    "peerRet": -28.85
+    "reitRet": -10.06,
+    "peerRet": -28.42
    },
    {
     "sector": "高速公路",
     "peerCode": "399437.SZ",
     "peerName": "国证运输",
     "corr": 0.21,
-    "reitRet": -9.02,
-    "peerRet": -1.22
+    "reitRet": -8.82,
+    "peerRet": -0.77
    },
    {
     "sector": "仓储物流",
     "peerCode": "399353.SZ",
     "peerName": "国证物流",
-    "corr": 0.08,
-    "reitRet": -17.29,
-    "peerRet": -4.98
+    "corr": 0.07,
+    "reitRet": -16.64,
+    "peerRet": -4.97
    },
    {
     "sector": "数据中心",
     "peerCode": "399935.SZ",
     "peerName": "中证信息",
     "corr": 0.05,
-    "reitRet": -15.73,
-    "peerRet": 14.24
+    "reitRet": -14.79,
+    "peerRet": 13.58
    },
    {
     "sector": "消费",
     "peerCode": "000932.SH",
     "peerName": "中证消费",
-    "corr": 0.2,
-    "reitRet": -12.09,
-    "peerRet": -14.43
+    "corr": 0.21,
+    "reitRet": -11.51,
+    "peerRet": -14.07
    }
   ],
   "betas": {
@@ -359,10 +359,10 @@
      "sector": "产业园",
      "members": 20,
      "betaEq": 0.008,
-     "betaBond": 1.465,
-     "sens10y": -0.08,
+     "betaBond": 1.461,
+     "sens10y": -0.078,
      "n": 102,
-     "score": 0.724,
+     "score": 0.725,
      "cls": "中性",
      "rankEq": 2
     },
@@ -370,10 +370,10 @@
      "sector": "仓储物流",
      "members": 11,
      "betaEq": -0.038,
-     "betaBond": 1.421,
-     "sens10y": 0.006,
+     "betaBond": 1.415,
+     "sens10y": 0.008,
      "n": 102,
-     "score": 0.349,
+     "score": 0.351,
      "cls": "中性",
      "rankEq": 4
     },
@@ -381,10 +381,10 @@
      "sector": "保租房",
      "members": 9,
      "betaEq": -0.188,
-     "betaBond": 6.685,
-     "sens10y": -2.317,
+     "betaBond": 6.683,
+     "sens10y": -2.316,
      "n": 102,
-     "score": -3.046,
+     "score": -3.047,
      "cls": "偏债",
      "rankEq": 8
     },
@@ -405,7 +405,7 @@
      "betaBond": 3.908,
      "sens10y": -1.337,
      "n": 102,
-     "score": -1.188,
+     "score": -1.189,
      "cls": "偏债",
      "rankEq": 6
     },
@@ -413,10 +413,10 @@
      "sector": "数据中心",
      "members": 2,
      "betaEq": 0.21,
-     "betaBond": -1.674,
-     "sens10y": 1.904,
+     "betaBond": -1.668,
+     "sens10y": 1.898,
      "n": 60,
-     "score": 3.708,
+     "score": 3.706,
      "cls": "偏股",
      "rankEq": 1
     },
@@ -424,10 +424,10 @@
      "sector": "消费",
      "members": 12,
      "betaEq": -0.104,
-     "betaBond": 3.563,
-     "sens10y": -1.315,
+     "betaBond": 3.558,
+     "sens10y": -1.313,
      "n": 102,
-     "score": -1.075,
+     "score": -1.074,
      "cls": "偏债",
      "rankEq": 7
     },
@@ -438,7 +438,7 @@
      "betaBond": 2.49,
      "sens10y": -0.919,
      "n": 102,
-     "score": -0.353,
+     "score": -0.354,
      "cls": "中性",
      "rankEq": 5
     },
@@ -446,10 +446,10 @@
      "sector": "高速公路",
      "members": 15,
      "betaEq": -0.011,
-     "betaBond": 0.673,
+     "betaBond": 0.671,
      "sens10y": 0.285,
      "n": 102,
-     "score": 0.88,
+     "score": 0.881,
      "cls": "偏股",
      "rankEq": 3
     }
@@ -461,10 +461,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.009,
-     "betaBond": 0.031,
+     "betaBond": 0.034,
      "sens10y": 0.376,
      "n": 102,
-     "score": 1.015,
+     "score": 1.01,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -475,10 +475,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.037,
-     "betaBond": 2.616,
-     "sens10y": -0.173,
-     "n": 101,
-     "score": 0.252,
+     "betaBond": 2.608,
+     "sens10y": -0.17,
+     "n": 102,
+     "score": 0.253,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -489,10 +489,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.06,
-     "betaBond": 1.565,
-     "sens10y": 0.02,
+     "betaBond": 1.567,
+     "sens10y": 0.021,
      "n": 102,
-     "score": 0.842,
+     "score": 0.839,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -506,7 +506,7 @@
      "betaBond": 0.891,
      "sens10y": 0.011,
      "n": 101,
-     "score": 0.02,
+     "score": 0.016,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -518,9 +518,9 @@
      "strategy": "周期型",
      "betaEq": -0.203,
      "betaBond": 2.869,
-     "sens10y": -0.728,
-     "n": 92,
-     "score": -1.769,
+     "sens10y": -0.73,
+     "n": 93,
+     "score": -1.77,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -531,10 +531,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.064,
-     "betaBond": -0.433,
-     "sens10y": 0.823,
+     "betaBond": -0.439,
+     "sens10y": 0.826,
      "n": 102,
-     "score": 1.635,
+     "score": 1.633,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -545,10 +545,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.086,
-     "betaBond": 1.96,
-     "sens10y": -0.573,
+     "betaBond": 1.958,
+     "sens10y": -0.572,
      "n": 99,
-     "score": -0.483,
+     "score": -0.484,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -562,7 +562,7 @@
      "betaBond": 3.697,
      "sens10y": -0.137,
      "n": 94,
-     "score": 0.602,
+     "score": 0.6,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -572,11 +572,11 @@
      "name": "招商科创孵化器REIT",
      "sector": "产业园",
      "strategy": "周期型",
-     "betaEq": 0.347,
-     "betaBond": -0.79,
-     "sens10y": 1.827,
+     "betaEq": 0.346,
+     "betaBond": -0.791,
+     "sens10y": 1.824,
      "n": 91,
-     "score": 4.04,
+     "score": 4.031,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -588,9 +588,9 @@
      "strategy": "周期型",
      "betaEq": -0.043,
      "betaBond": 1.162,
-     "sens10y": 0.147,
+     "sens10y": 0.149,
      "n": 102,
-     "score": 0.171,
+     "score": 0.168,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -601,10 +601,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.015,
-     "betaBond": -0.381,
-     "sens10y": 0.356,
+     "betaBond": -0.397,
+     "sens10y": 0.361,
      "n": 102,
-     "score": 0.984,
+     "score": 0.985,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -615,10 +615,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.036,
-     "betaBond": 2.632,
-     "sens10y": -0.964,
-     "n": 101,
-     "score": 0.236,
+     "betaBond": 2.625,
+     "sens10y": -0.962,
+     "n": 102,
+     "score": 0.237,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -629,10 +629,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.154,
-     "betaBond": 0.574,
-     "sens10y": 0.04,
+     "betaBond": 0.581,
+     "sens10y": 0.039,
      "n": 102,
-     "score": 1.97,
+     "score": 1.964,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -642,11 +642,11 @@
      "name": "中信建投沈阳国际软件园REIT",
      "sector": "产业园",
      "strategy": "周期型",
-     "betaEq": -0.099,
-     "betaBond": -3.927,
-     "sens10y": 2.485,
-     "n": 46,
-     "score": 1.674,
+     "betaEq": -0.095,
+     "betaBond": -3.972,
+     "sens10y": 2.502,
+     "n": 47,
+     "score": 1.713,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -656,11 +656,11 @@
      "name": "创金合信首农产业园REIT",
      "sector": "产业园",
      "strategy": "周期型",
-     "betaEq": -0.119,
-     "betaBond": 2.701,
-     "sens10y": -0.129,
-     "n": 61,
-     "score": -1.029,
+     "betaEq": -0.118,
+     "betaBond": 2.708,
+     "sens10y": -0.134,
+     "n": 62,
+     "score": -1.031,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -671,10 +671,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": -0.143,
-     "betaBond": -1.667,
-     "sens10y": 0.931,
-     "n": 65,
-     "score": 0.45,
+     "betaBond": -1.664,
+     "sens10y": 0.927,
+     "n": 66,
+     "score": 0.442,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -685,10 +685,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.029,
-     "betaBond": 0.669,
-     "sens10y": -0.011,
+     "betaBond": 0.648,
+     "sens10y": -0.01,
      "n": 102,
-     "score": 0.938,
+     "score": 0.939,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -699,10 +699,10 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.029,
-     "betaBond": 1.712,
-     "sens10y": 1.198,
-     "n": 82,
-     "score": 0.533,
+     "betaBond": 1.714,
+     "sens10y": 1.194,
+     "n": 83,
+     "score": 0.528,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -713,7 +713,7 @@
      "sector": "产业园",
      "strategy": "周期型",
      "betaEq": 0.009,
-     "betaBond": 5.379,
+     "betaBond": 5.383,
      "sens10y": -1.836,
      "n": 95,
      "score": -1.034,
@@ -728,9 +728,9 @@
      "strategy": "周期型",
      "betaEq": 0.07,
      "betaBond": 0.148,
-     "sens10y": 0.455,
+     "sens10y": 0.457,
      "n": 102,
-     "score": 1.462,
+     "score": 1.459,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -741,10 +741,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.146,
-     "betaBond": -0.755,
-     "sens10y": 0.769,
+     "betaBond": -0.763,
+     "sens10y": 0.771,
      "n": 102,
-     "score": 0.079,
+     "score": 0.077,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -757,8 +757,8 @@
      "betaEq": 0.077,
      "betaBond": 1.979,
      "sens10y": 0.23,
-     "n": 101,
-     "score": 0.814,
+     "n": 102,
+     "score": 0.811,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -769,10 +769,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.049,
-     "betaBond": -0.423,
-     "sens10y": 0.576,
+     "betaBond": -0.429,
+     "sens10y": 0.578,
      "n": 100,
-     "score": 1.517,
+     "score": 1.514,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -783,10 +783,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.021,
-     "betaBond": 1.718,
-     "sens10y": 0.146,
+     "betaBond": 1.719,
+     "sens10y": 0.147,
      "n": 75,
-     "score": 0.469,
+     "score": 0.467,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -796,11 +796,11 @@
      "name": "华夏安博仓储物流REIT",
      "sector": "仓储物流",
      "strategy": "周期型",
-     "betaEq": 0.221,
-     "betaBond": -4.601,
-     "sens10y": 3.304,
+     "betaEq": 0.224,
+     "betaBond": -4.744,
+     "sens10y": 3.327,
      "n": 41,
-     "score": 4.496,
+     "score": 4.564,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -811,10 +811,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.025,
-     "betaBond": 3.381,
-     "sens10y": -0.701,
+     "betaBond": 3.38,
+     "sens10y": -0.704,
      "n": 92,
-     "score": -0.539,
+     "score": -0.54,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -825,10 +825,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": 0.067,
-     "betaBond": -0.724,
-     "sens10y": 0.519,
+     "betaBond": -0.732,
+     "sens10y": 0.521,
      "n": 102,
-     "score": 1.774,
+     "score": 1.772,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -838,11 +838,11 @@
      "name": "中航易商仓储物流REIT",
      "sector": "仓储物流",
      "strategy": "周期型",
-     "betaEq": -0.016,
-     "betaBond": 0.854,
-     "sens10y": 0.659,
+     "betaEq": -0.017,
+     "betaBond": 0.864,
+     "sens10y": 0.655,
      "n": 88,
-     "score": 0.499,
+     "score": 0.491,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -853,10 +853,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.048,
-     "betaBond": 3.228,
-     "sens10y": -0.637,
-     "n": 82,
-     "score": -0.661,
+     "betaBond": 3.227,
+     "sens10y": -0.636,
+     "n": 83,
+     "score": -0.662,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -867,10 +867,10 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.06,
-     "betaBond": -0.192,
-     "sens10y": 1.308,
-     "n": 60,
-     "score": 0.549,
+     "betaBond": -0.19,
+     "sens10y": 1.306,
+     "n": 61,
+     "score": 0.544,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -881,9 +881,9 @@
      "sector": "仓储物流",
      "strategy": "周期型",
      "betaEq": -0.05,
-     "betaBond": 3.262,
-     "sens10y": -0.385,
-     "n": 101,
+     "betaBond": 3.259,
+     "sens10y": -0.384,
+     "n": 102,
      "score": -0.695,
      "cls": "偏债",
      "expected": "偏股",
@@ -895,10 +895,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.182,
-     "betaBond": 8.864,
-     "sens10y": -3.247,
+     "betaBond": 8.862,
+     "sens10y": -3.245,
      "n": 102,
-     "score": -3.897,
+     "score": -3.892,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -909,10 +909,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.248,
-     "betaBond": 6.362,
-     "sens10y": -2.022,
-     "n": 100,
-     "score": -3.466,
+     "betaBond": 6.356,
+     "sens10y": -2.02,
+     "n": 101,
+     "score": -3.461,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -925,7 +925,7 @@
      "betaEq": null,
      "betaBond": null,
      "sens10y": null,
-     "n": 23,
+     "n": 24,
      "score": null,
      "cls": null,
      "expected": "偏债",
@@ -937,10 +937,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.123,
-     "betaBond": 5.208,
-     "sens10y": -1.918,
+     "betaBond": 5.202,
+     "sens10y": -1.916,
      "n": 102,
-     "score": -2.025,
+     "score": -2.022,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -951,10 +951,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.18,
-     "betaBond": 5.737,
+     "betaBond": 5.747,
      "sens10y": -1.041,
      "n": 78,
-     "score": -2.687,
+     "score": -2.688,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -965,10 +965,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.19,
-     "betaBond": 5.473,
-     "sens10y": -2.054,
+     "betaBond": 5.469,
+     "sens10y": -2.052,
      "n": 102,
-     "score": -2.667,
+     "score": -2.664,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -979,10 +979,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.202,
-     "betaBond": 6.824,
-     "sens10y": -2.545,
+     "betaBond": 6.819,
+     "sens10y": -2.543,
      "n": 102,
-     "score": -3.275,
+     "score": -3.27,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -993,10 +993,10 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.15,
-     "betaBond": 6.199,
-     "sens10y": -2.194,
+     "betaBond": 6.194,
+     "sens10y": -2.192,
      "n": 100,
-     "score": -2.622,
+     "score": -2.618,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1007,8 +1007,8 @@
      "sector": "保租房",
      "strategy": "防御型",
      "betaEq": -0.083,
-     "betaBond": 7.632,
-     "sens10y": -1.062,
+     "betaBond": 7.642,
+     "sens10y": -1.063,
      "n": 71,
      "score": -2.638,
      "cls": "偏债",
@@ -1037,7 +1037,7 @@
      "betaEq": null,
      "betaBond": null,
      "sens10y": null,
-     "n": 16,
+     "n": 17,
      "score": null,
      "cls": null,
      "expected": "偏股",
@@ -1065,7 +1065,7 @@
      "betaEq": null,
      "betaBond": null,
      "sens10y": null,
-     "n": 16,
+     "n": 17,
      "score": null,
      "cls": null,
      "expected": "偏股",
@@ -1077,10 +1077,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": -0.222,
-     "betaBond": 6.183,
-     "sens10y": -2.226,
+     "betaBond": 6.184,
+     "sens10y": -2.227,
      "n": 99,
-     "score": -3.193,
+     "score": -3.192,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1091,10 +1091,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": -0.07,
-     "betaBond": 2.203,
+     "betaBond": 2.204,
      "sens10y": -0.82,
      "n": 102,
-     "score": -0.45,
+     "score": -0.453,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1105,10 +1105,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": -0.081,
-     "betaBond": 2.2,
-     "sens10y": -0.983,
+     "betaBond": 2.196,
+     "sens10y": -0.982,
      "n": 102,
-     "score": -0.532,
+     "score": -0.533,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1119,10 +1119,10 @@
      "sector": "市政环保",
      "strategy": "防御型",
      "betaEq": 0.094,
-     "betaBond": 5.918,
+     "betaBond": 5.919,
      "sens10y": -0.653,
-     "n": 83,
-     "score": -0.559,
+     "n": 84,
+     "score": -0.558,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1133,10 +1133,10 @@
      "sector": "数据中心",
      "strategy": "扩张型",
      "betaEq": 0.212,
-     "betaBond": -2.404,
-     "sens10y": 2.311,
-     "n": 59,
-     "score": 3.576,
+     "betaBond": -2.399,
+     "sens10y": 2.305,
+     "n": 60,
+     "score": 3.567,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1147,10 +1147,10 @@
      "sector": "数据中心",
      "strategy": "扩张型",
      "betaEq": 0.208,
-     "betaBond": -0.943,
-     "sens10y": 1.498,
+     "betaBond": -0.938,
+     "sens10y": 1.491,
      "n": 60,
-     "score": 2.989,
+     "score": 2.981,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1161,10 +1161,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.064,
-     "betaBond": 4.665,
+     "betaBond": 4.664,
      "sens10y": -1.923,
-     "n": 101,
-     "score": -1.343,
+     "n": 102,
+     "score": -1.342,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1175,10 +1175,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.137,
-     "betaBond": 2.913,
-     "sens10y": -0.855,
-     "n": 101,
-     "score": -1.255,
+     "betaBond": 2.908,
+     "sens10y": -0.853,
+     "n": 102,
+     "score": -1.254,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1189,10 +1189,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.179,
-     "betaBond": 4.762,
-     "sens10y": -1.629,
-     "n": 101,
-     "score": -2.302,
+     "betaBond": 4.756,
+     "sens10y": -1.627,
+     "n": 102,
+     "score": -2.299,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1203,10 +1203,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.001,
-     "betaBond": 3.411,
-     "sens10y": -0.238,
-     "n": 87,
-     "score": -0.358,
+     "betaBond": 3.412,
+     "sens10y": -0.239,
+     "n": 88,
+     "score": -0.359,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1217,10 +1217,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": 0.251,
-     "betaBond": 3.9,
-     "sens10y": -0.587,
+     "betaBond": 3.909,
+     "sens10y": -0.592,
      "n": 66,
-     "score": 1.474,
+     "score": 1.468,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1233,8 +1233,8 @@
      "betaEq": 0.115,
      "betaBond": -1.685,
      "sens10y": 1.798,
-     "n": 47,
-     "score": 2.525,
+     "n": 48,
+     "score": 2.518,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1245,10 +1245,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.037,
-     "betaBond": 0.846,
-     "sens10y": 0.175,
-     "n": 101,
-     "score": 0.338,
+     "betaBond": 0.84,
+     "sens10y": 0.177,
+     "n": 102,
+     "score": 0.337,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1259,10 +1259,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.196,
-     "betaBond": 5.169,
+     "betaBond": 5.168,
      "sens10y": -2.245,
-     "n": 101,
-     "score": -2.597,
+     "n": 102,
+     "score": -2.595,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1273,10 +1273,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.144,
-     "betaBond": 3.969,
-     "sens10y": -1.542,
-     "n": 101,
-     "score": -1.719,
+     "betaBond": 3.964,
+     "sens10y": -1.54,
+     "n": 102,
+     "score": -1.717,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1287,10 +1287,10 @@
      "sector": "消费",
      "strategy": "周期型",
      "betaEq": -0.089,
-     "betaBond": 2.17,
-     "sens10y": -1.297,
+     "betaBond": 2.167,
+     "sens10y": -1.296,
      "n": 102,
-     "score": -0.583,
+     "score": -0.584,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1300,11 +1300,11 @@
      "name": "中金唯品会奥莱REIT",
      "sector": "消费",
      "strategy": "周期型",
-     "betaEq": 0.039,
-     "betaBond": -0.974,
-     "sens10y": 1.224,
+     "betaEq": 0.04,
+     "betaBond": -0.981,
+     "sens10y": 1.231,
      "n": 55,
-     "score": 1.643,
+     "score": 1.647,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1314,11 +1314,11 @@
      "name": "华夏凯德消费REIT",
      "sector": "消费",
      "strategy": "周期型",
-     "betaEq": 0.039,
-     "betaBond": -0.888,
-     "sens10y": 1.022,
+     "betaEq": 0.042,
+     "betaBond": -0.921,
+     "sens10y": 1.039,
      "n": 52,
-     "score": 1.612,
+     "score": 1.64,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1329,10 +1329,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": 0.021,
-     "betaBond": 1.671,
+     "betaBond": 1.672,
      "sens10y": -0.615,
      "n": 102,
-     "score": 0.483,
+     "score": 0.48,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1343,10 +1343,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.213,
-     "betaBond": 1.808,
-     "sens10y": -1.471,
-     "n": 93,
-     "score": -1.445,
+     "betaBond": 1.806,
+     "sens10y": -1.472,
+     "n": 94,
+     "score": -1.446,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1357,10 +1357,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": 0.13,
-     "betaBond": 2.057,
-     "sens10y": -0.244,
-     "n": 101,
-     "score": 1.211,
+     "betaBond": 2.05,
+     "sens10y": -0.242,
+     "n": 102,
+     "score": 1.21,
      "cls": "偏股",
      "expected": "偏债",
      "disagree": true
@@ -1371,10 +1371,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.049,
-     "betaBond": 3.664,
-     "sens10y": -0.844,
-     "n": 60,
-     "score": -0.837,
+     "betaBond": 3.655,
+     "sens10y": -0.836,
+     "n": 61,
+     "score": -0.835,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1385,10 +1385,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.13,
-     "betaBond": 2.515,
-     "sens10y": -1.259,
+     "betaBond": 2.507,
+     "sens10y": -1.257,
      "n": 102,
-     "score": -1.047,
+     "score": -1.046,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1399,10 +1399,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.012,
-     "betaBond": 1.636,
-     "sens10y": -0.29,
+     "betaBond": 1.634,
+     "sens10y": -0.289,
      "n": 102,
-     "score": 0.235,
+     "score": 0.233,
      "cls": "中性",
      "expected": "偏债",
      "disagree": false
@@ -1429,7 +1429,7 @@
      "betaEq": null,
      "betaBond": null,
      "sens10y": null,
-     "n": 33,
+     "n": 34,
      "score": null,
      "cls": null,
      "expected": "偏债",
@@ -1455,10 +1455,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.093,
-     "betaBond": 4.906,
-     "sens10y": -2.089,
+     "betaBond": 4.916,
+     "sens10y": -2.091,
      "n": 102,
-     "score": -1.671,
+     "score": -1.675,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1469,10 +1469,10 @@
      "sector": "能源",
      "strategy": "防御型",
      "betaEq": -0.166,
-     "betaBond": 1.18,
-     "sens10y": -0.27,
+     "betaBond": 1.177,
+     "sens10y": -0.269,
      "n": 102,
-     "score": -0.823,
+     "score": -0.825,
      "cls": "偏债",
      "expected": "偏债",
      "disagree": false
@@ -1483,10 +1483,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.043,
-     "betaBond": 0.016,
+     "betaBond": 0.02,
      "sens10y": 0.398,
      "n": 102,
-     "score": 1.3,
+     "score": 1.294,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1497,10 +1497,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.007,
-     "betaBond": -0.607,
+     "betaBond": -0.605,
      "sens10y": 0.701,
      "n": 102,
-     "score": 1.135,
+     "score": 1.13,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1511,10 +1511,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.057,
-     "betaBond": -0.78,
+     "betaBond": -0.778,
      "sens10y": 1.466,
-     "n": 96,
-     "score": 1.716,
+     "n": 97,
+     "score": 1.71,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1524,11 +1524,11 @@
      "name": "浙商证券沪杭甬杭徽高速REIT",
      "sector": "高速公路",
      "strategy": "周期型",
-     "betaEq": -0.079,
-     "betaBond": 1.213,
-     "sens10y": 0.053,
+     "betaEq": -0.078,
+     "betaBond": 1.214,
+     "sens10y": 0.054,
      "n": 102,
-     "score": -0.136,
+     "score": -0.139,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1539,10 +1539,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.001,
-     "betaBond": 0.431,
-     "sens10y": 0.639,
+     "betaBond": 0.424,
+     "sens10y": 0.64,
      "n": 102,
-     "score": 0.804,
+     "score": 0.802,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1553,10 +1553,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.019,
-     "betaBond": 1.416,
+     "betaBond": 1.418,
      "sens10y": -0.416,
      "n": 102,
-     "score": 0.568,
+     "score": 0.564,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1567,10 +1567,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.141,
-     "betaBond": 1.23,
-     "sens10y": 0.054,
+     "betaBond": 1.228,
+     "sens10y": 0.055,
      "n": 102,
-     "score": -0.64,
+     "score": -0.642,
      "cls": "中性",
      "expected": "偏股",
      "disagree": false
@@ -1581,10 +1581,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.071,
-     "betaBond": 0.691,
-     "sens10y": 0.561,
+     "betaBond": 0.683,
+     "sens10y": 0.562,
      "n": 102,
-     "score": 1.26,
+     "score": 1.258,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1609,10 +1609,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.022,
-     "betaBond": 0.43,
+     "betaBond": 0.431,
      "sens10y": 0.297,
      "n": 102,
-     "score": 0.97,
+     "score": 0.965,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1623,10 +1623,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": -0.267,
-     "betaBond": 2.441,
+     "betaBond": 2.445,
      "sens10y": -0.161,
      "n": 92,
-     "score": -2.116,
+     "score": -2.119,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1637,10 +1637,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.114,
-     "betaBond": 1.18,
+     "betaBond": 1.181,
      "sens10y": 0.759,
      "n": 102,
-     "score": 1.422,
+     "score": 1.417,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1653,8 +1653,8 @@
      "betaEq": -0.165,
      "betaBond": 1.893,
      "sens10y": -0.902,
-     "n": 99,
-     "score": -1.093,
+     "n": 100,
+     "score": -1.095,
      "cls": "偏债",
      "expected": "偏股",
      "disagree": true
@@ -1665,10 +1665,10 @@
      "sector": "高速公路",
      "strategy": "周期型",
      "betaEq": 0.088,
-     "betaBond": -0.633,
-     "sens10y": 0.435,
+     "betaBond": -0.638,
+     "sens10y": 0.437,
      "n": 102,
-     "score": 1.906,
+     "score": 1.903,
      "cls": "偏股",
      "expected": "偏股",
      "disagree": false
@@ -1827,7 +1827,7 @@
        0.077,
        0.064,
        0.065,
-       0.056
+       0.057
       ],
       "betaBond": [
        1.527,
@@ -1888,7 +1888,7 @@
        -1.688,
        -1.645,
        -1.615,
-       -1.427
+       -1.433
       ]
      },
      "仓储物流": {
@@ -1951,7 +1951,7 @@
        0.079,
        0.067,
        0.068,
-       0.053
+       0.055
       ],
       "betaBond": [
        1.197,
@@ -2012,7 +2012,7 @@
        -1.548,
        -1.495,
        -1.491,
-       -1.168
+       -1.18
       ]
      },
      "保租房": {
@@ -2075,7 +2075,7 @@
        0.04,
        0.038,
        0.034,
-       0.003
+       0.004
       ],
       "betaBond": [
        5.935,
@@ -2136,7 +2136,7 @@
        2.956,
        2.895,
        2.882,
-       3.831
+       3.828
       ]
      },
      "商业不动产": {
@@ -2323,7 +2323,7 @@
        0.115,
        0.117,
        0.115,
-       0.099
+       0.1
       ],
       "betaBond": [
        4.27,
@@ -2384,7 +2384,7 @@
        0.28,
        0.31,
        0.327,
-       0.827
+       0.824
       ]
      },
      "数据中心": {
@@ -2447,7 +2447,7 @@
        0.18,
        0.173,
        0.185,
-       0.196
+       0.197
       ],
       "betaBond": [
        null,
@@ -2508,7 +2508,7 @@
        -1.856,
        -1.834,
        -1.861,
-       -2.102
+       -2.129
       ]
      },
      "消费": {
@@ -2571,7 +2571,7 @@
        0.099,
        0.098,
        0.098,
-       0.083
+       0.084
       ],
       "betaBond": [
        3.302,
@@ -2632,7 +2632,7 @@
        0.034,
        -0.063,
        -0.079,
-       0.356
+       0.349
       ]
      },
      "能源": {
@@ -2756,7 +2756,7 @@
        0.089,
        0.009,
        0.003,
-       0.207
+       0.214
       ]
      },
      "高速公路": {
@@ -2819,7 +2819,7 @@
        -0.02,
        -0.018,
        -0.015,
-       -0.022
+       -0.021
       ],
       "betaBond": [
        0.125,
@@ -2880,7 +2880,7 @@
        1.1,
        1.06,
        1.061,
-       1.277
+       1.278
       ]
      }
     }
@@ -2916,22 +2916,22 @@
    "peers": [
     {
      "code": "508002.SH",
-     "r": 0.63
+     "r": 0.64
     },
     {
      "code": "180502.SZ",
+     "r": 0.62
+    },
+    {
+     "code": "508011.SH",
      "r": 0.61
     },
     {
-     "code": "508088.SH",
+     "code": "508080.SH",
      "r": 0.61
     },
     {
      "code": "508084.SH",
-     "r": 0.61
-    },
-    {
-     "code": "508011.SH",
      "r": 0.61
     }
    ]
@@ -2944,15 +2944,15 @@
     },
     {
      "code": "508017.SH",
-     "r": 0.48
+     "r": 0.49
     },
     {
      "code": "508002.SH",
-     "r": 0.47
+     "r": 0.48
     },
     {
      "code": "508031.SH",
-     "r": 0.46
+     "r": 0.47
     },
     {
      "code": "508058.SH",
@@ -2972,7 +2972,7 @@
     },
     {
      "code": "508088.SH",
-     "r": 0.6
+     "r": 0.59
     },
     {
      "code": "180601.SZ",
@@ -3016,7 +3016,11 @@
     },
     {
      "code": "180301.SZ",
-     "r": 0.43
+     "r": 0.44
+    },
+    {
+     "code": "508092.SH",
+     "r": 0.39
     },
     {
      "code": "508011.SH",
@@ -3024,11 +3028,7 @@
     },
     {
      "code": "180901.SZ",
-     "r": 0.37
-    },
-    {
-     "code": "508092.SH",
-     "r": 0.37
+     "r": 0.38
     }
    ]
   },
@@ -3036,7 +3036,7 @@
    "peers": [
     {
      "code": "508078.SH",
-     "r": 0.57
+     "r": 0.58
     },
     {
      "code": "180101.SZ",
@@ -3044,7 +3044,7 @@
     },
     {
      "code": "508029.SH",
-     "r": 0.54
+     "r": 0.55
     },
     {
      "code": "508019.SH",
@@ -3071,11 +3071,11 @@
      "r": 0.62
     },
     {
-     "code": "508080.SH",
+     "code": "508029.SH",
      "r": 0.61
     },
     {
-     "code": "508029.SH",
+     "code": "508080.SH",
      "r": 0.61
     }
    ]
@@ -3124,7 +3124,7 @@
     },
     {
      "code": "508029.SH",
-     "r": 0.57
+     "r": 0.58
     }
    ]
   },
@@ -3159,20 +3159,20 @@
      "r": 0.61
     },
     {
-     "code": "180303.SZ",
-     "r": 0.56
-    },
-    {
      "code": "508029.SH",
      "r": 0.56
     },
     {
-     "code": "508088.SH",
-     "r": 0.55
+     "code": "180303.SZ",
+     "r": 0.56
     },
     {
      "code": "180101.SZ",
      "r": 0.55
+    },
+    {
+     "code": "508056.SH",
+     "r": 0.54
     }
    ]
   },
@@ -3180,23 +3180,23 @@
    "peers": [
     {
      "code": "180603.SZ",
-     "r": 0.68
+     "r": 0.66
     },
     {
      "code": "180301.SZ",
-     "r": 0.61
-    },
-    {
-     "code": "508031.SH",
-     "r": 0.61
-    },
-    {
-     "code": "180302.SZ",
      "r": 0.6
     },
     {
-     "code": "508011.SH",
+     "code": "508031.SH",
+     "r": 0.6
+    },
+    {
+     "code": "180302.SZ",
      "r": 0.59
+    },
+    {
+     "code": "508602.SH",
+     "r": 0.58
     }
    ]
   },
@@ -3204,7 +3204,7 @@
    "peers": [
     {
      "code": "508019.SH",
-     "r": 0.53
+     "r": 0.54
     },
     {
      "code": "180102.SZ",
@@ -3219,8 +3219,8 @@
      "r": 0.48
     },
     {
-     "code": "508097.SH",
-     "r": 0.47
+     "code": "508030.SH",
+     "r": 0.48
     }
    ]
   },
@@ -3276,7 +3276,7 @@
    "peers": [
     {
      "code": "508030.SH",
-     "r": 0.53
+     "r": 0.52
     },
     {
      "code": "508602.SH",
@@ -3303,20 +3303,20 @@
      "r": 0.51
     },
     {
-     "code": "180502.SZ",
-     "r": 0.49
+     "code": "508058.SH",
+     "r": 0.5
     },
     {
      "code": "508031.SH",
-     "r": 0.49
+     "r": 0.5
     },
     {
-     "code": "508058.SH",
-     "r": 0.49
+     "code": "180502.SZ",
+     "r": 0.5
     },
     {
      "code": "508091.SH",
-     "r": 0.48
+     "r": 0.49
     }
    ]
   },
@@ -3328,7 +3328,7 @@
     },
     {
      "code": "508077.SH",
-     "r": 0.64
+     "r": 0.65
     },
     {
      "code": "180502.SZ",
@@ -3336,11 +3336,11 @@
     },
     {
      "code": "180602.SZ",
-     "r": 0.56
+     "r": 0.57
     },
     {
      "code": "180603.SZ",
-     "r": 0.56
+     "r": 0.57
     }
    ]
   },
@@ -3348,18 +3348,18 @@
    "peers": [
     {
      "code": "508031.SH",
-     "r": 0.58
-    },
-    {
-     "code": "508059.SH",
-     "r": 0.55
+     "r": 0.59
     },
     {
      "code": "508077.SH",
-     "r": 0.53
+     "r": 0.54
     },
     {
      "code": "180502.SZ",
+     "r": 0.52
+    },
+    {
+     "code": "508068.SH",
      "r": 0.51
     },
     {
@@ -3376,11 +3376,11 @@
     },
     {
      "code": "180603.SZ",
-     "r": 0.67
+     "r": 0.68
     },
     {
      "code": "508058.SH",
-     "r": 0.64
+     "r": 0.65
     },
     {
      "code": "180502.SZ",
@@ -3408,11 +3408,11 @@
     },
     {
      "code": "180301.SZ",
-     "r": 0.61
+     "r": 0.62
     },
     {
      "code": "508084.SH",
-     "r": 0.57
+     "r": 0.56
     }
    ]
   },
@@ -3428,7 +3428,7 @@
     },
     {
      "code": "508056.SH",
-     "r": 0.49
+     "r": 0.5
     },
     {
      "code": "180502.SZ",
@@ -3460,7 +3460,7 @@
     },
     {
      "code": "508091.SH",
-     "r": 0.64
+     "r": 0.65
     }
    ]
   },
@@ -3468,7 +3468,7 @@
    "peers": [
     {
      "code": "180602.SZ",
-     "r": 0.58
+     "r": 0.59
     },
     {
      "code": "508077.SH",
@@ -3507,7 +3507,7 @@
      "r": 0.47
     },
     {
-     "code": "180607.SZ",
+     "code": "180601.SZ",
      "r": 0.47
     }
    ]
@@ -3524,7 +3524,7 @@
     },
     {
      "code": "508602.SH",
-     "r": 0.7
+     "r": 0.71
     },
     {
      "code": "508082.SH",
@@ -3571,16 +3571,16 @@
      "r": 0.68
     },
     {
-     "code": "508603.SH",
-     "r": 0.67
-    },
-    {
      "code": "180603.SZ",
      "r": 0.67
     },
     {
      "code": "508003.SH",
      "r": 0.67
+    },
+    {
+     "code": "508603.SH",
+     "r": 0.66
     }
    ]
   },
@@ -3592,18 +3592,18 @@
     },
     {
      "code": "508082.SH",
-     "r": 0.74
+     "r": 0.75
     },
     {
      "code": "508091.SH",
      "r": 0.73
     },
     {
-     "code": "508088.SH",
+     "code": "508017.SH",
      "r": 0.68
     },
     {
-     "code": "508017.SH",
+     "code": "508077.SH",
      "r": 0.68
     }
    ]
@@ -3624,7 +3624,7 @@
     },
     {
      "code": "180602.SZ",
-     "r": 0.53
+     "r": 0.54
     },
     {
      "code": "508031.SH",
@@ -3640,18 +3640,18 @@
     },
     {
      "code": "508078.SH",
-     "r": 0.58
+     "r": 0.59
     },
     {
      "code": "180602.SZ",
      "r": 0.58
     },
     {
-     "code": "180607.SZ",
+     "code": "508056.SH",
      "r": 0.58
     },
     {
-     "code": "508059.SH",
+     "code": "180607.SZ",
      "r": 0.58
     }
    ]
@@ -3660,7 +3660,7 @@
    "peers": [
     {
      "code": "180303.SZ",
-     "r": 0.37
+     "r": 0.36
     },
     {
      "code": "180602.SZ",
@@ -3668,7 +3668,7 @@
     },
     {
      "code": "508085.SH",
-     "r": 0.32
+     "r": 0.31
     },
     {
      "code": "508097.SH",
@@ -3708,7 +3708,7 @@
    "peers": [
     {
      "code": "508030.SH",
-     "r": 0.36
+     "r": 0.37
     },
     {
      "code": "180701.SZ",
@@ -3744,7 +3744,7 @@
     },
     {
      "code": "508091.SH",
-     "r": 0.57
+     "r": 0.56
     },
     {
      "code": "508031.SH",
@@ -3792,7 +3792,7 @@
     },
     {
      "code": "508603.SH",
-     "r": 0.47
+     "r": 0.46
     },
     {
      "code": "508077.SH",
@@ -3808,7 +3808,7 @@
     },
     {
      "code": "508016.SH",
-     "r": 0.38
+     "r": 0.37
     },
     {
      "code": "508056.SH",
@@ -3820,7 +3820,7 @@
     },
     {
      "code": "180601.SZ",
-     "r": 0.36
+     "r": 0.35
     }
    ]
   },
@@ -3852,7 +3852,7 @@
    "peers": [
     {
      "code": "508602.SH",
-     "r": 0.64
+     "r": 0.65
     },
     {
      "code": "508603.SH",
@@ -3860,7 +3860,7 @@
     },
     {
      "code": "508091.SH",
-     "r": 0.58
+     "r": 0.57
     },
     {
      "code": "180301.SZ",
@@ -3900,7 +3900,7 @@
    "peers": [
     {
      "code": "508602.SH",
-     "r": 0.48
+     "r": 0.49
     },
     {
      "code": "508011.SH",
@@ -3911,11 +3911,11 @@
      "r": 0.44
     },
     {
-     "code": "508048.SH",
+     "code": "508088.SH",
      "r": 0.43
     },
     {
-     "code": "508088.SH",
+     "code": "508048.SH",
      "r": 0.43
     }
    ]
@@ -3924,23 +3924,23 @@
    "peers": [
     {
      "code": "508069.SH",
-     "r": 0.53
-    },
-    {
-     "code": "508039.SH",
-     "r": 0.49
-    },
-    {
-     "code": "508010.SH",
-     "r": 0.48
+     "r": 0.52
     },
     {
      "code": "508601.SH",
-     "r": 0.48
+     "r": 0.5
+    },
+    {
+     "code": "508039.SH",
+     "r": 0.5
     },
     {
      "code": "180103.SZ",
-     "r": 0.47
+     "r": 0.48
+    },
+    {
+     "code": "508010.SH",
+     "r": 0.45
     }
    ]
   },
@@ -3952,7 +3952,7 @@
     },
     {
      "code": "508060.SH",
-     "r": 0.33
+     "r": 0.34
     },
     {
      "code": "508097.SH",
@@ -3964,7 +3964,7 @@
     },
     {
      "code": "180305.SZ",
-     "r": 0.31
+     "r": 0.3
     }
    ]
   },
@@ -3975,11 +3975,11 @@
      "r": 0.6
     },
     {
-     "code": "508056.SH",
+     "code": "180101.SZ",
      "r": 0.59
     },
     {
-     "code": "180101.SZ",
+     "code": "508056.SH",
      "r": 0.59
     },
     {
@@ -3988,7 +3988,7 @@
     },
     {
      "code": "508097.SH",
-     "r": 0.55
+     "r": 0.56
     }
    ]
   },
@@ -4011,7 +4011,7 @@
      "r": 0.41
     },
     {
-     "code": "180502.SZ",
+     "code": "508077.SH",
      "r": 0.41
     }
    ]
@@ -4028,14 +4028,14 @@
     },
     {
      "code": "180602.SZ",
-     "r": 0.44
-    },
-    {
-     "code": "508000.SH",
      "r": 0.43
     },
     {
      "code": "180102.SZ",
+     "r": 0.43
+    },
+    {
+     "code": "508000.SH",
      "r": 0.43
     }
    ]
@@ -4059,7 +4059,7 @@
      "r": 0.44
     },
     {
-     "code": "508048.SH",
+     "code": "180305.SZ",
      "r": 0.43
     }
    ]
@@ -4080,7 +4080,7 @@
     },
     {
      "code": "508059.SH",
-     "r": 0.61
+     "r": 0.59
     },
     {
      "code": "180303.SZ",
@@ -4124,7 +4124,7 @@
     },
     {
      "code": "508091.SH",
-     "r": 0.56
+     "r": 0.57
     },
     {
      "code": "180605.SZ",
@@ -4168,7 +4168,7 @@
     },
     {
      "code": "508056.SH",
-     "r": 0.56
+     "r": 0.55
     },
     {
      "code": "508022.SH",
@@ -4176,11 +4176,11 @@
     },
     {
      "code": "508039.SH",
-     "r": 0.52
+     "r": 0.51
     },
     {
-     "code": "508601.SH",
-     "r": 0.51
+     "code": "508078.SH",
+     "r": 0.5
     }
    ]
   },
@@ -4196,11 +4196,11 @@
     },
     {
      "code": "180301.SZ",
-     "r": 0.45
+     "r": 0.46
     },
     {
      "code": "508002.SH",
-     "r": 0.45
+     "r": 0.46
     },
     {
      "code": "508091.SH",
@@ -4236,7 +4236,7 @@
    "peers": [
     {
      "code": "508059.SH",
-     "r": 0.73
+     "r": 0.72
     },
     {
      "code": "180101.SZ",
@@ -4248,7 +4248,7 @@
     },
     {
      "code": "508099.SH",
-     "r": 0.57
+     "r": 0.58
     },
     {
      "code": "508080.SH",
@@ -4260,23 +4260,23 @@
    "peers": [
     {
      "code": "508068.SH",
-     "r": 0.44
-    },
-    {
-     "code": "508091.SH",
-     "r": 0.43
-    },
-    {
-     "code": "180603.SZ",
-     "r": 0.42
-    },
-    {
-     "code": "508022.SH",
-     "r": 0.42
+     "r": 0.41
     },
     {
      "code": "508026.SH",
-     "r": 0.42
+     "r": 0.4
+    },
+    {
+     "code": "508022.SH",
+     "r": 0.4
+    },
+    {
+     "code": "508097.SH",
+     "r": 0.39
+    },
+    {
+     "code": "180603.SZ",
+     "r": 0.39
     }
    ]
   },
@@ -4284,7 +4284,7 @@
    "peers": [
     {
      "code": "180301.SZ",
-     "r": 0.63
+     "r": 0.64
     },
     {
      "code": "508091.SH",
@@ -4340,14 +4340,14 @@
     },
     {
      "code": "508031.SH",
-     "r": 0.38
+     "r": 0.39
     },
     {
      "code": "180102.SZ",
      "r": 0.38
     },
     {
-     "code": "508603.SH",
+     "code": "508030.SH",
      "r": 0.37
     }
    ]
@@ -4368,10 +4368,10 @@
     },
     {
      "code": "508010.SH",
-     "r": 0.52
+     "r": 0.51
     },
     {
-     "code": "508084.SH",
+     "code": "508056.SH",
      "r": 0.5
     }
    ]
@@ -4380,7 +4380,7 @@
    "peers": [
     {
      "code": "180603.SZ",
-     "r": 0.5
+     "r": 0.49
     },
     {
      "code": "180601.SZ",
@@ -4388,11 +4388,11 @@
     },
     {
      "code": "508082.SH",
-     "r": 0.47
+     "r": 0.46
     },
     {
      "code": "508011.SH",
-     "r": 0.46
+     "r": 0.45
     },
     {
      "code": "180607.SZ",
@@ -4412,7 +4412,7 @@
     },
     {
      "code": "508091.SH",
-     "r": 0.38
+     "r": 0.39
     },
     {
      "code": "180602.SZ",
@@ -4452,23 +4452,23 @@
    "peers": [
     {
      "code": "508029.SH",
-     "r": 0.73
+     "r": 0.72
     },
     {
      "code": "508099.SH",
      "r": 0.67
     },
     {
-     "code": "508078.SH",
-     "r": 0.64
-    },
-    {
-     "code": "508022.SH",
-     "r": 0.64
-    },
-    {
      "code": "508027.SH",
      "r": 0.64
+    },
+    {
+     "code": "508089.SH",
+     "r": 0.63
+    },
+    {
+     "code": "508078.SH",
+     "r": 0.63
     }
    ]
   },
@@ -4479,12 +4479,12 @@
      "r": 0.78
     },
     {
-     "code": "508059.SH",
+     "code": "508078.SH",
      "r": 0.59
     },
     {
-     "code": "508078.SH",
-     "r": 0.58
+     "code": "508059.SH",
+     "r": 0.57
     },
     {
      "code": "508056.SH",
@@ -4524,7 +4524,7 @@
    "peers": [
     {
      "code": "508059.SH",
-     "r": 0.64
+     "r": 0.63
     },
     {
      "code": "508080.SH",
@@ -4540,7 +4540,7 @@
     },
     {
      "code": "508601.SH",
-     "r": 0.54
+     "r": 0.55
     }
    ]
   },
@@ -4572,7 +4572,7 @@
    "peers": [
     {
      "code": "508603.SH",
-     "r": 0.63
+     "r": 0.62
     },
     {
      "code": "508056.SH",
@@ -4584,10 +4584,10 @@
     },
     {
      "code": "508011.SH",
-     "r": 0.57
+     "r": 0.58
     },
     {
-     "code": "180602.SZ",
+     "code": "180603.SZ",
      "r": 0.56
     }
    ]
@@ -4600,11 +4600,11 @@
     },
     {
      "code": "508059.SH",
-     "r": 0.64
+     "r": 0.63
     },
     {
      "code": "508056.SH",
-     "r": 0.62
+     "r": 0.63
     },
     {
      "code": "180101.SZ",
@@ -4620,7 +4620,7 @@
    "peers": [
     {
      "code": "180603.SZ",
-     "r": 0.74
+     "r": 0.75
     },
     {
      "code": "180601.SZ",
@@ -4631,12 +4631,12 @@
      "r": 0.66
     },
     {
-     "code": "180607.SZ",
+     "code": "508602.SH",
      "r": 0.66
     },
     {
-     "code": "508602.SH",
-     "r": 0.65
+     "code": "180607.SZ",
+     "r": 0.66
     }
    ]
   },
@@ -4659,7 +4659,7 @@
      "r": 0.53
     },
     {
-     "code": "508088.SH",
+     "code": "180606.SZ",
      "r": 0.48
     }
    ]
@@ -4704,11 +4704,11 @@
     },
     {
      "code": "180601.SZ",
-     "r": 0.69
+     "r": 0.68
     },
     {
      "code": "180607.SZ",
-     "r": 0.69
+     "r": 0.68
     }
    ]
   },
@@ -4716,7 +4716,7 @@
    "peers": [
     {
      "code": "508059.SH",
-     "r": 0.57
+     "r": 0.54
     },
     {
      "code": "180102.SZ",
@@ -4743,15 +4743,15 @@
      "r": 0.5
     },
     {
-     "code": "508091.SH",
-     "r": 0.47
-    },
-    {
      "code": "180607.SZ",
      "r": 0.47
     },
     {
      "code": "508602.SH",
+     "r": 0.47
+    },
+    {
+     "code": "508091.SH",
      "r": 0.46
     },
     {
@@ -4768,18 +4768,18 @@
     },
     {
      "code": "508026.SH",
-     "r": 0.55
+     "r": 0.56
     },
     {
      "code": "508011.SH",
      "r": 0.54
     },
     {
-     "code": "508002.SH",
+     "code": "508059.SH",
      "r": 0.54
     },
     {
-     "code": "508059.SH",
+     "code": "508002.SH",
      "r": 0.54
     }
    ]
@@ -4788,7 +4788,7 @@
    "peers": [
     {
      "code": "508091.SH",
-     "r": 0.69
+     "r": 0.68
     },
     {
      "code": "180603.SZ",
@@ -4827,8 +4827,8 @@
      "r": 0.5
     },
     {
-     "code": "508088.SH",
-     "r": 0.5
+     "code": "508002.SH",
+     "r": 0.49
     }
    ]
   },
@@ -4844,14 +4844,14 @@
     },
     {
      "code": "508602.SH",
-     "r": 0.61
+     "r": 0.6
     },
     {
      "code": "180603.SZ",
-     "r": 0.61
+     "r": 0.6
     },
     {
-     "code": "508031.SH",
+     "code": "508011.SH",
      "r": 0.58
     }
    ]
@@ -4860,19 +4860,19 @@
    "peers": [
     {
      "code": "508078.SH",
-     "r": 0.51
+     "r": 0.52
     },
     {
      "code": "180303.SZ",
-     "r": 0.5
+     "r": 0.51
+    },
+    {
+     "code": "508029.SH",
+     "r": 0.49
     },
     {
      "code": "180101.SZ",
      "r": 0.49
-    },
-    {
-     "code": "508029.SH",
-     "r": 0.48
     },
     {
      "code": "508026.SH",
@@ -4884,22 +4884,22 @@
    "peers": [
     {
      "code": "180602.SZ",
-     "r": 0.6
-    },
-    {
-     "code": "180603.SZ",
-     "r": 0.55
+     "r": 0.59
     },
     {
      "code": "508026.SH",
-     "r": 0.55
-    },
-    {
-     "code": "180901.SZ",
      "r": 0.54
     },
     {
-     "code": "508091.SH",
+     "code": "180603.SZ",
+     "r": 0.54
+    },
+    {
+     "code": "180901.SZ",
+     "r": 0.53
+    },
+    {
+     "code": "508090.SH",
      "r": 0.53
     }
    ]
@@ -4920,11 +4920,11 @@
     },
     {
      "code": "508059.SH",
-     "r": 0.41
+     "r": 0.4
     },
     {
      "code": "508048.SH",
-     "r": 0.38
+     "r": 0.39
     }
    ]
   },
@@ -4935,19 +4935,19 @@
      "r": 0.64
     },
     {
-     "code": "508059.SH",
-     "r": 0.58
-    },
-    {
      "code": "508022.SH",
-     "r": 0.54
-    },
-    {
-     "code": "508009.SH",
-     "r": 0.54
+     "r": 0.55
     },
     {
      "code": "508011.SH",
+     "r": 0.54
+    },
+    {
+     "code": "508059.SH",
+     "r": 0.53
+    },
+    {
+     "code": "508009.SH",
      "r": 0.53
     }
    ]
@@ -4956,7 +4956,7 @@
    "peers": [
     {
      "code": "180601.SZ",
-     "r": 0.7
+     "r": 0.71
     },
     {
      "code": "508056.SH",
@@ -4972,7 +4972,7 @@
     },
     {
      "code": "508082.SH",
-     "r": 0.65
+     "r": 0.66
     }
    ]
   },
@@ -4984,18 +4984,18 @@
     },
     {
      "code": "508011.SH",
-     "r": 0.67
+     "r": 0.66
     },
     {
      "code": "508602.SH",
      "r": 0.64
     },
     {
-     "code": "508048.SH",
-     "r": 0.63
+     "code": "508009.SH",
+     "r": 0.62
     },
     {
-     "code": "508009.SH",
+     "code": "508048.SH",
      "r": 0.62
     }
    ]
@@ -5005,6 +5005,19 @@
   {
    "code": "180301.SZ",
    "name": "红土创新盐田港仓储物流REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
+   "code": "508098.SH",
+   "name": "嘉实京东仓储物流REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "180302.SZ",
+   "name": "华夏深国际仓储物流REIT",
    "date": "2026-10-12",
    "quiet": true
   },
@@ -5018,6 +5031,7 @@
    "code": "508086.SH",
    "name": "工银瑞信河北高速集团高速公路REIT",
    "date": "2026-10-12",
+   "break20": true,
    "quiet": true
   },
   {
@@ -5031,7 +5045,13 @@
    "name": "东吴苏州工业园区产业园REIT",
    "date": "2026-10-12",
    "quiet": true,
-   "rsiBounce": true,
+   "goldenCross": true
+  },
+  {
+   "code": "180102.SZ",
+   "name": "华夏合肥高新创新产业园REIT",
+   "date": "2026-10-12",
+   "quiet": true,
    "goldenCross": true
   },
   {
@@ -5056,14 +5076,14 @@
    "code": "508068.SH",
    "name": "华夏北京保障房中心租赁住房REIT",
    "date": "2026-10-12",
+   "break20": true,
    "quiet": true
   },
   {
    "code": "508058.SH",
    "name": "中金厦门安居保障性租赁住房REIT",
    "date": "2026-10-12",
-   "break20": true,
-   "quiet": true
+   "break20": true
   },
   {
    "code": "180501.SZ",
@@ -5076,7 +5096,14 @@
    "code": "508077.SH",
    "name": "华夏基金华润有巢租赁住房REIT",
    "date": "2026-10-12",
+   "break20": true,
    "quiet": true
+  },
+  {
+   "code": "180502.SZ",
+   "name": "招商蛇口租赁住房REIT",
+   "date": "2026-10-12",
+   "break20": true
   },
   {
    "code": "508055.SH",
@@ -5098,6 +5125,45 @@
    "quiet": true
   },
   {
+   "code": "180503.SZ",
+   "name": "中航北京昌保租赁住房REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "180601.SZ",
+   "name": "华夏华润消费REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
+   "code": "180602.SZ",
+   "name": "中金印力消费REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
+   "code": "508011.SH",
+   "name": "嘉实物美消费REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "180603.SZ",
+   "name": "华夏大悦城购物中心REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
+   "code": "180605.SZ",
+   "name": "易方达华威农贸市场REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
    "code": "508066.SH",
    "name": "华泰紫金江苏交控高速公路REIT",
    "date": "2026-10-12",
@@ -5107,13 +5173,13 @@
    "code": "180201.SZ",
    "name": "平安广州交投广河高速公路REIT",
    "date": "2026-10-12",
-   "quiet": true,
-   "rsiBounce": true
+   "quiet": true
   },
   {
    "code": "508001.SH",
    "name": "浙商证券沪杭甬杭徽高速REIT",
    "date": "2026-10-12",
+   "break20": true,
    "quiet": true
   },
   {
@@ -5131,6 +5197,12 @@
   {
    "code": "180202.SZ",
    "name": "华夏越秀高速公路REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "180203.SZ",
+   "name": "招商高速公路REIT",
    "date": "2026-10-12",
    "quiet": true
   },
@@ -5177,8 +5249,46 @@
    "quiet": true
   },
   {
+   "code": "508080.SH",
+   "name": "中金亦庄产业园REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "508029.SH",
+   "name": "中信建投沈阳国际软件园REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "508016.SH",
+   "name": "华夏华电清洁能源REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "508002.SH",
+   "name": "华安百联消费REIT",
+   "date": "2026-10-12",
+   "goldenCross": true
+  },
+  {
+   "code": "508005.SH",
+   "name": "华夏首创奥特莱斯REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
    "code": "508028.SH",
    "name": "中信建投国家电投新能源REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
+   "code": "508050.SH",
+   "name": "华夏中核清洁能源REIT",
    "date": "2026-10-12",
    "quiet": true
   },
@@ -5195,16 +5305,34 @@
    "quiet": true
   },
   {
+   "code": "508022.SH",
+   "name": "博时津开科工产业园REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
    "code": "508078.SH",
    "name": "中航易商仓储物流REIT",
    "date": "2026-10-12",
-   "break20": true,
-   "quiet": true
+   "break20": true
+  },
+  {
+   "code": "508090.SH",
+   "name": "中银中外运仓储物流REIT",
+   "date": "2026-10-12",
+   "break20": true
   },
   {
    "code": "508091.SH",
    "name": "华夏凯德消费REIT",
    "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "508092.SH",
+   "name": "华夏金隅智造工场REIT",
+   "date": "2026-10-12",
+   "break20": true,
    "quiet": true
   },
   {
@@ -5216,6 +5344,19 @@
   {
    "code": "508097.SH",
    "name": "华泰南京建邺REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "180607.SZ",
+   "name": "华夏中海消费REIT",
+   "date": "2026-10-12",
+   "break20": true,
+   "quiet": true
+  },
+  {
+   "code": "508084.SH",
+   "name": "汇添富九州通医药REIT",
    "date": "2026-10-12",
    "quiet": true
   },
@@ -5232,8 +5373,21 @@
    "quiet": true
   },
   {
+   "code": "508601.SH",
+   "name": "中信建投首农商业REIT",
+   "date": "2026-10-12",
+   "quiet": true,
+   "rsiBounce": true
+  },
+  {
    "code": "508602.SH",
    "name": "国泰海通砂之船商业REIT",
+   "date": "2026-10-12",
+   "quiet": true
+  },
+  {
+   "code": "508603.SH",
+   "name": "中金唯品会商业REIT",
    "date": "2026-10-12",
    "quiet": true
   },
@@ -6094,186 +6248,41 @@
    "name": "汇添富上海地产商业REIT",
    "date": "2026-09-30",
    "quiet": true
-  },
-  {
-   "code": "508601.SH",
-   "name": "中信建投首农商业REIT",
-   "date": "2026-09-30",
-   "quiet": true
-  },
-  {
-   "code": "508602.SH",
-   "name": "国泰海通砂之船商业REIT",
-   "date": "2026-09-30",
-   "quiet": true
-  },
-  {
-   "code": "508603.SH",
-   "name": "中金唯品会商业REIT",
-   "date": "2026-09-30",
-   "quiet": true
-  },
-  {
-   "code": "508056.SH",
-   "name": "中金普洛斯仓储物流REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508086.SH",
-   "name": "工银瑞信河北高速集团高速公路REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508027.SH",
-   "name": "东吴苏州工业园区产业园REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180102.SZ",
-   "name": "华夏合肥高新创新产业园REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180105.SZ",
-   "name": "易方达广州开发区高新产业园REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508068.SH",
-   "name": "华夏北京保障房中心租赁住房REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508058.SH",
-   "name": "中金厦门安居保障性租赁住房REIT",
-   "date": "2026-09-29",
-   "break20": true
-  },
-  {
-   "code": "180501.SZ",
-   "name": "红土创新深圳安居保障性租赁住房REIT",
-   "date": "2026-09-29",
-   "break20": true,
-   "volumeSpike": true
-  },
-  {
-   "code": "508077.SH",
-   "name": "华夏基金华润有巢租赁住房REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508055.SH",
-   "name": "汇添富上海地产租赁住房REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508085.SH",
-   "name": "华泰紫金苏州恒泰租赁住房REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180503.SZ",
-   "name": "中航北京昌保租赁住房REIT",
-   "date": "2026-09-29",
-   "goldenCross": true
-  },
-  {
-   "code": "180602.SZ",
-   "name": "中金印力消费REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508011.SH",
-   "name": "嘉实物美消费REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180603.SZ",
-   "name": "华夏大悦城购物中心REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180605.SZ",
-   "name": "易方达华威农贸市场REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508066.SH",
-   "name": "华泰紫金江苏交控高速公路REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508018.SH",
-   "name": "华夏中国交建高速公路REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "508008.SH",
-   "name": "国金铁建重庆渝遂高速公路REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180202.SZ",
-   "name": "华夏越秀高速公路REIT",
-   "date": "2026-09-29",
-   "quiet": true
-  },
-  {
-   "code": "180203.SZ",
-   "name": "招商高速公路REIT",
-   "date": "2026-09-29",
-   "quiet": true
   }
  ],
  "backtest": {
   "价稳量缩": {
    "d5": {
-    "n": 5615,
+    "n": 5624,
     "avg": -0.27,
-    "win": 42.6
+    "win": 42.7
    },
    "d20": {
-    "n": 5373,
+    "n": 5380,
     "avg": -1.07,
-    "win": 34.9
+    "win": 35.0
    }
   },
   "成交异动": {
    "d5": {
-    "n": 5190,
+    "n": 5194,
     "avg": -0.17,
     "win": 46.1
    },
    "d20": {
-    "n": 5003,
+    "n": 5006,
     "avg": -0.75,
     "win": 42.8
    }
   },
   "突破250日线": {
    "d5": {
-    "n": 2910,
+    "n": 2915,
     "avg": 0.16,
-    "win": 49.1
+    "win": 49.2
    },
    "d20": {
-    "n": 2860,
+    "n": 2861,
     "avg": 0.36,
     "win": 47.1
    }
@@ -6297,19 +6306,19 @@
     "win": 53.7
    },
    "d20": {
-    "n": 643,
-    "avg": -1.13,
-    "win": 40.9
+    "n": 644,
+    "avg": -1.12,
+    "win": 41.0
    }
   },
   "MACD金叉": {
    "d5": {
     "n": 1103,
     "avg": -0.27,
-    "win": 44.3
+    "win": 44.4
    },
    "d20": {
-    "n": 1047,
+    "n": 1048,
     "avg": -0.89,
     "win": 38.1
    }
@@ -27718,7 +27727,7 @@
    80.71,
    80.5,
    80.42,
-   81.09
+   81.19
   ],
   "bySector": {
    "产业园": [
@@ -27971,7 +27980,7 @@
     67.35,
     66.98,
     66.81,
-    68.76
+    68.14
    ],
    "仓储物流": [
     100.0,
@@ -28223,7 +28232,7 @@
     78.49,
     78.2,
     78.11,
-    73.52
+    78.55
    ],
    "保租房": [
     100.0,
@@ -28475,7 +28484,7 @@
     90.79,
     91.05,
     91.29,
-    90.7
+    92.02
    ],
    "商业不动产": [
     null,
@@ -28727,7 +28736,7 @@
     95.84,
     95.34,
     94.89,
-    93.7
+    95.16
    ],
    "市政环保": [
     100.0,
@@ -28979,7 +28988,7 @@
     90.37,
     90.39,
     90.58,
-    91.86
+    90.56
    ],
    "数据中心": [
     100.0,
@@ -29231,7 +29240,7 @@
     95.61,
     94.08,
     93.07,
-    93.35
+    94.09
    ],
    "消费": [
     100.0,
@@ -29483,7 +29492,7 @@
     87.62,
     87.27,
     87.07,
-    91.58
+    87.71
    ],
    "能源": [
     100.0,
@@ -29735,7 +29744,7 @@
     82.48,
     82.37,
     82.47,
-    85.44
+    82.35
    ],
    "高速公路": [
     100.0,
@@ -29987,7 +29996,7 @@
     84.08,
     84.04,
     83.97,
-    83.67
+    84.03
    ]
   },
   "byStrategy": {
@@ -30241,7 +30250,7 @@
     87.38,
     87.45,
     87.62,
-    89.18
+    87.86
    ],
    "周期型": [
     100.0,
@@ -30493,7 +30502,7 @@
     77.57,
     77.31,
     77.17,
-    76.92
+    78.07
    ],
    "扩张型": [
     100.0,
@@ -30745,7 +30754,7 @@
     95.61,
     94.08,
     93.07,
-    93.35
+    94.09
    ]
   },
   "byRight": {
@@ -30999,7 +31008,7 @@
     78.74,
     78.45,
     78.32,
-    78.25
+    79.45
    ],
    "经营权": [
     100.0,
@@ -31251,7 +31260,7 @@
     84.57,
     84.53,
     84.55,
-    85.43
+    84.54
    ]
   }
  },
@@ -31262,26 +31271,26 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.245,
-   "pct": -0.44,
-   "volume": 30700,
-   "amount": 68921.5,
-   "ret5": -2.86,
-   "ret20": -5.27,
-   "ret60": -8.74,
+   "close": 2.269,
+   "pct": 0.62,
+   "volume": 491000,
+   "amount": 1114079.0,
+   "ret5": -1.82,
+   "ret20": -4.26,
+   "ret60": -7.76,
    "macd": {
-    "dif": -0.0202,
-    "dea": -0.0112,
-    "hist": -0.018,
+    "dif": -0.0183,
+    "dea": -0.0108,
+    "hist": -0.015,
     "cross": null
    },
-   "rsi14": 30.8,
-   "pctRank": 1.4,
-   "devMA250": -23.09,
-   "amt5": 5983144.0,
-   "amt20": 10345195.0,
+   "rsi14": 37.2,
+   "pctRank": 3.0,
+   "devMA250": -22.27,
+   "amt5": 6192176.0,
+   "amt20": 10397453.0,
    "amtRatio": 0.95,
-   "sinceIPO": -34.93,
+   "sinceIPO": -34.23,
    "volAnn": 14.1,
    "histDates": [
     "2025-09-23",
@@ -31785,7 +31794,7 @@
     2.3,
     2.261,
     2.255,
-    2.245
+    2.269
    ],
    "listDays": 501,
    "signals": {
@@ -31805,26 +31814,26 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.079,
-   "pct": 0.05,
-   "volume": 600,
-   "amount": 1247.4,
-   "ret5": -0.29,
-   "ret20": 0.48,
-   "ret60": -7.8,
+   "close": 2.102,
+   "pct": 1.15,
+   "volume": 65099,
+   "amount": 136840.2,
+   "ret5": 0.82,
+   "ret20": 1.59,
+   "ret60": -6.78,
    "macd": {
-    "dif": -0.0033,
-    "dea": -0.0054,
-    "hist": 0.0041,
+    "dif": -0.0015,
+    "dea": -0.005,
+    "hist": 0.0071,
     "cross": null
    },
-   "rsi14": 49.1,
-   "pctRank": 15.6,
-   "devMA250": -8.52,
-   "amt5": 1592631.0,
-   "amt20": 1537225.0,
+   "rsi14": 57.2,
+   "pctRank": 20.8,
+   "devMA250": -7.52,
+   "amt5": 1619749.0,
+   "amt20": 1544005.0,
    "amtRatio": 0.59,
-   "sinceIPO": -1.09,
+   "sinceIPO": 0.0,
    "volAnn": 13.9,
    "histDates": [
     "2025-09-23",
@@ -32328,17 +32337,17 @@
     2.08,
     2.075,
     2.078,
-    2.079
+    2.102
    ],
    "listDays": 501,
    "signals": {
     "liquidity": -2,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -4,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -32348,29 +32357,28 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.314,
-   "pct": -0.18,
-   "volume": 478400,
-   "amount": 1585417.6,
-   "ret5": -0.99,
-   "ret20": 0.42,
-   "ret60": -5.29,
+   "close": 3.335,
+   "pct": 0.63,
+   "volume": 800,
+   "amount": 2668.0,
+   "ret5": -0.57,
+   "ret20": 1.12,
+   "ret60": -4.77,
    "macd": {
-    "dif": 0.003,
-    "dea": 0.0001,
-    "hist": 0.0057,
+    "dif": 0.0032,
+    "dea": 0.0007,
+    "hist": 0.0049,
     "cross": null
    },
-   "rsi14": 47.1,
-   "pctRank": 24.2,
-   "devMA250": -5.88,
-   "amt5": 2889762.0,
-   "amt20": 2973727.0,
-   "amtRatio": 0.84,
-   "sinceIPO": 23.7,
+   "rsi14": 51.5,
+   "pctRank": 26.3,
+   "devMA250": -5.23,
+   "amt5": 1782469.0,
+   "amt20": 2769285.0,
+   "amtRatio": 0.79,
+   "sinceIPO": 24.49,
    "volAnn": 14.7,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -32619,10 +32627,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.888,
     3.886,
     3.887,
     3.886,
@@ -32871,9 +32879,10 @@
     3.355,
     3.373,
     3.32,
-    3.314
+    3.314,
+    3.335
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": 0,
     "sentiment": 0,
@@ -32891,29 +32900,28 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.57,
-   "pct": -0.66,
-   "volume": 862400,
-   "amount": 2216368.0,
-   "ret5": -1.08,
-   "ret20": -3.96,
-   "ret60": -8.38,
+   "close": 2.574,
+   "pct": 0.16,
+   "volume": 44300,
+   "amount": 114028.2,
+   "ret5": -1.23,
+   "ret20": -2.87,
+   "ret60": -10.72,
    "macd": {
-    "dif": -0.027,
-    "dea": -0.0242,
-    "hist": -0.0056,
+    "dif": -0.0273,
+    "dea": -0.0248,
+    "hist": -0.0048,
     "cross": null
    },
-   "rsi14": 37.3,
-   "pctRank": 18.0,
-   "devMA250": -10.69,
-   "amt5": 1188491.0,
-   "amt20": 1799402.0,
-   "amtRatio": 0.8,
-   "sinceIPO": 9.92,
+   "rsi14": 38.4,
+   "pctRank": 18.2,
+   "devMA250": -10.48,
+   "amt5": 806480.0,
+   "amt20": 1622956.0,
+   "amtRatio": 0.74,
+   "sinceIPO": 10.09,
    "volAnn": 16.5,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -33162,10 +33170,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.149,
     3.148,
     3.154,
     3.146,
@@ -33414,9 +33422,10 @@
     2.593,
     2.588,
     2.587,
-    2.57
+    2.57,
+    2.574
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": -2,
     "sentiment": -1,
@@ -33434,27 +33443,27 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.178,
-   "pct": 0.03,
-   "volume": 100,
-   "amount": 317.8,
-   "ret5": -0.84,
-   "ret20": 2.91,
-   "ret60": -15.7,
+   "close": 3.206,
+   "pct": 0.91,
+   "volume": 19500,
+   "amount": 62517.0,
+   "ret5": 0.03,
+   "ret20": 3.82,
+   "ret60": -14.96,
    "macd": {
-    "dif": -0.0061,
-    "dea": -0.0101,
-    "hist": 0.0081,
+    "dif": -0.0039,
+    "dea": -0.0097,
+    "hist": 0.0117,
     "cross": null
    },
-   "rsi14": 47.8,
-   "pctRank": 4.4,
-   "devMA250": -18.33,
-   "amt5": 1293291.0,
-   "amt20": 2397584.0,
+   "rsi14": 51.6,
+   "pctRank": 5.9,
+   "devMA250": -17.61,
+   "amt5": 1305731.0,
+   "amt20": 2400694.0,
    "amtRatio": 0.6,
-   "sinceIPO": -21.99,
-   "volAnn": 17.6,
+   "sinceIPO": -21.31,
+   "volAnn": 17.7,
    "histDates": [
     "2025-09-23",
     "2025-09-24",
@@ -33957,7 +33966,7 @@
     3.18,
     3.166,
     3.177,
-    3.178
+    3.206
    ],
    "listDays": 473,
    "signals": {
@@ -33977,26 +33986,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 4.222,
-   "pct": 0.02,
-   "volume": 100,
-   "amount": 422.2,
-   "ret5": 0.36,
-   "ret20": 0.38,
-   "ret60": -8.46,
+   "close": 4.259,
+   "pct": 0.9,
+   "volume": 1400,
+   "amount": 5962.6,
+   "ret5": 1.24,
+   "ret20": 1.26,
+   "ret60": -7.65,
    "macd": {
-    "dif": -0.0241,
-    "dea": -0.033,
-    "hist": 0.0179,
+    "dif": -0.0211,
+    "dea": -0.0324,
+    "hist": 0.0226,
     "cross": null
    },
-   "rsi14": 45.7,
-   "pctRank": 4.2,
-   "devMA250": -13.51,
-   "amt5": 308618.0,
-   "amt20": 543181.0,
+   "rsi14": 53.8,
+   "pctRank": 4.6,
+   "devMA250": -12.76,
+   "amt5": 309726.0,
+   "amt20": 543458.0,
    "amtRatio": 0.41,
-   "sinceIPO": -27.02,
+   "sinceIPO": -26.38,
    "volAnn": 10.4,
    "histDates": [
     "2025-09-23",
@@ -34500,7 +34509,7 @@
     4.187,
     4.212,
     4.221,
-    4.222
+    4.259
    ],
    "listDays": 501,
    "signals": {
@@ -34520,26 +34529,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.879,
-   "pct": 0.0,
-   "volume": 500,
-   "amount": 939.5,
-   "ret5": -1.21,
-   "ret20": -0.74,
-   "ret60": -11.45,
+   "close": 1.9,
+   "pct": 1.12,
+   "volume": 21900,
+   "amount": 41610.0,
+   "ret5": -0.11,
+   "ret20": 0.37,
+   "ret60": -10.46,
    "macd": {
-    "dif": 0.0023,
-    "dea": 0.0003,
-    "hist": 0.0039,
+    "dif": 0.0039,
+    "dea": 0.0006,
+    "hist": 0.0066,
     "cross": null
    },
-   "rsi14": 49.2,
-   "pctRank": 6.0,
-   "devMA250": -19.85,
-   "amt5": 1358338.0,
-   "amt20": 4361621.0,
+   "rsi14": 52.9,
+   "pctRank": 7.2,
+   "devMA250": -18.96,
+   "amt5": 1366472.0,
+   "amt20": 4363654.0,
    "amtRatio": 0.81,
-   "sinceIPO": -25.58,
+   "sinceIPO": -24.75,
    "volAnn": 15.3,
    "histDates": [
     "2025-09-23",
@@ -35043,7 +35052,7 @@
     1.926,
     1.876,
     1.879,
-    1.879
+    1.9
    ],
    "listDays": 501,
    "signals": {
@@ -35063,26 +35072,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.419,
-   "pct": 0.28,
-   "volume": 14400,
-   "amount": 20433.6,
-   "ret5": 0.85,
-   "ret20": -4.57,
-   "ret60": -11.53,
+   "close": 1.422,
+   "pct": 0.49,
+   "volume": 107900,
+   "amount": 153433.8,
+   "ret5": 1.07,
+   "ret20": -4.37,
+   "ret60": -11.35,
    "macd": {
-    "dif": -0.0164,
+    "dif": -0.0161,
     "dea": -0.016,
-    "hist": -0.0007,
+    "hist": -0.0003,
     "cross": null
    },
-   "rsi14": 42.2,
+   "rsi14": 43.3,
    "pctRank": 3.8,
-   "devMA250": -20.06,
-   "amt5": 1479575.0,
-   "amt20": 4233309.0,
+   "devMA250": -19.89,
+   "amt5": 1506175.0,
+   "amt20": 4239959.0,
    "amtRatio": 1.0,
-   "sinceIPO": -28.33,
+   "sinceIPO": -28.18,
    "volAnn": 14.2,
    "histDates": [
     "2025-09-22",
@@ -35586,7 +35595,7 @@
     1.43,
     1.416,
     1.415,
-    1.419
+    1.422
    ],
    "listDays": 501,
    "signals": {
@@ -35606,26 +35615,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.365,
-   "pct": 0.34,
-   "volume": 2100,
-   "amount": 4966.5,
-   "ret5": 0.13,
-   "ret20": -4.6,
-   "ret60": -10.01,
+   "close": 2.36,
+   "pct": 0.13,
+   "volume": 21700,
+   "amount": 51212.0,
+   "ret5": -0.08,
+   "ret20": -4.8,
+   "ret60": -10.2,
    "macd": {
-    "dif": -0.0326,
-    "dea": -0.0337,
-    "hist": 0.0022,
+    "dif": -0.033,
+    "dea": -0.0338,
+    "hist": 0.0016,
     "cross": "golden"
    },
-   "rsi14": 31.8,
-   "pctRank": 1.0,
-   "devMA250": -13.56,
-   "amt5": 1757429.0,
-   "amt20": 3290255.0,
+   "rsi14": 29.2,
+   "pctRank": 0.4,
+   "devMA250": -13.74,
+   "amt5": 1766678.0,
+   "amt20": 3292567.0,
    "amtRatio": 1.08,
-   "sinceIPO": -30.38,
+   "sinceIPO": -30.53,
    "volAnn": 12.9,
    "histDates": [
     "2025-09-23",
@@ -36129,17 +36138,17 @@
     2.368,
     2.365,
     2.357,
-    2.365
+    2.36
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": -1,
+    "sentiment": -2,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -36149,26 +36158,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.167,
-   "pct": 0.09,
-   "volume": 100,
-   "amount": 116.7,
-   "ret5": -2.1,
-   "ret20": -9.95,
-   "ret60": -4.27,
+   "close": 1.177,
+   "pct": 0.94,
+   "volume": 1178100,
+   "amount": 1386623.7,
+   "ret5": -1.26,
+   "ret20": -9.18,
+   "ret60": -3.45,
    "macd": {
-    "dif": -0.008,
-    "dea": -0.0009,
-    "hist": -0.0143,
+    "dif": -0.0072,
+    "dea": -0.0007,
+    "hist": -0.013,
     "cross": null
    },
-   "rsi14": 42.0,
-   "pctRank": 6.0,
-   "devMA250": -31.02,
-   "amt5": 2437650.0,
-   "amt20": 6424134.0,
-   "amtRatio": 0.73,
-   "sinceIPO": -47.0,
+   "rsi14": 44.8,
+   "pctRank": 6.8,
+   "devMA250": -30.43,
+   "amt5": 2714952.0,
+   "amt20": 6493459.0,
+   "amtRatio": 0.74,
+   "sinceIPO": -46.55,
    "volAnn": 17.5,
    "histDates": [
     "2025-09-23",
@@ -36672,7 +36681,7 @@
     1.191,
     1.169,
     1.166,
-    1.167
+    1.177
    ],
    "listDays": 501,
    "signals": {
@@ -36692,29 +36701,28 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.002,
-   "pct": 0.3,
-   "volume": 2225800,
-   "amount": 2230251.6,
-   "ret5": -0.5,
-   "ret20": -2.15,
-   "ret60": -1.57,
+   "close": 1.007,
+   "pct": 0.5,
+   "volume": 29100,
+   "amount": 29303.7,
+   "ret5": 0.5,
+   "ret20": -1.08,
+   "ret60": -3.27,
    "macd": {
-    "dif": -0.0038,
-    "dea": -0.0037,
-    "hist": -0.0002,
-    "cross": null
+    "dif": -0.0033,
+    "dea": -0.0036,
+    "hist": 0.0007,
+    "cross": "golden"
    },
-   "rsi14": 45.4,
-   "pctRank": 4.8,
-   "devMA250": -27.78,
-   "amt5": 1442822.0,
-   "amt20": 2668465.0,
-   "amtRatio": 0.65,
-   "sinceIPO": -48.67,
+   "rsi14": 49.2,
+   "pctRank": 8.0,
+   "devMA250": -27.25,
+   "amt5": 1251669.0,
+   "amt20": 2411226.0,
+   "amtRatio": 0.6,
+   "sinceIPO": -48.41,
    "volAnn": 17.8,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -36963,10 +36971,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    1.812,
     1.812,
     1.809,
     1.805,
@@ -37215,9 +37223,10 @@
     1.003,
     1.004,
     0.999,
-    1.002
+    1.002,
+    1.007
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": -1,
     "sentiment": 0,
@@ -37235,26 +37244,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.325,
-   "pct": -0.45,
-   "volume": 60500,
-   "amount": 201162.5,
-   "ret5": -0.45,
-   "ret20": 0.57,
-   "ret60": -12.15,
+   "close": 3.392,
+   "pct": 1.56,
+   "volume": 65500,
+   "amount": 222176.0,
+   "ret5": 1.56,
+   "ret20": 2.6,
+   "ret60": -10.38,
    "macd": {
-    "dif": 0.0136,
-    "dea": 0.0187,
-    "hist": -0.0103,
+    "dif": 0.0189,
+    "dea": 0.0198,
+    "hist": -0.0018,
     "cross": null
    },
-   "rsi14": 48.3,
-   "pctRank": 5.8,
-   "devMA250": -18.25,
-   "amt5": 1206069.0,
-   "amt20": 2851285.0,
+   "rsi14": 56.5,
+   "pctRank": 9.0,
+   "devMA250": -16.61,
+   "amt5": 1210272.0,
+   "amt20": 2852336.0,
    "amtRatio": 0.62,
-   "sinceIPO": -25.5,
+   "sinceIPO": -24.0,
    "volAnn": 16.8,
    "histDates": [
     "2025-09-23",
@@ -37758,17 +37767,17 @@
     3.369,
     3.373,
     3.34,
-    3.325
+    3.392
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -37778,27 +37787,27 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.301,
-   "pct": -2.25,
-   "volume": 2300,
-   "amount": 7592.3,
-   "ret5": -2.68,
-   "ret20": -2.91,
-   "ret60": -9.64,
+   "close": 3.319,
+   "pct": -1.72,
+   "volume": 3300,
+   "amount": 10952.7,
+   "ret5": -2.15,
+   "ret20": -2.38,
+   "ret60": -9.14,
    "macd": {
-    "dif": -0.0248,
-    "dea": -0.0222,
-    "hist": -0.0052,
+    "dif": -0.0234,
+    "dea": -0.0219,
+    "hist": -0.0029,
     "cross": "death"
    },
-   "rsi14": 33.7,
-   "pctRank": 10.8,
-   "devMA250": -12.02,
-   "amt5": 1197235.0,
-   "amt20": 2844932.0,
+   "rsi14": 35.6,
+   "pctRank": 12.0,
+   "devMA250": -11.55,
+   "amt5": 1197907.0,
+   "amt20": 2845100.0,
    "amtRatio": 0.8,
-   "sinceIPO": 0.52,
-   "volAnn": 15.5,
+   "sinceIPO": 1.07,
+   "volAnn": 15.4,
    "histDates": [
     "2025-09-22",
     "2025-09-23",
@@ -38301,7 +38310,7 @@
     3.392,
     3.376,
     3.377,
-    3.301
+    3.319
    ],
    "listDays": 501,
    "signals": {
@@ -38321,26 +38330,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.546,
-   "pct": 0.06,
-   "volume": 200,
-   "amount": 309.2,
-   "ret5": 0.65,
-   "ret20": -7.48,
-   "ret60": -15.43,
+   "close": 1.552,
+   "pct": 0.45,
+   "volume": 61000,
+   "amount": 94672.0,
+   "ret5": 1.04,
+   "ret20": -7.12,
+   "ret60": -15.1,
    "macd": {
-    "dif": -0.0445,
-    "dea": -0.0495,
-    "hist": 0.0098,
+    "dif": -0.0441,
+    "dea": -0.0494,
+    "hist": 0.0106,
     "cross": null
    },
-   "rsi14": 23.9,
-   "pctRank": 1.0,
-   "devMA250": -21.91,
-   "amt5": 1116501.0,
-   "amt20": 1340750.0,
+   "rsi14": 27.5,
+   "pctRank": 1.2,
+   "devMA250": -21.61,
+   "amt5": 1135374.0,
+   "amt20": 1345468.0,
    "amtRatio": 0.82,
-   "sinceIPO": -38.28,
+   "sinceIPO": -38.04,
    "volAnn": 14.4,
    "histDates": [
     "2025-09-23",
@@ -38844,7 +38853,7 @@
     1.544,
     1.543,
     1.545,
-    1.546
+    1.552
    ],
    "listDays": 501,
    "signals": {
@@ -38864,26 +38873,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.229,
-   "pct": 0.0,
-   "volume": 100,
-   "amount": 122.9,
-   "ret5": -1.21,
-   "ret20": -4.88,
-   "ret60": -11.71,
+   "close": 1.238,
+   "pct": 0.73,
+   "volume": 86900,
+   "amount": 107582.2,
+   "ret5": -0.48,
+   "ret20": -4.18,
+   "ret60": -11.06,
    "macd": {
-    "dif": -0.0095,
-    "dea": -0.0096,
-    "hist": 0.0003,
+    "dif": -0.0088,
+    "dea": -0.0095,
+    "hist": 0.0015,
     "cross": null
    },
-   "rsi14": 43.2,
-   "pctRank": 3.4,
-   "devMA250": -24.81,
-   "amt5": 1037398.0,
-   "amt20": 2763328.0,
+   "rsi14": 46.3,
+   "pctRank": 5.2,
+   "devMA250": -24.26,
+   "amt5": 1058890.0,
+   "amt20": 2768701.0,
    "amtRatio": 0.75,
-   "sinceIPO": -48.58,
+   "sinceIPO": -48.2,
    "volAnn": 15.6,
    "histDates": [
     "2025-09-23",
@@ -39387,17 +39396,17 @@
     1.238,
     1.236,
     1.229,
-    1.229
+    1.238
    ],
    "listDays": 501,
    "signals": {
-    "liquidity": -1,
-    "sentiment": -1,
+    "liquidity": 0,
+    "sentiment": 0,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -39951,28 +39960,27 @@
    "right": "经营权",
    "strategy": "周期型",
    "close": 5.268,
-   "pct": 0.44,
-   "volume": 186300,
-   "amount": 981428.4,
-   "ret5": -3.16,
-   "ret20": -2.53,
-   "ret60": -2.97,
+   "pct": 0.0,
+   "volume": 1000,
+   "amount": 5268.0,
+   "ret5": -1.62,
+   "ret20": -2.84,
+   "ret60": -1.86,
    "macd": {
-    "dif": -0.0293,
-    "dea": -0.0054,
-    "hist": -0.0477,
+    "dif": -0.0329,
+    "dea": -0.0109,
+    "hist": -0.044,
     "cross": null
    },
    "rsi14": 38.9,
    "pctRank": 3.8,
-   "devMA250": -13.97,
-   "amt5": 465573.0,
-   "amt20": 579353.0,
-   "amtRatio": 0.52,
+   "devMA250": -13.88,
+   "amt5": 315294.0,
+   "amt20": 577936.0,
+   "amtRatio": 0.55,
    "sinceIPO": -3.39,
    "volAnn": 16.0,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -40221,10 +40229,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    6.777,
     6.73,
     6.71,
     6.685,
@@ -40473,9 +40481,10 @@
     5.273,
     5.255,
     5.245,
+    5.268,
     5.268
    ],
-   "listDays": 469,
+   "listDays": 470,
    "signals": {
     "liquidity": -2,
     "sentiment": -1,
@@ -40493,26 +40502,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 4.036,
-   "pct": 0.0,
-   "volume": 2900,
-   "amount": 11704.4,
-   "ret5": 0.15,
-   "ret20": 3.17,
-   "ret60": 2.62,
+   "close": 4.069,
+   "pct": 0.82,
+   "volume": 24900,
+   "amount": 101318.1,
+   "ret5": 0.97,
+   "ret20": 4.01,
+   "ret60": 3.46,
    "macd": {
-    "dif": 0.0301,
-    "dea": 0.0251,
-    "hist": 0.01,
+    "dif": 0.0328,
+    "dea": 0.0257,
+    "hist": 0.0142,
     "cross": null
    },
-   "rsi14": 69.6,
-   "pctRank": 53.9,
-   "devMA250": 0.23,
-   "amt5": 2812700.0,
-   "amt20": 3084510.0,
+   "rsi14": 75.1,
+   "pctRank": 59.9,
+   "devMA250": 1.05,
+   "amt5": 2830623.0,
+   "amt20": 3088991.0,
    "amtRatio": 0.47,
-   "sinceIPO": 23.24,
+   "sinceIPO": 24.24,
    "volAnn": 14.2,
    "histDates": [
     "2025-09-23",
@@ -41016,17 +41025,17 @@
     4.034,
     4.04,
     4.036,
-    4.036
+    4.069
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": 2,
+    "sentiment": 1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": -1,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -41036,26 +41045,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 3.965,
-   "pct": 0.3,
-   "volume": 1200,
-   "amount": 4758.0,
-   "ret5": 1.17,
-   "ret20": 3.52,
-   "ret60": 1.95,
+   "close": 3.999,
+   "pct": 1.16,
+   "volume": 28100,
+   "amount": 112371.9,
+   "ret5": 2.04,
+   "ret20": 4.41,
+   "ret60": 2.83,
    "macd": {
-    "dif": 0.0251,
-    "dea": 0.0152,
-    "hist": 0.0197,
+    "dif": 0.0278,
+    "dea": 0.0158,
+    "hist": 0.024,
     "cross": null
    },
-   "rsi14": 71.0,
-   "pctRank": 49.5,
-   "devMA250": -2.59,
-   "amt5": 2616762.0,
-   "amt20": 3742189.0,
+   "rsi14": 75.4,
+   "pctRank": 51.1,
+   "devMA250": -1.75,
+   "amt5": 2638285.0,
+   "amt20": 3747570.0,
    "amtRatio": 0.8,
-   "sinceIPO": 20.04,
+   "sinceIPO": 21.07,
    "volAnn": 14.6,
    "histDates": [
     "2025-09-22",
@@ -41559,7 +41568,7 @@
     3.936,
     3.94,
     3.953,
-    3.965
+    3.999
    ],
    "listDays": 501,
    "signals": {
@@ -41579,26 +41588,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 3.249,
-   "pct": 0.09,
-   "volume": 17300,
-   "amount": 56207.7,
-   "ret5": 0.34,
-   "ret20": 2.59,
-   "ret60": -2.96,
+   "close": 3.27,
+   "pct": 0.74,
+   "volume": 70700,
+   "amount": 231189.0,
+   "ret5": 0.99,
+   "ret20": 3.25,
+   "ret60": -2.33,
    "macd": {
-    "dif": 0.0057,
-    "dea": -0.0023,
-    "hist": 0.0159,
+    "dif": 0.0073,
+    "dea": -0.002,
+    "hist": 0.0186,
     "cross": null
    },
-   "rsi14": 62.9,
-   "pctRank": 20.0,
-   "devMA250": -4.37,
-   "amt5": 2044502.0,
-   "amt20": 1922893.0,
-   "amtRatio": 0.75,
-   "sinceIPO": 9.03,
+   "rsi14": 69.2,
+   "pctRank": 21.6,
+   "devMA250": -3.76,
+   "amt5": 2079498.0,
+   "amt20": 1931642.0,
+   "amtRatio": 0.76,
+   "sinceIPO": 9.73,
    "volAnn": 15.8,
    "histDates": [
     "2025-09-23",
@@ -42102,7 +42111,7 @@
     3.243,
     3.245,
     3.246,
-    3.249
+    3.27
    ],
    "listDays": 501,
    "signals": {
@@ -42122,26 +42131,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 2.674,
-   "pct": 0.15,
-   "volume": 400,
-   "amount": 1069.6,
-   "ret5": 0.19,
-   "ret20": 2.85,
-   "ret60": -2.19,
+   "close": 2.699,
+   "pct": 1.09,
+   "volume": 113900,
+   "amount": 307416.1,
+   "ret5": 1.12,
+   "ret20": 3.81,
+   "ret60": -1.28,
    "macd": {
-    "dif": 0.0053,
-    "dea": 0.0001,
-    "hist": 0.0105,
+    "dif": 0.0073,
+    "dea": 0.0004,
+    "hist": 0.0137,
     "cross": null
    },
-   "rsi14": 57.0,
-   "pctRank": 19.2,
-   "devMA250": -6.32,
-   "amt5": 1188124.0,
-   "amt20": 3640589.0,
+   "rsi14": 63.6,
+   "pctRank": 24.2,
+   "devMA250": -5.45,
+   "amt5": 1249393.0,
+   "amt20": 3655907.0,
    "amtRatio": 0.54,
-   "sinceIPO": -0.56,
+   "sinceIPO": 0.37,
    "volAnn": 17.1,
    "histDates": [
     "2025-09-12",
@@ -42645,7 +42654,7 @@
     2.671,
     2.671,
     2.67,
-    2.674
+    2.699
    ],
    "listDays": 501,
    "signals": {
@@ -42665,29 +42674,28 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 3.608,
-   "pct": 0.11,
-   "volume": 763300,
-   "amount": 2753986.4,
-   "ret5": 1.01,
-   "ret20": 6.87,
-   "ret60": 4.13,
+   "close": 3.641,
+   "pct": 0.91,
+   "volume": 96200,
+   "amount": 350264.2,
+   "ret5": 1.7,
+   "ret20": 6.99,
+   "ret60": 4.6,
    "macd": {
-    "dif": 0.0389,
-    "dea": 0.0294,
-    "hist": 0.0191,
+    "dif": 0.0427,
+    "dea": 0.032,
+    "hist": 0.0213,
     "cross": null
    },
-   "rsi14": 67.6,
-   "pctRank": 55.5,
-   "devMA250": 1.76,
-   "amt5": 3417415.0,
-   "amt20": 4518069.0,
-   "amtRatio": 0.94,
-   "sinceIPO": 23.48,
+   "rsi14": 71.3,
+   "pctRank": 60.2,
+   "devMA250": 2.7,
+   "amt5": 2912091.0,
+   "amt20": 4189821.0,
+   "amtRatio": 0.89,
+   "sinceIPO": 24.61,
    "volAnn": 15.9,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -42936,10 +42944,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.763,
     3.74,
     3.738,
     3.699,
@@ -43188,17 +43196,18 @@
     3.569,
     3.583,
     3.604,
-    3.608
+    3.608,
+    3.641
    ],
-   "listDays": 476,
+   "listDays": 477,
    "signals": {
     "liquidity": 1,
-    "sentiment": 2,
-    "moneyflow": 0,
+    "sentiment": 1,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": 2,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -43208,26 +43217,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 3.367,
-   "pct": 0.45,
-   "volume": 1500,
-   "amount": 5050.5,
-   "ret5": 3.12,
-   "ret20": 3.6,
-   "ret60": 3.89,
+   "close": 3.362,
+   "pct": 0.3,
+   "volume": 45400,
+   "amount": 152634.8,
+   "ret5": 2.97,
+   "ret20": 3.45,
+   "ret60": 3.73,
    "macd": {
-    "dif": 0.0173,
-    "dea": 0.0008,
-    "hist": 0.0329,
+    "dif": 0.0169,
+    "dea": 0.0007,
+    "hist": 0.0323,
     "cross": null
    },
-   "rsi14": 70.2,
-   "pctRank": 26.4,
-   "devMA250": -2.55,
-   "amt5": 2046122.0,
-   "amt20": 1343247.0,
+   "rsi14": 69.6,
+   "pctRank": 26.1,
+   "devMA250": -2.69,
+   "amt5": 2075639.0,
+   "amt20": 1350626.0,
    "amtRatio": 0.62,
-   "sinceIPO": -4.91,
+   "sinceIPO": -5.06,
    "volAnn": 13.4,
    "histDates": [
     "2025-09-23",
@@ -43731,17 +43740,17 @@
     3.268,
     3.307,
     3.352,
-    3.367
+    3.362
    ],
    "listDays": 371,
    "signals": {
     "liquidity": -2,
-    "sentiment": 1,
+    "sentiment": 2,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": -4,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -43751,26 +43760,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 3.821,
-   "pct": 0.0,
-   "volume": 100,
-   "amount": 382.1,
-   "ret5": -0.34,
-   "ret20": -0.34,
-   "ret60": 0.42,
+   "close": 3.856,
+   "pct": 0.92,
+   "volume": 92500,
+   "amount": 356680.0,
+   "ret5": 0.57,
+   "ret20": 0.57,
+   "ret60": 1.34,
    "macd": {
-    "dif": -0.0028,
-    "dea": 0.003,
-    "hist": -0.0117,
+    "dif": -0.0,
+    "dea": 0.0036,
+    "hist": -0.0073,
     "cross": null
    },
-   "rsi14": 45.9,
-   "pctRank": 35.9,
-   "devMA250": -0.54,
-   "amt5": 2154338.0,
-   "amt20": 3527581.0,
+   "rsi14": 53.9,
+   "pctRank": 44.7,
+   "devMA250": 0.37,
+   "amt5": 2225598.0,
+   "amt20": 3545396.0,
    "amtRatio": 0.82,
-   "sinceIPO": 9.2,
+   "sinceIPO": 10.2,
    "volAnn": 13.6,
    "histDates": [
     "2025-09-23",
@@ -44274,7 +44283,7 @@
     3.83,
     3.83,
     3.821,
-    3.821
+    3.856
    ],
    "listDays": 501,
    "signals": {
@@ -44294,26 +44303,26 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 3.471,
-   "pct": 0.17,
-   "volume": 700,
-   "amount": 2429.7,
-   "ret5": 1.14,
-   "ret20": 1.82,
-   "ret60": 1.14,
+   "close": 3.48,
+   "pct": 0.43,
+   "volume": 12200,
+   "amount": 42456.0,
+   "ret5": 1.4,
+   "ret20": 2.08,
+   "ret60": 1.4,
    "macd": {
-    "dif": 0.0062,
-    "dea": -0.0012,
-    "hist": 0.0149,
+    "dif": 0.007,
+    "dea": -0.0011,
+    "hist": 0.0161,
     "cross": null
    },
-   "rsi14": 62.8,
-   "pctRank": 18.3,
-   "devMA250": -3.78,
-   "amt5": 839210.0,
-   "amt20": 760666.0,
+   "rsi14": 64.6,
+   "pctRank": 18.9,
+   "devMA250": -3.53,
+   "amt5": 847215.0,
+   "amt20": 762667.0,
    "amtRatio": 0.51,
-   "sinceIPO": -2.34,
+   "sinceIPO": -2.08,
    "volAnn": 17.1,
    "histDates": [
     "2025-09-23",
@@ -44817,7 +44826,7 @@
     3.436,
     3.44,
     3.465,
-    3.471
+    3.48
    ],
    "listDays": 338,
    "signals": {
@@ -44837,27 +44846,27 @@
    "sector": "保租房",
    "right": "产权",
    "strategy": "防御型",
-   "close": 2.875,
-   "pct": 0.07,
-   "volume": 113600,
-   "amount": 326600.0,
-   "ret5": 0.35,
-   "ret20": 2.68,
-   "ret60": 8.29,
+   "close": 2.889,
+   "pct": 0.49,
+   "volume": 1300,
+   "amount": 3755.7,
+   "ret5": 1.01,
+   "ret20": 1.87,
+   "ret60": 8.41,
    "macd": {
-    "dif": 0.0066,
-    "dea": 0.0029,
-    "hist": 0.0073,
+    "dif": 0.0082,
+    "dea": 0.004,
+    "hist": 0.0085,
     "cross": null
    },
-   "rsi14": 54.3,
-   "pctRank": 83.3,
+   "rsi14": 56.9,
+   "pctRank": 88.1,
    "devMA250": null,
-   "amt5": 625939.0,
-   "amt20": 1096366.0,
-   "amtRatio": 0.51,
-   "sinceIPO": 3.42,
-   "volAnn": 14.7,
+   "amt5": 599349.0,
+   "amt20": 973599.0,
+   "amtRatio": 0.49,
+   "sinceIPO": 3.92,
+   "volAnn": 14.6,
    "histDates": [
     "2026-04-29",
     "2026-04-30",
@@ -44966,7 +44975,8 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
     2.78,
@@ -45076,17 +45086,18 @@
     2.892,
     2.88,
     2.873,
-    2.875
+    2.875,
+    2.889
    ],
-   "listDays": 108,
+   "listDays": 109,
    "signals": {
     "liquidity": -2,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": -5,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -45096,29 +45107,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 9.3,
-   "pct": 0.0,
-   "volume": 2917900,
-   "amount": 27136470.0,
-   "ret5": 0.06,
-   "ret20": 1.29,
-   "ret60": -2.63,
+   "close": 9.329,
+   "pct": 0.31,
+   "volume": 24100,
+   "amount": 224828.9,
+   "ret5": 0.31,
+   "ret20": 0.38,
+   "ret60": -3.24,
    "macd": {
-    "dif": -0.0078,
-    "dea": -0.02,
-    "hist": 0.0244,
+    "dif": -0.0036,
+    "dea": -0.0167,
+    "hist": 0.0262,
     "cross": null
    },
-   "rsi14": 51.0,
-   "pctRank": 31.8,
-   "devMA250": -5.55,
-   "amt5": 14980192.0,
-   "amt20": 10877893.0,
-   "amtRatio": 0.87,
-   "sinceIPO": 28.28,
+   "rsi14": 54.8,
+   "pctRank": 33.9,
+   "devMA250": -5.22,
+   "amt5": 13104708.0,
+   "amt20": 10453571.0,
+   "amtRatio": 0.88,
+   "sinceIPO": 28.68,
    "volAnn": 12.8,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -45367,10 +45377,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    10.3,
     10.281,
     10.284,
     10.249,
@@ -45619,9 +45629,10 @@
     9.3,
     9.281,
     9.3,
-    9.3
+    9.3,
+    9.329
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
@@ -45639,29 +45650,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.835,
-   "pct": 0.13,
-   "volume": 640700,
-   "amount": 2457084.5,
-   "ret5": -0.08,
-   "ret20": 2.87,
-   "ret60": 1.19,
+   "close": 3.869,
+   "pct": 0.89,
+   "volume": 8600,
+   "amount": 33273.4,
+   "ret5": 1.02,
+   "ret20": 3.48,
+   "ret60": 0.05,
    "macd": {
-    "dif": 0.0192,
-    "dea": 0.0101,
-    "hist": 0.0181,
+    "dif": 0.0223,
+    "dea": 0.0126,
+    "hist": 0.0195,
     "cross": null
    },
-   "rsi14": 60.8,
-   "pctRank": 27.4,
-   "devMA250": -6.46,
-   "amt5": 1254624.0,
-   "amt20": 1691465.0,
-   "amtRatio": 0.45,
-   "sinceIPO": 19.14,
+   "rsi14": 66.5,
+   "pctRank": 31.1,
+   "devMA250": -5.57,
+   "amt5": 902101.0,
+   "amt20": 1605355.0,
+   "amtRatio": 0.43,
+   "sinceIPO": 20.19,
    "volAnn": 14.5,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -45910,10 +45920,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.435,
     4.438,
     4.45,
     4.436,
@@ -46162,9 +46172,10 @@
     3.835,
     3.84,
     3.83,
-    3.835
+    3.835,
+    3.869
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": -2,
     "sentiment": 2,
@@ -46182,29 +46193,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.154,
-   "pct": 0.1,
-   "volume": 162300,
-   "amount": 511894.2,
-   "ret5": -1.1,
-   "ret20": -2.95,
-   "ret60": -14.27,
+   "close": 3.182,
+   "pct": 0.89,
+   "volume": 1500,
+   "amount": 4773.0,
+   "ret5": -0.59,
+   "ret20": -1.64,
+   "ret60": -15.33,
    "macd": {
-    "dif": -0.049,
-    "dea": -0.0574,
-    "hist": 0.0168,
+    "dif": -0.0454,
+    "dea": -0.055,
+    "hist": 0.0193,
     "cross": null
    },
-   "rsi14": 37.1,
-   "pctRank": 16.2,
-   "devMA250": -20.02,
-   "amt5": 1997783.0,
-   "amt20": 3185336.0,
-   "amtRatio": 0.84,
-   "sinceIPO": 13.25,
+   "rsi14": 42.3,
+   "pctRank": 17.0,
+   "devMA250": -19.22,
+   "amt5": 1276848.0,
+   "amt20": 2877635.0,
+   "amtRatio": 0.77,
+   "sinceIPO": 14.25,
    "volAnn": 17.5,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -46453,10 +46463,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.2,
     4.197,
     4.194,
     4.145,
@@ -46705,9 +46715,10 @@
     3.191,
     3.186,
     3.151,
-    3.154
+    3.154,
+    3.182
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
@@ -46725,29 +46736,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 4.287,
-   "pct": -0.3,
-   "volume": 2910900,
-   "amount": 12479028.3,
-   "ret5": 0.4,
-   "ret20": 1.4,
-   "ret60": -3.66,
+   "close": 4.334,
+   "pct": 1.1,
+   "volume": 64600,
+   "amount": 279976.4,
+   "ret5": 1.38,
+   "ret20": 2.31,
+   "ret60": -3.69,
    "macd": {
-    "dif": -0.003,
-    "dea": -0.0148,
-    "hist": 0.0235,
+    "dif": 0.0024,
+    "dea": -0.0114,
+    "hist": 0.0274,
     "cross": null
    },
-   "rsi14": 52.3,
-   "pctRank": 24.9,
-   "devMA250": -7.42,
-   "amt5": 8115244.0,
-   "amt20": 7863157.0,
-   "amtRatio": 1.07,
-   "sinceIPO": 28.74,
+   "rsi14": 59.0,
+   "pctRank": 29.3,
+   "devMA250": -6.34,
+   "amt5": 7637120.0,
+   "amt20": 7461499.0,
+   "amtRatio": 1.08,
+   "sinceIPO": 30.15,
    "volAnn": 16.0,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -46996,10 +47006,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    5.119,
     5.1,
     5.075,
     4.975,
@@ -47248,17 +47258,18 @@
     4.306,
     4.28,
     4.3,
-    4.287
+    4.287,
+    4.334
    ],
-   "listDays": 494,
+   "listDays": 495,
    "signals": {
     "liquidity": 2,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 2,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -47268,26 +47279,26 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.604,
-   "pct": 0.0,
-   "volume": 3700,
-   "amount": 13334.8,
-   "ret5": -1.56,
-   "ret20": -0.74,
-   "ret60": -4.07,
+   "close": 3.632,
+   "pct": 0.78,
+   "volume": 5400,
+   "amount": 19612.8,
+   "ret5": -0.79,
+   "ret20": 0.03,
+   "ret60": -3.33,
    "macd": {
-    "dif": -0.0034,
-    "dea": -0.0125,
-    "hist": 0.0183,
+    "dif": -0.0012,
+    "dea": -0.0121,
+    "hist": 0.0218,
     "cross": null
    },
-   "rsi14": 48.0,
-   "pctRank": 5.4,
-   "devMA250": -8.91,
-   "amt5": 815024.0,
-   "amt20": 3695789.0,
+   "rsi14": 52.2,
+   "pctRank": 7.7,
+   "devMA250": -8.21,
+   "amt5": 816280.0,
+   "amt20": 3696103.0,
    "amtRatio": 1.11,
-   "sinceIPO": -12.27,
+   "sinceIPO": -11.59,
    "volAnn": 15.3,
    "histDates": [
     "2025-09-23",
@@ -47791,7 +47802,7 @@
     3.655,
     3.632,
     3.604,
-    3.604
+    3.632
    ],
    "listDays": 312,
    "signals": {
@@ -47811,29 +47822,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 4.163,
-   "pct": 0.31,
-   "volume": 722000,
-   "amount": 3005686.0,
-   "ret5": 1.14,
-   "ret20": 1.31,
-   "ret60": -6.58,
+   "close": 4.177,
+   "pct": 0.34,
+   "volume": 20900,
+   "amount": 87299.3,
+   "ret5": 1.61,
+   "ret20": -0.45,
+   "ret60": -7.87,
    "macd": {
-    "dif": -0.0133,
-    "dea": -0.0284,
-    "hist": 0.0302,
+    "dif": -0.0083,
+    "dea": -0.0244,
+    "hist": 0.0321,
     "cross": null
    },
-   "rsi14": 53.2,
-   "pctRank": 6.4,
-   "devMA250": -13.5,
-   "amt5": 3110568.0,
-   "amt20": 4623693.0,
-   "amtRatio": 0.85,
-   "sinceIPO": 5.79,
+   "rsi14": 55.2,
+   "pctRank": 7.3,
+   "devMA250": -13.12,
+   "amt5": 2395777.0,
+   "amt20": 4378920.0,
+   "amtRatio": 0.82,
+   "sinceIPO": 6.15,
    "volAnn": 16.8,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -48082,10 +48092,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    5.456,
     5.434,
     5.393,
     5.373,
@@ -48334,17 +48344,18 @@
     4.144,
     4.133,
     4.15,
-    4.163
+    4.163,
+    4.177
    ],
-   "listDays": 409,
+   "listDays": 410,
    "signals": {
     "liquidity": 1,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -48354,26 +48365,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 5.443,
-   "pct": -0.13,
-   "volume": 1900,
-   "amount": 10341.7,
-   "ret5": -1.02,
-   "ret20": 1.72,
-   "ret60": -7.96,
+   "close": 5.44,
+   "pct": -0.18,
+   "volume": 3399,
+   "amount": 18496.0,
+   "ret5": -1.07,
+   "ret20": 1.66,
+   "ret60": -8.01,
    "macd": {
-    "dif": -0.0328,
+    "dif": -0.033,
     "dea": -0.0494,
-    "hist": 0.0332,
+    "hist": 0.0328,
     "cross": null
    },
-   "rsi14": 41.5,
+   "rsi14": 41.1,
    "pctRank": 2.4,
-   "devMA250": -8.89,
-   "amt5": 2176994.0,
-   "amt20": 2728059.0,
+   "devMA250": -8.94,
+   "amt5": 2178624.0,
+   "amt20": 2728467.0,
    "amtRatio": 0.55,
-   "sinceIPO": -11.65,
+   "sinceIPO": -11.7,
    "volAnn": 15.1,
    "histDates": [
     "2025-09-23",
@@ -48877,7 +48888,7 @@
     5.5,
     5.491,
     5.45,
-    5.443
+    5.44
    ],
    "listDays": 501,
    "signals": {
@@ -48897,26 +48908,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 6.818,
-   "pct": 0.13,
-   "volume": 44200,
-   "amount": 301355.6,
-   "ret5": 0.06,
-   "ret20": -0.7,
-   "ret60": -13.31,
+   "close": 6.81,
+   "pct": 0.01,
+   "volume": 1202900,
+   "amount": 8191749.0,
+   "ret5": -0.06,
+   "ret20": -0.82,
+   "ret60": -13.41,
    "macd": {
-    "dif": -0.0986,
-    "dea": -0.1255,
-    "hist": 0.0539,
+    "dif": -0.0992,
+    "dea": -0.1256,
+    "hist": 0.0529,
     "cross": null
    },
-   "rsi14": 30.8,
-   "pctRank": 3.4,
-   "devMA250": -14.89,
-   "amt5": 9958876.0,
-   "amt20": 12294042.0,
-   "amtRatio": 1.07,
-   "sinceIPO": -29.18,
+   "rsi14": 28.9,
+   "pctRank": 1.8,
+   "devMA250": -14.99,
+   "amt5": 11536955.0,
+   "amt20": 12688562.0,
+   "amtRatio": 1.09,
+   "sinceIPO": -29.26,
    "volAnn": 10.4,
    "histDates": [
     "2025-09-23",
@@ -49420,17 +49431,17 @@
     6.798,
     6.799,
     6.809,
-    6.818
+    6.81
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 2,
-    "sentiment": -1,
+    "sentiment": -2,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -49440,26 +49451,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 4.755,
-   "pct": -0.13,
-   "volume": 11300,
-   "amount": 53731.5,
-   "ret5": 1.26,
-   "ret20": 0.93,
-   "ret60": -10.5,
+   "close": 4.769,
+   "pct": 0.17,
+   "volume": 91900,
+   "amount": 438271.1,
+   "ret5": 1.55,
+   "ret20": 1.23,
+   "ret60": -10.24,
    "macd": {
-    "dif": -0.0097,
-    "dea": -0.0237,
-    "hist": 0.028,
+    "dif": -0.0086,
+    "dea": -0.0235,
+    "hist": 0.0298,
     "cross": null
    },
-   "rsi14": 55.7,
-   "pctRank": 6.4,
-   "devMA250": -16.38,
-   "amt5": 2465624.0,
-   "amt20": 1782888.0,
-   "amtRatio": 0.55,
-   "sinceIPO": -35.93,
+   "rsi14": 59.6,
+   "pctRank": 6.8,
+   "devMA250": -16.13,
+   "amt5": 2542531.0,
+   "amt20": 1802115.0,
+   "amtRatio": 0.56,
+   "sinceIPO": -35.75,
    "volAnn": 16.6,
    "histDates": [
     "2025-09-23",
@@ -49963,7 +49974,7 @@
     4.72,
     4.75,
     4.761,
-    4.755
+    4.769
    ],
    "listDays": 501,
    "signals": {
@@ -49983,26 +49994,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 5.774,
-   "pct": -0.45,
-   "volume": 200,
-   "amount": 1154.8,
-   "ret5": -0.84,
-   "ret20": 0.49,
-   "ret60": -1.85,
+   "close": 5.802,
+   "pct": 0.03,
+   "volume": 10300,
+   "amount": 59760.6,
+   "ret5": -0.36,
+   "ret20": 0.97,
+   "ret60": -1.38,
    "macd": {
-    "dif": 0.0016,
-    "dea": 0.002,
-    "hist": -0.0008,
-    "cross": "death"
+    "dif": 0.0038,
+    "dea": 0.0024,
+    "hist": 0.0028,
+    "cross": null
    },
-   "rsi14": 42.6,
-   "pctRank": 81.4,
-   "devMA250": 2.79,
-   "amt5": 1834999.0,
-   "amt20": 5012876.0,
+   "rsi14": 50.0,
+   "pctRank": 85.0,
+   "devMA250": 3.29,
+   "amt5": 1846720.0,
+   "amt20": 5015806.0,
    "amtRatio": 0.79,
-   "sinceIPO": 18.08,
+   "sinceIPO": 18.65,
    "volAnn": 11.1,
    "histDates": [
     "2025-09-23",
@@ -50506,17 +50517,17 @@
     5.808,
     5.812,
     5.8,
-    5.774
+    5.802
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 2,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -50528,8 +50539,8 @@
    "strategy": "周期型",
    "close": 7.348,
    "pct": -0.01,
-   "volume": 400,
-   "amount": 2939.2,
+   "volume": 9600,
+   "amount": 70540.8,
    "ret5": 0.16,
    "ret20": -1.41,
    "ret60": -5.81,
@@ -50542,8 +50553,8 @@
    "rsi14": 39.6,
    "pctRank": 1.4,
    "devMA250": -6.94,
-   "amt5": 3817694.0,
-   "amt20": 5357838.0,
+   "amt5": 3831214.0,
+   "amt20": 5361218.0,
    "amtRatio": 0.9,
    "sinceIPO": -18.06,
    "volAnn": 12.5,
@@ -51069,26 +51080,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 4.513,
-   "pct": 0.0,
-   "volume": 2300,
-   "amount": 10379.9,
-   "ret5": -0.57,
-   "ret20": -3.59,
-   "ret60": -7.5,
+   "close": 4.515,
+   "pct": 0.04,
+   "volume": 13100,
+   "amount": 59146.5,
+   "ret5": -0.53,
+   "ret20": -3.55,
+   "ret60": -7.46,
    "macd": {
-    "dif": -0.0466,
+    "dif": -0.0465,
     "dea": -0.0478,
-    "hist": 0.0023,
+    "hist": 0.0026,
     "cross": null
    },
-   "rsi14": 29.3,
-   "pctRank": 0.2,
-   "devMA250": -14.43,
-   "amt5": 1283666.0,
-   "amt20": 1986544.0,
+   "rsi14": 30.0,
+   "pctRank": 0.6,
+   "devMA250": -14.39,
+   "amt5": 1293420.0,
+   "amt20": 1988982.0,
    "amtRatio": 0.67,
-   "sinceIPO": -32.02,
+   "sinceIPO": -31.99,
    "volAnn": 8.8,
    "histDates": [
     "2025-09-23",
@@ -51592,17 +51603,17 @@
     4.527,
     4.514,
     4.513,
-    4.513
+    4.515
    ],
    "listDays": 501,
    "signals": {
     "liquidity": -1,
-    "sentiment": -2,
+    "sentiment": -1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -5,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -51612,29 +51623,28 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 7.189,
-   "pct": -0.28,
-   "volume": 225800,
-   "amount": 1623276.2,
-   "ret5": -0.69,
-   "ret20": 1.54,
-   "ret60": -5.78,
+   "close": 7.175,
+   "pct": -0.19,
+   "volume": 23400,
+   "amount": 167895.0,
+   "ret5": -0.97,
+   "ret20": 1.03,
+   "ret60": -6.02,
    "macd": {
-    "dif": 0.0205,
-    "dea": 0.0153,
-    "hist": 0.0103,
+    "dif": 0.0171,
+    "dea": 0.0157,
+    "hist": 0.0029,
     "cross": null
    },
-   "rsi14": 51.9,
-   "pctRank": 37.6,
-   "devMA250": -0.2,
-   "amt5": 1420068.0,
-   "amt20": 2615334.0,
-   "amtRatio": 0.52,
-   "sinceIPO": 2.99,
+   "rsi14": 49.7,
+   "pctRank": 36.0,
+   "devMA250": -0.36,
+   "amt5": 1195580.0,
+   "amt20": 2509564.0,
+   "amtRatio": 0.5,
+   "sinceIPO": 2.79,
    "volAnn": 16.1,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -51883,10 +51893,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    7.766,
     7.829,
     7.835,
     7.789,
@@ -52135,9 +52145,10 @@
     7.223,
     7.224,
     7.209,
-    7.189
+    7.189,
+    7.175
    ],
-   "listDays": 455,
+   "listDays": 456,
    "signals": {
     "liquidity": -1,
     "sentiment": 0,
@@ -52155,26 +52166,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 7.726,
-   "pct": -0.45,
-   "volume": 15200,
-   "amount": 117435.2,
-   "ret5": 0.51,
-   "ret20": -3.51,
-   "ret60": -7.86,
+   "close": 7.765,
+   "pct": 0.05,
+   "volume": 207400,
+   "amount": 1610461.0,
+   "ret5": 1.01,
+   "ret20": -3.02,
+   "ret60": -7.39,
    "macd": {
-    "dif": -0.0668,
-    "dea": -0.0948,
-    "hist": 0.0559,
+    "dif": -0.0637,
+    "dea": -0.0942,
+    "hist": 0.0609,
     "cross": null
    },
-   "rsi14": 46.8,
-   "pctRank": 50.5,
-   "devMA250": 2.04,
-   "amt5": 5913589.0,
-   "amt20": 7139419.0,
+   "rsi14": 48.9,
+   "pctRank": 51.5,
+   "devMA250": 2.56,
+   "amt5": 6212194.0,
+   "amt20": 7214071.0,
    "amtRatio": 1.45,
-   "sinceIPO": 6.42,
+   "sinceIPO": 6.96,
    "volAnn": 14.1,
    "histDates": [
     "2025-09-23",
@@ -52678,7 +52689,7 @@
     7.765,
     7.762,
     7.761,
-    7.726
+    7.765
    ],
    "listDays": 501,
    "signals": {
@@ -52698,26 +52709,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 5.91,
-   "pct": -0.34,
-   "volume": 200,
-   "amount": 1182.0,
-   "ret5": -2.44,
-   "ret20": -0.15,
-   "ret60": -0.84,
+   "close": 5.922,
+   "pct": -0.13,
+   "volume": 23700,
+   "amount": 140351.4,
+   "ret5": -2.24,
+   "ret20": 0.05,
+   "ret60": -0.64,
    "macd": {
-    "dif": 0.028,
-    "dea": 0.0414,
-    "hist": -0.0267,
+    "dif": 0.029,
+    "dea": 0.0416,
+    "hist": -0.0252,
     "cross": null
    },
-   "rsi14": 43.7,
-   "pctRank": 14.2,
-   "devMA250": -7.26,
-   "amt5": 3758277.0,
-   "amt20": 4728748.0,
+   "rsi14": 45.4,
+   "pctRank": 14.6,
+   "devMA250": -7.07,
+   "amt5": 3786111.0,
+   "amt20": 4735706.0,
    "amtRatio": 0.64,
-   "sinceIPO": -13.65,
+   "sinceIPO": -13.47,
    "volAnn": 13.2,
    "histDates": [
     "2025-09-23",
@@ -53221,17 +53232,17 @@
     6.042,
     5.962,
     5.93,
-    5.91
+    5.922
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 1,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -53241,26 +53252,26 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.534,
-   "pct": 0.28,
-   "volume": 100,
-   "amount": 353.4,
-   "ret5": -0.65,
-   "ret20": -2.35,
-   "ret60": -3.97,
+   "close": 3.553,
+   "pct": 0.82,
+   "volume": 54100,
+   "amount": 192217.3,
+   "ret5": -0.11,
+   "ret20": -1.82,
+   "ret60": -3.45,
    "macd": {
-    "dif": -0.0293,
-    "dea": -0.0356,
-    "hist": 0.0128,
+    "dif": -0.0277,
+    "dea": -0.0353,
+    "hist": 0.0152,
     "cross": null
    },
-   "rsi14": 43.8,
-   "pctRank": 33.9,
-   "devMA250": -7.17,
-   "amt5": 1017474.0,
-   "amt20": 2936407.0,
+   "rsi14": 46.1,
+   "pctRank": 34.9,
+   "devMA250": -6.67,
+   "amt5": 1055847.0,
+   "amt20": 2946000.0,
    "amtRatio": 0.95,
-   "sinceIPO": 34.02,
+   "sinceIPO": 34.74,
    "volAnn": 17.9,
    "histDates": [
     "2025-09-23",
@@ -53764,17 +53775,17 @@
     3.62,
     3.559,
     3.524,
-    3.534
+    3.553
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 0,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -53784,26 +53795,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 9.045,
-   "pct": -0.44,
-   "volume": 800,
-   "amount": 7236.0,
-   "ret5": 0.04,
-   "ret20": -0.03,
-   "ret60": -4.35,
+   "close": 9.061,
+   "pct": -0.26,
+   "volume": 2400,
+   "amount": 21746.4,
+   "ret5": 0.22,
+   "ret20": 0.14,
+   "ret60": -4.18,
    "macd": {
-    "dif": -0.0186,
-    "dea": -0.0517,
-    "hist": 0.0662,
+    "dif": -0.0173,
+    "dea": -0.0514,
+    "hist": 0.0682,
     "cross": null
    },
-   "rsi14": 51.0,
-   "pctRank": 3.4,
-   "devMA250": -8.77,
-   "amt5": 1316786.0,
-   "amt20": 2714142.0,
+   "rsi14": 52.9,
+   "pctRank": 3.6,
+   "devMA250": -8.61,
+   "amt5": 1319688.0,
+   "amt20": 2714868.0,
    "amtRatio": 0.77,
-   "sinceIPO": -13.78,
+   "sinceIPO": -13.63,
    "volAnn": 13.3,
    "histDates": [
     "2025-09-22",
@@ -54307,7 +54318,7 @@
     9.065,
     9.086,
     9.085,
-    9.045
+    9.061
    ],
    "listDays": 501,
    "signals": {
@@ -54327,27 +54338,27 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 6.551,
-   "pct": 0.29,
-   "volume": 5400,
-   "amount": 35375.4,
-   "ret5": -0.53,
-   "ret20": 0.96,
+   "close": 6.591,
+   "pct": 0.9,
+   "volume": 10900,
+   "amount": 71841.9,
+   "ret5": 0.08,
+   "ret20": 1.57,
    "ret60": null,
    "macd": {
-    "dif": 0.0226,
-    "dea": 0.0295,
-    "hist": -0.0138,
+    "dif": 0.0258,
+    "dea": 0.0301,
+    "hist": -0.0087,
     "cross": null
    },
-   "rsi14": 55.2,
-   "pctRank": 69.4,
+   "rsi14": 59.9,
+   "pctRank": 81.6,
    "devMA250": null,
-   "amt5": 706166.0,
-   "amt20": 5105546.0,
+   "amt5": 713460.0,
+   "amt20": 5106291.0,
    "amtRatio": null,
-   "sinceIPO": 5.1,
-   "volAnn": 10.3,
+   "sinceIPO": 5.74,
+   "volAnn": 10.4,
    "histDates": [
     "2026-07-28",
     "2026-07-29",
@@ -54448,7 +54459,7 @@
     6.576,
     6.581,
     6.532,
-    6.551
+    6.591
    ],
    "listDays": 49,
    "signals": {
@@ -54468,29 +54479,28 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 4.874,
-   "pct": 0.06,
-   "volume": 258500,
-   "amount": 1259929.0,
-   "ret5": 4.15,
-   "ret20": 0.62,
-   "ret60": -18.63,
+   "close": 4.918,
+   "pct": 0.9,
+   "volume": 13700,
+   "amount": 67376.6,
+   "ret5": 3.67,
+   "ret20": -0.61,
+   "ret60": -18.37,
    "macd": {
-    "dif": -0.0031,
-    "dea": -0.0567,
-    "hist": 0.1071,
+    "dif": 0.0099,
+    "dea": -0.0433,
+    "hist": 0.1066,
     "cross": null
    },
-   "rsi14": 58.5,
-   "pctRank": 7.7,
-   "devMA250": -23.83,
-   "amt5": 1186630.0,
-   "amt20": 1252899.0,
-   "amtRatio": 0.53,
-   "sinceIPO": -23.3,
+   "rsi14": 61.1,
+   "pctRank": 9.3,
+   "devMA250": -23.05,
+   "amt5": 943076.0,
+   "amt20": 1199044.0,
+   "amtRatio": 0.51,
+   "sinceIPO": -22.61,
    "volAnn": 20.8,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -54739,10 +54749,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    6.895,
     6.874,
     6.853,
     6.841,
@@ -54991,9 +55001,10 @@
     4.83,
     4.909,
     4.871,
-    4.874
+    4.874,
+    4.918
    ],
-   "listDays": 441,
+   "listDays": 442,
    "signals": {
     "liquidity": -2,
     "sentiment": 2,
@@ -55011,26 +55022,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 3.735,
-   "pct": -0.45,
-   "volume": 500,
-   "amount": 1867.5,
-   "ret5": -1.4,
-   "ret20": 0.51,
-   "ret60": -4.89,
+   "close": 3.76,
+   "pct": 0.21,
+   "volume": 900,
+   "amount": 3384.0,
+   "ret5": -0.74,
+   "ret20": 1.18,
+   "ret60": -4.25,
    "macd": {
-    "dif": 0.007,
-    "dea": 0.0131,
-    "hist": -0.0121,
+    "dif": 0.009,
+    "dea": 0.0135,
+    "hist": -0.0089,
     "cross": null
    },
-   "rsi14": 45.7,
-   "pctRank": 18.4,
-   "devMA250": -7.38,
-   "amt5": 1500885.0,
-   "amt20": 2125981.0,
+   "rsi14": 49.3,
+   "pctRank": 20.2,
+   "devMA250": -6.77,
+   "amt5": 1501188.0,
+   "amt20": 2126057.0,
    "amtRatio": 0.57,
-   "sinceIPO": 7.27,
+   "sinceIPO": 7.98,
    "volAnn": 15.2,
    "histDates": [
     "2025-09-23",
@@ -55534,7 +55545,7 @@
     3.805,
     3.75,
     3.752,
-    3.735
+    3.76
    ],
    "listDays": 501,
    "signals": {
@@ -55554,29 +55565,28 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 5.286,
-   "pct": 0.72,
-   "volume": 487700,
-   "amount": 2577982.2,
-   "ret5": -1.33,
-   "ret20": -3.35,
-   "ret60": -5.05,
+   "close": 5.322,
+   "pct": 0.68,
+   "volume": 6800,
+   "amount": 36189.6,
+   "ret5": 0.6,
+   "ret20": -2.37,
+   "ret60": -5.79,
    "macd": {
-    "dif": -0.036,
-    "dea": -0.0098,
-    "hist": -0.0524,
+    "dif": -0.0357,
+    "dea": -0.0149,
+    "hist": -0.0416,
     "cross": null
    },
-   "rsi14": 40.7,
-   "pctRank": 3.2,
-   "devMA250": -16.99,
-   "amt5": 1956500.0,
-   "amt20": 2448767.0,
-   "amtRatio": 0.99,
-   "sinceIPO": -31.86,
+   "rsi14": 44.3,
+   "pctRank": 4.0,
+   "devMA250": -16.29,
+   "amt5": 1378240.0,
+   "amt20": 2426729.0,
+   "amtRatio": 1.01,
+   "sinceIPO": -31.39,
    "volAnn": 15.6,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -55825,10 +55835,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    7.811,
     7.801,
     7.568,
     7.524,
@@ -56077,9 +56087,10 @@
     5.243,
     5.245,
     5.248,
-    5.286
+    5.286,
+    5.322
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
@@ -56097,26 +56108,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 4.099,
-   "pct": 0.22,
-   "volume": 3000,
-   "amount": 12297.0,
-   "ret5": -0.02,
-   "ret20": -2.08,
-   "ret60": -15.66,
+   "close": 4.064,
+   "pct": -0.64,
+   "volume": 39400,
+   "amount": 160121.6,
+   "ret5": -0.88,
+   "ret20": -2.91,
+   "ret60": -16.38,
    "macd": {
-    "dif": -0.0369,
-    "dea": -0.0565,
-    "hist": 0.0392,
+    "dif": -0.0397,
+    "dea": -0.057,
+    "hist": 0.0347,
     "cross": null
    },
-   "rsi14": 45.1,
-   "pctRank": 2.2,
-   "devMA250": -14.61,
-   "amt5": 2210064.0,
-   "amt20": 3948805.0,
+   "rsi14": 39.6,
+   "pctRank": 1.8,
+   "devMA250": -15.34,
+   "amt5": 2239629.0,
+   "amt20": 3956197.0,
    "amtRatio": 0.94,
-   "sinceIPO": -14.69,
+   "sinceIPO": -15.42,
    "volAnn": 15.4,
    "histDates": [
     "2025-09-23",
@@ -56620,17 +56631,17 @@
     4.1,
     4.1,
     4.09,
-    4.099
+    4.064
    ],
    "listDays": 501,
    "signals": {
     "liquidity": 1,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -56640,26 +56651,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 5.437,
-   "pct": -0.04,
-   "volume": 4400,
-   "amount": 23922.8,
-   "ret5": 0.89,
-   "ret20": -1.4,
-   "ret60": -4.78,
+   "close": 5.439,
+   "pct": 0.0,
+   "volume": 46100,
+   "amount": 250737.9,
+   "ret5": 0.93,
+   "ret20": -1.36,
+   "ret60": -4.75,
    "macd": {
-    "dif": -0.0402,
-    "dea": -0.0515,
-    "hist": 0.0224,
+    "dif": -0.0401,
+    "dea": -0.0514,
+    "hist": 0.0227,
     "cross": null
    },
-   "rsi14": 45.3,
-   "pctRank": 8.8,
-   "devMA250": -3.28,
-   "amt5": 2074601.0,
-   "amt20": 4828976.0,
+   "rsi14": 45.6,
+   "pctRank": 9.0,
+   "devMA250": -3.25,
+   "amt5": 2119964.0,
+   "amt20": 4840317.0,
    "amtRatio": 0.86,
-   "sinceIPO": -14.08,
+   "sinceIPO": -14.05,
    "volAnn": 10.8,
    "histDates": [
     "2025-09-23",
@@ -57163,7 +57174,7 @@
     5.399,
     5.432,
     5.439,
-    5.437
+    5.439
    ],
    "listDays": 501,
    "signals": {
@@ -57183,29 +57194,28 @@
    "sector": "数据中心",
    "right": "产权",
    "strategy": "扩张型",
-   "close": 5.649,
-   "pct": -0.28,
-   "volume": 2303200,
-   "amount": 13010776.8,
-   "ret5": -1.6,
-   "ret20": 4.88,
-   "ret60": -9.76,
+   "close": 5.701,
+   "pct": 0.92,
+   "volume": 147300,
+   "amount": 839757.3,
+   "ret5": -1.08,
+   "ret20": 5.11,
+   "ret60": -9.79,
    "macd": {
-    "dif": 0.0523,
-    "dea": 0.0263,
-    "hist": 0.052,
+    "dif": 0.0543,
+    "dea": 0.0319,
+    "hist": 0.0448,
     "cross": null
    },
-   "rsi14": 56.9,
-   "pctRank": 12.8,
-   "devMA250": -11.69,
-   "amt5": 12265004.0,
-   "amt20": 13907100.0,
-   "amtRatio": 0.74,
-   "sinceIPO": -3.44,
-   "volAnn": 15.3,
+   "rsi14": 60.7,
+   "pctRank": 15.2,
+   "devMA250": -10.85,
+   "amt5": 9075317.0,
+   "amt20": 13610007.0,
+   "amtRatio": 0.73,
+   "sinceIPO": -2.55,
+   "volAnn": 15.2,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -57454,10 +57464,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    6.09,
     6.09,
     6.09,
     6.06,
@@ -57706,9 +57716,10 @@
     5.701,
     5.733,
     5.665,
-    5.649
+    5.649,
+    5.701
    ],
-   "listDays": 281,
+   "listDays": 282,
    "signals": {
     "liquidity": 2,
     "sentiment": 2,
@@ -57726,26 +57737,26 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.354,
-   "pct": 0.0,
-   "volume": 1300,
-   "amount": 4360.2,
-   "ret5": -1.27,
-   "ret20": -2.1,
-   "ret60": -2.19,
+   "close": 3.345,
+   "pct": -0.27,
+   "volume": 23300,
+   "amount": 77938.5,
+   "ret5": -1.53,
+   "ret20": -2.36,
+   "ret60": -2.45,
    "macd": {
-    "dif": -0.0021,
-    "dea": 0.0011,
-    "hist": -0.0063,
+    "dif": -0.0028,
+    "dea": 0.0009,
+    "hist": -0.0075,
     "cross": null
    },
-   "rsi14": 45.7,
-   "pctRank": 8.4,
-   "devMA250": -10.97,
-   "amt5": 4791963.0,
-   "amt20": 6059061.0,
+   "rsi14": 44.0,
+   "pctRank": 7.3,
+   "devMA250": -11.2,
+   "amt5": 4806679.0,
+   "amt20": 6062740.0,
    "amtRatio": 0.61,
-   "sinceIPO": -10.2,
+   "sinceIPO": -10.44,
    "volAnn": 14.0,
    "histDates": [
     "2025-09-23",
@@ -58249,17 +58260,17 @@
     3.372,
     3.373,
     3.354,
-    3.354
+    3.345
    ],
    "listDays": 357,
    "signals": {
     "liquidity": 2,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -58269,26 +58280,26 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 4.531,
-   "pct": -0.35,
-   "volume": 2000,
-   "amount": 9062.0,
-   "ret5": -1.71,
-   "ret20": -1.13,
-   "ret60": -9.63,
+   "close": 4.595,
+   "pct": 1.06,
+   "volume": 13600,
+   "amount": 62492.0,
+   "ret5": -0.33,
+   "ret20": 0.26,
+   "ret60": -8.36,
    "macd": {
-    "dif": -0.0168,
-    "dea": -0.0233,
-    "hist": 0.013,
+    "dif": -0.0117,
+    "dea": -0.0223,
+    "hist": 0.0212,
     "cross": null
    },
-   "rsi14": 41.3,
-   "pctRank": 3.1,
+   "rsi14": 51.1,
+   "pctRank": 13.0,
    "devMA250": null,
-   "amt5": 3249895.0,
-   "amt20": 3818295.0,
+   "amt5": 3260581.0,
+   "amt20": 3820966.0,
    "amtRatio": 0.96,
-   "sinceIPO": -17.6,
+   "sinceIPO": -16.44,
    "volAnn": 15.6,
    "histDates": [
     "2025-12-19",
@@ -58678,17 +58689,17 @@
     4.592,
     4.581,
     4.547,
-    4.531
+    4.595
    ],
    "listDays": 193,
    "signals": {
     "liquidity": 1,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -58700,8 +58711,8 @@
    "strategy": "周期型",
    "close": 5.995,
    "pct": 0.02,
-   "volume": 2400,
-   "amount": 14388.0,
+   "volume": 15800,
+   "amount": 94721.0,
    "ret5": 0.35,
    "ret20": -4.77,
    "ret60": -5.14,
@@ -58714,8 +58725,8 @@
    "rsi14": 39.0,
    "pctRank": 2.2,
    "devMA250": -5.58,
-   "amt5": 1092238.0,
-   "amt20": 3037275.0,
+   "amt5": 1108305.0,
+   "amt20": 3041292.0,
    "amtRatio": 0.76,
    "sinceIPO": -11.19,
    "volAnn": 11.7,
@@ -59241,26 +59252,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.395,
-   "pct": -0.17,
-   "volume": 900,
-   "amount": 2155.5,
-   "ret5": 1.27,
-   "ret20": 0.8,
-   "ret60": 8.91,
+   "close": 2.38,
+   "pct": -0.79,
+   "volume": 6900,
+   "amount": 16422.0,
+   "ret5": 0.63,
+   "ret20": 0.17,
+   "ret60": 8.23,
    "macd": {
-    "dif": 0.0186,
-    "dea": 0.0154,
-    "hist": 0.0064,
+    "dif": 0.0174,
+    "dea": 0.0151,
+    "hist": 0.0045,
     "cross": null
    },
-   "rsi14": 57.0,
-   "pctRank": 15.8,
-   "devMA250": -11.23,
-   "amt5": 1375264.0,
-   "amt20": 1473999.0,
+   "rsi14": 54.5,
+   "pctRank": 15.2,
+   "devMA250": -11.79,
+   "amt5": 1378117.0,
+   "amt20": 1474712.0,
    "amtRatio": 0.57,
-   "sinceIPO": -6.12,
+   "sinceIPO": -6.7,
    "volAnn": 22.3,
    "histDates": [
     "2025-09-23",
@@ -59764,17 +59775,17 @@
     2.385,
     2.413,
     2.399,
-    2.395
+    2.38
    ],
    "listDays": 442,
    "signals": {
     "liquidity": -2,
-    "sentiment": 2,
+    "sentiment": 0,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -59784,26 +59795,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 7.464,
-   "pct": 0.2,
-   "volume": 2200,
-   "amount": 16420.8,
-   "ret5": 0.82,
-   "ret20": -3.47,
-   "ret60": -7.09,
+   "close": 7.472,
+   "pct": 0.31,
+   "volume": 24100,
+   "amount": 180075.2,
+   "ret5": 0.93,
+   "ret20": -3.36,
+   "ret60": -7.0,
    "macd": {
-    "dif": -0.0689,
-    "dea": -0.052,
-    "hist": -0.0338,
+    "dif": -0.0683,
+    "dea": -0.0519,
+    "hist": -0.0328,
     "cross": null
    },
-   "rsi14": 38.0,
+   "rsi14": 39.0,
    "pctRank": 1.9,
-   "devMA250": -12.47,
-   "amt5": 972096.0,
-   "amt20": 2980857.0,
-   "amtRatio": 0.86,
-   "sinceIPO": -13.26,
+   "devMA250": -12.37,
+   "amt5": 1004827.0,
+   "amt20": 2989039.0,
+   "amtRatio": 0.87,
+   "sinceIPO": -13.17,
    "volAnn": 13.8,
    "histDates": [
     "2025-09-23",
@@ -60307,7 +60318,7 @@
     7.424,
     7.44,
     7.449,
-    7.464
+    7.472
    ],
    "listDays": 431,
    "signals": {
@@ -60327,29 +60338,28 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.728,
-   "pct": 0.29,
-   "volume": 352600,
-   "amount": 961892.8,
-   "ret5": -0.18,
-   "ret20": 6.07,
-   "ret60": -9.94,
+   "close": 2.73,
+   "pct": 0.07,
+   "volume": 4000,
+   "amount": 10920.0,
+   "ret5": 0.44,
+   "ret20": 2.09,
+   "ret60": -12.16,
    "macd": {
-    "dif": 0.0205,
-    "dea": 0.0184,
-    "hist": 0.0043,
+    "dif": 0.0208,
+    "dea": 0.0189,
+    "hist": 0.0039,
     "cross": null
    },
-   "rsi14": 57.7,
-   "pctRank": 14.7,
-   "devMA250": -20.21,
-   "amt5": 1371477.0,
-   "amt20": 2792407.0,
-   "amtRatio": 0.75,
-   "sinceIPO": -22.85,
+   "rsi14": 58.1,
+   "pctRank": 15.3,
+   "devMA250": -20.05,
+   "amt5": 677689.0,
+   "amt20": 2333519.0,
+   "amtRatio": 0.64,
+   "sinceIPO": -22.79,
    "volAnn": 20.5,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -60598,10 +60608,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.886,
     3.864,
     3.88,
     3.86,
@@ -60850,17 +60860,18 @@
     2.719,
     2.725,
     2.72,
-    2.728
+    2.728,
+    2.73
    ],
-   "listDays": 312,
+   "listDays": 313,
    "signals": {
     "liquidity": -1,
     "sentiment": 2,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -60870,26 +60881,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.544,
-   "pct": -0.55,
-   "volume": 565800,
-   "amount": 1439395.2,
-   "ret5": -2.53,
-   "ret20": -2.75,
-   "ret60": -18.28,
+   "close": 2.574,
+   "pct": 1.18,
+   "volume": 2400,
+   "amount": 6177.6,
+   "ret5": -0.73,
+   "ret20": 0.04,
+   "ret60": -18.26,
    "macd": {
-    "dif": -0.0086,
-    "dea": -0.0147,
+    "dif": -0.0071,
+    "dea": -0.0132,
     "hist": 0.0122,
     "cross": null
    },
-   "rsi14": 44.5,
-   "pctRank": 9.4,
+   "rsi14": 50.1,
+   "pctRank": 12.9,
    "devMA250": null,
-   "amt5": 2406092.0,
-   "amt20": 2281428.0,
-   "amtRatio": 0.78,
-   "sinceIPO": -30.49,
+   "amt5": 2281411.0,
+   "amt20": 2094988.0,
+   "amtRatio": 0.72,
+   "sinceIPO": -29.67,
    "volAnn": 18.5,
    "histDates": [
     "2025-11-06",
@@ -61114,7 +61125,8 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
     3.66,
@@ -61339,17 +61351,18 @@
     2.585,
     2.567,
     2.558,
-    2.544
+    2.544,
+    2.574
    ],
-   "listDays": 223,
+   "listDays": 224,
    "signals": {
     "liquidity": -1,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -61359,29 +61372,28 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 4.29,
-   "pct": 0.0,
-   "volume": 1007500,
-   "amount": 4322175.0,
-   "ret5": 0.7,
-   "ret20": 1.9,
-   "ret60": 1.47,
+   "close": 4.206,
+   "pct": -1.96,
+   "volume": 24600,
+   "amount": 103467.6,
+   "ret5": -1.38,
+   "ret20": -0.64,
+   "ret60": -1.2,
    "macd": {
-    "dif": 0.016,
-    "dea": 0.0108,
-    "hist": 0.0103,
-    "cross": null
+    "dif": 0.0102,
+    "dea": 0.0107,
+    "hist": -0.0011,
+    "cross": "death"
    },
-   "rsi14": 60.1,
-   "pctRank": 43.4,
-   "devMA250": -0.6,
-   "amt5": 1700667.0,
-   "amt20": 2400185.0,
-   "amtRatio": 0.85,
-   "sinceIPO": -11.18,
-   "volAnn": 10.7,
+   "rsi14": 43.0,
+   "pctRank": 20.6,
+   "devMA250": -2.51,
+   "amt5": 1570635.0,
+   "amt20": 2244568.0,
+   "amtRatio": 0.82,
+   "sinceIPO": -12.92,
+   "volAnn": 10.9,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -61630,10 +61642,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.598,
     4.6,
     4.586,
     4.547,
@@ -61882,17 +61894,18 @@
     4.276,
     4.279,
     4.29,
-    4.29
+    4.29,
+    4.206
    ],
-   "listDays": 286,
+   "listDays": 287,
    "signals": {
     "liquidity": -1,
-    "sentiment": 2,
+    "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -61902,29 +61915,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.551,
-   "pct": -0.04,
-   "volume": 133800,
-   "amount": 341323.8,
-   "ret5": -0.55,
-   "ret20": -2.93,
-   "ret60": -13.02,
+   "close": 2.579,
+   "pct": 1.1,
+   "volume": 293800,
+   "amount": 757710.2,
+   "ret5": 1.18,
+   "ret20": -2.46,
+   "ret60": -13.66,
    "macd": {
-    "dif": -0.0273,
-    "dea": -0.0251,
-    "hist": -0.0044,
-    "cross": null
+    "dif": -0.0246,
+    "dea": -0.025,
+    "hist": 0.0007,
+    "cross": "golden"
    },
-   "rsi14": 39.0,
-   "pctRank": 19.4,
-   "devMA250": -15.03,
-   "amt5": 864085.0,
-   "amt20": 2571954.0,
-   "amtRatio": 0.44,
-   "sinceIPO": 9.3,
+   "rsi14": 45.8,
+   "pctRank": 21.6,
+   "devMA250": -14.03,
+   "amt5": 792845.0,
+   "amt20": 2510782.0,
+   "amtRatio": 0.43,
+   "sinceIPO": 10.5,
    "volAnn": 18.7,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -62173,10 +62185,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.092,
     3.1,
     3.091,
     3.055,
@@ -62425,17 +62437,18 @@
     2.56,
     2.56,
     2.552,
-    2.551
+    2.551,
+    2.579
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": -1,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -4,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -62445,29 +62458,28 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 4.06,
-   "pct": -0.1,
-   "volume": 1442300,
-   "amount": 5855738.0,
-   "ret5": 0.32,
-   "ret20": 2.34,
-   "ret60": -1.34,
+   "close": 4.083,
+   "pct": 0.57,
+   "volume": 110900,
+   "amount": 452804.7,
+   "ret5": 0.2,
+   "ret20": 2.43,
+   "ret60": -1.85,
    "macd": {
-    "dif": 0.0112,
-    "dea": 0.005,
-    "hist": 0.0126,
+    "dif": 0.0132,
+    "dea": 0.0066,
+    "hist": 0.0132,
     "cross": null
    },
-   "rsi14": 56.2,
-   "pctRank": 53.4,
-   "devMA250": -0.42,
-   "amt5": 5498414.0,
-   "amt20": 4583693.0,
-   "amtRatio": 0.78,
-   "sinceIPO": 52.57,
-   "volAnn": 16.7,
+   "rsi14": 61.0,
+   "pctRank": 57.3,
+   "devMA250": 0.14,
+   "amt5": 4421324.0,
+   "amt20": 4433381.0,
+   "amtRatio": 0.77,
+   "sinceIPO": 53.44,
+   "volAnn": 16.6,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -62716,10 +62728,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.011,
     4.012,
     4.01,
     4.01,
@@ -62968,9 +62980,10 @@
     4.077,
     4.07,
     4.064,
-    4.06
+    4.06,
+    4.083
    ],
-   "listDays": 500,
+   "listDays": 501,
    "signals": {
     "liquidity": 1,
     "sentiment": 2,
@@ -62988,26 +63001,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 9.74,
-   "pct": -0.08,
-   "volume": 1000,
-   "amount": 9740.0,
-   "ret5": 0.42,
-   "ret20": 0.93,
-   "ret60": -2.39,
+   "close": 9.777,
+   "pct": 0.3,
+   "volume": 8300,
+   "amount": 81149.1,
+   "ret5": 0.8,
+   "ret20": 1.32,
+   "ret60": -2.01,
    "macd": {
-    "dif": 0.0145,
-    "dea": -0.0023,
-    "hist": 0.0335,
+    "dif": 0.0174,
+    "dea": -0.0017,
+    "hist": 0.0382,
     "cross": null
    },
-   "rsi14": 60.2,
-   "pctRank": 11.2,
-   "devMA250": -4.77,
-   "amt5": 2779406.0,
-   "amt20": 5281060.0,
+   "rsi14": 64.7,
+   "pctRank": 12.2,
+   "devMA250": -4.41,
+   "amt5": 2793688.0,
+   "amt20": 5284630.0,
    "amtRatio": 0.63,
-   "sinceIPO": -4.75,
+   "sinceIPO": -4.39,
    "volAnn": 10.6,
    "histDates": [
     "2025-09-23",
@@ -63511,7 +63524,7 @@
     9.715,
     9.715,
     9.748,
-    9.74
+    9.777
    ],
    "listDays": 501,
    "signals": {
@@ -63531,29 +63544,28 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.381,
-   "pct": -0.82,
-   "volume": 487800,
-   "amount": 1649251.8,
-   "ret5": -3.4,
-   "ret20": -2.28,
-   "ret60": -11.26,
+   "close": 3.423,
+   "pct": 1.24,
+   "volume": 59400,
+   "amount": 203326.2,
+   "ret5": -0.84,
+   "ret20": -2.81,
+   "ret60": -9.85,
    "macd": {
-    "dif": -0.0231,
-    "dea": -0.0037,
-    "hist": -0.0389,
+    "dif": -0.0243,
+    "dea": -0.0078,
+    "hist": -0.0329,
     "cross": null
    },
-   "rsi14": 36.0,
-   "pctRank": 5.5,
-   "devMA250": -24.09,
-   "amt5": 1873511.0,
-   "amt20": 3381096.0,
-   "amtRatio": 0.69,
-   "sinceIPO": -28.58,
+   "rsi14": 42.6,
+   "pctRank": 7.9,
+   "devMA250": -23.04,
+   "amt5": 1664320.0,
+   "amt20": 2742897.0,
+   "amtRatio": 0.56,
+   "sinceIPO": -27.69,
    "volAnn": 19.2,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -63802,10 +63814,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.946,
     4.965,
     4.979,
     4.926,
@@ -64054,17 +64066,18 @@
     3.416,
     3.399,
     3.409,
-    3.381
+    3.381,
+    3.423
    ],
-   "listDays": 291,
+   "listDays": 292,
    "signals": {
-    "liquidity": 0,
+    "liquidity": -1,
     "sentiment": -1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -64074,26 +64087,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 6.317,
-   "pct": 0.17,
-   "volume": 1200,
-   "amount": 7580.4,
-   "ret5": 0.4,
-   "ret20": -1.3,
-   "ret60": 0.27,
+   "close": 6.282,
+   "pct": -0.55,
+   "volume": 4000,
+   "amount": 25128.0,
+   "ret5": -0.29,
+   "ret20": -2.3,
+   "ret60": -1.84,
    "macd": {
-    "dif": -0.0178,
+    "dif": -0.0186,
     "dea": -0.0187,
-    "hist": 0.0017,
-    "cross": "golden"
+    "hist": 0.0001,
+    "cross": null
    },
-   "rsi14": 47.9,
-   "pctRank": 18.4,
+   "rsi14": 41.7,
+   "pctRank": 6.1,
    "devMA250": null,
-   "amt5": 202816.0,
-   "amt20": 711630.0,
-   "amtRatio": 0.46,
-   "sinceIPO": -1.71,
+   "amt5": 180122.0,
+   "amt20": 624956.0,
+   "amtRatio": 0.41,
+   "sinceIPO": -2.26,
    "volAnn": 8.2,
    "histDates": [
     "2026-02-02",
@@ -64258,7 +64271,8 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
     6.427,
@@ -64423,17 +64437,18 @@
     6.295,
     6.3,
     6.306,
-    6.317
+    6.317,
+    6.282
    ],
-   "listDays": 163,
+   "listDays": 164,
    "signals": {
     "liquidity": -2,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -4,
+    "total": -5,
     "label": "中性"
    }
   },
@@ -64443,26 +64458,26 @@
    "sector": "市政环保",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 3.297,
-   "pct": -0.12,
-   "volume": 9000,
-   "amount": 29673.0,
-   "ret5": -0.15,
-   "ret20": -5.15,
-   "ret60": -7.78,
+   "close": 3.316,
+   "pct": 0.45,
+   "volume": 193200,
+   "amount": 640651.2,
+   "ret5": 0.42,
+   "ret20": -4.6,
+   "ret60": -7.24,
    "macd": {
-    "dif": -0.0403,
-    "dea": -0.0452,
-    "hist": 0.0098,
+    "dif": -0.0388,
+    "dea": -0.0449,
+    "hist": 0.0123,
     "cross": null
    },
-   "rsi14": 35.8,
-   "pctRank": 1.4,
-   "devMA250": -8.66,
-   "amt5": 1012315.0,
-   "amt20": 3638675.0,
-   "amtRatio": 1.05,
-   "sinceIPO": -16.64,
+   "rsi14": 40.8,
+   "pctRank": 2.8,
+   "devMA250": -8.14,
+   "amt5": 1134511.0,
+   "amt20": 3669224.0,
+   "amtRatio": 1.06,
+   "sinceIPO": -16.16,
    "volAnn": 11.3,
    "histDates": [
     "2025-09-23",
@@ -64966,17 +64981,17 @@
     3.31,
     3.31,
     3.301,
-    3.297
+    3.316
    ],
    "listDays": 501,
    "signals": {
-    "liquidity": 0,
+    "liquidity": 1,
     "sentiment": -1,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -64988,8 +65003,8 @@
    "strategy": "防御型",
    "close": 11.35,
    "pct": -0.02,
-   "volume": 1600,
-   "amount": 18160.0,
+   "volume": 6700,
+   "amount": 76045.0,
    "ret5": -0.19,
    "ret20": -1.0,
    "ret60": -1.69,
@@ -65002,8 +65017,8 @@
    "rsi14": 42.1,
    "pctRank": 2.4,
    "devMA250": -4.03,
-   "amt5": 2372621.0,
-   "amt20": 4111917.0,
+   "amt5": 2384198.0,
+   "amt20": 4114811.0,
    "amtRatio": 0.93,
    "sinceIPO": -16.16,
    "volAnn": 7.9,
@@ -65529,26 +65544,26 @@
    "sector": "能源",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 8.158,
-   "pct": 0.01,
-   "volume": 1000,
-   "amount": 8158.0,
-   "ret5": 0.0,
-   "ret20": 0.59,
+   "close": 8.151,
+   "pct": -0.07,
+   "volume": 23300,
+   "amount": 189918.3,
+   "ret5": -0.09,
+   "ret20": 0.51,
    "ret60": null,
    "macd": {
-    "dif": 0.0255,
-    "dea": 0.0283,
-    "hist": -0.0056,
+    "dif": 0.0249,
+    "dea": 0.0282,
+    "hist": -0.0065,
     "cross": null
    },
-   "rsi14": 61.5,
-   "pctRank": 82.9,
+   "rsi14": 58.1,
+   "pctRank": 75.6,
    "devMA250": null,
-   "amt5": 5134279.0,
-   "amt20": 12552069.0,
+   "amt5": 5170631.0,
+   "amt20": 12556502.0,
    "amtRatio": null,
-   "sinceIPO": 1.75,
+   "sinceIPO": 1.66,
    "volAnn": 4.4,
    "histDates": [
     "2026-08-07",
@@ -65634,7 +65649,7 @@
     8.172,
     8.17,
     8.157,
-    8.158
+    8.151
    ],
    "listDays": 41,
    "signals": {
@@ -65654,27 +65669,27 @@
    "sector": "数据中心",
    "right": "产权",
    "strategy": "扩张型",
-   "close": 3.93,
-   "pct": -0.03,
-   "volume": 2200,
-   "amount": 8646.0,
-   "ret5": -4.17,
-   "ret20": 2.5,
-   "ret60": -6.7,
+   "close": 3.981,
+   "pct": 1.27,
+   "volume": 120000,
+   "amount": 477720.0,
+   "ret5": -2.93,
+   "ret20": 3.83,
+   "ret60": -5.48,
    "macd": {
-    "dif": 0.0462,
-    "dea": 0.0482,
-    "hist": -0.0039,
-    "cross": "death"
+    "dif": 0.0503,
+    "dea": 0.049,
+    "hist": 0.0026,
+    "cross": null
    },
-   "rsi14": 50.3,
-   "pctRank": 14.5,
-   "devMA250": -8.87,
-   "amt5": 7481898.0,
-   "amt20": 9545212.0,
+   "rsi14": 54.7,
+   "pctRank": 15.6,
+   "devMA250": -7.69,
+   "amt5": 7575713.0,
+   "amt20": 9568666.0,
    "amtRatio": 0.76,
-   "sinceIPO": 0.77,
-   "volAnn": 15.1,
+   "sinceIPO": 2.08,
+   "volAnn": 15.2,
    "histDates": [
     "2025-09-23",
     "2025-09-24",
@@ -66177,7 +66192,7 @@
     4.087,
     4.005,
     3.931,
-    3.93
+    3.981
    ],
    "listDays": 282,
    "signals": {
@@ -66197,26 +66212,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.13,
-   "pct": 0.0,
-   "volume": 400,
-   "amount": 1252.0,
-   "ret5": -1.57,
-   "ret20": -3.84,
-   "ret60": -13.68,
+   "close": 3.142,
+   "pct": 0.38,
+   "volume": 3400,
+   "amount": 10682.8,
+   "ret5": -1.19,
+   "ret20": -3.47,
+   "ret60": -13.35,
    "macd": {
-    "dif": -0.035,
-    "dea": -0.0484,
-    "hist": 0.0268,
+    "dif": -0.034,
+    "dea": -0.0482,
+    "hist": 0.0283,
     "cross": null
    },
-   "rsi14": 41.3,
-   "pctRank": 1.5,
-   "devMA250": -16.61,
-   "amt5": 2268509.0,
-   "amt20": 2598819.0,
+   "rsi14": 43.2,
+   "pctRank": 1.9,
+   "devMA250": -16.3,
+   "amt5": 2270395.0,
+   "amt20": 2599290.0,
    "amtRatio": 1.11,
-   "sinceIPO": -3.66,
+   "sinceIPO": -3.29,
    "volAnn": 16.7,
    "histDates": [
     "2025-09-23",
@@ -66720,7 +66735,7 @@
     3.192,
     3.166,
     3.13,
-    3.13
+    3.142
    ],
    "listDays": 468,
    "signals": {
@@ -66740,29 +66755,28 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.415,
-   "pct": -0.41,
-   "volume": 138600,
-   "amount": 334719.0,
-   "ret5": -2.11,
-   "ret20": -5.11,
-   "ret60": -18.66,
+   "close": 2.438,
+   "pct": 0.95,
+   "volume": 3000,
+   "amount": 7314.0,
+   "ret5": -0.89,
+   "ret20": -4.17,
+   "ret60": -18.92,
    "macd": {
-    "dif": -0.0271,
-    "dea": -0.0283,
-    "hist": 0.0025,
+    "dif": -0.0254,
+    "dea": -0.0278,
+    "hist": 0.0047,
     "cross": null
    },
-   "rsi14": 38.3,
-   "pctRank": 3.2,
-   "devMA250": -23.94,
-   "amt5": 2108457.0,
-   "amt20": 3851808.0,
-   "amtRatio": 1.18,
-   "sinceIPO": 0.25,
+   "rsi14": 43.7,
+   "pctRank": 7.9,
+   "devMA250": -23.11,
+   "amt5": 1320309.0,
+   "amt20": 3750376.0,
+   "amtRatio": 1.21,
+   "sinceIPO": 1.2,
    "volAnn": 18.3,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -67011,10 +67025,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.537,
     3.538,
     3.503,
     3.484,
@@ -67263,9 +67277,10 @@
     2.439,
     2.421,
     2.425,
-    2.415
+    2.415,
+    2.438
    ],
-   "listDays": 495,
+   "listDays": 496,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -67283,26 +67298,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 4.713,
-   "pct": -0.46,
-   "volume": 17300,
-   "amount": 81534.9,
-   "ret5": -10.91,
-   "ret20": -8.13,
-   "ret60": -7.15,
+   "close": 4.731,
+   "pct": -0.08,
+   "volume": 131200,
+   "amount": 620707.2,
+   "ret5": -10.57,
+   "ret20": -7.78,
+   "ret60": -6.8,
    "macd": {
-    "dif": -0.0667,
-    "dea": 0.0011,
-    "hist": -0.1356,
+    "dif": -0.0653,
+    "dea": 0.0013,
+    "hist": -0.1333,
     "cross": null
    },
-   "rsi14": 18.5,
+   "rsi14": 19.0,
    "pctRank": 0.0,
    "devMA250": null,
-   "amt5": 7321281.0,
-   "amt20": 6318777.0,
+   "amt5": 7429115.0,
+   "amt20": 6345736.0,
    "amtRatio": 1.07,
-   "sinceIPO": -8.49,
+   "sinceIPO": -8.14,
    "volAnn": 17.2,
    "histDates": [
     "2026-04-22",
@@ -67534,7 +67549,7 @@
     5.298,
     4.735,
     4.735,
-    4.713
+    4.731
    ],
    "listDays": 114,
    "signals": {
@@ -67554,26 +67569,26 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.826,
-   "pct": -0.39,
-   "volume": 3100,
-   "amount": 8760.6,
-   "ret5": -0.6,
-   "ret20": -5.45,
-   "ret60": -7.5,
+   "close": 2.877,
+   "pct": 1.41,
+   "volume": 188400,
+   "amount": 542026.8,
+   "ret5": 1.2,
+   "ret20": -3.75,
+   "ret60": -5.83,
    "macd": {
-    "dif": -0.0444,
-    "dea": -0.0369,
-    "hist": -0.015,
+    "dif": -0.0404,
+    "dea": -0.0361,
+    "hist": -0.0085,
     "cross": null
    },
-   "rsi14": 34.3,
-   "pctRank": 0.9,
-   "devMA250": -17.78,
-   "amt5": 2310153.0,
-   "amt20": 2907150.0,
-   "amtRatio": 1.1,
-   "sinceIPO": -6.36,
+   "rsi14": 43.1,
+   "pctRank": 3.0,
+   "devMA250": -16.3,
+   "amt5": 2416806.0,
+   "amt20": 2933813.0,
+   "amtRatio": 1.11,
+   "sinceIPO": -4.67,
    "volAnn": 19.5,
    "histDates": [
     "2025-09-23",
@@ -68077,7 +68092,7 @@
     2.855,
     2.84,
     2.837,
-    2.826
+    2.877
    ],
    "listDays": 432,
    "signals": {
@@ -68097,27 +68112,27 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.984,
-   "pct": 0.1,
-   "volume": 100,
-   "amount": 198.4,
-   "ret5": 1.28,
-   "ret20": 1.74,
-   "ret60": -13.96,
+   "close": 2.01,
+   "pct": 1.41,
+   "volume": 150600,
+   "amount": 302706.0,
+   "ret5": 2.6,
+   "ret20": 3.08,
+   "ret60": -12.84,
    "macd": {
-    "dif": 0.0141,
-    "dea": 0.0065,
-    "hist": 0.015,
+    "dif": 0.0161,
+    "dea": 0.007,
+    "hist": 0.0183,
     "cross": null
    },
-   "rsi14": 60.7,
+   "rsi14": 65.4,
    "pctRank": 11.2,
-   "devMA250": -24.75,
-   "amt5": 1466641.0,
-   "amt20": 7053800.0,
+   "devMA250": -23.77,
+   "amt5": 1527142.0,
+   "amt20": 7068925.0,
    "amtRatio": 0.83,
-   "sinceIPO": -34.52,
-   "volAnn": 17.5,
+   "sinceIPO": -33.66,
+   "volAnn": 17.6,
    "histDates": [
     "2025-09-23",
     "2025-09-24",
@@ -68620,7 +68635,7 @@
     1.971,
     1.977,
     1.982,
-    1.984
+    2.01
    ],
    "listDays": 411,
    "signals": {
@@ -68640,26 +68655,26 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.95,
-   "pct": 0.0,
-   "volume": 5100,
-   "amount": 20145.0,
-   "ret5": -0.1,
-   "ret20": 2.46,
-   "ret60": -5.18,
+   "close": 3.977,
+   "pct": 0.68,
+   "volume": 13800,
+   "amount": 54882.6,
+   "ret5": 0.58,
+   "ret20": 3.16,
+   "ret60": -4.54,
    "macd": {
-    "dif": 0.0184,
-    "dea": 0.0042,
-    "hist": 0.0284,
+    "dif": 0.0206,
+    "dea": 0.0046,
+    "hist": 0.0319,
     "cross": null
    },
-   "rsi14": 55.6,
-   "pctRank": 12.8,
-   "devMA250": -7.41,
-   "amt5": 4611077.0,
-   "amt20": 9808013.0,
+   "rsi14": 58.6,
+   "pctRank": 15.6,
+   "devMA250": -6.78,
+   "amt5": 4618024.0,
+   "amt20": 9809750.0,
    "amtRatio": 1.31,
-   "sinceIPO": -10.49,
+   "sinceIPO": -9.88,
    "volAnn": 13.4,
    "histDates": [
     "2025-09-23",
@@ -69163,7 +69178,7 @@
     3.999,
     3.97,
     3.95,
-    3.95
+    3.977
    ],
    "listDays": 257,
    "signals": {
@@ -69183,29 +69198,28 @@
    "sector": "市政环保",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 10.436,
-   "pct": 0.35,
-   "volume": 315900,
-   "amount": 3296732.4,
-   "ret5": 0.27,
-   "ret20": -2.96,
-   "ret60": -4.41,
+   "close": 10.454,
+   "pct": 0.17,
+   "volume": 4300,
+   "amount": 44952.2,
+   "ret5": 1.0,
+   "ret20": -3.61,
+   "ret60": -3.92,
    "macd": {
-    "dif": -0.0803,
-    "dea": -0.0611,
-    "hist": -0.0385,
+    "dif": -0.0761,
+    "dea": -0.0641,
+    "hist": -0.024,
     "cross": null
    },
-   "rsi14": 40.1,
-   "pctRank": 2.3,
-   "devMA250": -7.2,
-   "amt5": 2164417.0,
-   "amt20": 3799416.0,
-   "amtRatio": 1.06,
-   "sinceIPO": 7.32,
+   "rsi14": 41.8,
+   "pctRank": 2.8,
+   "devMA250": -6.98,
+   "amt5": 2160366.0,
+   "amt20": 3703074.0,
+   "amtRatio": 1.05,
+   "sinceIPO": 7.51,
    "volAnn": 16.9,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -69454,10 +69468,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    12.15,
     12.085,
     12.043,
     11.978,
@@ -69706,9 +69720,10 @@
     10.361,
     10.36,
     10.4,
-    10.436
+    10.436,
+    10.454
    ],
-   "listDays": 399,
+   "listDays": 400,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -69726,29 +69741,28 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.395,
-   "pct": -0.12,
-   "volume": 319000,
-   "amount": 1083005.0,
-   "ret5": 0.89,
-   "ret20": 4.08,
-   "ret60": -9.78,
+   "close": 3.4,
+   "pct": 0.15,
+   "volume": 10000,
+   "amount": 34000.0,
+   "ret5": 0.71,
+   "ret20": 3.79,
+   "ret60": -10.34,
    "macd": {
-    "dif": 0.0086,
-    "dea": -0.0109,
-    "hist": 0.0389,
+    "dif": 0.0115,
+    "dea": -0.0064,
+    "hist": 0.0358,
     "cross": null
    },
-   "rsi14": 58.8,
-   "pctRank": 12.5,
-   "devMA250": -13.32,
-   "amt5": 4578676.0,
-   "amt20": 3009393.0,
-   "amtRatio": 1.1,
-   "sinceIPO": -13.59,
+   "rsi14": 59.6,
+   "pctRank": 13.4,
+   "devMA250": -13.12,
+   "amt5": 2817735.0,
+   "amt20": 2995205.0,
+   "amtRatio": 1.11,
+   "sinceIPO": -13.46,
    "volAnn": 16.2,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -69997,10 +70011,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.12,
     4.123,
     4.124,
     4.132,
@@ -70249,9 +70263,10 @@
     3.395,
     3.391,
     3.399,
-    3.395
+    3.395,
+    3.4
    ],
-   "listDays": 289,
+   "listDays": 290,
    "signals": {
     "liquidity": 0,
     "sentiment": 2,
@@ -70269,27 +70284,27 @@
    "sector": "消费",
    "right": "产权",
    "strategy": "周期型",
-   "close": 5.24,
-   "pct": 0.19,
-   "volume": 200,
-   "amount": 1048.0,
-   "ret5": 0.46,
-   "ret20": -2.71,
-   "ret60": -11.17,
+   "close": 5.327,
+   "pct": 1.85,
+   "volume": 44300,
+   "amount": 235986.1,
+   "ret5": 2.13,
+   "ret20": -1.1,
+   "ret60": -9.7,
    "macd": {
-    "dif": -0.0623,
-    "dea": -0.0746,
-    "hist": 0.0246,
+    "dif": -0.0554,
+    "dea": -0.0732,
+    "hist": 0.0357,
     "cross": null
    },
-   "rsi14": 36.9,
-   "pctRank": 4.1,
+   "rsi14": 52.6,
+   "pctRank": 6.5,
    "devMA250": null,
-   "amt5": 3531513.0,
-   "amt20": 4397150.0,
+   "amt5": 3578500.0,
+   "amt20": 4408897.0,
    "amtRatio": 0.98,
-   "sinceIPO": -18.63,
-   "volAnn": 12.6,
+   "sinceIPO": -17.28,
+   "volAnn": 12.8,
    "histDates": [
     "2025-09-29",
     "2025-09-30",
@@ -70784,17 +70799,17 @@
     5.225,
     5.225,
     5.23,
-    5.24
+    5.327
    ],
    "listDays": 246,
    "signals": {
     "liquidity": 1,
-    "sentiment": -1,
+    "sentiment": 0,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -70804,29 +70819,28 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.891,
-   "pct": -0.58,
-   "volume": 554600,
-   "amount": 1603348.6,
-   "ret5": -0.99,
-   "ret20": 0.21,
-   "ret60": -5.0,
+   "close": 2.939,
+   "pct": 1.66,
+   "volume": 1500,
+   "amount": 4408.5,
+   "ret5": 1.0,
+   "ret20": 0.65,
+   "ret60": -3.51,
    "macd": {
-    "dif": -0.0026,
-    "dea": -0.0048,
-    "hist": 0.0046,
+    "dif": 0.0003,
+    "dea": -0.0038,
+    "hist": 0.0083,
     "cross": null
    },
-   "rsi14": 45.9,
-   "pctRank": 4.8,
-   "devMA250": -22.02,
-   "amt5": 753799.0,
-   "amt20": 2449392.0,
-   "amtRatio": 0.61,
-   "sinceIPO": -21.67,
+   "rsi14": 55.9,
+   "pctRank": 9.4,
+   "devMA250": -20.62,
+   "amt5": 600975.0,
+   "amt20": 2311584.0,
+   "amtRatio": 0.59,
+   "sinceIPO": -20.37,
    "volAnn": 16.1,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -71075,10 +71089,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.22,
     4.239,
     4.22,
     4.189,
@@ -71327,17 +71341,18 @@
     2.91,
     2.924,
     2.908,
-    2.891
+    2.891,
+    2.939
    ],
-   "listDays": 393,
+   "listDays": 394,
    "signals": {
     "liquidity": -1,
-    "sentiment": 0,
+    "sentiment": 2,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -71347,26 +71362,26 @@
    "sector": "高速公路",
    "right": "经营权",
    "strategy": "周期型",
-   "close": 8.179,
-   "pct": -0.45,
-   "volume": 700,
-   "amount": 5725.3,
-   "ret5": -0.76,
-   "ret20": -0.15,
-   "ret60": -3.08,
+   "close": 8.216,
+   "pct": 0.0,
+   "volume": 1000,
+   "amount": 8216.0,
+   "ret5": -0.32,
+   "ret20": 0.31,
+   "ret60": -2.64,
    "macd": {
-    "dif": -0.0151,
-    "dea": -0.0118,
-    "hist": -0.0067,
+    "dif": -0.0122,
+    "dea": -0.0112,
+    "hist": -0.0019,
     "cross": null
    },
-   "rsi14": 38.5,
-   "pctRank": 1.1,
+   "rsi14": 43.9,
+   "pctRank": 7.5,
    "devMA250": null,
-   "amt5": 138239.0,
-   "amt20": 756376.0,
+   "amt5": 138737.0,
+   "amt20": 756501.0,
    "amtRatio": 0.67,
-   "sinceIPO": -3.29,
+   "sinceIPO": -2.85,
    "volAnn": 10.1,
    "histDates": [
     "2026-05-26",
@@ -71556,7 +71571,7 @@
     8.211,
     8.232,
     8.216,
-    8.179
+    8.216
    ],
    "listDays": 93,
    "signals": {
@@ -71578,8 +71593,8 @@
    "strategy": "周期型",
    "close": 2.102,
    "pct": 0.05,
-   "volume": 100,
-   "amount": 210.2,
+   "volume": 500,
+   "amount": 1051.0,
    "ret5": 0.19,
    "ret20": -2.14,
    "ret60": -10.78,
@@ -71592,8 +71607,8 @@
    "rsi14": 52.2,
    "pctRank": 8.5,
    "devMA250": -19.29,
-   "amt5": 1575331.0,
-   "amt20": 1740820.0,
+   "amt5": 1575500.0,
+   "amt20": 1740862.0,
    "amtRatio": 0.61,
    "sinceIPO": -19.0,
    "volAnn": 23.0,
@@ -72120,24 +72135,24 @@
    "right": "产权",
    "strategy": "周期型",
    "close": 5.23,
-   "pct": 0.35,
-   "volume": 33200,
-   "amount": 173636.0,
-   "ret5": 1.04,
-   "ret20": 0.6,
-   "ret60": -1.25,
+   "pct": 0.0,
+   "volume": 25099,
+   "amount": 131273.0,
+   "ret5": 1.3,
+   "ret20": 0.75,
+   "ret60": -4.04,
    "macd": {
-    "dif": -0.0232,
-    "dea": -0.0442,
-    "hist": 0.0421,
+    "dif": -0.0168,
+    "dea": -0.0387,
+    "hist": 0.0439,
     "cross": null
    },
    "rsi14": 53.1,
    "pctRank": 12.3,
    "devMA250": null,
-   "amt5": 395542.0,
-   "amt20": 1062127.0,
-   "amtRatio": 0.77,
+   "amt5": 341357.0,
+   "amt20": 1032016.0,
+   "amtRatio": 0.78,
    "sinceIPO": -4.12,
    "volAnn": 15.9,
    "histDates": [
@@ -72367,7 +72382,8 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
     5.455,
@@ -72596,9 +72612,10 @@
     5.119,
     5.154,
     5.212,
+    5.23,
     5.23
    ],
-   "listDays": 227,
+   "listDays": 228,
    "signals": {
     "liquidity": -2,
     "sentiment": 0,
@@ -72616,26 +72633,26 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 1.781,
-   "pct": -1.06,
-   "volume": 1400,
-   "amount": 2493.4,
-   "ret5": -0.11,
-   "ret20": -1.82,
-   "ret60": -15.27,
+   "close": 1.8,
+   "pct": 0.0,
+   "volume": 249400,
+   "amount": 448920.0,
+   "ret5": 0.95,
+   "ret20": -0.77,
+   "ret60": -14.37,
    "macd": {
-    "dif": -0.0078,
-    "dea": -0.0116,
-    "hist": 0.0075,
+    "dif": -0.0063,
+    "dea": -0.0113,
+    "hist": 0.0099,
     "cross": null
    },
-   "rsi14": 47.2,
-   "pctRank": 6.8,
-   "devMA250": -32.67,
-   "amt5": 1348416.0,
-   "amt20": 1804300.0,
+   "rsi14": 51.5,
+   "pctRank": 8.4,
+   "devMA250": -31.95,
+   "amt5": 1437702.0,
+   "amt20": 1826622.0,
    "amtRatio": 0.62,
-   "sinceIPO": -44.74,
+   "sinceIPO": -44.15,
    "volAnn": 16.2,
    "histDates": [
     "2025-09-23",
@@ -73139,7 +73156,7 @@
     1.796,
     1.777,
     1.8,
-    1.781
+    1.8
    ],
    "listDays": 428,
    "signals": {
@@ -73159,29 +73176,28 @@
    "sector": "仓储物流",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.758,
-   "pct": 0.13,
-   "volume": 178100,
-   "amount": 669299.8,
-   "ret5": -0.03,
-   "ret20": -0.03,
-   "ret60": -4.93,
+   "close": 3.751,
+   "pct": -0.19,
+   "volume": 400,
+   "amount": 1500.4,
+   "ret5": 0.54,
+   "ret20": -0.16,
+   "ret60": -6.2,
    "macd": {
-    "dif": -0.0092,
-    "dea": -0.0127,
+    "dif": -0.0083,
+    "dea": -0.0119,
     "hist": 0.007,
     "cross": null
    },
-   "rsi14": 49.9,
-   "pctRank": 13.3,
-   "devMA250": -7.31,
-   "amt5": 2132639.0,
-   "amt20": 2657118.0,
-   "amtRatio": 0.69,
-   "sinceIPO": 1.24,
+   "rsi14": 48.5,
+   "pctRank": 10.2,
+   "devMA250": -7.45,
+   "amt5": 1283465.0,
+   "amt20": 2510463.0,
+   "amtRatio": 0.66,
+   "sinceIPO": 1.05,
    "volAnn": 13.6,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -73430,10 +73446,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    4.183,
     4.162,
     4.141,
     4.105,
@@ -73682,9 +73698,10 @@
     3.752,
     3.75,
     3.753,
-    3.758
+    3.758,
+    3.751
    ],
-   "listDays": 392,
+   "listDays": 393,
    "signals": {
     "liquidity": -1,
     "sentiment": 0,
@@ -73702,29 +73719,28 @@
    "sector": "产业园",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.395,
-   "pct": -0.54,
-   "volume": 358300,
-   "amount": 858128.5,
-   "ret5": -3.74,
-   "ret20": -3.89,
-   "ret60": -12.14,
+   "close": 2.417,
+   "pct": 0.92,
+   "volume": 130400,
+   "amount": 315176.8,
+   "ret5": -2.3,
+   "ret20": -3.51,
+   "ret60": -11.59,
    "macd": {
-    "dif": -0.0184,
-    "dea": -0.0152,
-    "hist": -0.0064,
+    "dif": -0.0193,
+    "dea": -0.016,
+    "hist": -0.0065,
     "cross": null
    },
-   "rsi14": 35.3,
-   "pctRank": 1.1,
-   "devMA250": -22.83,
-   "amt5": 1656287.0,
-   "amt20": 2885441.0,
+   "rsi14": 40.8,
+   "pctRank": 2.1,
+   "devMA250": -21.98,
+   "amt5": 1579492.0,
+   "amt20": 2869061.0,
    "amtRatio": 1.01,
-   "sinceIPO": -29.54,
+   "sinceIPO": -28.89,
    "volAnn": 16.6,
    "histDates": [
-    "2025-09-22",
     "2025-09-23",
     "2025-09-24",
     "2025-09-25",
@@ -73973,10 +73989,10 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
-    3.81,
     3.799,
     3.77,
     3.763,
@@ -74225,9 +74241,10 @@
     2.465,
     2.455,
     2.408,
-    2.395
+    2.395,
+    2.417
    ],
-   "listDays": 435,
+   "listDays": 436,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
@@ -74245,26 +74262,26 @@
    "sector": "市政环保",
    "right": "经营权",
    "strategy": "防御型",
-   "close": 3.899,
-   "pct": -0.28,
-   "volume": 200,
-   "amount": 779.8,
-   "ret5": 1.56,
-   "ret20": 2.28,
-   "ret60": -3.01,
+   "close": 3.885,
+   "pct": -0.64,
+   "volume": 5600,
+   "amount": 21756.0,
+   "ret5": 1.2,
+   "ret20": 1.92,
+   "ret60": -3.36,
    "macd": {
-    "dif": 0.0145,
-    "dea": 0.011,
-    "hist": 0.0069,
+    "dif": 0.0133,
+    "dea": 0.0108,
+    "hist": 0.0051,
     "cross": null
    },
-   "rsi14": 56.2,
-   "pctRank": 23.0,
-   "devMA250": -2.41,
-   "amt5": 1617586.0,
-   "amt20": 2832809.0,
+   "rsi14": 53.7,
+   "pctRank": 21.3,
+   "devMA250": -2.76,
+   "amt5": 1621781.0,
+   "amt20": 2833858.0,
    "amtRatio": 0.63,
-   "sinceIPO": 16.81,
+   "sinceIPO": 16.39,
    "volAnn": 16.0,
    "histDates": [
     "2025-09-23",
@@ -74768,17 +74785,17 @@
     3.895,
     3.88,
     3.91,
-    3.899
+    3.885
    ],
    "listDays": 465,
    "signals": {
     "liquidity": 0,
-    "sentiment": 2,
+    "sentiment": 0,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -74788,26 +74805,26 @@
    "sector": "商业不动产",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.474,
-   "pct": -0.26,
-   "volume": 7600,
-   "amount": 26402.4,
-   "ret5": -0.83,
-   "ret20": -3.18,
-   "ret60": -5.31,
+   "close": 3.49,
+   "pct": 0.2,
+   "volume": 85300,
+   "amount": 297697.0,
+   "ret5": -0.37,
+   "ret20": -2.73,
+   "ret60": -4.88,
    "macd": {
-    "dif": -0.0276,
-    "dea": -0.0236,
-    "hist": -0.0082,
+    "dif": -0.0264,
+    "dea": -0.0233,
+    "hist": -0.0061,
     "cross": null
    },
-   "rsi14": 11.7,
-   "pctRank": 0.0,
+   "rsi14": 19.9,
+   "pctRank": 2.6,
    "devMA250": null,
-   "amt5": 906809.0,
-   "amt20": 1646217.0,
+   "amt5": 961068.0,
+   "amt20": 1659782.0,
    "amtRatio": 1.01,
-   "sinceIPO": -15.12,
+   "sinceIPO": -14.73,
    "volAnn": 11.1,
    "histDates": [
     "2026-06-18",
@@ -74963,7 +74980,7 @@
     3.5,
     3.485,
     3.483,
-    3.474
+    3.49
    ],
    "listDays": 76,
    "signals": {
@@ -74983,27 +75000,27 @@
    "sector": "商业不动产",
    "right": "产权",
    "strategy": "周期型",
-   "close": 2.889,
-   "pct": -0.48,
-   "volume": 745200,
-   "amount": 2152882.8,
-   "ret5": -1.9,
-   "ret20": -3.02,
-   "ret60": -5.43,
+   "close": 2.909,
+   "pct": 0.69,
+   "volume": 23900,
+   "amount": 69525.1,
+   "ret5": -0.95,
+   "ret20": -2.38,
+   "ret60": -4.9,
    "macd": {
-    "dif": -0.019,
-    "dea": -0.0137,
-    "hist": -0.0107,
+    "dif": -0.0193,
+    "dea": -0.0148,
+    "hist": -0.009,
     "cross": null
    },
-   "rsi14": 24.5,
-   "pctRank": 0.0,
+   "rsi14": 35.5,
+   "pctRank": 2.6,
    "devMA250": null,
-   "amt5": 2742150.0,
-   "amt20": 3810474.0,
-   "amtRatio": 0.97,
-   "sinceIPO": -5.46,
-   "volAnn": 8.9,
+   "amt5": 1349878.0,
+   "amt20": 3245650.0,
+   "amtRatio": 0.85,
+   "sinceIPO": -4.81,
+   "volAnn": 9.0,
    "histDates": [
     "2026-06-18",
     "2026-06-22",
@@ -75079,7 +75096,8 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
     3.056,
@@ -75156,17 +75174,18 @@
     2.924,
     2.92,
     2.903,
-    2.889
+    2.889,
+    2.909
    ],
-   "listDays": 75,
+   "listDays": 76,
    "signals": {
-    "liquidity": 1,
-    "sentiment": -2,
-    "moneyflow": 0,
+    "liquidity": 0,
+    "sentiment": -1,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 1,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -75176,26 +75195,26 @@
    "sector": "商业不动产",
    "right": "产权",
    "strategy": "周期型",
-   "close": 6.299,
-   "pct": 0.32,
-   "volume": 89200,
-   "amount": 561870.8,
-   "ret5": -1.65,
-   "ret20": -1.95,
-   "ret60": -3.24,
+   "close": 6.306,
+   "pct": 0.43,
+   "volume": 104300,
+   "amount": 657715.8,
+   "ret5": -1.55,
+   "ret20": -1.84,
+   "ret60": -3.13,
    "macd": {
-    "dif": -0.022,
-    "dea": -0.0105,
-    "hist": -0.0231,
+    "dif": -0.0215,
+    "dea": -0.0104,
+    "hist": -0.0222,
     "cross": null
    },
-   "rsi14": 34.9,
-   "pctRank": 10.5,
+   "rsi14": 36.5,
+   "pctRank": 11.8,
    "devMA250": null,
-   "amt5": 2538232.0,
-   "amt20": 3062185.0,
+   "amt5": 2557401.0,
+   "amt20": 3066978.0,
    "amtRatio": 0.74,
-   "sinceIPO": 2.52,
+   "sinceIPO": 2.64,
    "volAnn": 10.8,
    "histDates": [
     "2026-06-18",
@@ -75351,7 +75370,7 @@
     6.36,
     6.314,
     6.279,
-    6.299
+    6.306
    ],
    "listDays": 76,
    "signals": {
@@ -75371,26 +75390,26 @@
    "sector": "商业不动产",
    "right": "产权",
    "strategy": "周期型",
-   "close": 3.8,
-   "pct": -0.73,
-   "volume": 2313900,
-   "amount": 8792820.0,
-   "ret5": -1.58,
-   "ret20": -2.16,
-   "ret60": -4.64,
+   "close": 3.792,
+   "pct": -0.21,
+   "volume": 10100,
+   "amount": 38299.2,
+   "ret5": -1.84,
+   "ret20": -2.22,
+   "ret60": -5.25,
    "macd": {
-    "dif": -0.0168,
-    "dea": -0.0139,
-    "hist": -0.0058,
+    "dif": -0.0196,
+    "dea": -0.015,
+    "hist": -0.0092,
     "cross": null
    },
-   "rsi14": 27.5,
+   "rsi14": 26.0,
    "pctRank": 0.0,
    "devMA250": null,
-   "amt5": 3530593.0,
-   "amt20": 3959031.0,
-   "amtRatio": 0.91,
-   "sinceIPO": -2.26,
+   "amt5": 3432638.0,
+   "amt20": 3723205.0,
+   "amtRatio": 0.87,
+   "sinceIPO": -2.47,
    "volAnn": 6.9,
    "histDates": [
     "2026-06-18",
@@ -75467,7 +75486,8 @@
     "2026-09-29",
     "2026-09-30",
     "2026-10-08",
-    "2026-10-09"
+    "2026-10-09",
+    "2026-10-12"
    ],
    "histClose": [
     3.888,
@@ -75544,17 +75564,18 @@
     3.849,
     3.841,
     3.828,
-    3.8
+    3.8,
+    3.792
    ],
-   "listDays": 75,
+   "listDays": 76,
    "signals": {
     "liquidity": 1,
     "sentiment": -2,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 1,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   }
