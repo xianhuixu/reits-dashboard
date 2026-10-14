@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-13T18:47:33+08:00",
+  "checkedAt": "2026-10-14T09:49:38+08:00",
   "lastSuccessAt": "2026-10-13T18:47:33+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -9,11 +9,11 @@
     {
       "id": "ctbpsp",
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
-      "status": "ok",
-      "count": 10,
-      "checkedAt": "2026-10-13T18:47:33+08:00",
-      "lastSuccessAt": "2026-10-13T18:47:33+08:00",
-      "latestBulletinDate": "2026-10-13"
+      "status": "failed",
+      "count": 0,
+      "checkedAt": "2026-10-14T09:49:38+08:00",
+      "lastSuccessAt": null,
+      "latestBulletinDate": null
     },
     {
       "status": "failed",
@@ -923,16 +923,6 @@
       "date": "2026-07-16",
       "title": "昌平保障房机构间REITs项目审计服务竞争性磋商公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869e5d09a4019f69cfe0d26d36&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_15c5ff1b96dc16286cdf",
-      "date": "2026-07-15",
-      "title": "彰驿站镇污水处理厂项目机构间REITs计划管理人及承销机构中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69f631306019f638c0b8616d9&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
