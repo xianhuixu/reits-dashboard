@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-14 18:54:27",
+ "updated": "2026-10-14 22:35:49",
  "lastTradeDate": "2026-10-14",
  "count": 88,
  "sectors": [
@@ -3456,7 +3456,9 @@
   "code": "932047.CSI",
   "name": "中证REITs全收益",
   "close": 956.8,
-  "pct": 0.55
+  "pct": 0.55,
+  "stale": true,
+  "staleNote": "实时数据获取失败，显示为最近一次成功数据"
  },
  "cycle": {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
@@ -4262,7 +4264,7 @@
    },
    "spreadLeg": {
     "status": "ok",
-    "pctileChangePP": 12.6,
+    "pctileChangePP": 16.0,
     "from": "2026-07-14",
     "to": "2026-10-14",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
@@ -4279,10 +4281,10 @@
     "y10Now": 1.652,
     "y10YearAgo": 1.837,
     "pointToPointBp": -18.5,
-    "ttmYieldMcap": 4.78,
-    "distYoYMedianPct": -2.48,
-    "distDragBp": -11.9,
-    "netBp": -11.2,
+    "ttmYieldMcap": 4.81,
+    "distYoYMedianPct": -0.8,
+    "distDragBp": -3.9,
+    "netBp": -3.2,
     "dominant": "distribution",
     "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
