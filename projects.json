@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-15 09:58:20",
+ "updated": "2026-10-15 18:59:59",
  "ndrc": [
   {
    "name": "上海地产租赁住房新购入项目",
@@ -353,6 +353,15 @@
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=620f9db7cc1f48b1b6531c5af02e8b34"
   },
   {
+   "name": "嘉实首开封闭式商业不动产证券投资基金",
+   "manager": "嘉实基金管理有限公司",
+   "assetType": "商业不动产",
+   "status": "已反馈",
+   "acceptDate": "2026-03-02",
+   "updateDate": "2026-10-15",
+   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=73c7577e4b3847aab5331d0379e15eff"
+  },
+  {
    "name": "国金嘉泽新能源封闭式基础设施证券投资基金",
    "manager": "国金基金管理有限公司",
    "assetType": "基础设施",
@@ -369,15 +378,6 @@
    "acceptDate": "2026-03-02",
    "updateDate": "2026-03-30",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=b80b031657254459b6d0010d6b2d5286"
-  },
-  {
-   "name": "嘉实首开封闭式商业不动产证券投资基金",
-   "manager": "嘉实基金管理有限公司",
-   "assetType": "商业不动产",
-   "status": "已反馈",
-   "acceptDate": "2026-03-02",
-   "updateDate": "2026-03-20",
-   "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=73c7577e4b3847aab5331d0379e15eff"
   },
   {
    "name": "国泰海通崇邦封闭式商业不动产证券投资基金",
