@@ -1,19 +1,19 @@
 {
-  "checkedAt": "2026-10-16T09:47:32+08:00",
-  "lastSuccessAt": "2026-10-16T09:47:32+08:00",
+  "checkedAt": "2026-10-16T18:48:10+08:00",
+  "lastSuccessAt": "2026-10-16T18:48:10+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
-  "latestBulletinDate": "2026-10-15",
+  "latestBulletinDate": "2026-10-16",
   "sources": [
     {
       "id": "ctbpsp",
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-10-16T09:47:32+08:00",
-      "lastSuccessAt": "2026-10-16T09:47:32+08:00",
-      "latestBulletinDate": "2026-10-15"
+      "checkedAt": "2026-10-16T18:48:10+08:00",
+      "lastSuccessAt": "2026-10-16T18:48:10+08:00",
+      "latestBulletinDate": "2026-10-16"
     },
     {
       "status": "failed",
@@ -37,6 +37,16 @@
     }
   ],
   "items": [
+    {
+      "code": "ctb_ca128a46d24c",
+      "date": "2026-10-16",
+      "title": "发行供水公募REITs中介机构选聘项目中标结果公示",
+      "summary": "来源：中国招标投标公共服务平台（陕西省 中标结果公示 按10号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E5%8F%91%E8%A1%8C%E4%BE%9B%E6%B0%B4%E5%85%AC%E5%8B%9FREITs%E4%B8%AD%E4%BB%8B%E6%9C%BA%E6%9E%84%E9%80%89%E8%81%98%E9%A1%B9%E7%9B%AE%E4%B8%AD%E6%A0%87%E7%BB%93%E6%9E%9C%E5%85%AC%E7%A4%BA",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
     {
       "code": "ctb_5202bda35e81",
       "date": "2026-10-15",
