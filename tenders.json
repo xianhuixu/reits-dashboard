@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-18T18:47:32+08:00",
-  "lastSuccessAt": "2026-10-18T18:47:32+08:00",
+  "checkedAt": "2026-10-19T09:47:42+08:00",
+  "lastSuccessAt": "2026-10-19T09:47:42+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 8,
-      "checkedAt": "2026-10-18T18:47:32+08:00",
-      "lastSuccessAt": "2026-10-18T18:47:32+08:00",
+      "checkedAt": "2026-10-19T09:47:42+08:00",
+      "lastSuccessAt": "2026-10-19T09:47:42+08:00",
       "latestBulletinDate": "2026-10-18"
     },
     {
@@ -983,16 +983,6 @@
       "date": "2026-07-22",
       "title": "建信基金管理有限责任公司公募基金产品做市商流动性服务项目（第2包：公募REITs产品做市商流动性服务）公开招标公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849e5d0d8a019f889e943a5615&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_bae8522ea442319c02e5",
-      "date": "2026-07-20",
-      "title": "南京地铁集团类REITs发行服务项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019f7e4d157e1dac&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
