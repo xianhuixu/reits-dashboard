@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19 19:00:56",
+ "updated": "2026-10-20 00:34:20",
  "ndrc": [
   {
    "name": "上海地产租赁住房新购入项目",
@@ -203,9 +203,9 @@
    "name": "汇添富上海地产租赁住房封闭式基础设施证券投资基金",
    "manager": "汇添富基金管理股份有限公司",
    "assetType": "基础设施",
-   "status": "已受理",
+   "status": "已反馈",
    "acceptDate": "2026-09-30",
-   "updateDate": "2026-09-30",
+   "updateDate": "2026-10-19",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=72c49c7e1ec847fea999460058302391"
   },
   {
@@ -221,9 +221,9 @@
    "name": "国泰海通上实租赁住房封闭式基础设施证券投资基金",
    "manager": "上海国泰海通证券资产管理有限公司",
    "assetType": "基础设施",
-   "status": "已受理",
+   "status": "已反馈",
    "acceptDate": "2026-09-16",
-   "updateDate": "2026-09-16",
+   "updateDate": "2026-10-19",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=894cbcc4623047c385444030dd83f921"
   },
   {
@@ -358,7 +358,7 @@
    "assetType": "商业不动产",
    "status": "已反馈",
    "acceptDate": "2026-03-02",
-   "updateDate": "2026-10-15",
+   "updateDate": "2026-10-19",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=73c7577e4b3847aab5331d0379e15eff"
   },
   {
@@ -616,6 +616,15 @@
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000086"
   },
   {
+   "name": "国泰海通鹏瑞利封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "鹏瑞利（四川）企业管理有限公司",
+   "acceptDate": "2026-09-16",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000082"
+  },
+  {
    "name": "华安晶澳科技新能源封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
@@ -623,15 +632,6 @@
    "originator": "晶澳太阳能投资（中国）有限公司;朝阳龙盛太阳能发电有限公司",
    "acceptDate": "2026-09-16",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000079"
-  },
-  {
-   "name": "国泰海通鹏瑞利封闭式商业不动产证券投资基金",
-   "type": "首发",
-   "assetType": "商业不动产",
-   "status": "已受理",
-   "originator": "鹏瑞利（四川）企业管理有限公司",
-   "acceptDate": "2026-09-16",
-   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000082"
   },
   {
    "name": "华夏中海封闭式商业不动产证券投资基金",
@@ -733,6 +733,15 @@
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000071"
   },
   {
+   "name": "华夏华润置地封闭式商业不动产证券投资基金",
+   "type": "首发",
+   "assetType": "商业不动产",
+   "status": "已问询",
+   "originator": "润置控股有限公司;华润置地（成都）有限公司",
+   "acceptDate": "2026-04-30",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000069"
+  },
+  {
    "name": "中金菜鸟仓储物流封闭式基础设施证券投资基金",
    "type": "首发",
    "assetType": "基础设施",
@@ -740,15 +749,6 @@
    "originator": "杭州传欣物联网技术有限公司",
    "acceptDate": "2026-04-30",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000068"
-  },
-  {
-   "name": "华夏华润置地封闭式商业不动产证券投资基金",
-   "type": "首发",
-   "assetType": "商业不动产",
-   "status": "已问询",
-   "originator": "华润置地控股有限公司;华润置地（成都）有限公司",
-   "acceptDate": "2026-04-30",
-   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000069"
   },
   {
    "name": "银华粤海水务水利封闭式基础设施证券投资基金",

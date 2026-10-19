@@ -802,7 +802,7 @@
     },
     "spreadLeg": {
       "status": "ok",
-      "pctileChangePP": 13.5,
+      "pctileChangePP": 23.2,
       "from": "2026-07-17",
       "to": "2026-10-19",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
@@ -819,10 +819,10 @@
       "y10Now": 1.65,
       "y10YearAgo": 1.825,
       "pointToPointBp": -17.5,
-      "ttmYieldMcap": 4.79,
-      "distYoYMedianPct": -0.8,
-      "distDragBp": -3.8,
-      "netBp": -3.5,
+      "ttmYieldMcap": 4.48,
+      "distYoYMedianPct": -5.93,
+      "distDragBp": -26.6,
+      "netBp": -26.2,
       "dominant": "distribution",
       "text": "分派拖累占优：租金（分派）回落快过利率下行",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
