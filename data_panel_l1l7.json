@@ -2379,6 +2379,15 @@
       "pctile": 0.9491,
       "pctileFull": 0.9663,
       "n": 54
+    },
+    {
+      "date": "2026-10-19",
+      "ttmYield": 4.792,
+      "y10": 1.65,
+      "spread": 3.1421,
+      "pctile": 0.9324,
+      "pctileFull": 0.9554,
+      "n": 54
     }
   ],
   "operatingIrrSeries": [
@@ -2919,7 +2928,7 @@
     ]
   },
   "propertySpread": {
-    "asOf": "2026-10-16",
+    "asOf": "2026-10-19",
     "coverage": {
       "included": 54,
       "mcapWeighted": 53,
@@ -2980,27 +2989,27 @@
       ]
     },
     "latest": {
-      "ttmYieldMcap": 4.829,
-      "ttmYieldMedian": 4.895,
-      "y10": 1.648,
-      "spreadBp": 318.1,
-      "spreadMedianBp": 324.7,
-      "pctRolling3y": 94.9,
-      "pctFull": 96.6,
-      "pctSinceN10": 94.9,
-      "pctRolling3yMedian": 94.9,
-      "pctFullMedian": 96.6,
+      "ttmYieldMcap": 4.792,
+      "ttmYieldMedian": 4.716,
+      "y10": 1.65,
+      "spreadBp": 314.2,
+      "spreadMedianBp": 306.6,
+      "pctRolling3y": 93.2,
+      "pctFull": 95.5,
+      "pctSinceN10": 93.3,
+      "pctRolling3yMedian": 90.8,
+      "pctFullMedian": 93.9,
       "defaultPct": "pctRolling3y"
     },
     "gate60d": {
-      "pctileChangePP": 17.1,
-      "from": "2026-07-16",
-      "to": "2026-10-16",
+      "pctileChangePP": 13.5,
+      "from": "2026-07-17",
+      "to": "2026-10-19",
       "basis": "滚动 3 年分位（市值加权），60 个交易日"
     },
     "distYoY": {
-      "asOf": "2026-10-16",
-      "yearAgo": "2025-10-16",
+      "asOf": "2026-10-19",
+      "yearAgo": "2025-10-19",
       "n": 33,
       "medianPct": -0.8,
       "nDown": 16,
@@ -3248,6 +3257,14 @@
           "yoyPct": 21.59
         },
         {
+          "code": "180603.SZ",
+          "name": "华夏大悦城购物中心REIT",
+          "sector": "消费",
+          "ttmNow": 0.18418,
+          "ttmYearAgo": 0.14907,
+          "yoyPct": 23.55
+        },
+        {
           "code": "180103.SZ",
           "name": "华夏杭州和达高科产业园REIT",
           "sector": "产业园",
@@ -3288,14 +3305,6 @@
           "yoyPct": 37.07
         },
         {
-          "code": "180603.SZ",
-          "name": "华夏大悦城购物中心REIT",
-          "sector": "消费",
-          "ttmNow": 0.22957,
-          "ttmYearAgo": 0.10368,
-          "yoyPct": 121.42
-        },
-        {
           "code": "508068.SH",
           "name": "华夏北京保障房中心租赁住房REIT",
           "sector": "保租房",
@@ -3307,17 +3316,17 @@
     },
     "rentVsRate": {
       "status": "ok",
-      "asOf": "2026-10-16",
+      "asOf": "2026-10-19",
       "y10Avg1y": 1.771,
-      "y10AvgPrev1y": 1.777,
-      "rateTailwindBp": 0.5,
-      "y10Now": 1.648,
-      "y10YearAgo": 1.841,
-      "pointToPointBp": -19.3,
-      "ttmYieldMcap": 4.83,
+      "y10AvgPrev1y": 1.774,
+      "rateTailwindBp": 0.4,
+      "y10Now": 1.65,
+      "y10YearAgo": 1.825,
+      "pointToPointBp": -17.5,
+      "ttmYieldMcap": 4.79,
       "distYoYMedianPct": -0.8,
-      "distDragBp": -3.9,
-      "netBp": -3.3,
+      "distDragBp": -3.8,
+      "netBp": -3.5,
       "dominant": "distribution",
       "text": "分派拖累占优：租金（分派）回落快过利率下行",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
@@ -3326,11 +3335,11 @@
       {
         "sector": "产业园",
         "nReits": 20,
-        "yieldMcap": 5.931,
-        "spreadBp": 428.3,
-        "spreadMedianBp": 422.7,
-        "pctFull": 99.5,
-        "historyDays": 1653,
+        "yieldMcap": 5.953,
+        "spreadBp": 430.3,
+        "spreadMedianBp": 424.0,
+        "pctFull": 99.6,
+        "historyDays": 1656,
         "since": "2022-04-07",
         "shortHistory": false,
         "distYoYPct": -7.0,
@@ -3343,10 +3352,10 @@
         "sector": "仓储物流",
         "nReits": 11,
         "yieldMcap": 5.64,
-        "spreadBp": 399.2,
-        "spreadMedianBp": 314.3,
-        "pctFull": 91.5,
-        "historyDays": 1654,
+        "spreadBp": 399.1,
+        "spreadMedianBp": 313.7,
+        "pctFull": 91.4,
+        "historyDays": 1657,
         "since": "2022-04-06",
         "shortHistory": false,
         "distYoYPct": -8.1,
@@ -3358,11 +3367,11 @@
       {
         "sector": "保租房",
         "nReits": 8,
-        "yieldMcap": 3.318,
-        "spreadBp": 167.0,
-        "spreadMedianBp": 159.6,
-        "pctFull": 74.1,
-        "historyDays": 1138,
+        "yieldMcap": 3.312,
+        "spreadBp": 166.2,
+        "spreadMedianBp": 158.6,
+        "pctFull": 73.2,
+        "historyDays": 1141,
         "since": "2023-09-04",
         "shortHistory": false,
         "distYoYPct": -5.0,
@@ -3376,9 +3385,9 @@
         "nReits": 1,
         "yieldMcap": NaN,
         "spreadBp": NaN,
-        "spreadMedianBp": -164.8,
+        "spreadMedianBp": -165.0,
         "pctFull": null,
-        "historyDays": 120,
+        "historyDays": 123,
         "since": "2026-06-18",
         "shortHistory": true,
         "distYoYPct": null,
@@ -3390,11 +3399,11 @@
       {
         "sector": "数据中心",
         "nReits": 2,
-        "yieldMcap": 5.514,
-        "spreadBp": 386.6,
-        "spreadMedianBp": 362.8,
-        "pctFull": 14.0,
-        "historyDays": 66,
+        "yieldMcap": 5.507,
+        "spreadBp": 385.7,
+        "spreadMedianBp": 362.1,
+        "pctFull": 11.4,
+        "historyDays": 69,
         "since": "2026-08-11",
         "shortHistory": true,
         "distYoYPct": null,
@@ -3406,11 +3415,11 @@
       {
         "sector": "消费",
         "nReits": 12,
-        "yieldMcap": 4.181,
-        "spreadBp": 253.3,
-        "spreadMedianBp": 239.2,
-        "pctFull": 73.3,
-        "historyDays": 802,
+        "yieldMcap": 4.061,
+        "spreadBp": 241.1,
+        "spreadMedianBp": 238.2,
+        "pctFull": 68.4,
+        "historyDays": 805,
         "since": "2024-08-05",
         "shortHistory": false,
         "distYoYPct": 6.1,
@@ -3421,7 +3430,7 @@
       }
     ],
     "status": "ok",
-    "updated": "2026-10-19 01:48:12",
+    "updated": "2026-10-19 10:48:02",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
@@ -3432,22 +3441,27 @@
         "failed": []
       },
       "dists": {
-        "ok": 56,
+        "ok": 54,
         "failed": [
+          "508000.SH",
           "508021.SH",
+          "508058.SH",
           "508603.SH"
         ]
       },
       "units": {
-        "ok": 54,
+        "ok": 51,
         "failed": [
+          "180101.SZ",
+          "508027.SH",
+          "508099.SH",
           "508600.SH",
           "508601.SH",
           "508602.SH",
           "508603.SH"
         ]
       },
-      "elapsedS": 177.0
+      "elapsedS": 259.6
     }
   },
   "operatingDisclosedIrr": {
