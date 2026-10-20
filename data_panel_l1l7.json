@@ -2382,11 +2382,11 @@
     },
     {
       "date": "2026-10-20",
-      "ttmYield": 4.79,
+      "ttmYield": 4.788,
       "y10": 1.635,
-      "spread": 3.155,
-      "pctile": 0.9366,
-      "pctileFull": 0.9582,
+      "spread": 3.1528,
+      "pctile": 0.9352,
+      "pctileFull": 0.9573,
       "n": 54
     }
   ],
@@ -2989,20 +2989,20 @@
       ]
     },
     "latest": {
-      "ttmYieldMcap": 4.79,
+      "ttmYieldMcap": 4.788,
       "ttmYieldMedian": 4.727,
       "y10": 1.635,
-      "spreadBp": 315.5,
+      "spreadBp": 315.3,
       "spreadMedianBp": 309.1,
-      "pctRolling3y": 93.7,
-      "pctFull": 95.8,
-      "pctSinceN10": 93.7,
+      "pctRolling3y": 93.5,
+      "pctFull": 95.7,
+      "pctSinceN10": 93.6,
       "pctRolling3yMedian": 91.9,
       "pctFullMedian": 94.6,
       "defaultPct": "pctRolling3y"
     },
     "gate60d": {
-      "pctileChangePP": 12.0,
+      "pctileChangePP": 11.9,
       "from": "2026-07-20",
       "to": "2026-10-20",
       "basis": "滚动 3 年分位（市值加权），60 个交易日"
@@ -3335,7 +3335,7 @@
       {
         "sector": "产业园",
         "nReits": 20,
-        "yieldMcap": 5.949,
+        "yieldMcap": 5.95,
         "spreadBp": 431.4,
         "spreadMedianBp": 423.0,
         "pctFull": 99.6,
@@ -3351,10 +3351,10 @@
       {
         "sector": "仓储物流",
         "nReits": 11,
-        "yieldMcap": 5.636,
-        "spreadBp": 400.0,
+        "yieldMcap": 5.626,
+        "spreadBp": 399.1,
         "spreadMedianBp": 315.2,
-        "pctFull": 91.7,
+        "pctFull": 91.4,
         "historyDays": 1658,
         "since": "2022-04-06",
         "shortHistory": false,
@@ -3367,10 +3367,10 @@
       {
         "sector": "保租房",
         "nReits": 8,
-        "yieldMcap": 3.304,
-        "spreadBp": 166.9,
-        "spreadMedianBp": 160.0,
-        "pctFull": 74.0,
+        "yieldMcap": 3.301,
+        "spreadBp": 166.6,
+        "spreadMedianBp": 158.8,
+        "pctFull": 73.7,
         "historyDays": 1142,
         "since": "2023-09-04",
         "shortHistory": false,
@@ -3430,49 +3430,52 @@
       }
     ],
     "status": "lagged",
-    "updated": "2026-10-20 10:48:01",
+    "updated": "2026-10-20 14:15:14",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 54,
-        "failed": [
-          "180301.SZ",
-          "180105.SZ",
-          "508077.SH",
-          "180502.SZ"
-        ]
+        "ok": 58,
+        "failed": []
       },
       "dists": {
-        "ok": 51,
+        "ok": 48,
         "failed": [
-          "508098.SH",
-          "180101.SZ",
-          "180501.SZ",
+          "180102.SZ",
+          "508021.SH",
+          "180105.SZ",
+          "508058.SH",
+          "508031.SH",
+          "508010.SH",
+          "508029.SH",
           "508005.SH",
-          "508039.SH",
-          "180607.SZ",
+          "508090.SH",
           "508603.SH"
         ]
       },
       "units": {
-        "ok": 50,
+        "ok": 45,
         "failed": [
-          "508088.SH",
-          "508077.SH",
-          "180603.SZ",
-          "180901.SZ",
+          "180101.SZ",
+          "508021.SH",
+          "180105.SZ",
+          "180501.SZ",
+          "180605.SZ",
+          "508017.SH",
+          "508029.SH",
+          "508002.SH",
+          "508022.SH",
           "508600.SH",
           "508601.SH",
           "508602.SH",
           "508603.SH"
         ]
       },
-      "elapsedS": 341.3
+      "elapsedS": 390.1
     },
-    "lagReason": "新浪/东财取数覆盖不足（价格 54/58，分派 51/58），沿用缓存"
+    "lagReason": "新浪/东财取数覆盖不足（价格 58/58，分派 48/58），沿用缓存"
   },
   "operatingDisclosedIrr": {
     "status": "ok",

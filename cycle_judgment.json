@@ -802,13 +802,13 @@
     },
     "spreadLeg": {
       "status": "lagged",
-      "pctileChangePP": 12.0,
+      "pctileChangePP": 11.9,
       "from": "2026-07-20",
       "to": "2026-10-20",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
       "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-      "note": "新浪/东财取数覆盖不足（价格 54/58，分派 51/58），沿用缓存"
+      "note": "新浪/东财取数覆盖不足（价格 58/58，分派 48/58），沿用缓存"
     },
     "asOf": "2026-10-20",
     "rentLeg": {
