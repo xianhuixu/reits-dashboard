@@ -1,6 +1,6 @@
 {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
-  "updated": "2026-10-19",
+  "updated": "2026-10-20",
   "bond10y": 1.65,
   "pm": {
     "pmi": 49.2,
@@ -103,7 +103,7 @@
       "y10": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
       "pmi": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI 总指数（国家统计局；该接口无新订单分项）"
     },
-    "computedAt": "2026-10-19",
+    "computedAt": "2026-10-20",
     "status": "ok",
     "asOf": "2026-10-19",
     "y10": 1.6497,
@@ -791,7 +791,7 @@
       "downgradeTo": "partial"
     },
     "status": "not_triggered",
-    "dataStatus": "complete",
+    "dataStatus": "lagged",
     "rateLeg": {
       "status": "ok",
       "d10y60bp": -9.5,
@@ -801,17 +801,18 @@
       "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
     },
     "spreadLeg": {
-      "status": "ok",
-      "pctileChangePP": 23.2,
+      "status": "lagged",
+      "pctileChangePP": 13.5,
       "from": "2026-07-17",
       "to": "2026-10-19",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
-      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
+      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
+      "note": "新浪/东财取数覆盖不足（价格 58/58，分派 51/58），沿用缓存"
     },
     "asOf": "2026-10-19",
     "rentLeg": {
-      "status": "ok",
+      "status": "lagged",
       "asOf": "2026-10-19",
       "y10Avg1y": 1.771,
       "y10AvgPrev1y": 1.774,
@@ -819,10 +820,10 @@
       "y10Now": 1.65,
       "y10YearAgo": 1.825,
       "pointToPointBp": -17.5,
-      "ttmYieldMcap": 4.48,
-      "distYoYMedianPct": -5.93,
-      "distDragBp": -26.6,
-      "netBp": -26.2,
+      "ttmYieldMcap": 4.79,
+      "distYoYMedianPct": -0.8,
+      "distDragBp": -3.8,
+      "netBp": -3.5,
       "dominant": "distribution",
       "text": "分派拖累占优：租金（分派）回落快过利率下行",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
@@ -840,7 +841,7 @@
       "tsf": "live",
       "gdp": "live"
     },
-    "computedAt": "2026-10-19",
+    "computedAt": "2026-10-20",
     "status": "ok",
     "label": null,
     "asOf": "2026-04",
