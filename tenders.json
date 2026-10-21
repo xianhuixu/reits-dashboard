@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-20T18:47:33+08:00",
-  "lastSuccessAt": "2026-10-20T18:47:33+08:00",
+  "checkedAt": "2026-10-21T09:47:32+08:00",
+  "lastSuccessAt": "2026-10-21T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 6,
-      "checkedAt": "2026-10-20T18:47:33+08:00",
-      "lastSuccessAt": "2026-10-20T18:47:33+08:00",
+      "checkedAt": "2026-10-21T09:47:32+08:00",
+      "lastSuccessAt": "2026-10-21T09:47:32+08:00",
       "latestBulletinDate": "2026-10-20"
     },
     {
@@ -983,36 +983,6 @@
       "date": "2026-07-23",
       "title": "徐州市国投能源集团有限公司公募REITs评估机构选聘项目招标计划公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69f8d5892019f8e19d8367737&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_a9c18ca66a5ebbddc1ed",
-      "date": "2026-07-22",
-      "title": "郑州城发安居科技有限公司租赁住房公募REITs资产评估服务询比采购公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019f87dff2e552b3&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_e38079e47bec14fed6b8",
-      "date": "2026-07-22",
-      "title": "徐州市国投能源集团有限公司公募REITs会计师事务所选聘、税务服务机构选聘项目招标计划公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869e5d09a4019f89029dfa755f&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_77996ba5ef8a861f26ca",
-      "date": "2026-07-22",
-      "title": "建信基金管理有限责任公司公募基金产品做市商流动性服务项目（第2包：公募REITs产品做市商流动性服务）公开招标公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849e5d0d8a019f889e943a5615&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
