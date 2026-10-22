@@ -791,7 +791,7 @@
       "downgradeTo": "partial"
     },
     "status": "not_triggered",
-    "dataStatus": "complete",
+    "dataStatus": "lagged",
     "rateLeg": {
       "status": "ok",
       "d10y60bp": -8.7,
@@ -801,17 +801,18 @@
       "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
     },
     "spreadLeg": {
-      "status": "ok",
-      "pctileChangePP": 8.4,
+      "status": "lagged",
+      "pctileChangePP": 10.6,
       "from": "2026-07-22",
       "to": "2026-10-22",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
-      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
+      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
+      "note": "新浪/东财取数覆盖不足（价格 58/58，分派 51/58），沿用缓存"
     },
     "asOf": "2026-10-22",
     "rentLeg": {
-      "status": "ok",
+      "status": "lagged",
       "asOf": "2026-10-22",
       "y10Avg1y": 1.768,
       "y10AvgPrev1y": 1.772,
@@ -819,7 +820,7 @@
       "y10Now": 1.641,
       "y10YearAgo": 1.829,
       "pointToPointBp": -18.8,
-      "ttmYieldMcap": 4.77,
+      "ttmYieldMcap": 4.72,
       "distYoYMedianPct": -0.8,
       "distDragBp": -3.8,
       "netBp": -3.4,
