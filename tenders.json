@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-22T18:47:33+08:00",
-  "lastSuccessAt": "2026-10-22T18:47:33+08:00",
+  "checkedAt": "2026-10-23T09:47:33+08:00",
+  "lastSuccessAt": "2026-10-23T09:47:33+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 8,
-      "checkedAt": "2026-10-22T18:47:33+08:00",
-      "lastSuccessAt": "2026-10-22T18:47:33+08:00",
+      "checkedAt": "2026-10-23T09:47:33+08:00",
+      "lastSuccessAt": "2026-10-23T09:47:33+08:00",
       "latestBulletinDate": "2026-10-22"
     },
     {
@@ -973,16 +973,6 @@
       "date": "2026-07-27",
       "title": "海悦·梧桐苑机构间 REITs 发行与存续阶段中介机构-律师事务所比选公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fa33b98019fa3559199039d&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_86a74f79bd868772b439",
-      "date": "2026-07-24",
-      "title": "武汉安家保障性住房有限公司公募REITs基金管理人中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494859e5d0b9e019f9240612f7947&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
