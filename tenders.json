@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-25T18:47:33+08:00",
-  "lastSuccessAt": "2026-10-25T18:47:33+08:00",
+  "checkedAt": "2026-10-26T09:47:32+08:00",
+  "lastSuccessAt": "2026-10-26T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 9,
-      "checkedAt": "2026-10-25T18:47:33+08:00",
-      "lastSuccessAt": "2026-10-25T18:47:33+08:00",
+      "checkedAt": "2026-10-26T09:47:32+08:00",
+      "lastSuccessAt": "2026-10-26T09:47:32+08:00",
       "latestBulletinDate": "2026-10-24"
     },
     {
@@ -993,26 +993,6 @@
       "date": "2026-07-28",
       "title": "南京地铁集团类REITs发行服务项目中标结果公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019fa6a218aa4d50&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_6ee322775993d586e0a0",
-      "date": "2026-07-27",
-      "title": "海悦·梧桐苑机构间REITs发行与存续阶段中介机构-审计机构比选公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869e5d09a4019fa351bc2e5578&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_ab328bf8fdd83650dc70",
-      "date": "2026-07-27",
-      "title": "海悦·梧桐苑机构间 REITs 发行与存续阶段中介机构-律师事务所比选公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fa33b98019fa3559199039d&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
