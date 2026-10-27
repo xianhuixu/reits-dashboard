@@ -1,19 +1,19 @@
 {
-  "checkedAt": "2026-10-27T09:47:34+08:00",
-  "lastSuccessAt": "2026-10-27T09:47:34+08:00",
+  "checkedAt": "2026-10-27T18:47:32+08:00",
+  "lastSuccessAt": "2026-10-27T18:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
-  "latestBulletinDate": "2026-10-24",
+  "latestBulletinDate": "2026-10-27",
   "sources": [
     {
       "id": "ctbpsp",
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
-      "count": 9,
-      "checkedAt": "2026-10-27T09:47:34+08:00",
-      "lastSuccessAt": "2026-10-27T09:47:34+08:00",
-      "latestBulletinDate": "2026-10-24"
+      "count": 10,
+      "checkedAt": "2026-10-27T18:47:32+08:00",
+      "lastSuccessAt": "2026-10-27T18:47:32+08:00",
+      "latestBulletinDate": "2026-10-27"
     },
     {
       "status": "failed",
@@ -37,6 +37,16 @@
     }
   ],
   "items": [
+    {
+      "code": "ctb_7bca62f2bc9f",
+      "date": "2026-10-27",
+      "title": "郑州热力集团有限公司供热基础设施公募REITs管线核查梳理及配套测绘项目-公开招标公告",
+      "summary": "来源：中国招标投标公共服务平台（河南省 招标公告 按10号令规范发布）",
+      "media": "中国招标投标公共服务平台",
+      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E9%83%91%E5%B7%9E%E7%83%AD%E5%8A%9B%E9%9B%86%E5%9B%A2%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E4%BE%9B%E7%83%AD%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E5%85%AC%E5%8B%9FREITs%E7%AE%A1%E7%BA%BF%E6%A0%B8%E6%9F%A5%E6%A2%B3%E7%90%86%E5%8F%8A",
+      "tag": "招投标",
+      "source": "ctbpsp"
+    },
     {
       "code": "ctb_b8b623e46450",
       "date": "2026-10-24",
