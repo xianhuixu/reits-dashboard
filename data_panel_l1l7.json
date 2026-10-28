@@ -2391,11 +2391,11 @@
     },
     {
       "date": "2026-10-28",
-      "ttmYield": 4.489,
+      "ttmYield": 4.492,
       "y10": 1.635,
-      "spread": 2.8542,
-      "pctile": 0.8567,
-      "pctileFull": 0.906,
+      "spread": 2.8576,
+      "pctile": 0.8581,
+      "pctileFull": 0.9069,
       "n": 54
     }
   ],
@@ -2983,20 +2983,20 @@
       ]
     },
     "latest": {
-      "ttmYieldMcap": 4.489,
+      "ttmYieldMcap": 4.492,
       "ttmYieldMedian": 4.708,
       "y10": 1.635,
-      "spreadBp": 285.4,
+      "spreadBp": 285.8,
       "spreadMedianBp": 307.3,
-      "pctRolling3y": 85.7,
-      "pctFull": 90.6,
-      "pctSinceN10": 85.9,
+      "pctRolling3y": 85.8,
+      "pctFull": 90.7,
+      "pctSinceN10": 86.0,
       "pctRolling3yMedian": 90.8,
       "pctFullMedian": 93.9,
       "defaultPct": "pctRolling3y"
     },
     "gate60d": {
-      "pctileChangePP": 22.2,
+      "pctileChangePP": 22.4,
       "from": "2026-07-28",
       "to": "2026-10-28",
       "basis": "滚动 3 年分位（市值加权），60 个交易日"
@@ -3329,8 +3329,8 @@
       {
         "sector": "产业园",
         "nReits": 20,
-        "yieldMcap": 6.045,
-        "spreadBp": 441.1,
+        "yieldMcap": 6.058,
+        "spreadBp": 442.4,
         "spreadMedianBp": 432.3,
         "pctFull": 100.0,
         "historyDays": 1665,
@@ -3377,7 +3377,7 @@
       {
         "sector": "消费",
         "nReits": 12,
-        "yieldMcap": 4.05,
+        "yieldMcap": 4.051,
         "spreadBp": 241.6,
         "spreadMedianBp": 232.7,
         "pctFull": 68.1,
@@ -3393,10 +3393,10 @@
       {
         "sector": "保租房",
         "nReits": 8,
-        "yieldMcap": 3.278,
-        "spreadBp": 164.3,
+        "yieldMcap": 3.283,
+        "spreadBp": 164.9,
         "spreadMedianBp": 158.8,
-        "pctFull": 71.8,
+        "pctFull": 72.0,
         "historyDays": 1150,
         "since": "2023-09-04",
         "shortHistory": false,
@@ -3424,47 +3424,40 @@
       }
     ],
     "status": "lagged",
-    "updated": "2026-10-28 10:47:59",
+    "updated": "2026-10-28 15:55:05",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 51,
-        "failed": [
-          "508021.SH",
-          "508019.SH",
-          "508068.SH",
-          "508058.SH",
-          "180606.SZ",
-          "180605.SZ",
-          "508017.SH"
-        ]
+        "ok": 58,
+        "failed": []
       },
       "dists": {
         "ok": 52,
         "failed": [
           "180302.SZ",
-          "180303.SZ",
-          "508099.SH",
-          "508021.SH",
           "180103.SZ",
+          "180502.SZ",
+          "508011.SH",
+          "180605.SZ",
           "508603.SH"
         ]
       },
       "units": {
-        "ok": 54,
+        "ok": 53,
         "failed": [
-          "180302.SZ",
-          "508000.SH",
-          "508099.SH",
+          "508027.SH",
+          "508088.SH",
+          "180603.SZ",
+          "508017.SH",
           "508600.SH"
         ]
       },
-      "elapsedS": 359.0
+      "elapsedS": 285.4
     },
-    "lagReason": "新浪/东财取数覆盖不足（价格 51/58，分派 52/58），沿用缓存"
+    "lagReason": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
   },
   "operatingDisclosedIrr": {
     "status": "ok",
