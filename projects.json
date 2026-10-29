@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-29 19:00:50",
+ "updated": "2026-10-30 00:10:30",
  "ndrc": [
   {
    "name": "万国数据中心新购入项目",
@@ -587,6 +587,15 @@
  ],
  "szse": [
   {
+   "name": "国泰海通信义能源新能源封闭式基础设施证券投资基金",
+   "type": "首发",
+   "assetType": "基础设施",
+   "status": "已问询",
+   "originator": "信义光能（芜湖）有限公司",
+   "acceptDate": "2026-09-24",
+   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000084"
+  },
+  {
    "name": "汇添富顺联封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
@@ -612,15 +621,6 @@
    "originator": "凯华（广州）不动产投资有限公司",
    "acceptDate": "2026-09-24",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000085"
-  },
-  {
-   "name": "国泰海通信义能源新能源封闭式基础设施证券投资基金",
-   "type": "首发",
-   "assetType": "基础设施",
-   "status": "已受理",
-   "originator": "信义光能（芜湖）有限公司",
-   "acceptDate": "2026-09-24",
-   "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000084"
   },
   {
    "name": "华安晶澳科技新能源封闭式基础设施证券投资基金",

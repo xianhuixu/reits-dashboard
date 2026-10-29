@@ -3423,8 +3423,8 @@
         "valueTrap": false
       }
     ],
-    "status": "lagged",
-    "updated": "2026-10-29 10:48:01",
+    "status": "ok",
+    "updated": "2026-10-29 16:00:06",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
@@ -3435,30 +3435,21 @@
         "failed": []
       },
       "dists": {
-        "ok": 51,
+        "ok": 55,
         "failed": [
-          "180606.SZ",
-          "508017.SH",
-          "180305.SZ",
-          "180306.SZ",
-          "508060.SH",
-          "508048.SH",
+          "508000.SH",
+          "508077.SH",
           "508603.SH"
         ]
       },
       "units": {
-        "ok": 53,
+        "ok": 57,
         "failed": [
-          "180305.SZ",
-          "180306.SZ",
-          "508060.SH",
-          "508048.SH",
           "508600.SH"
         ]
       },
-      "elapsedS": 309.9
-    },
-    "lagReason": "新浪/东财取数覆盖不足（价格 58/58，分派 51/58），沿用缓存"
+      "elapsedS": 162.5
+    }
   },
   "operatingDisclosedIrr": {
     "status": "ok",
