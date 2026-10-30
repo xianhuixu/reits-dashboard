@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-10-29T18:47:32+08:00",
-  "lastSuccessAt": "2026-10-29T18:47:32+08:00",
+  "checkedAt": "2026-10-30T09:47:32+08:00",
+  "lastSuccessAt": "2026-10-30T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-10-29T18:47:32+08:00",
-      "lastSuccessAt": "2026-10-29T18:47:32+08:00",
+      "checkedAt": "2026-10-30T09:47:32+08:00",
+      "lastSuccessAt": "2026-10-30T09:47:32+08:00",
       "latestBulletinDate": "2026-10-29"
     },
     {
@@ -993,26 +993,6 @@
       "date": "2026-08-04",
       "title": "兰州热力REITs项目审计机构选聘项目中标候选人公示",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fab2c0e019faba177a515ab&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_4ed1487eec522bf964bc",
-      "date": "2026-07-31",
-      "title": "徐州市国投能源集团有限公司公募REITs财务顾问选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fb578c2019fb5e7ac4118d0&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_553bfa139d2c21505a6a",
-      "date": "2026-07-31",
-      "title": "REITs模式下高速公路运营安全体系建设课题研究服务成交候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69f1af9f8019f1b49405d0c43&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
