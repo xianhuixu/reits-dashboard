@@ -802,7 +802,7 @@
     },
     "spreadLeg": {
       "status": "ok",
-      "pctileChangePP": 7.6,
+      "pctileChangePP": 27.5,
       "from": "2026-07-30",
       "to": "2026-10-30",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
@@ -819,10 +819,10 @@
       "y10Now": 1.65,
       "y10YearAgo": 1.81,
       "pointToPointBp": -16.0,
-      "ttmYieldMcap": 4.85,
-      "distYoYMedianPct": 0.8,
-      "distDragBp": 3.9,
-      "netBp": 3.9,
+      "ttmYieldMcap": 4.6,
+      "distYoYMedianPct": 0.89,
+      "distDragBp": 4.1,
+      "netBp": 4.1,
       "dominant": "rate",
       "text": "利率顺风占优：利率下行快过分派回落",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
