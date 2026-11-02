@@ -89,11 +89,11 @@
    "signals": {
     "liquidity": -1,
     "sentiment": 0,
-    "moneyflow": 1,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -163,7 +163,7 @@
    "amtRatio": 1.23,
    "sinceIPO": 15.8,
    "volAnn": 16.7,
-   "listDays": 501,
+   "listDays": 561,
    "signals": {
     "liquidity": -1,
     "sentiment": 2,
@@ -323,11 +323,11 @@
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -488,6 +488,45 @@
    }
   },
   {
+   "code": "508021.SH",
+   "name": "国泰海通临港创新智造产业园REIT",
+   "sector": "产业园",
+   "right": "产权",
+   "strategy": "周期型",
+   "close": 3.142,
+   "pct": -1.1,
+   "volume": 52700,
+   "amount": 165583.4,
+   "ret5": -8.95,
+   "ret20": -5.93,
+   "ret60": -1.87,
+   "macd": {
+    "dif": -0.021,
+    "dea": 0.0099,
+    "hist": -0.0617,
+    "cross": null
+   },
+   "rsi14": 29.3,
+   "pctRank": 1.1,
+   "devMA250": -21.49,
+   "amt5": 3821196.0,
+   "amt20": 2618986.0,
+   "amtRatio": 0.53,
+   "sinceIPO": -41.34,
+   "volAnn": 17.1,
+   "listDays": 983,
+   "signals": {
+    "liquidity": -1,
+    "sentiment": -2,
+    "moneyflow": -2,
+    "performance": 0,
+    "spread": 0,
+    "stockbond": 0,
+    "total": -5,
+    "label": "中性"
+   }
+  },
+  {
    "code": "508088.SH",
    "name": "国泰海通东久新经济产业园REIT",
    "sector": "产业园",
@@ -514,7 +553,7 @@
    "amtRatio": 0.82,
    "sinceIPO": -0.19,
    "volAnn": 15.5,
-   "listDays": 501,
+   "listDays": 982,
    "signals": {
     "liquidity": -2,
     "sentiment": -2,
@@ -579,12 +618,12 @@
    "ret20": -10.69,
    "ret60": -10.62,
    "macd": {
-    "dif": -0.0326,
-    "dea": -0.0169,
+    "dif": -0.0328,
+    "dea": -0.017,
     "hist": -0.0316,
     "cross": null
    },
-   "rsi14": 25.6,
+   "rsi14": 25.4,
    "pctRank": 0.0,
    "devMA250": -30.19,
    "amt5": 6073292.0,
@@ -596,11 +635,11 @@
    "signals": {
     "liquidity": 1,
     "sentiment": -2,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -635,12 +674,12 @@
    "signals": {
     "liquidity": -2,
     "sentiment": -2,
-    "moneyflow": 0,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -4,
-    "label": "中性"
+    "total": -6,
+    "label": "偏弱"
    }
   },
   {
@@ -702,7 +741,7 @@
     "cross": null
    },
    "rsi14": 51.9,
-   "pctRank": 62.1,
+   "pctRank": 81.0,
    "devMA250": 1.53,
    "amt5": 2860049.0,
    "amt20": 4453514.0,
@@ -713,10 +752,10 @@
    "signals": {
     "liquidity": 1,
     "sentiment": 0,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -2,
+    "stockbond": -1,
     "total": -1,
     "label": "中性"
    }
@@ -755,8 +794,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 2,
+    "stockbond": 0,
+    "total": 3,
     "label": "中性"
    }
   },
@@ -794,8 +833,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -2,
-    "total": -4,
+    "stockbond": -1,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -833,8 +872,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 1,
+    "stockbond": 0,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -869,11 +908,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": 2,
-    "moneyflow": 1,
+    "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": 4,
+    "total": 3,
     "label": "中性"
    }
   },
@@ -969,8 +1008,8 @@
    "ret20": 7.05,
    "ret60": 5.94,
    "macd": {
-    "dif": 0.0524,
-    "dea": 0.0487,
+    "dif": 0.0523,
+    "dea": 0.0486,
     "hist": 0.0075,
     "cross": null
    },
@@ -979,7 +1018,7 @@
    "devMA250": 2.2,
    "amt5": 3428937.0,
    "amt20": 2961578.0,
-   "amtRatio": 1.77,
+   "amtRatio": 1.66,
    "sinceIPO": 3.38,
    "volAnn": 17.2,
    "listDays": 353,
@@ -1064,11 +1103,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
-    "moneyflow": 2,
+    "moneyflow": 1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 3,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -1103,11 +1142,11 @@
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -1142,11 +1181,11 @@
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -1181,11 +1220,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
-    "moneyflow": 1,
+    "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": -1,
-    "total": 2,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -1203,9 +1242,9 @@
    "ret20": -1.12,
    "ret60": -0.79,
    "macd": {
-    "dif": 0.0042,
-    "dea": 0.0057,
-    "hist": -0.003,
+    "dif": 0.0049,
+    "dea": 0.0058,
+    "hist": -0.0019,
     "cross": null
    },
    "rsi14": 48.0,
@@ -1255,7 +1294,7 @@
    "amtRatio": 0.84,
    "sinceIPO": 3.99,
    "volAnn": 16.7,
-   "listDays": 425,
+   "listDays": 426,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -1298,11 +1337,11 @@
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -1337,11 +1376,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 1,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -1359,9 +1398,9 @@
    "ret20": 0.96,
    "ret60": -2.77,
    "macd": {
-    "dif": 0.0059,
-    "dea": 0.0097,
-    "hist": -0.0076,
+    "dif": 0.0058,
+    "dea": 0.0096,
+    "hist": -0.0077,
     "cross": null
    },
    "rsi14": 44.6,
@@ -1376,11 +1415,11 @@
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
-    "moneyflow": 1,
+    "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -1415,7 +1454,7 @@
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
@@ -1437,7 +1476,7 @@
    "ret20": -5.53,
    "ret60": -9.59,
    "macd": {
-    "dif": -0.1301,
+    "dif": -0.1302,
     "dea": -0.0946,
     "hist": -0.0711,
     "cross": null
@@ -1493,11 +1532,11 @@
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -1610,11 +1649,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -1649,11 +1688,11 @@
    "signals": {
     "liquidity": 0,
     "sentiment": 0,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -1789,19 +1828,19 @@
    "ret60": -3.56,
    "macd": {
     "dif": -0.0301,
-    "dea": -0.0098,
+    "dea": -0.0099,
     "hist": -0.0405,
     "cross": null
    },
    "rsi14": 30.3,
-   "pctRank": 10.0,
+   "pctRank": 28.2,
    "devMA250": -9.33,
    "amt5": 3780535.0,
    "amt20": 3350416.0,
-   "amtRatio": 0.99,
-   "sinceIPO": 7.36,
-   "volAnn": 15.2,
-   "listDays": 501,
+   "amtRatio": 0.97,
+   "sinceIPO": 31.17,
+   "volAnn": 15.0,
+   "listDays": 628,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
@@ -1883,11 +1922,11 @@
    "signals": {
     "liquidity": 1,
     "sentiment": -2,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -1922,11 +1961,11 @@
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -2000,11 +2039,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -2039,11 +2078,11 @@
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -2077,12 +2116,12 @@
    "listDays": 501,
    "signals": {
     "liquidity": 1,
-    "sentiment": -2,
-    "moneyflow": 1,
+    "sentiment": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -2,
     "label": "中性"
    }
   },
@@ -2179,16 +2218,16 @@
    "ret60": -3.52,
    "macd": {
     "dif": -0.0546,
-    "dea": -0.0254,
-    "hist": -0.0584,
+    "dea": -0.0255,
+    "hist": -0.0583,
     "cross": null
    },
-   "rsi14": 24.4,
+   "rsi14": 24.3,
    "pctRank": 3.7,
    "devMA250": -26.96,
    "amt5": 3494344.0,
    "amt20": 2347622.0,
-   "amtRatio": 0.71,
+   "amtRatio": 0.72,
    "sinceIPO": -30.97,
    "volAnn": 20.7,
    "listDays": 328,
@@ -2234,11 +2273,11 @@
    "signals": {
     "liquidity": -1,
     "sentiment": -2,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -4,
+    "total": -5,
     "label": "中性"
    }
   },
@@ -2256,9 +2295,9 @@
    "ret20": -1.52,
    "ret60": -0.85,
    "macd": {
-    "dif": -0.006,
-    "dea": -0.0023,
-    "hist": -0.0074,
+    "dif": -0.0061,
+    "dea": -0.0024,
+    "hist": -0.0073,
     "cross": null
    },
    "rsi14": 42.6,
@@ -2266,18 +2305,18 @@
    "devMA250": -2.29,
    "amt5": 3743233.0,
    "amt20": 3786779.0,
-   "amtRatio": 1.24,
+   "amtRatio": 1.03,
    "sinceIPO": -13.04,
    "volAnn": 10.7,
    "listDays": 302,
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
-    "moneyflow": 1,
+    "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -2351,10 +2390,10 @@
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
+    "stockbond": 0,
     "total": -1,
     "label": "中性"
    }
@@ -2568,19 +2607,19 @@
    "ret20": -0.53,
    "ret60": null,
    "macd": {
-    "dif": 0.0013,
-    "dea": 0.011,
+    "dif": 0.0014,
+    "dea": 0.0111,
     "hist": -0.0193,
     "cross": null
    },
-   "rsi14": 42.7,
+   "rsi14": 42.8,
    "pctRank": 41.1,
    "devMA250": null,
    "amt5": 4846552.0,
    "amt20": 10920840.0,
    "amtRatio": null,
    "sinceIPO": 1.21,
-   "volAnn": 4.5,
+   "volAnn": 4.6,
    "listDays": 56,
    "signals": {
     "liquidity": 2,
@@ -2624,11 +2663,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": -1,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -2702,11 +2741,11 @@
    "signals": {
     "liquidity": 1,
     "sentiment": 0,
-    "moneyflow": 1,
+    "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 2,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -2858,11 +2897,11 @@
    "signals": {
     "liquidity": 2,
     "sentiment": 0,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -2935,12 +2974,12 @@
    "listDays": 305,
    "signals": {
     "liquidity": 0,
-    "sentiment": 0,
+    "sentiment": -1,
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 1,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -2997,19 +3036,19 @@
    "ret20": -1.65,
    "ret60": -2.98,
    "macd": {
-    "dif": -0.007,
-    "dea": -0.0011,
+    "dif": -0.0071,
+    "dea": -0.0013,
     "hist": -0.0116,
     "cross": null
    },
    "rsi14": 38.0,
    "pctRank": 2.9,
-   "devMA250": -21.07,
+   "devMA250": -21.08,
    "amt5": 1034022.0,
    "amt20": 1830640.0,
-   "amtRatio": 0.51,
+   "amtRatio": 0.38,
    "sinceIPO": -22.46,
-   "volAnn": 15.9,
+   "volAnn": 15.8,
    "listDays": 409,
    "signals": {
     "liquidity": -2,
@@ -3092,11 +3131,11 @@
    "signals": {
     "liquidity": -1,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -3170,11 +3209,11 @@
    "signals": {
     "liquidity": -2,
     "sentiment": 0,
-    "moneyflow": -1,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -3231,9 +3270,9 @@
    "ret20": 1.74,
    "ret60": -3.01,
    "macd": {
-    "dif": 0.0208,
-    "dea": 0.0125,
-    "hist": 0.0165,
+    "dif": 0.0209,
+    "dea": 0.0127,
+    "hist": 0.0164,
     "cross": null
    },
    "rsi14": 53.9,
@@ -3310,18 +3349,18 @@
    "ret60": -4.9,
    "macd": {
     "dif": -0.0333,
-    "dea": -0.03,
-    "hist": -0.0065,
+    "dea": -0.0301,
+    "hist": -0.0064,
     "cross": null
    },
-   "rsi14": 9.6,
+   "rsi14": 9.8,
    "pctRank": 0.0,
    "devMA250": null,
    "amt5": 874722.0,
    "amt20": 1403023.0,
    "amtRatio": 0.88,
    "sinceIPO": -16.96,
-   "volAnn": 10.2,
+   "volAnn": 10.3,
    "listDays": 91,
    "signals": {
     "liquidity": -2,
@@ -3404,11 +3443,11 @@
    "signals": {
     "liquidity": 0,
     "sentiment": -1,
-    "moneyflow": 0,
+    "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -1,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -4475,7 +4514,7 @@
    },
    {
     "name": "资金中枢抬升",
-    "value": "60/250日成交额比 0.76",
+    "value": "60/250日成交额比 0.91",
     "ok": false,
     "desc": "流动性过剩溢出至 REITs 市场的直接证据"
    },
@@ -4487,7 +4526,7 @@
    },
    {
     "name": "估值分位抬升",
-    "value": "全市场历史分位均值 15%",
+    "value": "全市场历史分位均值 17%",
     "ok": false,
     "desc": "价格系统性站上历史中枢是重估的结果验证"
    }
@@ -4499,11 +4538,11 @@
    "label": "中性"
   },
   "周期型": {
-   "avg": -1.5,
+   "avg": -2.1,
    "label": "中性"
   },
   "扩张型": {
-   "avg": -0.5,
+   "avg": -1.0,
    "label": "中性"
   }
  }
