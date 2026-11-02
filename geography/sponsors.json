@@ -2,7 +2,7 @@
  "version": 1,
  "checkedAt": "2026-11-02",
  "coordinateSource": "https://geo.datav.aliyun.com/areas_v3/bound/100000_full_city.json",
- "scope": "原始权益人/发起人注册城市索引。部分覆盖，不代表资产所在地、资产价值或收入分布。",
+ "scope": "原始权益人/发起人注册城市索引；原始权益人境外注册的基金，以披露的境内运营管理机构注册城市补点并注明角色。不代表资产所在地、资产价值或收入分布。",
  "cities": {
   "上海市": {
    "name": "上海市",
@@ -840,39 +840,39 @@
    "checkedAt": "2026-09-28"
   },
   "508056": {
-   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-01/508056_20260701_VFJI.pdf",
+   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-01/508056_20260701_9CT7.pdf",
    "kind": "primary",
-   "document": "招募说明书",
-   "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
-   "checkedAt": "2026-09-28"
+   "document": "基金产品资料概要（2026-07-01）",
+   "basis": "原始权益人境外注册，境内无原始权益人点位；改按披露的境内运营管理机构注册城市补点，tooltip 已注明非原始权益人。",
+   "checkedAt": "2026-11-02"
   },
   "508060": {
-   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-25/508060_20260625_43B4.pdf",
+   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-03-03/508060_20260303_C753.pdf",
    "kind": "primary",
-   "document": "招募说明书",
-   "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
-   "checkedAt": "2026-09-28"
+   "document": "招募说明书（2026-03-03，载明运营管理机构注册地）",
+   "basis": "原始权益人境外注册，境内无原始权益人点位；改按披露的境内运营管理机构注册城市补点，tooltip 已注明非原始权益人。",
+   "checkedAt": "2026-11-02"
   },
   "508078": {
-   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-06-18/508078_20260618_4ST2.pdf",
-   "kind": "primary",
-   "document": "招募说明书",
-   "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
-   "checkedAt": "2026-09-28"
+   "url": "http://fund.eastmoney.com/gonggao/508078,AN202606171823633757.html",
+   "kind": "secondary",
+   "document": "基金产品资料概要更新（2026-06-17）",
+   "basis": "原始权益人境外注册，境内无原始权益人点位；改按披露的境内运营管理机构注册城市补点，tooltip 已注明非原始权益人。",
+   "checkedAt": "2026-11-02"
   },
   "508088": {
-   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2025-11-05/508088_20251105_PRFD.pdf",
+   "url": "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2022-09-09/508088_20220909_5_CwPeKyPV.pdf",
    "kind": "primary",
-   "document": "招募说明书",
-   "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
-   "checkedAt": "2026-09-28"
+   "document": "招募说明书（2022-09-09，东久上海为首发运营管理机构）",
+   "basis": "原始权益人境外注册，境内无原始权益人点位；改按披露的境内运营管理机构注册城市补点，tooltip 已注明非原始权益人。",
+   "checkedAt": "2026-11-02"
   },
   "180306": {
-   "url": "https://disc.static.szse.cn/download/disc/disk03/finalpage/2025-10-24/077ea49f-99e7-4fe2-9a03-ce04915081f4.PDF",
-   "kind": "primary",
-   "document": "招募说明书",
-   "basis": "交易所披露的招募说明书；境外注册主体不生成内地点位。",
-   "checkedAt": "2026-09-28"
+   "url": "https://cfi.net.cn/p20251120001724.html",
+   "kind": "secondary",
+   "document": "基金产品资料概要更新（2025-11-19）",
+   "basis": "原始权益人境外注册，境内无原始权益人点位；改按披露的境内运营管理机构注册城市补点，tooltip 已注明非原始权益人。",
+   "checkedAt": "2026-11-02"
   }
  },
  "locations": [
@@ -1582,6 +1582,41 @@
    "organization": "润泽科技发展有限公司",
    "role": "原始权益人",
    "source": "180901"
+  },
+  {
+   "code": "508056.SH",
+   "city": "上海市",
+   "organization": "普洛斯投资（上海）有限公司",
+   "role": "境内运营管理机构（原始权益人：普洛斯中国控股有限公司·香港）",
+   "source": "508056"
+  },
+  {
+   "code": "508088.SH",
+   "city": "上海市",
+   "organization": "东久（上海）投资管理咨询有限公司",
+   "role": "境内运营管理机构（首发原始权益人：FULL REGALIA LIMITED 等·境外）",
+   "source": "508088"
+  },
+  {
+   "code": "180306.SZ",
+   "city": "深圳市",
+   "organization": "深圳前海安博基础设施投资有限公司",
+   "role": "境内运营管理机构（原始权益人：PCCLF Holding PTE. LTD.·新加坡）",
+   "source": "180306"
+  },
+  {
+   "code": "508060.SH",
+   "city": "苏州市",
+   "organization": "万国数据服务有限公司",
+   "role": "境内运营管理机构（统筹）（原始权益人：万国数据控股有限公司·开曼群岛）",
+   "source": "508060"
+  },
+  {
+   "code": "508078.SH",
+   "city": "上海市",
+   "organization": "上海易之商企业管理服务有限公司",
+   "role": "境内运营管理机构（原始权益人：ESR Group Limited·开曼群岛）",
+   "source": "508078"
   }
  ],
  "offshore": [
