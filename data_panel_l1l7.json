@@ -3431,8 +3431,10 @@
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 58,
-        "failed": []
+        "ok": 57,
+        "failed": [
+          "508603.SH"
+        ]
       },
       "dists": {
         "ok": 57,

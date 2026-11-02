@@ -3,6 +3,8 @@
 # 用法：bash deploy_cf.sh   （在仓库根目录执行）
 set -e
 cd "$(dirname "$0")"
+# 部署前自检：派生文件与源数据脱节时自动重建，避免把过期数据推上线
+python3 scripts/rebuild_derived.py
 rm -rf .cf-deploy
 mkdir .cf-deploy
 cp index.html app.js styles.css research-layout.css workspace.css workspace.js tender-feed.js allocation-tools.js ui-utils.js data-status.js page-agent-loader.js fonts.css _headers .cf-deploy/

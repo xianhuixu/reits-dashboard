@@ -1,0 +1,20 @@
+#!/bin/bash
+# post-merge：拉取/合并远端每日数据更新后，自动重建派生文件并提交。
+# 背景：远端 GitHub Actions 每日更新 data_research.json 等源数据，
+# 若本地合并时以任一方为准解决冲突，market-series.json 等派生文件会与源数据脱节。
+set -e
+cd "$(git rev-parse --show-toplevel)"
+
+# 源数据没变就直接跳过
+if ! git diff --name-only HEAD@{1} HEAD 2>/dev/null | grep -qE '^(data_research\.(json|js)|data\.(json|js))$'; then
+  exit 0
+fi
+
+echo "[post-merge] 检测到行情源数据变更，重建派生文件……"
+python3 scripts/rebuild_derived.py
+
+if ! git diff --quiet -- market-series.json index.html 2>/dev/null; then
+  git add market-series.json index.html
+  git commit -m "data: post-merge 自动重建派生文件（market-series + banner）" --no-verify
+  echo "[post-merge] 已提交派生文件重建，请记得 git push"
+fi
