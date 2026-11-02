@@ -139,12 +139,20 @@ test("banner conclusion is rate → stanceOverride; spread basis hidden while di
   const adv = liveAdvice(), panel = livePanel();
   const m = H.bannerModel(liveData(), STANCE, panel, adv);
   assert.equal(m.conclusion, "利率下行 → " + STANCE);
-  assert.equal(m.basis, "依据：时钟·利率下行"); // 分派同比下滑 → 第二条依据不进 basis
-  assert.match(m.spreadSkip, /利差分位暂不参与/);
-  assert.match(m.spreadSkip, /分派同比下滑|数据滞后/);
+  assert.match(m.basis, /^依据：时钟·利率下行/);
   assert.match(m.overrideNote || "", /降档理由|顺风|拖累/);
   assert.equal(m.aux, "辅助：社融脉冲转负（低置信，数据截至 4 月）");
   assert.doesNotMatch([m.conclusion, m.basis, m.aux].join("|"), /增长|临界|趋势|PMI|z3/);
+  // 分派同比下滑 → 第二条依据不进 basis（构造数据，不依赖实时分派状态）
+  const declining = JSON.parse(JSON.stringify(panel));
+  declining.propertySpread.status = "ok";
+  declining.propertySpread.distYoY.medianPct = -3.0;
+  declining.propertySpread.distYoY.state = "下滑";
+  const m0 = H.bannerModel(liveData(), STANCE, declining, adv);
+  assert.equal(m0.basis, "依据：时钟·利率下行");
+  assert.match(m0.spreadSkip, /利差分位暂不参与/);
+  assert.match(m0.spreadSkip, /分派同比下滑|数据滞后/);
+  assert.ok(!m0.used.includes("propertySpread"));
   // 分派企稳 + live → 第二条依据出现
   const ok = JSON.parse(JSON.stringify(panel));
   ok.propertySpread.status = "ok";

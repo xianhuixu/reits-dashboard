@@ -80,7 +80,9 @@ test("rateRentGate spread leg live/lagged → matching badge; pending → 待接
   assert.equal(DS.fromGateLeg(undefined).status, "pending");
   assert.ok(["ok", "lagged"].includes(gate.spreadLeg.status));
   assert.equal(DS.fromGateLeg(gate.spreadLeg, gate.asOf).status, gate.spreadLeg.status === "ok" ? "live" : "lagged");
-  assert.ok(gate.rentLeg && gate.rentLeg.dominant === "distribution");
+  assert.ok(gate.rentLeg && ["rate", "distribution"].includes(gate.rentLeg.dominant));
+  if (gate.rentLeg.dominant === "rate") assert.match(gate.rentLeg.text, /顺风/);
+  else assert.match(gate.rentLeg.text, /拖累|回落/);
 });
 
 test("beta panel pending when not computed; rate clock cached when series from cache", () => {
