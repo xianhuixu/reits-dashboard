@@ -98,14 +98,20 @@ def fetch_sse() -> List[Dict[str, Any]]:
     url = "https://query.sse.com.cn/commonSoaQuery.do?" + urllib.parse.urlencode(params)
     resp = _get(url, referer="https://www.sse.com.cn/reits/info/")
     items = (resp.get("pageHelp") or {}).get("data") or []
-    status_map = {"0": "已申报", "1": "已受理", "2": "已反馈", "4": "通过", "5": "未通过"}
+    # 实测 AUDIT_STATUS 字典（2026-11 核查）：12=通过（注册生效，含已上市与待上市）、
+    # 8=终止(撤回)（2026-01-23 集中撤回批次）、2=已反馈、1=已受理；0/4/5 沿用页面旧字典。
+    status_map = {"0": "已申报", "1": "已受理", "2": "已反馈", "4": "通过", "5": "未通过",
+                  "8": "终止(撤回)", "12": "通过（注册生效）"}
     asset_map = {"0": "商业不动产", "1": "基础设施"}
+    keep_status = {"8", "12"}  # 已出审核结论的项目不受受理日期过滤限制
     out: List[Dict[str, Any]] = []
     for it in items:
         accept = _d(it.get("ACCEPT_DATE"))
         publish = _d(it.get("PUBLISH_DATE"))
-        # 受理日期或发布日期任一在 2026 年及以后即保留（覆盖新申报及2026年有更新的项目）
-        if (accept and accept < "2026-01-01") and (publish and publish < "2026-01-01"):
+        audit_status = str(it.get("AUDIT_STATUS"))
+        # 受理日期或发布日期任一在 2026 年及以后即保留；
+        # 已通过/已终止项目即使受理较早也保留（覆盖已上市与有结论项目）
+        if audit_status not in keep_status and (accept and accept < "2026-01-01") and (publish and publish < "2026-01-01"):
             continue
         out.append({
             "name": it.get("AUDIT_NAME") or "",
@@ -128,7 +134,9 @@ def fetch_szse() -> List[Dict[str, Any]]:
     out: List[Dict[str, Any]] = []
     for it in items:
         accept = _d(it.get("acptdt"))
-        if accept < "2026-01-01":
+        prjst = it.get("prjst") or ""
+        # 2026 年以来受理的全部保留；受理较早但已"注册生效"（获批/已上市）的也保留
+        if accept < "2026-01-01" and prjst not in ("注册生效", "终止(撤回)"):
             continue
         out.append({
             "name": it.get("cmpnm") or "",
