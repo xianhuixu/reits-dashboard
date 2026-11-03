@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-02T18:47:33+08:00",
-  "lastSuccessAt": "2026-11-02T18:47:33+08:00",
+  "checkedAt": "2026-11-03T09:47:32+08:00",
+  "lastSuccessAt": "2026-11-03T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-11-02T18:47:33+08:00",
-      "lastSuccessAt": "2026-11-02T18:47:33+08:00",
+      "checkedAt": "2026-11-03T09:47:32+08:00",
+      "lastSuccessAt": "2026-11-03T09:47:32+08:00",
       "latestBulletinDate": "2026-11-02"
     },
     {
@@ -923,86 +923,6 @@
       "date": "2026-08-05",
       "title": "昌平保障房机构间REITs项目审计服务中标结果公示",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849fa2a533019fcfabe78939a8&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_e3f116905e7057c9d5a2",
-      "date": "2026-08-04",
-      "title": "郑州城发安居科技有限公司租赁住房公募REITs资产评估服务成交候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019fcb8d18ce3236&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_53ba1040ffded2df61fd",
-      "date": "2026-08-04",
-      "title": "郑州城发安居科技有限公司租赁住房公募REITs审计机构选聘询比采购公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=ec5efa2d19e24b23a02a4c3dd2e4538b&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_6fd9736d8572499bbd4b",
-      "date": "2026-08-04",
-      "title": "海悦·梧桐苑机构间REITs发行与存续阶段中介机构-律师事务所中选公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494859e5d0b9e019fca588f170796&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_8b970c402a8eb238f6de",
-      "date": "2026-08-04",
-      "title": "海悦·梧桐苑机构间REITs发行与存续阶段中介机构-审计机构中选公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fca1237019fca5ca9480c18&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_633d7036bbd4dc7692d8",
-      "date": "2026-08-04",
-      "title": "徐州市国投能源集团有限公司公募REITs财务顾问选聘项目中标结果公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fca1237019fca918bc02095&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_ac75bc0e516809eb3901",
-      "date": "2026-08-04",
-      "title": "兰州热力REITs项目资产评估机构选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fab2c0e019fabacf1fe192f&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_0aafd754413efa918b6b",
-      "date": "2026-08-04",
-      "title": "兰州热力REITs项目法律服务机构选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fab2c0e019faba7a7d417ad&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_597ac6496c9717e00a12",
-      "date": "2026-08-04",
-      "title": "兰州热力REITs项目审计机构选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fab2c0e019faba177a515ab&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
