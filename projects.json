@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-03 10:03:09",
+ "updated": "2026-11-03 19:01:24",
  "ndrc": [
   {
    "name": "万国数据中心新购入项目",
@@ -347,7 +347,7 @@
    "assetType": "商业不动产",
    "status": "已反馈",
    "acceptDate": "2026-03-30",
-   "updateDate": "2026-04-27",
+   "updateDate": "2026-11-03",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=7c28dbd738914f278d7b55b510cf44e9"
   },
   {
@@ -363,9 +363,9 @@
    "name": "建信天津临港发展集团港口封闭式基础设施证券投资基金",
    "manager": "建信基金管理有限责任公司",
    "assetType": "基础设施",
-   "status": "已反馈",
+   "status": "通过（注册生效）",
    "acceptDate": "2026-03-02",
-   "updateDate": "2026-10-20",
+   "updateDate": "2026-11-02",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=b80b031657254459b6d0010d6b2d5286"
   },
   {
@@ -1202,7 +1202,7 @@
    "name": "华夏大悦城封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
-   "status": "已问询",
+   "status": "通过",
    "originator": "中粮置业投资有限公司",
    "acceptDate": "2026-07-29",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000077"
@@ -1283,7 +1283,7 @@
    "name": "华夏华润置地封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
-   "status": "已问询",
+   "status": "通过",
    "originator": "润置控股有限公司;华润置地（成都）有限公司",
    "acceptDate": "2026-04-30",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000069"
@@ -1319,7 +1319,7 @@
    "name": "红土创新星河集团封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
-   "status": "已问询",
+   "status": "通过",
    "originator": "星河实业（深圳）有限公司",
    "acceptDate": "2026-03-13",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000065"
