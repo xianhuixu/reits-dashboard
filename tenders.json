@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-03T18:47:32+08:00",
-  "lastSuccessAt": "2026-11-03T18:47:32+08:00",
+  "checkedAt": "2026-11-04T09:47:33+08:00",
+  "lastSuccessAt": "2026-11-04T09:47:33+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-11-03T18:47:32+08:00",
-      "lastSuccessAt": "2026-11-03T18:47:32+08:00",
+      "checkedAt": "2026-11-04T09:47:33+08:00",
+      "lastSuccessAt": "2026-11-04T09:47:33+08:00",
       "latestBulletinDate": "2026-11-02"
     },
     {
@@ -883,46 +883,6 @@
       "date": "2026-08-06",
       "title": "中信金融资产不良资产ABS、CMBS、REITs等资产证券化产品计划管理人和销售机构采购项目-中标候选人公示",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019fd5191035411c&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_d2f075a8be335c668062",
-      "date": "2026-08-05",
-      "title": "昌平保障房机构间REITs项目评估服务中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869fbfd7ac019fcfae88454694&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_5877b681262e639c4d9c",
-      "date": "2026-08-05",
-      "title": "昌平保障房机构间REITs项目计划管理人等服务中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849fa2a533019fcfb259243aa0&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_824806d35f8c085e5b5a",
-      "date": "2026-08-05",
-      "title": "昌平保障房机构间REITs项目律师服务中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849fa2a533019fcfb0e1d93a5e&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_cea96a9ce2264fe4aab4",
-      "date": "2026-08-05",
-      "title": "昌平保障房机构间REITs项目审计服务中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849fa2a533019fcfabe78939a8&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
