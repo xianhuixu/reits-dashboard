@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-05 10:01:09",
+ "updated": "2026-11-05 18:58:26",
  "ndrc": [
   {
    "name": "万国数据中心新购入项目",
@@ -291,9 +291,9 @@
    "name": "东方红申能股份新能源封闭式基础设施证券投资基金",
    "manager": "上海东方证券资产管理有限公司",
    "assetType": "基础设施",
-   "status": "已反馈",
+   "status": "通过（注册生效）",
    "acceptDate": "2026-07-13",
-   "updateDate": "2026-10-14",
+   "updateDate": "2026-11-02",
    "link": "https://www.sse.com.cn/reits/info/index_detail.shtml?audit_id=f461bff4962247f4a1dac82dea874c42"
   },
   {
@@ -1319,7 +1319,7 @@
    "name": "红土创新星河集团封闭式商业不动产证券投资基金",
    "type": "首发",
    "assetType": "商业不动产",
-   "status": "通过",
+   "status": "注册生效",
    "originator": "星河实业（深圳）有限公司",
    "acceptDate": "2026-03-13",
    "link": "https://reits.szse.cn/projectdynamic/detail/index.html?id=5000065"
