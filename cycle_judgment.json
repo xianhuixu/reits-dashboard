@@ -808,7 +808,7 @@
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
       "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-      "note": "新浪/东财取数覆盖不足（价格 57/58，分派 49/58），沿用缓存"
+      "note": "新浪/东财取数覆盖不足（价格 57/58，分派 44/58），沿用缓存"
     },
     "asOf": "2026-11-06",
     "rentLeg": {
