@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-05T18:47:32+08:00",
-  "lastSuccessAt": "2026-11-05T18:47:32+08:00",
+  "checkedAt": "2026-11-06T09:47:33+08:00",
+  "lastSuccessAt": "2026-11-06T09:47:33+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-11-05T18:47:32+08:00",
-      "lastSuccessAt": "2026-11-05T18:47:32+08:00",
+      "checkedAt": "2026-11-06T09:47:33+08:00",
+      "lastSuccessAt": "2026-11-06T09:47:33+08:00",
       "latestBulletinDate": "2026-11-05"
     },
     {
@@ -853,36 +853,6 @@
       "date": "2026-08-10",
       "title": "中信金融资产不良资产ABS、CMBS、REITs等资产证券化产品计划管理人和销售机构采购项目结果公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019fe8fc9b865f4f&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_9fb53387a4dd16091c30",
-      "date": "2026-08-07",
-      "title": "徐州市国投能源集团有限公司公募REITs评估机构选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494849fa2a533019fdb55766508d5&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_83d5310a279dd080f102",
-      "date": "2026-08-07",
-      "title": "徐州市国投能源集团有限公司公募REITs税务服务机构选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869fbfd7ac019fdb5a3b72144f&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_cabf5312c5a8311e4a2a",
-      "date": "2026-08-07",
-      "title": "徐州市国投能源集团有限公司公募REITs会计师事务所选聘项目中标候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869fbfd7ac019fdb5143cb1164&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
