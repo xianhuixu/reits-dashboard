@@ -2238,174 +2238,174 @@
     },
     {
       "date": "2026-07-03",
-      "ttmYield": 4.087,
+      "ttmYield": 4.074,
       "y10": 1.746,
-      "spread": 2.3412,
-      "pctile": 0.5406,
-      "pctileFull": 0.6754,
-      "n": 46
-    },
-    {
-      "date": "2026-07-10",
-      "ttmYield": 4.095,
-      "y10": 1.74,
-      "spread": 2.3553,
-      "pctile": 0.5406,
-      "pctileFull": 0.677,
-      "n": 46
-    },
-    {
-      "date": "2026-07-17",
-      "ttmYield": 4.115,
-      "y10": 1.74,
-      "spread": 2.3746,
-      "pctile": 0.5502,
-      "pctileFull": 0.6853,
-      "n": 46
-    },
-    {
-      "date": "2026-07-24",
-      "ttmYield": 4.184,
-      "y10": 1.728,
-      "spread": 2.4553,
-      "pctile": 0.619,
-      "pctileFull": 0.7347,
-      "n": 46
-    },
-    {
-      "date": "2026-07-31",
-      "ttmYield": 4.18,
-      "y10": 1.714,
-      "spread": 2.4657,
-      "pctile": 0.6162,
-      "pctileFull": 0.734,
-      "n": 46
-    },
-    {
-      "date": "2026-08-07",
-      "ttmYield": 4.47,
-      "y10": 1.711,
-      "spread": 2.7583,
-      "pctile": 0.8349,
-      "pctileFull": 0.8861,
+      "spread": 2.3279,
+      "pctile": 0.5296,
+      "pctileFull": 0.6676,
       "n": 47
     },
     {
+      "date": "2026-07-10",
+      "ttmYield": 4.083,
+      "y10": 1.74,
+      "spread": 2.3432,
+      "pctile": 0.5378,
+      "pctileFull": 0.675,
+      "n": 47
+    },
+    {
+      "date": "2026-07-17",
+      "ttmYield": 4.104,
+      "y10": 1.74,
+      "spread": 2.3639,
+      "pctile": 0.5461,
+      "pctileFull": 0.6824,
+      "n": 47
+    },
+    {
+      "date": "2026-07-24",
+      "ttmYield": 4.169,
+      "y10": 1.728,
+      "spread": 2.4413,
+      "pctile": 0.6121,
+      "pctileFull": 0.7299,
+      "n": 47
+    },
+    {
+      "date": "2026-07-31",
+      "ttmYield": 4.168,
+      "y10": 1.714,
+      "spread": 2.4539,
+      "pctile": 0.6149,
+      "pctileFull": 0.7331,
+      "n": 47
+    },
+    {
+      "date": "2026-08-07",
+      "ttmYield": 4.451,
+      "y10": 1.711,
+      "spread": 2.7391,
+      "pctile": 0.8294,
+      "pctileFull": 0.8824,
+      "n": 48
+    },
+    {
       "date": "2026-08-14",
-      "ttmYield": 4.516,
+      "ttmYield": 4.499,
       "y10": 1.696,
-      "spread": 2.8194,
-      "pctile": 0.8624,
-      "pctileFull": 0.9056,
-      "n": 50
+      "spread": 2.8026,
+      "pctile": 0.8542,
+      "pctileFull": 0.8999,
+      "n": 51
     },
     {
       "date": "2026-08-21",
-      "ttmYield": 4.37,
+      "ttmYield": 4.357,
       "y10": 1.684,
-      "spread": 2.6861,
-      "pctile": 0.7923,
-      "pctileFull": 0.8581,
-      "n": 50
+      "spread": 2.6731,
+      "pctile": 0.7868,
+      "pctileFull": 0.8543,
+      "n": 51
     },
     {
       "date": "2026-08-28",
-      "ttmYield": 4.405,
+      "ttmYield": 4.391,
       "y10": 1.695,
-      "spread": 2.7102,
-      "pctile": 0.8061,
-      "pctileFull": 0.8681,
-      "n": 52
+      "spread": 2.6959,
+      "pctile": 0.7978,
+      "pctileFull": 0.8625,
+      "n": 53
     },
     {
       "date": "2026-09-04",
-      "ttmYield": 4.545,
+      "ttmYield": 4.53,
       "y10": 1.68,
-      "spread": 2.8646,
-      "pctile": 0.8776,
-      "pctileFull": 0.9171,
-      "n": 53
+      "spread": 2.8492,
+      "pctile": 0.8735,
+      "pctileFull": 0.9143,
+      "n": 54
     },
     {
       "date": "2026-09-11",
-      "ttmYield": 4.546,
+      "ttmYield": 4.532,
       "y10": 1.69,
-      "spread": 2.8561,
-      "pctile": 0.8693,
-      "pctileFull": 0.912,
-      "n": 53
+      "spread": 2.8421,
+      "pctile": 0.8624,
+      "pctileFull": 0.9073,
+      "n": 54
     },
     {
       "date": "2026-09-18",
-      "ttmYield": 4.572,
+      "ttmYield": 4.558,
       "y10": 1.682,
-      "spread": 2.8901,
-      "pctile": 0.8886,
-      "pctileFull": 0.9253,
-      "n": 53
+      "spread": 2.876,
+      "pctile": 0.8817,
+      "pctileFull": 0.9207,
+      "n": 54
     },
     {
       "date": "2026-09-24",
-      "ttmYield": 4.569,
+      "ttmYield": 4.552,
       "y10": 1.674,
-      "spread": 2.8949,
-      "pctile": 0.8858,
-      "pctileFull": 0.9237,
-      "n": 53
+      "spread": 2.8786,
+      "pctile": 0.879,
+      "pctileFull": 0.9191,
+      "n": 54
     },
     {
       "date": "2026-09-30",
-      "ttmYield": 4.536,
+      "ttmYield": 4.52,
       "y10": 1.682,
-      "spread": 2.8539,
-      "pctile": 0.8581,
-      "pctileFull": 0.9056,
-      "n": 53
+      "spread": 2.8382,
+      "pctile": 0.8499,
+      "pctileFull": 0.9001,
+      "n": 54
     },
     {
       "date": "2026-10-09",
-      "ttmYield": 4.603,
+      "ttmYield": 4.588,
       "y10": 1.686,
-      "spread": 2.9171,
-      "pctile": 0.8982,
-      "pctileFull": 0.9323,
-      "n": 53
+      "spread": 2.9012,
+      "pctile": 0.8913,
+      "pctileFull": 0.9277,
+      "n": 54
     },
     {
       "date": "2026-10-16",
-      "ttmYield": 4.539,
+      "ttmYield": 4.524,
       "y10": 1.648,
-      "spread": 2.891,
-      "pctile": 0.8803,
-      "pctileFull": 0.9208,
-      "n": 53
+      "spread": 2.8758,
+      "pctile": 0.8735,
+      "pctileFull": 0.9162,
+      "n": 54
     },
     {
       "date": "2026-10-23",
-      "ttmYield": 4.49,
+      "ttmYield": 4.476,
       "y10": 1.64,
-      "spread": 2.8502,
-      "pctile": 0.8418,
-      "pctileFull": 0.8957,
-      "n": 53
+      "spread": 2.8357,
+      "pctile": 0.8363,
+      "pctileFull": 0.8921,
+      "n": 54
     },
     {
       "date": "2026-10-30",
-      "ttmYield": 4.599,
+      "ttmYield": 4.583,
       "y10": 1.65,
-      "spread": 2.9489,
-      "pctile": 0.9106,
-      "pctileFull": 0.9413,
-      "n": 53
+      "spread": 2.9327,
+      "pctile": 0.9092,
+      "pctileFull": 0.9404,
+      "n": 54
     },
     {
       "date": "2026-11-05",
-      "ttmYield": 4.603,
+      "ttmYield": 4.587,
       "y10": 1.604,
-      "spread": 2.9995,
-      "pctile": 0.923,
-      "pctileFull": 0.9496,
-      "n": 53
+      "spread": 2.9832,
+      "pctile": 0.9188,
+      "pctileFull": 0.9469,
+      "n": 54
     }
   ],
   "operatingIrrSeries": [
@@ -2948,8 +2948,8 @@
   "propertySpread": {
     "asOf": "2026-11-05",
     "coverage": {
-      "included": 53,
-      "mcapWeighted": 53,
+      "included": 54,
+      "mcapWeighted": 54,
       "universe": 58,
       "excluded": [
         {
@@ -2992,20 +2992,20 @@
       ]
     },
     "latest": {
-      "ttmYieldMcap": 4.603,
+      "ttmYieldMcap": 4.587,
       "ttmYieldMedian": 4.893,
       "y10": 1.604,
-      "spreadBp": 299.9,
-      "spreadMedianBp": 329.0,
-      "pctRolling3y": 92.3,
-      "pctFull": 95.0,
-      "pctSinceN10": 92.5,
-      "pctRolling3yMedian": 95.2,
-      "pctFullMedian": 96.9,
+      "spreadBp": 298.3,
+      "spreadMedianBp": 328.9,
+      "pctRolling3y": 91.9,
+      "pctFull": 94.7,
+      "pctSinceN10": 92.1,
+      "pctRolling3yMedian": 96.3,
+      "pctFullMedian": 97.6,
       "defaultPct": "pctRolling3y"
     },
     "gate60d": {
-      "pctileChangePP": 10.1,
+      "pctileChangePP": 10.3,
       "from": "2026-08-05",
       "to": "2026-11-05",
       "basis": "滚动 3 年分位（市值加权），60 个交易日"
@@ -3326,9 +3326,9 @@
       "y10Now": 1.604,
       "y10YearAgo": 1.796,
       "pointToPointBp": -19.3,
-      "ttmYieldMcap": 4.6,
+      "ttmYieldMcap": 4.59,
       "distYoYMedianPct": 0.97,
-      "distDragBp": 4.5,
+      "distDragBp": 4.4,
       "netBp": 4.3,
       "dominant": "rate",
       "text": "利率顺风占优：利率下行快过分派回落",
@@ -3385,11 +3385,11 @@
       },
       {
         "sector": "消费",
-        "nReits": 11,
-        "yieldMcap": 4.064,
-        "spreadBp": 246.0,
-        "spreadMedianBp": 238.6,
-        "pctFull": 69.0,
+        "nReits": 12,
+        "yieldMcap": 4.038,
+        "spreadBp": 243.4,
+        "spreadMedianBp": 236.9,
+        "pctFull": 69.9,
         "historyDays": 822,
         "since": "2024-08-05",
         "shortHistory": false,
@@ -3432,35 +3432,95 @@
         "valueTrap": false
       }
     ],
-    "status": "ok",
-    "updated": "2026-11-05 17:18:30",
+    "status": "lagged",
+    "updated": "2026-11-06 01:48:01",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 58,
-        "failed": []
+        "ok": 45,
+        "failed": [
+          "508082.SH",
+          "508090.SH",
+          "508091.SH",
+          "508092.SH",
+          "508097.SH",
+          "180607.SZ",
+          "508012.SH",
+          "508084.SH",
+          "180106.SZ",
+          "508600.SH",
+          "508601.SH",
+          "508602.SH",
+          "508603.SH"
+        ]
       },
       "dists": {
-        "ok": 55,
+        "ok": 33,
         "failed": [
-          "180302.SZ",
+          "508000.SH",
+          "180101.SZ",
+          "508088.SH",
+          "508019.SH",
+          "508077.SH",
+          "508055.SH",
+          "508031.SH",
+          "180901.SZ",
           "180305.SZ",
+          "508010.SH",
+          "508002.SH",
+          "508060.SH",
+          "508082.SH",
+          "508090.SH",
+          "508091.SH",
+          "508092.SH",
+          "508097.SH",
+          "180607.SZ",
+          "508012.SH",
+          "508084.SH",
+          "180106.SZ",
+          "508600.SH",
+          "508601.SH",
+          "508602.SH",
           "508603.SH"
         ]
       },
       "units": {
-        "ok": 55,
+        "ok": 32,
         "failed": [
-          "508056.SH",
-          "180302.SZ",
-          "508600.SH"
+          "508000.SH",
+          "180105.SZ",
+          "508058.SH",
+          "508077.SH",
+          "180502.SZ",
+          "180601.SZ",
+          "180603.SZ",
+          "180605.SZ",
+          "180901.SZ",
+          "508080.SH",
+          "508005.SH",
+          "508039.SH",
+          "508078.SH",
+          "508082.SH",
+          "508090.SH",
+          "508091.SH",
+          "508092.SH",
+          "508097.SH",
+          "180607.SZ",
+          "508012.SH",
+          "508084.SH",
+          "180106.SZ",
+          "508600.SH",
+          "508601.SH",
+          "508602.SH",
+          "508603.SH"
         ]
       },
-      "elapsedS": 197.7
-    }
+      "elapsedS": 426.9
+    },
+    "lagReason": "新浪/东财取数覆盖不足（价格 45/58，分派 33/58），沿用缓存"
   },
   "operatingDisclosedIrr": {
     "status": "ok",
