@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07 00:51:33",
+ "updated": "2026-11-07 09:53:40",
  "lastTradeDate": "2026-11-06",
  "count": 88,
  "sectors": [
@@ -3460,7 +3460,7 @@
  },
  "cycle": {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
-  "updated": "2026-11-06",
+  "updated": "2026-11-07",
   "bond10y": 1.59,
   "pm": {
    "pmi": 49.2,
@@ -3563,7 +3563,7 @@
     "y10": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
     "pmi": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI 总指数（国家统计局；该接口无新订单分项）"
    },
-   "computedAt": "2026-11-06",
+   "computedAt": "2026-11-07",
    "status": "ok",
    "asOf": "2026-11-06",
    "y10": 1.5868,
@@ -4251,7 +4251,7 @@
     "downgradeTo": "partial"
    },
    "status": "not_triggered",
-   "dataStatus": "lagged",
+   "dataStatus": "complete",
    "rateLeg": {
     "status": "ok",
     "d10y60bp": -12.1,
@@ -4261,18 +4261,17 @@
     "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
    },
    "spreadLeg": {
-    "status": "lagged",
+    "status": "ok",
     "pctileChangePP": 12.4,
     "from": "2026-08-06",
     "to": "2026-11-06",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
     "met": false,
-    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-    "note": "新浪/东财取数覆盖不足（价格 57/58，分派 44/58），沿用缓存"
+    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
    },
    "asOf": "2026-11-06",
    "rentLeg": {
-    "status": "lagged",
+    "status": "ok",
     "asOf": "2026-11-06",
     "y10Avg1y": 1.76,
     "y10AvgPrev1y": 1.757,
@@ -4301,7 +4300,7 @@
     "tsf": "live",
     "gdp": "live"
    },
-   "computedAt": "2026-11-06",
+   "computedAt": "2026-11-07",
    "status": "ok",
    "label": null,
    "asOf": "2026-04",
