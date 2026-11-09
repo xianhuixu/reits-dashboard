@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-08T18:47:32+08:00",
-  "lastSuccessAt": "2026-11-08T18:47:32+08:00",
+  "checkedAt": "2026-11-09T09:47:31+08:00",
+  "lastSuccessAt": "2026-11-09T09:47:31+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-11-08T18:47:32+08:00",
-      "lastSuccessAt": "2026-11-08T18:47:32+08:00",
+      "checkedAt": "2026-11-09T09:47:31+08:00",
+      "lastSuccessAt": "2026-11-09T09:47:31+08:00",
       "latestBulletinDate": "2026-11-06"
     },
     {
@@ -803,66 +803,6 @@
       "date": "2026-08-11",
       "title": "徐州市国投能源集团有限公司公募REITs会计师事务所选聘项目中标结果公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869fe94a17019feeaf265d64cd&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_4d20c439121c8762f27f",
-      "date": "2026-08-10",
-      "title": "郑州城发安居科技有限公司租赁住房公募REITs资产评估服务成交结果公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019feaf5b4a22aa7&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_3d6d9ccf6b0635ac829e",
-      "date": "2026-08-10",
-      "title": "海悦·梧桐苑机构间REITs发行与存续阶段中介机构-财务顾问及计划管理人成交公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fea0af9019fea45d4d30f0e&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_c0bf2362eafd2f86dc29",
-      "date": "2026-08-10",
-      "title": "兰州热力REITs项目资产评估机构选聘项目中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494859e5d0b9e019fcab4d5e01323&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_4ad901daada3b13df8d9",
-      "date": "2026-08-10",
-      "title": "兰州热力REITs项目法律服务机构选聘项目中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69fca1237019fcab1320f2f02&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_4ef161cad6b1fbb2fc80",
-      "date": "2026-08-10",
-      "title": "兰州热力REITs项目审计机构选聘项目中标结果公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494859e5d0b9e019fcaaed9891215&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_155ee1b8d814d820eb79",
-      "date": "2026-08-10",
-      "title": "中信金融资产不良资产ABS、CMBS、REITs等资产证券化产品计划管理人和销售机构采购项目结果公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf91019fe8fc9b865f4f&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
