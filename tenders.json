@@ -1,6 +1,6 @@
 {
-  "checkedAt": "2026-11-09T18:47:33+08:00",
-  "lastSuccessAt": "2026-11-09T18:47:33+08:00",
+  "checkedAt": "2026-11-10T09:47:32+08:00",
+  "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
   "retentionDays": 90,
@@ -11,8 +11,8 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "ok",
       "count": 10,
-      "checkedAt": "2026-11-09T18:47:33+08:00",
-      "lastSuccessAt": "2026-11-09T18:47:33+08:00",
+      "checkedAt": "2026-11-10T09:47:32+08:00",
+      "lastSuccessAt": "2026-11-10T09:47:32+08:00",
       "latestBulletinDate": "2026-11-09"
     },
     {
@@ -787,36 +787,6 @@
       "media": "中国招标投标公共服务平台",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=dd8c841d-7395-434f-a1cb-9b6a09c495c4&dataSource=1",
       "tag": "招投标"
-    },
-    {
-      "code": "bid_9941e1ce756a378986a6",
-      "date": "2026-08-11",
-      "title": "徐州市国投能源集团有限公司公募REITs评估机构选聘项目中标结果公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869fe94a17019feeb8d4b7661f&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_4717d8ab29e84e263c51",
-      "date": "2026-08-11",
-      "title": "徐州市国投能源集团有限公司公募REITs税务服务机构选聘项目中标结果公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494859fdb3f8a019feebd775d1629&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_8dcedc16c8a73d171951",
-      "date": "2026-08-11",
-      "title": "徐州市国投能源集团有限公司公募REITs会计师事务所选聘项目中标结果公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494869fe94a17019feeaf265d64cd&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
     }
   ]
 }
