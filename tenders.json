@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-10T18:49:38+08:00",
+  "checkedAt": "2026-11-11T09:49:36+08:00",
   "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -11,7 +11,7 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "failed",
       "count": 0,
-      "checkedAt": "2026-11-10T18:49:38+08:00",
+      "checkedAt": "2026-11-11T09:49:36+08:00",
       "lastSuccessAt": null,
       "latestBulletinDate": null
     },
@@ -767,25 +767,6 @@
       "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
       "media": "中国招标投标公共服务平台",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=b41d6f29-b583-4b6b-8835-057d262cfc22&dataSource=1",
-      "tag": "招投标"
-    },
-    {
-      "code": "bid_ff16fd2b636d4849208c",
-      "date": "2026-08-12",
-      "title": "济南城发租赁住房 REITs项目中介机构选聘竞争性磋商公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9c96a69ff457b1019ff487b2450896&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "ctb_dd8c841d-739",
-      "date": "2026-08-12",
-      "title": "天津市津能滨海热电有限公司公募REITs项目前期税务咨询项目结果公示",
-      "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
-      "media": "中国招标投标公共服务平台",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=dd8c841d-7395-434f-a1cb-9b6a09c495c4&dataSource=1",
       "tag": "招投标"
     }
   ]
