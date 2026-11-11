@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-11T18:49:38+08:00",
+  "checkedAt": "2026-11-12T02:11:54+08:00",
   "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -11,7 +11,7 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "failed",
       "count": 0,
-      "checkedAt": "2026-11-11T18:49:38+08:00",
+      "checkedAt": "2026-11-12T02:11:54+08:00",
       "lastSuccessAt": null,
       "latestBulletinDate": null
     },
@@ -750,24 +750,6 @@
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
       "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "ctb_30a211f1-d44",
-      "date": "2026-08-13",
-      "title": "首钢基金公募REITs资产评估服务项目招标公告",
-      "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
-      "media": "中国招标投标公共服务平台",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=30a211f1-d442-4722-bb17-63ff5e6161de&dataSource=1",
-      "tag": "招投标"
-    },
-    {
-      "code": "ctb_b41d6f29-b58",
-      "date": "2026-08-13",
-      "title": "四川蜀道高速公路集团有限公司高速公路权益并表型类REITs项目信托服务机构选聘中标候选人公示",
-      "summary": "来源：中国招标投标公共服务平台（招标/中标/选聘公告）",
-      "media": "中国招标投标公共服务平台",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=b41d6f29-b583-4b6b-8835-057d262cfc22&dataSource=1",
-      "tag": "招投标"
     }
   ]
 }
