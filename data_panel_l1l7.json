@@ -3431,38 +3431,41 @@
         "valueTrap": false
       }
     ],
-    "status": "ok",
-    "updated": "2026-11-14 01:50:20",
+    "status": "lagged",
+    "updated": "2026-11-14 10:50:10",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 55,
+        "ok": 57,
         "failed": [
-          "180101.SZ",
-          "508099.SH",
-          "180501.SZ"
+          "508027.SH"
         ]
       },
       "dists": {
-        "ok": 54,
+        "ok": 51,
         "failed": [
           "180503.SZ",
-          "508011.SH",
-          "180106.SZ",
+          "180603.SZ",
+          "180901.SZ",
+          "508084.SH",
+          "508601.SH",
+          "508602.SH",
           "508603.SH"
         ]
       },
       "units": {
-        "ok": 57,
+        "ok": 56,
         "failed": [
-          "508600.SH"
+          "508600.SH",
+          "508602.SH"
         ]
       },
-      "elapsedS": 194.6
-    }
+      "elapsedS": 284.2
+    },
+    "lagReason": "新浪/东财取数覆盖不足（价格 57/58，分派 51/58），沿用缓存"
   },
   "operatingDisclosedIrr": {
     "status": "ok",
