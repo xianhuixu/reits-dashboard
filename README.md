@@ -4,7 +4,7 @@
 
 配置页按“配置总览 → 分权估值 → 现金流质量 → 板块筛选 → 风险与压力测试 → 研究依据”组织。正文直接包含在 HTML 中；`allocation-tools.js` 只读行情，并提供板块筛选与独立假设情景计算。`research-layout.css` 统一导航、卡片和响应式表格布局，沿用三种主题。
 
-新版以[完整研究备忘录](research/allocation-research-2026-09-14.md)为依据，区分披露事实、研究判断与假设。原 `advice.json` / `advice.js` 和 `docs/school-framework.md` 保留为历史资料，当前配置页不再消费其评级、仓位倾向及未经逐项核验的卖方指标。行情更新不会自动刷新研究观点。
+新版以[完整研究备忘录](research/allocation-research-2026-09-14.md)为依据，区分披露事实、研究判断与假设。配置页与首页结论横幅仍消费 `advice.json` / `advice.js`（研究观点人工维护）；`docs/school-framework.md` 与 `research/allocation-research-2026-09-14.md` 为框架备忘，不因日更行情自动改写。未经逐项核验的卖方指标不得直接当作实时行情。行情更新不会自动刷新研究观点。
 
 压力测试采用独立示例参数，不读写原始财务模型；产权采用零增长永续近似，经营权采用有限期等额年末现金流。正式投资定价仍须逐券建模。`npm test` 包含独立现金流现值核验、无效参数和缺失行情样本检查。
 

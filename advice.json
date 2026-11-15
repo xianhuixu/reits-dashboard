@@ -20,60 +20,60 @@
       "增长×利率时钟（cycle.rateClock，2026-09-30 校准口径）与 clockSectorPrior 仅作宏观背景层；冲突自动产出 conflictFlag，不直接改变 sectorViews；利率轴用动态死区（进入 max(5bp,0.7σ)、退出为其一半、5 日确认），增长轴用 PMI 偏离趋势 z3（±0.5 进入 / ±0.25 退出）；任一轴走平或趋势附近为「过渡期」，不判象限，只按最近象限给「参考」提示，硬冲突只来自确定象限；距切换线很近时标「临界」并降置信度；社融脉冲（cycle.tsfImpulse）为单独领先预警，只看方向，不改仓位"
     ]
   },
-  "asOfMarket": "2026-09-09",
-  "asOfResearch": "2026-09-07",
-  "asOfMarketNote": "data.json lastTradeDate=2026-09-09; marketIndex may be stale (stale=true in feed). PNG/dashboard snapshot 2026-09-07 close≈937.67 used as cross-check.",
-  "headline": "底部区域分批：产权利差处历史极高分位但缩量回落、重估暂停；经营权IRR分位仅中等作稳定底仓；过五维破局闸门前禁止趋势牛叙事",
-  "rating": "结构性偏多（引用CSC「强于大市」作中期评级锚，近端受CICC破局闸门约束）",
-  "ratingSource": "School synthesis: CSC rating + CICC five-gate + dashboard revaluation=暂停",
+  "asOfMarket": "2026-11-09",
+  "asOfResearch": "2026-11-09",
+  "asOfMarketNote": "data.json lastTradeDate=2026-11-09; research refresh sourced from CSC 2026-11-09 (REITs2027策略，黄啸天)；行情/重估记分卡仍以 data.json 为准，不因研报改写。",
+  "headline": "CSC2027：红利属性凸显、增配机遇渐明——二级以奥莱/保租房/市政环保/数据中心底仓，关注仓储与部分高速修复、择优厂房类；近端仍受五维破局闸门约束，禁止趋势牛叙事",
+  "rating": "结构性偏多（引用CSC 2026-11-09「强于大市」作中期评级锚，近端受CICC破局闸门约束）",
+  "ratingSource": "School synthesis: CSC 2026-11-09「强于大市」+ CICC five-gate (未本轮重验) + dashboard revaluation=暂停",
   "conflictFlags": [
-    "cycle.clock=衰退 vs CSC下半年企稳复苏叙事 → 学派：clock作宏观背景，强化抗周期",
-    "revaluation=重估暂停(1/4) vs 无闸门全面超配 → 学派禁止全面超配",
-    "CSC 08-29 weekly close 955.3 vs post-week pullback / CICC 09-07 week -1.52%",
-    "CICC「已具备配置价值」≠「趋势确立」",
-    "clockSectorPrior：消费（美国类比购物中心/社区商业）雷区=Q3，学派「标配偏超配」→ 待中国抗周期实证；当前 rateClock 象限与自动冲突见周期分析页"
+    "CSC 2026-11-09「强于大市」/增配叙事 vs 仪表盘 revaluation=重估暂停(1/4) → 学派禁止全面超配与趋势牛叙事",
+    "CICC 五维破局闸门自 2026-09 以来未做本轮逐项重验（量价/资金中枢/供给吸收）→ 近端仍闸门约束",
+    "CSC 产权分派率约4.7%超中证红利约4.2%、利差分位97.3%（截至10-30）≠ 趋势确立",
+    "消费升至「超配」（CSC 奥莱底仓）vs clockSectorPrior 美国购物中心/社区商业 Q3 雷区 → 保留冲突提示，待中国奥莱抗周期实证",
+    "产业园仅「左侧精选/观望」（CSC 择优厂房类）——升超配需出租率/续租边际证据，待 Jason 拍板"
   ],
   "breakoutGates": [
     {
       "id": "fundamental",
       "label": "基本面",
       "status": "partial",
-      "note": "CICC中报分化；保租房/消费/数据中心韧性，产业园仓储租金仍是主要矛盾；待三季度筑底验证",
-      "asOf": "2026-09-02"
+      "note": "CSC：Q3可比EBITDA同比+0.9%、环比+9.7%（高速/能源带动）；保租房/消费相对稳健，产业园与仓储收入及EBITDA同环比仍降。CICC闸门口径未本轮重验。",
+      "asOf": "2026-11-09"
     },
     {
       "id": "valuation",
       "label": "估值",
       "status": "lit",
-      "note": "产权TTM分派vs10Y利差302bps=97.3%分位(CICC截至9/4)；经营权IRR利差363bps=59.8%分位",
-      "asOf": "2026-09-04"
+      "note": "CSC截至10-30：产权分派率约4.7%、利差历史分位97.3%；经营权IRR约5.5%、分位62.2%。与此前CICC高分位方向一致。",
+      "asOf": "2026-11-09"
     },
     {
       "id": "priceVolume",
       "label": "量价",
       "status": "dim",
-      "note": "CICC周报8.31-9.4日均成交3.78亿、换手0.36%缩量；DASH资金中枢/宽度未确认",
-      "asOf": "2026-09-07"
+      "note": "CSC：10月指数企稳但成交仍较清淡。仪表盘重估「资金中枢抬升/市场宽度」仍未点亮（data.json）。CICC周报量价未本轮重验。",
+      "asOf": "2026-11-09"
     },
     {
       "id": "capital",
       "label": "资金",
       "status": "partial",
-      "note": "指数基金/二级债基/险资政策在途；增持公告需与经营协同验证(CICC)",
-      "asOf": "2026-09-07"
+      "note": "CSC：二级债基扩围已落地（截至11-02年内144只纳入、发行规模约507亿）；首批REITs指数基金已成立；公募限制拟放宽（征求意见）；险资资产负债新规自2027年起施行。关键仍看实际建仓节奏。",
+      "asOf": "2026-11-09"
     },
     {
       "id": "supply",
       "label": "供给",
       "status": "watch",
-      "note": "9月解禁(唯品会奥莱/凯德消费等)+新发分化；CICC 8/14口径9-12月解禁约35亿可消化，但仍需跟踪吸收",
-      "asOf": "2026-09-07"
+      "note": "CSC：2027年解禁约292.4亿元（同比+50.5%），下半年约177.7亿，关注6月/11月集中释放；商业不动产储备充足，一级需精选定价合理项目。",
+      "asOf": "2026-11-09"
     }
   ],
   "revaluationMapping": {
     "dashboardStage": "重估暂停",
     "dashboardScore": 1,
-    "dashboardAsOf": "2026-09-09",
+    "dashboardAsOf": "2026-11-09",
     "mapToGates": {
       "利率下行趋势": "valuation/denominator + capital backdrop",
       "资金中枢抬升": "priceVolume + capital",
@@ -83,22 +83,22 @@
   },
   "horizons": {
     "weekly": {
-      "stance": "中性偏谨慎·分批低吸",
+      "stance": "中性偏谨慎·主线内分批",
       "positionBias": 0.05,
-      "summary": "CICC 09-07：二级缩量回落（全收益-1.52%，日均成交3.78亿）；前两周领涨的产业园/仓储回吐。产权利差仍极高但量价维未点亮 → 不追反弹，主线内分批。",
+      "summary": "CSC 2026-11-09：指数10月企稳但成交清淡；仪表盘重估仍暂停。近端不追趋势，主线（奥莱/保租房/市政环保/数据中心）内分批。CICC周报量价未本轮重验。",
       "overweight": [
         "保租房",
         "市政环保",
-        "能源"
+        "消费",
+        "数据中心"
       ],
       "selective": [
-        "消费",
-        "数据中心",
-        "高速公路"
+        "能源",
+        "高速公路",
+        "仓储物流"
       ],
       "underweightOrCautious": [
         "产业园",
-        "仓储物流",
         "商业不动产"
       ],
       "triggersBull": [
@@ -115,15 +115,15 @@
       ],
       "confidence": "低",
       "citations": [
-        "CICC 2026-09-07 weekly",
-        "CICC 2026-08-21 five-gate",
-        "DASH revaluation暂停"
+        "CSC 2026-11-09",
+        "DASH revaluation暂停",
+        "CICC five-gate（未本轮重验）"
       ]
     },
     "monthly": {
-      "stance": "底部区域配置",
+      "stance": "红利底仓配置·关注修复",
       "positionBias": 0.35,
-      "summary": "CSC底部配置+CICC择优低吸：估值安全垫在产权侧充分，但五维仅估值偏亮、量价资金供给未齐 → 仓位中性至中高、结构重于择时。",
+      "summary": "CSC2027：产权现金回报吸引力改善（分派约4.7% vs 红利约4.2%）；以奥莱/保租房/市政环保/数据中心底仓，兼顾仓储与部分高速景气修复；仓位结构重于择时，过闸门前不加杠杆追涨。",
       "sleeveWeights": {
         "defensiveAntiCycle": [
           0.4,
@@ -159,71 +159,67 @@
       ],
       "triggersBull": [
         "指数基金AUM上升",
-        "险资商业REITs准入落地",
-        "解禁高峰平稳度过",
-        "三季度基本面筑底验证"
+        "险资/公募实际增配落地",
+        "2027解禁高峰平稳度过",
+        "仓储/高速修复证据"
       ],
       "triggersBear": [
         "商业不动产定价失序",
+        "2027下半年解禁冲击超预期",
         "产权基本面继续下修",
-        "长端利率上行超预期",
         "增量资金不及预期",
         "升息快于租金闸门触发（rateRentGate）"
       ],
       "confidence": "中",
       "citations": [
-        "CSC 2026-08-27",
-        "CICC 2026-09-03 monthly",
-        "CICC 2026-08-21"
+        "CSC 2026-11-09",
+        "CICC five-gate（未本轮重验）"
       ]
     },
     "quarterly": {
-      "stance": "结构牛/企稳复苏基准",
+      "stance": "增配机遇渐明 / 结构配置基准",
       "positionBias": 0.45,
-      "summary": "CSC中期：上半年压力释放、下半年供需改善；CICC：破局需估值×政策×资金结构共振。基准情景为结构机会而非普涨。",
+      "summary": "CSC2027基准：红利属性凸显、多元增量资金有望逐步入市；关键看公募与险资建仓能否承接新发与解禁。结构机会而非普涨。",
       "themes": [
         {
           "id": "anti_cycle",
-          "label": "抗周期",
+          "label": "确定性底仓",
           "sectors": [
             "保租房",
             "消费",
             "市政环保",
-            "能源"
+            "数据中心"
           ]
         },
         {
           "id": "growth_repair",
-          "label": "高景气与修复",
+          "label": "景气修复",
           "sectors": [
-            "数据中心",
             "仓储物流",
-            "高速公路"
+            "高速公路",
+            "能源"
           ]
         },
         {
-          "id": "strong_sponsor",
-          "label": "强原权扩募",
+          "id": "selective_value",
+          "label": "择优/定价精选",
           "sectors": [
-            "消费",
-            "保租房",
             "产业园",
-            "高速公路"
+            "商业不动产"
           ]
         }
       ],
       "confidence": "中",
       "citations": [
+        "CSC 2026-11-09",
         "CSC 2026-06-14 midyear",
-        "CSC 2025-11-10 annual",
-        "CICC 2026-08-21",
-        "CICC 2026-09-02 interim"
+        "CICC 2026-08-21"
       ]
     }
   },
   "rightsViews": {
     "产权": {
-      "view": "估值吸引，主线内精选超配（非无过滤全面超配）",
+      "view": "估值吸引（CSC：分派约4.7%超红利约4.2%），主线内精选超配（非无过滤全面超配）",
       "evidence": {
         "ciccTtmYield": 0.047,
         "ciccSpreadVsCsiDividendBps": 54.5,
@@ -242,7 +238,12 @@
         },
         "cscSpreadPercentile": 0.959,
         "cscSpreadPercentileAsOf": "2026-08-26",
-        "note": "利差分位极高提供安全垫，但CICC强调静态低估值非充分买点"
+        "note": "CSC 2026-11-09：产权利差处历史高分位提供安全垫；静态低估值≠趋势买点；仪表盘重估仍暂停",
+        "cscPropertyYield": 0.047,
+        "cscCsiDividendYield": 0.042,
+        "cscSpreadVs10YPercentile": 0.973,
+        "cscVol252": 0.099,
+        "cscAsOf": "2026-10-30"
       },
       "seedSnapshot": {
         "count": 58,
@@ -250,11 +251,12 @@
         "ret20": 1.51,
         "ret60": -9.36,
         "pctRankAvg": 13.55,
-        "asOf": "2026-09-09"
+        "asOf": "2026-09-09",
+        "note": "snapshot retained from prior advice seed; live returns see data.json — not refreshed from CSC"
       }
     },
     "经营权": {
-      "view": "稳定底仓/标配；勿因高现金分派率误判极度低估",
+      "view": "稳定底仓/标配；CSC经营权IRR约5.5%（分位62.2%），勿因高现金分派率误判极度低估",
       "evidence": {
         "ciccIrr": 0.0531,
         "ciccIrrSpreadVs10YBps": 363,
@@ -262,9 +264,11 @@
         "ciccAsOf": "2026-09-04",
         "ciccIrr_20260828": 0.0519,
         "ciccIrrSpreadPercentile_20260828": 0.53,
-        "cscIrrSpreadPercentile": 0.607,
+        "cscIrrSpreadPercentile": 0.622,
         "cscIrrSpreadPercentileAsOf": "2026-07-22",
-        "note": "强制使用中债IRR利差；现金分派含本金回收"
+        "note": "强制使用中债IRR利差；现金分派含本金回收（CSC/CICC一致纪律）",
+        "cscIrr": 0.055,
+        "cscAsOf": "2026-10-30"
       },
       "seedSnapshot": {
         "count": 30,
@@ -272,7 +276,8 @@
         "ret20": -0.7,
         "ret60": -5.24,
         "pctRankAvg": 22.7,
-        "asOf": "2026-09-09"
+        "asOf": "2026-09-09",
+        "note": "snapshot retained from prior advice seed; live returns see data.json — not refreshed from CSC"
       }
     }
   },
@@ -282,10 +287,9 @@
       "action": "超配",
       "confidence": "高",
       "theme": "anti_cycle",
-      "reason": "CICC中报高出租收缴+月报稳健修复；CSC抗周期主线",
+      "reason": "CSC2027确定性底仓：现金流稳定、抗周期；Q3相对稳健",
       "sources": [
-        "CICC 2026-09-02",
-        "CSC 2026-08-27"
+        "CSC 2026-11-09"
       ]
     },
     {
@@ -293,10 +297,9 @@
       "action": "超配",
       "confidence": "中高",
       "theme": "anti_cycle",
-      "reason": "抗周期低波动；CICC关注回款节奏",
+      "reason": "CSC2027确定性底仓：刚需属性、抗跌；年内板块相对抗跌",
       "sources": [
-        "CSC",
-        "CICC 2026-09-02"
+        "CSC 2026-11-09"
       ]
     },
     {
@@ -304,34 +307,31 @@
       "action": "标配偏超配",
       "confidence": "中",
       "theme": "anti_cycle",
-      "reason": "优选水电/火电稳健子集；规避消纳与电价压力项目",
-      "uncertainty": "需个券筛选",
+      "reason": "CSC：Q3环比改善主要贡献之一；未单列为二级底仓，优选稳健子集",
+      "uncertainty": "需个券筛选；消纳与电价压力",
       "sources": [
-        "CICC 2026-09-02",
-        "CSC"
+        "CSC 2026-11-09"
       ]
     },
     {
       "sector": "消费",
-      "action": "标配偏超配",
+      "action": "超配",
       "confidence": "中高",
       "theme": "anti_cycle",
-      "reason": "主动调改与运营提效下总体稳健；头部运营能力突出者优先",
+      "reason": "CSC2027以奥特莱斯构筑底仓（确定性现金流）；消费整体相对稳健",
       "sources": [
-        "CICC 2026-09-02",
-        "CICC 2026-09-03",
-        "CSC"
-      ]
+        "CSC 2026-11-09"
+      ],
+      "schoolRuling": "奥莱子集优先；clockSectorPrior 美国购物中心Q3雷区冲突仍提示"
     },
     {
       "sector": "数据中心",
       "action": "超配",
       "confidence": "中",
-      "theme": "growth_repair",
-      "reason": "高上架率与长租约现金流可见度；关注分配波动",
+      "theme": "anti_cycle",
+      "reason": "CSC2027确定性底仓：长租约/上架率支撑现金流可见度",
       "sources": [
-        "CICC 2026-09-02",
-        "CSC"
+        "CSC 2026-11-09"
       ]
     },
     {
@@ -339,11 +339,9 @@
       "action": "标配偏超配",
       "confidence": "中",
       "theme": "growth_repair",
-      "reason": "项目分化加大；精选路网引流/交通量修复",
+      "reason": "CSC：关注区域交通需求恢复、经营扰动消退的部分高速；非全面底仓。注意2027解禁增量靠前",
       "sources": [
-        "CICC 2026-09-02",
-        "CICC 2026-09-03",
-        "CSC"
+        "CSC 2026-11-09"
       ]
     },
     {
@@ -351,43 +349,38 @@
       "action": "左侧精选/卫星",
       "confidence": "中",
       "theme": "growth_repair",
-      "reason": "租金下行仍是主要矛盾；学派裁决：战术可博弈、战略非底仓",
+      "reason": "CSC：关注租赁供需边际改善的修复机会；Q3收入/EBITDA同环比仍降 → 战略非底仓",
       "sources": [
-        "CICC 2026-09-02",
-        "CICC 2026-09-03",
-        "CSC"
+        "CSC 2026-11-09"
       ],
-      "schoolRuling": "卫星仓，绑定出租率修复证据"
+      "schoolRuling": "卫星仓，绑定出租率/续租修复证据"
     },
     {
       "sector": "产业园",
-      "action": "观望/弱低配",
+      "action": "左侧精选/观望",
       "confidence": "中",
       "theme": "value_trap_watch",
-      "reason": "供需压力未消；高分派易成估值陷阱；09-07周领跌回吐",
+      "reason": "CSC：择优关注估值回落、经营相对稳健的厂房类；Q3同环比仍承压 → 条件未齐不升超配",
       "sources": [
-        "CICC 2026-09-02",
-        "CICC 2026-09-07",
-        "CSC"
+        "CSC 2026-11-09"
       ],
-      "schoolRuling": "战略弱低配；禁止作为抗周期底仓"
+      "schoolRuling": "战略仍非抗周期底仓；升仓需边际证据，待Jason确认是否再升档"
     },
     {
       "sector": "商业不动产",
       "action": "中性精选",
       "confidence": "低",
       "theme": "supply_dilution",
-      "reason": "扩容元年定价分歧大；CICC提示首日大跌后增持等分化",
+      "reason": "CSC：精选定价合理优质项目；警惕市场化询价后发行定价过高。新发表现分化、部分上市初期偏弱",
       "sources": [
-        "CSC midyear",
-        "CICC 2026-09-07"
+        "CSC 2026-11-09"
       ]
     }
   ],
   "strategiesCSC": [
-    "流动性策略",
-    "景气度策略",
-    "强原权策略"
+    "确定性底仓（奥莱/保租房/市政环保/数据中心）",
+    "景气修复（仓储/部分高速）",
+    "一级精选定价（询价合理+长锁战配谨慎）"
   ],
   "strategiesSchool": [
     "五维破局闸门",
@@ -399,47 +392,54 @@
     {
       "id": "supply_unlock",
       "level": "高",
-      "title": "解禁与新发供给冲击",
-      "detail": "CSC年策略约25起解禁；CICC：9月唯品会奥莱/凯德消费等解禁+新发分化；8/14口径9-12月解禁约35亿"
+      "title": "2027解禁规模回升与新发供给",
+      "detail": "CSC：2027解禁约292.4亿元（同比+50.5%），下半年约177.7亿；关注6月/11月集中释放；高速+消费为解禁增量主力；新增资金能否承接是关键"
     },
     {
       "id": "fundamental_divergence",
       "level": "高",
-      "title": "业态基本面分化与分派质量",
-      "detail": "CICC中报：可比可供分配同比-6.9%，现金调增同比-48.3%；产业园/仓储租金压力"
+      "title": "业态基本面分化",
+      "detail": "CSC：保租房/消费相对稳健；产业园与仓储Q3收入及EBITDA同环比仍降；分派质量与修复节奏分化"
     },
     {
       "id": "negative_feedback",
       "level": "高",
       "title": "流动性—价格负反馈再起",
-      "detail": "缩量+同质机构行为(机构占比97.44%)可放大卖压；静态低估值不自动带来买盘"
+      "detail": "CSC：成交仍较清淡；投资者结构偏机构一致性交易可放大卖压；静态低估值不自动带来买盘"
     },
     {
       "id": "policy_slippage",
       "level": "中",
-      "title": "增量资金政策不及预期",
-      "detail": "险资准入商业REITs、指数扩容、二级债基/FOF加大配置进度"
+      "title": "增量资金落地节奏不及预期",
+      "detail": "债基扩围与指数基金已落地，但公募限制放宽仍为征求意见、险资新规自2027年起施行；关键看实际建仓与增配进度"
     },
     {
       "id": "rate_equity_divert",
       "level": "中",
       "title": "长端利率上行与权益分流",
-      "detail": "CICC明示长端利率上行超预期为关键风险"
+      "detail": "关注无风险利率变化及配置需求向REITs传导；升息快于租金闸门（rateRentGate）仍适用"
     },
     {
       "id": "valuation_misuse",
       "level": "中",
       "title": "经营权估值误用",
-      "detail": "高现金分派含本金回收，应用中债IRR利差（9/4分位仅59.8%）"
+      "detail": "高现金分派含本金回收；CSC经营权IRR约5.5%（分位62.2%），应用中债IRR利差而非现金分派率"
     },
     {
-      "id": "liquidity_homogeneity",
+      "id": "primary_pricing",
       "level": "中",
-      "title": "投资者结构单一",
-      "detail": "户数下降、机构占比极高，一致性交易放大波动"
+      "title": "一级询价/定价失序",
+      "detail": "CSC：看好部分优质商业不动产，同时警惕市场化询价后发行定价过高；长锁定期战配需保持谨慎"
     }
   ],
   "sources": [
+    {
+      "house": "CSC",
+      "date": "2026-11-09",
+      "title": "REITs2027年投资策略报告：红利属性凸显，增配机遇渐明",
+      "authors": "黄啸天",
+      "rating": "维持「强于大市」"
+    },
     {
       "house": "CICC",
       "date": "2026-09-07",
@@ -501,61 +501,62 @@
     },
     {
       "house": "DASH",
-      "date": "2026-09-09",
+      "date": "2026-11-09",
       "title": "reits-dashboard data.json live"
     }
   ],
   "dataGaps": [
     "per-REIT cashYield / PNAV / PFFO / ChinaBond IRR",
     "yieldSpreadPercentile by right (auto)",
-    "unlockCalendar[]",
+    "unlockCalendar[]（CSC已给2027总量/月度/业态摘要，面板未建）",
     "ipoPipeline[] / expansionPipeline[]",
-    "indexFundAUM / secondaryBondFundCount",
+    "indexFundAUM / secondaryBondFundCount（CSC：指数基金已成立；债基144只/约507亿发行口径待接入实时序列）",
     "earningsBeatRate quarterly by sector",
-    "breakoutGates auto-scoring feed",
-    "propertySpreadPercentile live series (for rateRentGate)"
+    "breakoutGates auto-scoring feed（CICC五维未本轮重验）",
+    "propertySpreadPercentile live series (for rateRentGate)",
+    "产业园是否由「左侧精选/观望」再升档（待Jason / 出租率续租证据）"
   ],
   "disclaimer": "本advice节点与分权破局重估学派框架仅供投研仪表盘信息展示与研究训练，不构成任何投资建议或收益承诺。投资者应独立判断并自行承担风险。",
   "supplyDemand": {
-    "asOf": "2026-09-07",
+    "asOf": "2026-11-09",
     "items": [
       {
         "id": "unlock",
         "label": "解禁压力",
         "status": "watch",
-        "note": "CICC：9月唯品会奥莱/凯德消费等解禁；8/14口径9-12月解禁约35亿可消化，仍需跟踪吸收（见供给闸门与风险清单）",
-        "source": "CICC 2026-08-14 / 2026-09-07"
+        "note": "CSC：2027年解禁约292.4亿元（同比+50.5%），下半年约177.7亿（约60.8%）；关注6月约43.3亿、11月约45.4亿集中释放；高速/消费为增量主力",
+        "source": "CSC 2026-11-09 §3.5"
       },
       {
         "id": "ipo_pipeline",
         "label": "新发 / 扩募",
         "status": "watch",
-        "note": "商业不动产扩容元年定价分歧；首日破发后增持等分化，避免失序抽流动性",
-        "source": "CICC 2026-09-07 · CSC midyear"
+        "note": "CSC：2027商业不动产项目储备充足；一级精选估值与询价区间合理标的，警惕定价过高；新发上市初期收益回落、业态分化",
+        "source": "CSC 2026-11-09"
       },
       {
         "id": "index_funds",
         "label": "指数基金",
         "status": "partial",
-        "note": "指数基金通道打开为增量资金线索；AUM抬升是月度加仓触发之一（待接入实时AUM）",
-        "source": "CSC / CICC 催化"
+        "note": "CSC：首批REITs指数基金已成立（首批4只、合计募集近12亿元）；AUM抬升仍为月度加仓观察项（待接入实时AUM）",
+        "source": "CSC 2026-11-09"
       },
       {
         "id": "secondary_bond",
         "label": "二级债基 / FOF",
         "status": "partial",
-        "note": "政策支持二级债基/FOF加大REITs配置；进度不及预期为中等风险",
-        "source": "CICC 增量资金风险"
+        "note": "CSC：债基扩围已落地；截至2026-11-02年内144只二级债基纳入公募REITs、发行规模合计约507亿元（潜在增量取决于实际配置比例）",
+        "source": "CSC 2026-11-09"
       },
       {
         "id": "insurance",
         "label": "险资准入",
         "status": "partial",
-        "note": "险资商业REITs准入在途；落地为月度偏多触发，不及预期为政策滑点风险",
-        "source": "CICC / CSC"
+        "note": "CSC：《保险公司资产负债管理办法》已发布、自2027年起施行；高分红REITs与收益覆盖要求更匹配，商业不动产扩围等增量政策仍可期待",
+        "source": "CSC 2026-11-09"
       }
     ],
-    "summary": "供给维仍为观察项：解禁可消化不等于无冲击；新发定价有序与增量资金落地共同决定是否点亮供给闸门。"
+    "summary": "资金端制度工具已部分落地（债基扩围、指数基金），但解禁回升与新发供给仍观察项；关键是公募/险资实际建仓节奏能否匹配2027供给。"
   },
   "clockSectorPrior": [
     {
@@ -647,7 +648,7 @@
         "Q4"
       ],
       "analogConfidence": "中",
-      "chinaEvidence": "研发办公/厂房混合，续租与租金折让压力",
+      "chinaEvidence": "研发办公/厂房混合；CSC 2026-11-09仅择优关注估值回落、经营相对稳健的厂房类，Q3同环比仍承压",
       "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
     },
     {
@@ -661,8 +662,8 @@
         "Q3"
       ],
       "analogConfidence": "中",
-      "chinaEvidence": "国内以奥莱/社区商业/购物中心为主，CICC 中报显示调改后运营总体稳健；是否具备抗周期性尚缺跨周期实证",
-      "conflictFlag": "学派「标配偏超配 · anti_cycle」vs 美国先验：购物中心与社区商业在 Q3（衰退）均为雷区（年化为负）、最佳在 Q4/Q2 → 需补中国消费 REITs 抗周期实证（租约结构、调改、客流/销售），否则在 Q3 期间降为「标配」复核",
+      "chinaEvidence": "国内以奥莱/社区商业/购物中心为主；CSC 2026-11-09将奥特莱斯列入二级确定性底仓，消费整体相对稳健；是否具备跨周期抗周期性仍缺长样本实证",
+      "conflictFlag": "学派「超配 · 奥莱底仓（CSC 2026-11-09）」vs 美国先验：购物中心与社区商业在 Q3（衰退）均为雷区 → 需补中国奥莱/消费 REITs 抗周期实证，否则在确定 Q3 期间降为「标配」复核",
       "note": "中国业态↔美国业态映射为本仪表盘提出的研究假设，并非杜丽虹原文观点；美国先验来自 overseas_clock_du2021.json（1994 年以来美国权益型 REITs）"
     },
     {
@@ -704,5 +705,5 @@
     "dataStatus": "利率腿=真实 10Y；产权利差分位腿=propertySpread 滚动 3 年分位（scripts/build_spread.py）；租金端 rentLeg=利率顺风 vs 分派拖累"
   },
   "stanceOverride": "产权标配·偏多观察",
-  "stanceOverrideRationale": "利率顺风≈−1bp（10Y 一年均值 1.777% vs 前一年 1.788%）不足以覆盖分派拖累≈−20bp（TTM 分派率 4.83% × 分派同比中位数 −4.2%）；租金回落快过利率下行。点对点 10Y 同比 −22bp 仅作次要参考。"
+  "stanceOverrideRationale": "利率顺风≈−1bp（10Y 一年均值 1.777% vs 前一年 1.788%）不足以覆盖分派拖累≈−20bp（TTM 分派率 4.83% × 分派同比中位数 −4.2%）；租金回落快过利率下行。点对点 10Y 同比 −22bp 仅作次要参考。｜研究面已换CSC 2026-11-09，但 stanceOverride 仍为人工开关，不因研报自动改写。"
 }
