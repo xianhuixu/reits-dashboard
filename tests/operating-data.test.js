@@ -77,3 +77,14 @@ test('all-sector default uses core metrics and distinguishes inapplicable from u
  assert.equal(O.rowView(D,occ,highway).vacancy,'该指标不适用');
  assert.equal(O.compare({metric:'footfall_yoy',period:'2026Q3',tax_flag:'不适用'}).label,'不可比');
 });
+
+test('highway core metric falls back to period traffic without converting into daily average',()=>{
+ const funds=new Map(D.funds.map(f=>[f.code,f]));
+ const core={funds,period:'2026Q3',sector:'',metric:'__core__',caliber:'__auto__'};
+ const tie=D.funds.find(f=>f.code==='508008.SH');
+ const zhao=D.funds.find(f=>f.code==='180203.SZ');
+ const tv=O.rowView(D,core,tie), zv=O.rowView(D,core,zhao);
+ assert.equal(tv.metric,'traffic_total');assert.equal(tv.point.value,2086000);assert.equal(tv.point.unit,'车次');assert.equal(tv.vacancy,'');
+ assert.notEqual(tv.metric,'traffic_volume');
+ assert.equal(zv.metric,'traffic_volume');assert.equal(zv.point.value,19692);assert.equal(zv.point.unit,'车次/日');
+});
