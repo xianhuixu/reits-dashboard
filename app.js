@@ -1609,7 +1609,10 @@ LAZY.research.push(function () {
   // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
   function openReitDetail(code, updateHash) {
     // The SVG archive must remain usable if the legacy chart library fails.
-    withResearchData(function () { openReitDetailInner(code, updateHash); });
+    var requestedHash = location.hash;
+    withResearchData(function () {
+      if (location.hash === requestedHash) openReitDetailInner(code, updateHash);
+    });
   }
   function openReitDetailInner(code, updateHash) {
     var r = null;
@@ -1621,7 +1624,7 @@ LAZY.research.push(function () {
     if (!r) {
       // Source database also contains newly listed/unlisted funds absent from market snapshots.
       if (window.ReitsFundArchive && /^[0-9]{6}\.(SH|SZ)$/.test(code)) {
-        if (updateHash !== false) history.replaceState(null, "", "#/detail/" + code);
+        if (updateHash !== false) writeRoute("#/detail/" + code);
         showPage("research"); switchView("detail");
         $("detailPanel").innerHTML = '<section id="fundArchive"></section>';
         window.ReitsFundArchive.mount($("fundArchive"), code);
@@ -1629,12 +1632,14 @@ LAZY.research.push(function () {
       return;
     }
     if (updateHash !== false) {
-      try { history.replaceState(null, "", "#/detail/" + code); } catch (e) {}
+      try { writeRoute("#/detail/" + code); } catch (e) {}
     }
     showPage("research"); switchView("detail");
     // 历史行情序列在研究数据包中（按需加载），必须等数据合并完成后再渲染详情，
     // 否则热力图下钻 / hash 深链时 histClose 尚未就绪导致走势图空白
+    var renderingHash = location.hash;
     withResearchData(function () {
+      if (location.hash !== renderingHash) return;
       ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).value = ""; });
       $("fSearch").value = r.code;
       if (window.__setSelCode) window.__setSelCode(r.code);
@@ -1750,6 +1755,45 @@ LAZY.research.push(function () {
       console.log('[showPage] switched to', pg);
     } catch (err) { console.error('[showPage] error:', err); }
   }
+  // Navigation routes own history; rendering a route must never write another entry.
+  var lastDetailRoute = /^#\/?detail\//i.test(location.hash) ? location.hash : null;
+  function writeRoute(hash) {
+    if (/^#\/?detail\//i.test(location.hash)) lastDetailRoute = location.hash;
+    if (/^#\/?detail\//i.test(hash)) lastDetailRoute = hash;
+    if (location.hash !== hash) history.pushState(null, "", hash);
+  }
+  function syncNavigationRoute(btn) {
+    var pg = btn.dataset.pg || "research";
+    var sub = pg === "pano" ? "#panoSub" : pg === "research" ? "#researchSub" : null;
+    var active = sub && document.querySelector(sub + " button.on");
+    var view = btn.dataset.v || (active && active.dataset.v) || "";
+    // Returning to the research tab can legitimately restore its existing detail.
+    if (pg === "research" && view === "detail" && lastDetailRoute) {
+      writeRoute(lastDetailRoute);
+      return;
+    }
+    var section = btn.dataset.scroll || "";
+    writeRoute("#/page/" + pg + (view ? "/" + view : section ? "/" + section : ""));
+  }
+  function restoreNavigationRoute() {
+    var hash = location.hash || "";
+    var detail = hash.match(/^#\/?detail\/([0-9A-Z.]+)/i);
+    if (detail) { lastDetailRoute = hash; openReitDetail(detail[1], false); return; }
+    var m = hash.match(/^#\/page\/(pano|research|advice|ops|inst)(?:\/([a-zA-Z0-9-]+))?$/);
+    if (!m && hash && hash !== "#") return; // Leave existing research anchors alone.
+    var pg = m ? m[1] : "pano", view = m ? m[2] : "heatmap";
+    var sub = pg === "pano" ? "#panoSub" : pg === "research" ? "#researchSub" : null;
+    var button = sub && view && document.querySelector(sub + ' button[data-v="' + view + '"]');
+    var section = pg === "advice" && view && document.querySelector('#subbar button[data-scroll="' + view + '"]');
+    if (view && !button && !section) return;
+    showPage(pg);
+    if (button) switchView(view);
+    if (section) {
+      setActiveNav(section.parentElement.querySelectorAll("button"), section);
+      var target = document.getElementById(view);
+      if (target && window.ReitsWorkspace) window.ReitsWorkspace.selectAdviceForTarget(target);
+    }
+  }
   // ---- 导航事件绑定：直接绑定到每个按钮（兼容 iOS Safari 事件委托问题） ----
   function bindNavButton(btn) {
     if (!btn) return;
@@ -1761,6 +1805,7 @@ LAZY.research.push(function () {
           var t = document.getElementById(btn.dataset.scroll);
           if (t && window.ReitsWorkspace) window.ReitsWorkspace.selectAdviceForTarget(t);
           if (t) window.scrollTo({ top: 0, behavior: "auto" });
+          syncNavigationRoute(btn);
           var showKpi = btn.dataset.scroll === "v-heatmap";
           $("kpis").style.display = showKpi ? "" : "none";
           return;
@@ -1768,6 +1813,7 @@ LAZY.research.push(function () {
         if (btn.dataset.v) {
           showPage(btn.dataset.pg || "research");
           switchView(btn.dataset.v);
+          syncNavigationRoute(btn);
           window.scrollTo({ top: 0, behavior: "auto" });
           if (btn.dataset.pg === "pano") {
             $("kpis").style.display = btn.dataset.v === "heatmap" ? "" : "none";
@@ -1776,6 +1822,7 @@ LAZY.research.push(function () {
         }
         if (btn.dataset.pg) {
           showPage(btn.dataset.pg);
+          syncNavigationRoute(btn);
         }
       } catch (err) { console.error('[nav] error:', err); }
     }
@@ -2733,19 +2780,10 @@ LAZY.research.push(function () {
     _resizeTimer = setTimeout(echResizeAll, 120);
   });
 
-  // ---- hash 路由：#/detail/{code} 直达个券详情（可分享链接） ----
-  (function () {
-    function codeFromHash() {
-      var m = (location.hash || "").match(/^#\/?detail\/([0-9A-Z.]+)/i);
-      return m ? m[1] : null;
-    }
-    window.addEventListener("hashchange", function () {
-      var c = codeFromHash();
-      if (c) openReitDetail(c, false);
-    });
-    var c0 = codeFromHash();
-    if (c0) openReitDetail(c0, false);
-  })();
+  // Hash links, browser back/forward and refresh all restore the same page state.
+  window.addEventListener("hashchange", restoreNavigationRoute);
+  window.addEventListener("popstate", restoreNavigationRoute);
+  restoreNavigationRoute();
 
   (function countUp() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
