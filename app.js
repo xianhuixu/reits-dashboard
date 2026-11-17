@@ -885,7 +885,7 @@ LAZY.research.push(function () {
     var tr = closestTr(e); if (!tr) return;
     selCode = tr.dataset.code;
     renderTbl();
-    renderDetail(selCode);
+    openReitDetail(selCode);
     $("detailPanel").scrollIntoView({ behavior: "smooth", block: "start" });
   });
   ["fStrategy", "fSector", "fRight", "fSignal"].forEach(function (id) { $(id).addEventListener("change", renderTbl); });
@@ -1014,8 +1014,25 @@ LAZY.research.push(function () {
         '<div class="card" style="margin-top:14px"><h2>相似个券 · 近130日收益率相关性 Top ' + peers.length + '</h2>' +
         '<p class="note">与当前个券同涨同跌程度最高的标的 · 点击切换查看</p>' +
         '<div class="peer-list">' + peerHtml + '</div></div>' : "");
-    renderLineChart(histChartId, r.histDates, [{ label: "收盘", color: "#165dff", data: r.histClose }], { area: true });
-    renderRadar(sig);
+    // Keep existing market/valuation/signals intact, below the independent research archive.
+    if (window.ReitsFundArchive) {
+      var detailHost = $("detailPanel"), legacy = document.createElement("details");
+      legacy.className = "fa-legacy";
+      var legacyTitle = document.createElement("summary");
+      legacyTitle.textContent = "行情、估值与交易信号（原有模块）";
+      legacy.appendChild(legacyTitle);
+      while (detailHost.firstChild) legacy.appendChild(detailHost.firstChild);
+      var archiveHost = document.createElement("section");
+      archiveHost.id = "fundArchive";
+      detailHost.appendChild(archiveHost); detailHost.appendChild(legacy);
+      window.ReitsFundArchive.mount(archiveHost, r.code);
+      legacy.addEventListener("toggle", function () { if (legacy.open) echResizeAll(); });
+    }
+    withECharts(function () {
+      if (archiveHost && !archiveHost.isConnected) return;
+      renderLineChart(histChartId, r.histDates, [{ label: "收盘", color: "#165dff", data: r.histClose }], { area: true });
+      renderRadar(sig);
+    });
     document.querySelectorAll("#detailPanel .peer-it").forEach(function (b) {
       b.addEventListener("click", function () { openReitDetail(b.dataset.code); });
     });
@@ -1591,7 +1608,8 @@ LAZY.research.push(function () {
 
   // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
   function openReitDetail(code, updateHash) {
-    withResearchData(function () { withECharts(function () { openReitDetailInner(code, updateHash); }); });
+    // The SVG archive must remain usable if the legacy chart library fails.
+    withResearchData(function () { openReitDetailInner(code, updateHash); });
   }
   function openReitDetailInner(code, updateHash) {
     var r = null;
@@ -1600,7 +1618,16 @@ LAZY.research.push(function () {
       var num = String(code).split(".")[0];
       for (var j = 0; j < D.reits.length; j++) if (D.reits[j].code.split(".")[0] === num) { r = D.reits[j]; break; }
     }
-    if (!r) return;
+    if (!r) {
+      // Source database also contains newly listed/unlisted funds absent from market snapshots.
+      if (window.ReitsFundArchive && /^[0-9]{6}\.(SH|SZ)$/.test(code)) {
+        if (updateHash !== false) history.replaceState(null, "", "#/detail/" + code);
+        showPage("research"); switchView("detail");
+        $("detailPanel").innerHTML = '<section id="fundArchive"></section>';
+        window.ReitsFundArchive.mount($("fundArchive"), code);
+      }
+      return;
+    }
     if (updateHash !== false) {
       try { history.replaceState(null, "", "#/detail/" + code); } catch (e) {}
     }
