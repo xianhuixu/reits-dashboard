@@ -13,7 +13,7 @@ test('only standard ops and whitelisted fund financials enter page',()=>{
  assert.ok(!('market_valuation' in D));assert.ok(!('forecast' in D));assert.ok(!('daily_quote' in D));
 });
 test('zero is a reported value, null and numeric strings are never coerced',()=>{
- assert.equal(O.format({value:0,unit:'万元'}),'0');assert.equal(O.format({value:null}),'未披露');assert.equal(O.format({value:'0.9'}),'未披露');assert.equal(O.format({value:.8874,unit:'小数'}),'88.74');assert.equal(O.unit({unit:'小数'}),'%');assert.equal(O.format({value:5.79,unit:'%'}),'5.79');
+ assert.equal(O.format({value:0,unit:'万元'}),'0');assert.equal(O.format({value:null}),'尚未披露');assert.equal(O.format({value:'0.9'}),'尚未披露');assert.equal(O.format({value:.8874,unit:'小数'}),'88.74');assert.equal(O.unit({unit:'小数'}),'%');assert.equal(O.format({value:5.79,unit:'%'}),'5.79');
 });
 test('slice never silently carries forward or combines fund and project',()=>{
  const funds=new Map(D.funds.map(f=>[f.code,f]));const ps=O.select(D,{funds,period:'2026Q3',sector:'产业园',metric:'occupancy_rate',caliber:'期末'});assert.ok(ps.length>0);ps.forEach(p=>{assert.equal(p.period,'2026Q3');assert.equal(p.scope,'基金');assert.equal(p.caliber,'期末');assert.equal(funds.get(p.code).sector_l1,'产业园');});
@@ -50,4 +50,28 @@ test('reading contracts keep pagination outside scroll and details under selecte
  assert.match(js,/paginate\(fs,pageNumber,20\)/);assert.match(js,/if\(keepPage!==true\)pageNumber=1/);assert.match(js,/row\.after\(expanded\)/);assert.match(js,/aria-expanded/);assert.match(js,/trigger\.focus\(\)/);assert.match(js,/scrollLeft=0/);assert.doesNotMatch(js,/\$\('opsDetail'\)/);
  assert.match(css,/position:sticky;left:0/);assert.match(css,/ops-mobile-value/);assert.match(css,/ops-mobile-open/);
  assert.doesNotMatch(css,/100vw/);assert.match(css,/container-type:inline-size/);assert.match(css,/100cqw/);assert.match(css,/.ops-expanded-row>td{[^}]*max-width:0/);
+});
+
+test('all-sector default uses core metrics and distinguishes inapplicable from undisclosed',()=>{
+ const funds=new Map(D.funds.map(f=>[f.code,f]));
+ const highway=D.funds.find(f=>f.code==='180201.SZ');
+ const park=D.funds.find(f=>f.code==='180103.SZ');
+ const cainiao=D.funds.find(f=>f.code==='180307.SZ');
+ const unlisted=D.funds.find(f=>f.code==='180107.SZ');
+ assert.equal(O.coreMetric('交通'),'traffic_volume');
+ assert.equal(O.coreMetric('能源'),'power_generation');
+ assert.equal(O.coreMetric('产业园'),'occupancy_rate');
+ assert.equal(O.metricApplies('occupancy_rate','交通'),false);
+ assert.equal(O.metricApplies('occupancy_rate','产业园'),true);
+ assert.equal(O.vacancyLabel(highway,'occupancy_rate',null),'该指标不适用');
+ assert.equal(O.vacancyLabel(cainiao,'occupancy_rate',null),'尚未披露');
+ assert.equal(O.vacancyLabel(unlisted,'occupancy_rate',null),'尚未披露');
+ const core={funds,period:'2026Q3',sector:'',metric:'__core__',caliber:'__auto__'};
+ const hv=O.rowView(D,core,highway),pv=O.rowView(D,core,park);
+ assert.equal(hv.metric,'traffic_volume');assert.equal(hv.point.value,157800);assert.equal(hv.vacancy,'');
+ assert.equal(O.unit(hv.point),'车次/日');
+ assert.equal(pv.metric,'occupancy_rate');assert.ok(pv.point&&Number.isFinite(pv.point.value));
+ const occ={funds,period:'2026Q3',sector:'',metric:'occupancy_rate',caliber:'期末'};
+ assert.equal(O.rowView(D,occ,highway).vacancy,'该指标不适用');
+ assert.equal(O.compare({metric:'footfall_yoy',period:'2026Q3',tax_flag:'不适用'}).label,'不可比');
 });

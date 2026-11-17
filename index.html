@@ -107,7 +107,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <!-- 工作台样式在研究与地图组件之后，防止旧版页面布局覆盖导航和主题。 -->
 <link rel="stylesheet" href="workspace.css?v=20261009-operirr-overflow">
 
-<link rel="stylesheet" href="research/operating-data.css?v=20261117c">
+<link rel="stylesheet" href="research/operating-data.css?v=20261117d">
 </head>
 <body>
 <a class="skip-link" href="#workspaceMain">跳到主要内容</a>
@@ -944,9 +944,9 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <label>报告期<select id="opsPeriod"></select></label><label>业态<select id="opsSector"></select></label><label>核心指标<select id="opsMetric"></select></label><label>统计口径<select id="opsCaliber"></select></label><label>基金名称／代码<input id="opsSearch" type="search" placeholder="搜索基金"></label></fieldset>
 <p id="opsCoverage" aria-live="polite"></p></section>
 <div class="ops-cards" id="opsCards"></div>
-<section class="ops-table-card" aria-labelledby="opsCompareHeading"><h2 id="opsCompareHeading">基金原值对比</h2><p class="note">数值附单位及含税口径，不作跨口径排名。每页 20 只，可搜索；明细在所选基金行下展开。手机固定名称与核心值，其余字段可横滑；点击“不可比”查看原因。</p><p class="note" id="opsCount"></p>
+<section class="ops-table-card" aria-labelledby="opsCompareHeading"><h2 id="opsCompareHeading">基金原值对比</h2><p class="note">全部业态默认按各业态核心指标展示（公路看车流，能源看发电量，租赁类看出租率），不作跨业态、跨口径排名。若指定了与业态不匹配的指标，显示“该指标不适用”，与“尚未披露”区分。每页 20 只，可搜索；明细在所选基金行下展开。手机固定名称与核心值，其余字段可横滑；点击“不可比”查看原因。</p><p class="note" id="opsCount"></p>
 <div class="ops-scroll" tabindex="0" role="region" aria-label="基金经营指标对比表"><table class="matrix ops-comparison"><thead><tr><th scope="col">基金／业态</th><th scope="col">数值</th><th scope="col">单位</th><th scope="col">统计口径</th><th scope="col">含税口径</th><th scope="col">同比核验</th><th scope="col">明细</th></tr></thead><tbody id="opsBody"></tbody></table></div><nav class="ops-pagination" aria-label="基金对比分页"><button id="opsPrev" type="button" class="secondary-button" disabled>上一页</button><span id="opsPageStatus" role="status" aria-live="polite"></span><button id="opsNext" type="button" class="secondary-button" disabled>下一页</button></nav></section>
-<p class="note">未披露不等于零；ALL 为基金层，项目按资产ID核验归属，二者不加总。税口径均未说明不证明可比。<a href="research/operating-data-rules.md">查看口径规则</a></p>
+<p class="note">尚未披露不等于零；“该指标不适用”不代表没有经营数据。ALL 为基金层，项目按资产ID核验归属，二者不加总。税口径均未说明不证明可比。<a href="research/operating-data-rules.md">查看口径规则</a></p>
 </div>
 </main>
 
@@ -964,7 +964,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <script src="data-status.js?v=20261005-designr3" defer></script>
 <script src="allocation-tools.js?v=20261005-designr3" defer></script>
 <script src="workspace.js?v=20261117-ops" defer></script>
-<script src="research/operating-data.js?v=20261117b" defer></script>
+<script src="research/operating-data.js?v=20261117d" defer></script>
 <script src="app.js?v=20261117-ops" defer></script>
 <!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
 <script>
