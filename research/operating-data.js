@@ -8,7 +8,12 @@ function unit(p){return p.unit==='小数'?'%':p.unit||'未说明';}
 function caliberLabel(p){if(p.sourceTable==='financials'&&p.caliber==='本期'){return p.caliber+(/^\d{4}Q[1-4]$/.test(p.period)?'（单季）':/H1$/.test(p.period)?'（上半年）':/A$/.test(p.period)?'（年报期间）':'');}return p.caliber;}
 function scopeReason(p){return '原标签：'+p.level+'；按资产ID确认为'+p.scope+'层。';}
 function periodBounds(period){var m=/^(\d{4})(Q[1-4]|H1|A)$/.exec(period||'');if(!m)return null;var year=+m[1],ends={Q1:'03-31',Q2:'06-30',H1:'06-30',Q3:'09-30',Q4:'12-31',A:'12-31'},starts={Q1:'01-01',Q2:'04-01',H1:'01-01',Q3:'07-01',Q4:'10-01',A:'01-01'};return {start:(year-1)+'-'+starts[m[2]],end:year+'-'+ends[m[2]]};}
-function compare(p,assets){var b=p&&periodBounds(p.period),expanded=b&&(assets||[]).some(function(a){return a.code===p.code&&a.include_type==='扩募'&&/^\d{4}-\d{2}-\d{2}$/.test(a.include_date||'')&&a.include_date>=b.start&&a.include_date<=b.end;});return {label:expanded?'含扩募，非同店':'不可比',reason:(expanded?'较上年同期资产范围可能变化，不展示同店同比。 ':'')+'未完成两期资产范围、报告期间完整性及含税口径复核，不自动计算同比。'+(!p||p.tax_flag==='未说明'?' 含税口径未说明。':'')};}
+function compare(p,assets){var b=p&&periodBounds(p.period),expanded=b&&(assets||[]).some(function(a){return a.code===p.code&&a.include_type==='扩募'&&/^\d{4}-\d{2}-\d{2}$/.test(a.include_date||'')&&a.include_date>=b.start&&a.include_date<=b.end;});
+ if(expanded)return {label:'含扩募，非同店',reason:'较上年同期资产范围可能变化，不展示同店同比。未完成两期项目范围复核，不自动计算同比。'};
+ var metric=p&&p.metric,tax=p&&p.tax_flag;
+ if(metric==='footfall_yoy'||metric==='sales_yoy')return {label:'不可比',reason:'该字段已是原始同比，未按同口径复核，不作为已核验同比列。'};
+ if(metric==='avg_rent'||metric==='hosting_price')return {label:'不可比',reason:'租金类同比须同单位、同平均或期末口径，且含税口径对齐。税标记为“未说明”或未对齐时不计算同比。'+(tax==='未说明'?' 含税口径未说明。':'')};
+ return {label:'待核资产范围',reason:'可能已有上年同期同口径记录，但两期项目是否持续在池尚未复核，不自动计算同比。税口径“不适用”不作为出租率、车流、电量等不可比的依据。'};}
 function select(d,s){return d.points.filter(function(p){var f=s.funds.get(p.code);return f&&(!s.sector||f.sector_l1===s.sector)&&p.period===s.period&&p.metric===s.metric&&(!s.caliber||p.caliber===s.caliber)&&p.scope==='基金';});}
 var CORE={'交通':'traffic_volume','能源':'power_generation','水务环保':'revenue','供热':'heating_area','数据中心':'rack_utilization'};
 var UNIVERSAL=['revenue','ebitda','distributable_cash'];

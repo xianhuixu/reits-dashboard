@@ -20,9 +20,11 @@ test('slice never silently carries forward or combines fund and project',()=>{
  assert.deepEqual(O.select(D,{funds,period:'2099Q3',metric:'revenue'}),[]);
 });
 test('comparison never invents verified same-store / unknown tax is not comparable',()=>{
- assert.equal(O.compare({period:'2026Q3',tax_flag:'未说明'}).label,'不可比');
- assert.equal(O.compare({code:'x',period:'2026Q3'},[{code:'x',include_type:'扩募',include_date:'2025-08-29'}]).label,'含扩募，非同店');
- assert.equal(O.compare({code:'x',period:'2026Q3'},[{code:'x',include_type:'扩募',include_date:'nan'}]).label,'不可比');
+ assert.equal(O.compare({period:'2026Q3',metric:'occupancy_rate',tax_flag:'不适用'}).label,'待核资产范围');
+ assert.equal(O.compare({period:'2026Q3',metric:'traffic_volume',tax_flag:'不适用'}).label,'待核资产范围');
+ assert.equal(O.compare({period:'2026Q3',metric:'avg_rent',tax_flag:'未说明'}).label,'不可比');
+ assert.equal(O.compare({code:'x',period:'2026Q3',metric:'occupancy_rate'},[{code:'x',include_type:'扩募',include_date:'2025-08-29'}]).label,'含扩募，非同店');
+ assert.equal(O.compare({code:'x',period:'2026Q3',metric:'occupancy_rate'},[{code:'x',include_type:'扩募',include_date:'nan'}]).label,'待核资产范围');
  assert.equal(O.compare({metric:'footfall_yoy',period:'2026Q3',tax_flag:'不适用'}).label,'不可比');
  assert.equal(O.periodBounds('nan'),null);assert.equal(O.periodBounds('2026H1').end,'2026-06-30');
 });
