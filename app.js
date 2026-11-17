@@ -1620,7 +1620,7 @@ LAZY.research.push(function () {
 
   // ---- 左侧导航：三大板块 + 研究二级菜单 ----
   var currentPage = "pano";
-  var pageScroll = { pano: 0, research: 0, advice: 0, inst: 0 };
+  var pageScroll = { pano: 0, research: 0, advice: 0, ops: 0, inst: 0 };
   function restorePageScroll(page) {
     requestAnimationFrame(function () {
       window.scrollTo({ top: pageScroll[page] || 0, behavior: "auto" });

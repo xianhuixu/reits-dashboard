@@ -107,6 +107,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <!-- 工作台样式在研究与地图组件之后，防止旧版页面布局覆盖导航和主题。 -->
 <link rel="stylesheet" href="workspace.css?v=20261009-operirr-overflow">
 
+<link rel="stylesheet" href="research/operating-data.css?v=20261117">
 </head>
 <body>
 <a class="skip-link" href="#workspaceMain">跳到主要内容</a>
@@ -118,6 +119,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <button data-pg="pano" class="on" aria-current="page"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#layout-dashboard"></use></svg><span>市场总览</span><svg class="ui-icon nav-chevron" aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#chevron-right"></use></svg></button>
 <button data-pg="research"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#chart-no-axes-combined"></use></svg><span>研究分析</span><svg class="ui-icon nav-chevron" aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#chevron-right"></use></svg></button>
 <button data-pg="advice"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#shield-check"></use></svg><span>配置与风险</span><svg class="ui-icon nav-chevron" aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#chevron-right"></use></svg></button>
+<button data-pg="ops"><svg class="ui-icon" aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#building-2"></use></svg><span>经营数据</span></button>
 <button data-pg="inst"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#building-2"></use></svg><span>机构间市场</span><svg class="ui-icon nav-chevron" aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#chevron-right"></use></svg></button>
 </nav><div class="sidebar-section-label">快捷访问</div>
   <div class="sidebar-shortcuts"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#file-text"></use></svg><button data-jump-view="news">新闻与公告</button><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#layers"></use></svg><button data-jump-view="detail">全部上市REITs</button></div>
@@ -933,6 +935,20 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
   </div>
 </section>
 </div><!-- /pg-inst -->
+<div class="page" id="pg-ops" hidden>
+<section class="ops-intro" aria-labelledby="opsHeading">
+<h2 id="opsHeading">从现金流到资产经营，按口径看变化</h2>
+<p class="ops-notice">待原公告复核 · 用户提供的经营数据快照。只作原值展示，不自动影响利差、IRR、预警或配置结论。</p>
+<p id="opsLoad" role="status">首次进入时读取经营数据。</p><button id="opsRetry" type="button" class="secondary-button" hidden>重试加载</button>
+<fieldset class="ops-filters" id="opsFilters" disabled><legend class="sr-only">经营数据筛选</legend>
+<label>报告期<select id="opsPeriod"></select></label><label>业态<select id="opsSector"></select></label><label>核心指标<select id="opsMetric"></select></label><label>统计口径<select id="opsCaliber"></select></label><label>基金名称／代码<input id="opsSearch" type="search" placeholder="搜索基金"></label></fieldset>
+<p id="opsCoverage" aria-live="polite"></p></section>
+<div class="ops-cards" id="opsCards"></div>
+<section class="ops-table-card" aria-labelledby="opsCompareHeading"><h2 id="opsCompareHeading">基金原值对比</h2><p class="note">数值附单位及含税口径，不作跨口径排名。手机可在表格内横向滑动；点击“不可比”查看原因。</p><p class="note" id="opsCount"></p>
+<div class="ops-scroll" tabindex="0" role="region" aria-label="基金经营指标对比表"><table class="matrix"><thead><tr><th scope="col">基金／业态</th><th scope="col">数值</th><th scope="col">单位</th><th scope="col">统计口径</th><th scope="col">含税口径</th><th scope="col">同比核验</th><th scope="col">明细</th></tr></thead><tbody id="opsBody"></tbody></table></div></section>
+<section id="opsDetail" tabindex="-1" aria-label="单只基金历史及项目明细"></section>
+<p class="note">未披露不等于零；ALL 为基金层，项目按资产ID核验归属，二者不加总。税口径均未说明不证明可比。<a href="research/operating-data-rules.md">查看口径规则</a></p>
+</div>
 </main>
 
 <footer id="foot">
@@ -949,6 +965,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <script src="data-status.js?v=20261005-designr3" defer></script>
 <script src="allocation-tools.js?v=20261005-designr3" defer></script>
 <script src="workspace.js?v=20261007-studio2" defer></script>
+<script src="research/operating-data.js?v=20261117" defer></script>
 <script src="app.js?v=20261009-operirr-overflow2" defer></script>
 <!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
 <script>
