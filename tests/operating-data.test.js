@@ -13,7 +13,7 @@ test('only standard ops and whitelisted fund financials enter page',()=>{
  assert.ok(!('market_valuation' in D));assert.ok(!('forecast' in D));assert.ok(!('daily_quote' in D));
 });
 test('zero is a reported value, null and numeric strings are never coerced',()=>{
- assert.equal(O.format({value:0,unit:'万元'}),'0');assert.equal(O.format({value:null}),'尚未披露');assert.equal(O.format({value:'0.9'}),'尚未披露');assert.equal(O.format({value:.8874,unit:'小数'}),'88.74');assert.equal(O.unit({unit:'小数'}),'%');assert.equal(O.format({value:5.79,unit:'%'}),'5.79');
+ assert.equal(O.format({value:0,unit:'万元'}),'0');assert.equal(O.format({value:null}),'尚未披露');assert.equal(O.format({value:'0.9'}),'尚未披露');assert.equal(O.format({value:.8874,unit:'小数'}),'88.74');assert.equal(O.unit({unit:'小数'}),'%');assert.equal(O.format({value:5.79,unit:'%'}),'5.79');assert.equal(O.format({value:0.92,unit:'小数'}),'92.00');assert.equal(O.format({value:13551.5,unit:'万元'}),'13,551.50');assert.equal(O.format({value:19692,unit:'车次/日'}),'19,692');
 });
 test('slice never silently carries forward or combines fund and project',()=>{
  const funds=new Map(D.funds.map(f=>[f.code,f]));const ps=O.select(D,{funds,period:'2026Q3',sector:'产业园',metric:'occupancy_rate',caliber:'期末'});assert.ok(ps.length>0);ps.forEach(p=>{assert.equal(p.period,'2026Q3');assert.equal(p.scope,'基金');assert.equal(p.caliber,'期末');assert.equal(funds.get(p.code).sector_l1,'产业园');});
@@ -50,7 +50,7 @@ test('reading contracts keep pagination outside scroll and details under selecte
  const html=fs.readFileSync('index.html','utf8'),js=fs.readFileSync('research/operating-data.js','utf8'),css=fs.readFileSync('research/operating-data.css','utf8');
  assert.match(html,/id="opsPrev"/);assert.match(html,/id="opsNext"/);assert.match(html,/id="opsPageStatus" role="status"/);assert.doesNotMatch(html,/id="opsDetail"/);
  assert.match(js,/paginate\(fs,pageNumber,20\)/);assert.match(js,/if\(keepPage!==true\)pageNumber=1/);assert.match(js,/row\.after\(expanded\)/);assert.match(js,/aria-expanded/);assert.match(js,/trigger\.focus\(\)/);assert.match(js,/scrollLeft=0/);assert.doesNotMatch(js,/\$\('opsDetail'\)/);
- assert.match(css,/position:sticky;left:0/);assert.match(css,/ops-mobile-value/);assert.match(css,/ops-mobile-open/);
+ assert.match(css,/position:sticky;left:0/);assert.match(css,/position:sticky;top:0/);assert.match(css,/text-align:right/);assert.match(js,/ops-num/);assert.match(css,/ops-mobile-value/);assert.match(css,/ops-mobile-open/);
  assert.doesNotMatch(css,/100vw/);assert.match(css,/container-type:inline-size/);assert.match(css,/100cqw/);assert.match(css,/.ops-expanded-row>td{[^}]*max-width:0/);
 });
 
