@@ -3449,22 +3449,22 @@
       }
     ],
     "status": "ok",
-    "updated": "2026-11-17 01:50:07",
+    "updated": "2026-11-17 03:40:54",
     "source": "新浪 CN_MarketData 日收盘（不复权）· 东方财富 F10 分红送配详情 / 规模变动（季末份额）· 中债 10Y（macro_series.json，东财 RPTA_WEB_TREASURYYIELD）",
     "label": "产权利差 = 市值加权 TTM 分派率 − 中债 10Y",
     "pctNote": "默认显示滚动 3 年分位；2022 年以来全样本分位见悬浮提示（2022—2023H1 截面仅 2–6 只，早期噪音大）",
     "method": "口径见 scripts/build_spread.py（移植固收 PM 交付规则：≤45 天合并分派事件、首期 stub、上市<365 天年化、TTM 防重复）",
     "fetch": {
       "prices": {
-        "ok": 58,
-        "failed": []
+        "ok": 57,
+        "failed": [
+          "508017.SH"
+        ]
       },
       "dists": {
-        "ok": 54,
+        "ok": 56,
         "failed": [
-          "180101.SZ",
           "180503.SZ",
-          "508002.SH",
           "508603.SH"
         ]
       },
@@ -3474,7 +3474,7 @@
           "508600.SH"
         ]
       },
-      "elapsedS": 192.0
+      "elapsedS": 245.3
     }
   },
   "operatingDisclosedIrr": {
