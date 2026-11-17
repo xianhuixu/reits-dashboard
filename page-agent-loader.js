@@ -166,6 +166,50 @@
     return { btn: btn, gear: gear };
   }
 
+  // Narrow archive views use a normal-flow tool row, never a viewport overlay.
+  // Keep the original nodes/listeners when detailPanel is replaced on fund/asset navigation.
+  function installArchiveDock(wrap) {
+    var media = window.matchMedia('(max-width:640px)');
+    var root = document.documentElement;
+    var host = document.getElementById('detailPanel');
+    var page = document.getElementById('pg-research');
+    var view = document.getElementById('v-detail');
+    function sync() {
+      var active = !!(media.matches && host && page && view &&
+        !page.hidden && !view.hidden && !page.classList.contains('hidden') &&
+        !view.classList.contains('hidden') && host.querySelector('#fundArchive'));
+      root.classList.toggle('rd-ai-archive-mobile', active);
+      var dock = document.getElementById('rdAiArchiveDock');
+      if (active) {
+        if (!dock || dock.parentNode !== host) {
+          dock = document.createElement('div');
+          dock.id = 'rdAiArchiveDock';
+          dock.setAttribute('role', 'group');
+          dock.setAttribute('aria-label', '档案辅助工具');
+          host.insertBefore(dock, host.firstChild);
+        }
+        if (wrap.parentNode !== dock) dock.appendChild(wrap);
+        wrap.classList.add('rd-ai-archive-docked');
+      } else {
+        wrap.classList.remove('rd-ai-archive-docked');
+        if (wrap.parentNode !== document.body) document.body.appendChild(wrap);
+        if (dock) dock.remove();
+      }
+    }
+    // Existing navigation sometimes uses replaceState without hashchange; observe
+    // the actual view/host instead. Do not watch table subtrees or horizontal scroll.
+    var observer = new MutationObserver(sync);
+    if (host) observer.observe(host, { childList: true });
+    [page, view].forEach(function (el) {
+      if (el) observer.observe(el, { attributes: true, attributeFilter: ['hidden', 'class'] });
+    });
+    if (media.addEventListener) media.addEventListener('change', sync);
+    else media.addListener(sync);
+    window.addEventListener('hashchange', sync);
+    sync();
+    return { sync: sync };
+  }
+
   function buildCard() {
     var wrap = document.createElement('div');
     wrap.id = 'rdAiCard';
@@ -377,6 +421,18 @@
         'right:max(12px, env(safe-area-inset-right, 0px));' +
         'top:72px}' +
       '@media (max-width:640px){#rdAiWrap{top:auto;bottom:max(16px, env(safe-area-inset-bottom, 0px));right:max(12px, env(safe-area-inset-right, 0px));flex-direction:row;gap:8px}}' +
+      /* Archive-only mobile dock: takes real layout space above fund/asset content. */
+      '@media (max-width:640px){' +
+        'html.rd-ai-archive-mobile #rdAiArchiveDock{display:flex;justify-content:flex-end;align-items:center;box-sizing:border-box;min-width:0;min-height:56px;' +
+          'padding:8px max(12px, env(safe-area-inset-right, 0px)) 8px max(12px, env(safe-area-inset-left, 0px));margin-bottom:8px}' +
+        'html.rd-ai-archive-mobile #rdAiWrap.rd-ai-archive-docked{position:static;inset:auto;flex-shrink:0;margin:0}' +
+        'html.rd-ai-archive-mobile.rd-ai-panel-open #rdAiArchiveDock{display:none}' +
+        'html.rd-ai-archive-mobile #detailPanel{padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px))}' +
+        'html.rd-ai-archive-mobile #rdAiCard{box-sizing:border-box;top:max(64px, calc(12px + env(safe-area-inset-top, 0px)));' +
+          'left:max(12px, env(safe-area-inset-left, 0px));right:max(12px, env(safe-area-inset-right, 0px));' +
+          'max-height:calc(100vh - 96px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));' +
+          'max-height:calc(100dvh - 96px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}' +
+      '}' +
       '#rdAiLauncher{width:44px;height:44px;border-radius:50%;border:none;cursor:pointer;' +
         'font:700 14px/1 system-ui,sans-serif;color:#fff;' +
         'background:var(--brand,var(--accent,#3159ce));box-shadow:0 4px 16px rgba(0,0,0,.28);' +
@@ -476,6 +532,7 @@
     injectStyles();
     var ui = buildLauncher();
     gearBtn = ui.gear;
+    installArchiveDock($('rdAiWrap'));
     buildCard();
     syncGear();
 
