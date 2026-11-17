@@ -28,3 +28,6 @@ jobs:
           cp tenders.json data.json data_research.json market-series.json news.json corp_actions.json projects.json reits_snapshot.json advice.json data_panel_l1l7.json "$DEPLOY_DIR/"
           cp -r lib icons research geography fonts "$DEPLOY_DIR/"
           npx wrangler pages deploy "$DEPLOY_DIR" --project-name=reits-dashboard --branch=main --commit-dirty=true
+          # 短网址 reitsdash.pages.dev：同一份内容再部署到第二个免费 Pages 项目
+          npx wrangler pages project create reitsdash --production-branch=main || echo "reitsdash 项目已存在"
+          npx wrangler pages deploy "$DEPLOY_DIR" --project-name=reitsdash --branch=main --commit-dirty=true
