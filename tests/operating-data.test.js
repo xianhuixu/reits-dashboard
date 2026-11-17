@@ -49,4 +49,5 @@ test('reading contracts keep pagination outside scroll and details under selecte
  assert.match(html,/id="opsPrev"/);assert.match(html,/id="opsNext"/);assert.match(html,/id="opsPageStatus" role="status"/);assert.doesNotMatch(html,/id="opsDetail"/);
  assert.match(js,/paginate\(fs,pageNumber,20\)/);assert.match(js,/if\(keepPage!==true\)pageNumber=1/);assert.match(js,/row\.after\(expanded\)/);assert.match(js,/aria-expanded/);assert.match(js,/trigger\.focus\(\)/);assert.match(js,/scrollLeft=0/);assert.doesNotMatch(js,/\$\('opsDetail'\)/);
  assert.match(css,/position:sticky;left:0/);assert.match(css,/ops-mobile-value/);assert.match(css,/ops-mobile-open/);
+ assert.doesNotMatch(css,/100vw/);assert.match(css,/container-type:inline-size/);assert.match(css,/100cqw/);assert.match(css,/.ops-expanded-row>td{[^}]*max-width:0/);
 });
