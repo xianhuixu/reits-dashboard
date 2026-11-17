@@ -34,3 +34,19 @@ test('new tab is accessible, lazy and mirrored through existing recursive asset 
 });
 
 test('financial period labels distinguish quarters from semiannual reports',()=>{assert.equal(O.caliberLabel({sourceTable:'financials',caliber:'本期',period:'2026Q3'}),'本期（单季）');assert.equal(O.caliberLabel({sourceTable:'financials',caliber:'本期',period:'2026H1'}),'本期（上半年）');assert.equal(O.caliberLabel({sourceTable:'ops_metric',caliber:'期间累计',period:'2026Q3'}),'期间累计');});
+
+test('fund pagination uses 20 unique funds, clamps pages and preserves source',()=>{
+ const funds=Array.from({length:103},(_,i)=>({code:String(i)}));
+ const first=O.paginate(funds,1),last=O.paginate(funds,6),beyond=O.paginate(funds,100);
+ assert.equal(first.items.length,20);assert.equal(first.pages,6);assert.equal(first.start,1);assert.equal(first.end,20);
+ assert.equal(last.items.length,3);assert.equal(last.start,101);assert.equal(last.end,103);assert.equal(beyond.page,6);
+ assert.equal(O.paginate(funds,-1).page,1);assert.equal(O.paginate([],9).start,0);assert.equal(O.paginate([],9).end,0);
+ assert.equal(O.paginate(funds.slice(0,2),6).page,1);assert.equal(funds.length,103);
+ assert.deepEqual(Array.from({length:6},(_,i)=>O.paginate(funds,i+1).items).flat(),funds);
+});
+test('reading contracts keep pagination outside scroll and details under selected row',()=>{
+ const html=fs.readFileSync('index.html','utf8'),js=fs.readFileSync('research/operating-data.js','utf8'),css=fs.readFileSync('research/operating-data.css','utf8');
+ assert.match(html,/id="opsPrev"/);assert.match(html,/id="opsNext"/);assert.match(html,/id="opsPageStatus" role="status"/);assert.doesNotMatch(html,/id="opsDetail"/);
+ assert.match(js,/paginate\(fs,pageNumber,20\)/);assert.match(js,/if\(keepPage!==true\)pageNumber=1/);assert.match(js,/row\.after\(expanded\)/);assert.match(js,/aria-expanded/);assert.match(js,/trigger\.focus\(\)/);assert.match(js,/scrollLeft=0/);assert.doesNotMatch(js,/\$\('opsDetail'\)/);
+ assert.match(css,/position:sticky;left:0/);assert.match(css,/ops-mobile-value/);assert.match(css,/ops-mobile-open/);
+});
