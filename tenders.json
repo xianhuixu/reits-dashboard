@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-17T18:49:45+08:00",
+  "checkedAt": "2026-11-18T03:27:06+08:00",
   "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -11,7 +11,7 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "failed",
       "count": 0,
-      "checkedAt": "2026-11-17T18:49:45+08:00",
+      "checkedAt": "2026-11-18T03:27:06+08:00",
       "lastSuccessAt": null,
       "latestBulletinDate": null
     },
@@ -736,16 +736,6 @@
       "date": "2026-08-24",
       "title": "山东发展新能源集团有限公司机构间REITs计划管理人选聘项目招标公告",
       "url": "https://ctbpsp.com/#/bulletinDetail?uuid=d50ee2df4c344b778a4dc35073968f40&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "bid_4ec52ff2cc448e97a7fa",
-      "date": "2026-08-19",
-      "title": "郑州城发安居科技有限公司租赁住房公募REITs审计机构选聘成交候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=2fd4795febfd4de59002beb81fd26790&inpvalue=&dataSource=0&tenderAgency=",
       "source": "ceb",
       "tag": "招投标",
       "media": "中国招标投标公共服务平台（官方备用列表）",
