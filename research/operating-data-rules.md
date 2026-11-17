@@ -74,7 +74,7 @@
 
 | 字段 | 原因 | 处理 |
 |---|---|---|
-| `financials.leverage_ratio` | 实为总资产/净资产，408/408 能对上，值域 1.01–1.39 倍 | 改名「权益乘数」，禁止叫杠杆率/LTV |
+| `financials.leverage_ratio` | 源库无可验证定义或公式；单位照录源字段，不凭旧资料推测经济含义 | 标为「原始杠杆字段，定义待核」，不称权益乘数或LTV |
 | `financials.actual_distribution`、`dps_actual` | 与派息事件冲突，存在 0 和 6.2 异常 | 不进主图 |
 | `market_valuation.valuation_yield` | 无来源，非 IRR | 不进利差/横幅 |
 | `market_valuation.remaining_years` | 口径不明，与到期日、term_years 对不齐 | 特许到期用 `concession_end` |
@@ -110,3 +110,5 @@
 - `forecast` 的单位、假设日、披露来源。
 - 原始 label 的标准映射表（986 个标签未编码）。
 - 资产退出：`exit_date` 全空，不能据此判断已处置资产。
+
+- 收入/成本原表缺单位及可验证的分项不重叠依据：相同公司和报告期不足以作图。仅保留折叠原值表；同主体、同期间、同单位和分项不重叠均验证后方可另行开启构成图。
