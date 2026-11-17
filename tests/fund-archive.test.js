@@ -12,8 +12,8 @@ test('archive export is deterministic, read-only and flags dividend conflicts (P
  const out=execFileSync('python3',['-m','unittest','discover','-s','tests','-p','test_fund_archives.py'],{cwd:path.join(__dirname,'..'),encoding:'utf8'});assert.equal(typeof out,'string');
 });
 test('full source audit and all fund shards agree; no project/fund mixing',()=>{
- assert.equal(manifest.summary.funds,103);assert.equal(manifest.summary.financials,20507);assert.equal(manifest.summary.ops,4651);assert.equal(manifest.summary.distributionEvents,544);assert.equal(manifest.summary.scopeLabelMismatches,552);assert.equal(manifest.feedsSignals,false);
- const totals={};for(const fund of manifest.funds){const d=read(fund.code);assert.equal(d.code,fund.code);const own=new Set(d.tables.asset.map(a=>a.asset_id));for(const [t,rs] of Object.entries(d.tables)){assert.equal(rs.length,d.coverage[t]);assert.equal(rs.length,fund.coverage[t]);totals[t]=(totals[t]||0)+rs.length;for(const r of rs)assert.equal(r.code,fund.code);}
+ assert.equal(manifest.summary.funds,103);assert.equal(manifest.summary.financials,20507);assert.equal(manifest.summary.ops,4651);assert.equal(manifest.summary.distributionEvents,544);assert.equal(manifest.summary.scopeLabelMismatches,552);assert.equal(manifest.feedsSignals,false);assert.equal(manifest.tables.market_valuation.exported,false);assert.ok(manifest.tables.market_valuation.fields.valuation_yield);
+ const totals={};for(const fund of manifest.funds){const d=read(fund.code);assert.equal(d.code,fund.code);assert.ok(!Object.hasOwn(d.tables,'market_valuation'));assert.ok(!JSON.stringify(d.tables).includes('\"valuation_yield\"'));const own=new Set(d.tables.asset.map(a=>a.asset_id));for(const [t,rs] of Object.entries(d.tables)){assert.equal(rs.length,d.coverage[t]);assert.equal(rs.length,fund.coverage[t]);totals[t]=(totals[t]||0)+rs.length;for(const r of rs)assert.equal(r.code,fund.code);}
  for(const t of ['ops_metric','financials']){for(const r of A.normalized(d,t)){assert.equal(r.scope,'基金');if(t==='ops_metric')assert.equal(r.asset_id,'ALL');}
  for(const r of d.tables[t].filter(r=>r.scope==='项目'))assert.ok(own.has(r.asset_id));}
  }
@@ -34,8 +34,13 @@ test('508008 preserves only period traffic and 180203 keeps traffic vs toll sepa
  const d=read('508008.SH'),rs=A.normalized(d,'ops_metric').filter(r=>r.period==='2026Q3');assert.equal(rs.find(r=>r.metric==='traffic_total').value,2086000);assert.ok(!rs.some(r=>r.metric==='traffic_volume'));assert.match(A.summaryCards(d),/期间车次/);assert.ok(!A.summaryCards(d).includes('日均车流'));
  const highway=read('180203.SZ'),p=A.normalized(highway,'ops_metric').filter(r=>r.period==='2026Q3');assert.equal(p.find(r=>r.metric==='traffic_volume').value,19692);assert.equal(p.find(r=>r.metric==='toll_revenue').value,13551.5);assert.match(A.summaryCards(read('508006.SH')),/营业收入/);
 });
-test('two priority sectors have real graphs, financial matrices, source tables, assets and holders',()=>{
+test('two priority sectors render real data; forecasts stay unit-unknown, not IRR; leverage is not LTV',()=>{
  for(const code of ['180103.SZ','180203.SZ']){const d=read(code),before=JSON.stringify(d);assert.match(A.operating(d),/<svg/);assert.match(A.finances(d),/季度利润与分配/);assert.match(A.finances(d),/逐笔分红/);assert.match(A.originals(d),/可供分配金额计算过程/);assert.match(A.holders(d),/主要持有人/);const a=d.tables.asset[0];assert.match(A.assetContent(d,a),/返回.*基金档案/);assert.match(A.assetContent(d,a),/当前期基金及兄弟资产对照/);assert.equal(JSON.stringify(d),before);}
+ const d=read('180103.SZ');for(const k of Object.keys(d.tables))d.tables[k]=[];
+ d.tables.forecast=[{code:d.code,year:2027,metric:'distributable_cash',value:12345,scenario:'首发',start_month:1,end_month:12}];
+ const before=JSON.stringify(d),forecastOnly=A.finances(d);assert.match(forecastOnly,/无单位字段/);assert.match(forecastOnly,/12,345/);assert.doesNotMatch(forecastOnly,/<svg|IRR|达成率[^。]*[0-9]/);assert.equal(JSON.stringify(d),before);
+ d.tables.forecast=[];d.tables.financials=[{code:d.code,scope:'基金',asset_id:'ALL',metric:'leverage_ratio',period:'2025A',caliber:'期末',unit:'倍',value:1.75,tax_flag:'不适用'}];
+ const leverage=A.finances(d);assert.match(leverage,/权益乘数（非LTV）/);assert.match(leverage,/1.75/);assert.doesNotMatch(leverage,/(?:贷款价值比|抵押率|LTV) · 倍/);
 });
 test('zero financial distributions are flagged, never plotted as zero event payments',()=>{
  let count=0;for(const fund of manifest.funds){const d=read(fund.code);for(const r of d.tables.financials.filter(r=>r.qualityFlags)){assert.equal(r.value,0);assert.match(A.visibleValue(r),/待核/);count++;}}
