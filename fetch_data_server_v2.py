@@ -220,7 +220,7 @@ def score_signals(reits, fund, corr_ret, bench_ret, bond10y):
     def sb_score(code):
         if corr_ret is None or code not in corr_ret.columns:
             return 0
-        if "000300.SH" not in bench_ret.columns or "000012.SH" not in bench_ret.columns:
+        if bench_ret is None or "000300.SH" not in bench_ret.columns or "000012.SH" not in bench_ret.columns:
             return 0
         j = pd.concat([corr_ret[code], bench_ret["000300.SH"], bench_ret["000012.SH"]], axis=1).dropna()
         if len(j) < 20:
