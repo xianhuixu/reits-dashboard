@@ -1610,7 +1610,8 @@ LAZY.research.push(function () {
   var VIEW_ASSETS = {
     ops: { css: "research/operating-data.css?v=20261117e", js: "research/operating-data.js?v=20261119-perf" },
     archive: { css: "research/fund-archive.css?v=20261117a", js: "research/fund-archive.js?v=20261119-perf" },
-    alloc: { js: "allocation-tools.js?v=20261005-designr3" }
+    alloc: { js: "allocation-tools.js?v=20261005-designr3" },
+    track: { css: "research/track-analysis.css?v=20261119-track", js: "research/track-analysis.js?v=20261119-track" }
   };
   function ensureViewModule(name) {
     var spec = VIEW_ASSETS[name];
@@ -1718,6 +1719,11 @@ LAZY.research.push(function () {
       stagger(target);
       if (v === "news") withScript("news.js", "REITS_NEWS", function () { runLazy("news"); });
       else if (v.indexOf("proj-") === 0) withScript("projects.js", "REITS_PROJECTS", function () { runLazy("proj"); });
+      else if (v === "track") {
+        ensureViewModule("track").then(function () {
+          if (window.ReitsTrackAnalysis) window.ReitsTrackAnalysis.mount();
+        });
+      }
       requestAnimationFrame(ensureCharts);
       // 移动端切换偶发图表空白：延迟二次 resize + 热力图整图重绘兜底
       setTimeout(echResizeAll, 160);
@@ -2517,70 +2523,7 @@ LAZY.research.push(function () {
     }
   });
 
-  // ---- 赛道透视 ----
-  LAZY.research.push(function () {
-    var TRACKS = [
-      { sector: "高速公路", metrics: ["车流量", "通行费收入", "路网分流"], redline: "流量低于预测 >10% 预警" },
-      { sector: "能源", metrics: ["电价", "发电量/出力率", "补贴回款"], redline: "出力率低于预测 >10% 预警" },
-      { sector: "保租房", metrics: ["出租率", "租金水平", "租户续租率"], redline: "出租率 <90% 预警" },
-      { sector: "产业园", metrics: ["出租率", "租金偏离", "空置率", "租户行业分散度"], redline: "空置率 >12% 或租金偏离 >15% 预警" },
-      { sector: "仓储物流", metrics: ["出租率", "WALE", "新增供给"], redline: "出租率 <90% 或租金下行 >10%" },
-      { sector: "消费", metrics: ["客流量", "销售额", "租售比"], redline: "空置率 >15% 预警" },
-      { sector: "数据中心", metrics: ["上架率", "电力成本", "算力需求", "解禁节奏"], redline: "上架率显著低于预测预警" },
-      { sector: "市政环保", metrics: ["处理量", "政府付费回款", "特许剩余年限"], redline: "剩余年限不足覆盖本金回收" },
-    ];
-    var fundMap = {};
-    (D.fundamentals || []).forEach(function (f) { fundMap[f.code] = f; });
-    if (DS) {
-      var fundSt = DS.fromFundamentals(D.fundamentals);
-      dsApply($("trackGrid").closest(".card"), fundSt);
-      dsApply($("fundTable").closest(".card"), fundSt);
-    }
-    $("trackGrid").innerHTML = '<div class="grid3" style="margin-bottom:0">' + TRACKS.map(function (t) {
-      var members = D.reits.filter(function (r) { return r.sector === t.sector; });
-      var pills = [];
-      members.forEach(function (r) {
-        var f = fundMap[r.code];
-        if (f && f.metrics) {
-          Object.keys(f.metrics).forEach(function (mk) {
-            var v = f.metrics[mk];
-            if (v == null) return;
-            var level = "ok";
-            if (mk === "出租率" && v < 90) level = "risk"; else if (mk === "出租率" && v < 92) level = "warn";
-            if (mk === "空置率" && v > 12) level = "risk"; else if (mk === "空置率" && v > 10) level = "warn";
-            pills.push({ n: r.name.replace(/REIT.*$/, ""), m: mk, v: v, level: level });
-          });
-        }
-      });
-      var pillHtml = pills.length
-        ? pills.slice(0, 6).map(function (p) {
-            return '<span class="metric-pill ' + p.level + '">' + p.n + " " + p.m + " " + p.v + (typeof p.v === "number" ? "%" : "") + "</span>";
-          }).join("")
-        : '<span class="metric-pill gray">运营数据待季度更新</span>';
-      return '<div class="card" style="background:var(--panel2)"><div style="display:flex;justify-content:space-between;align-items:center">' +
-        '<b style="font-size:13px">' + t.sector + '</b><span style="font-size:11px;color:var(--tx3)">' + members.length + " 只</span></div>" +
-        '<div style="margin:6px 0">' + t.metrics.map(function (m2) { return '<span class="metric-pill gray">' + m2 + "</span>"; }).join("") + "</div>" +
-        '<div class="tone-risk" style="font-size:11px;margin-bottom:6px">红线：' + t.redline + "</div>" + pillHtml + "</div>";
-    }).join("") + "</div>";
-
-    // 分派达成监测
-    var funds = D.fundamentals || [];
-    if (!funds.length) {
-      $("fundTable").innerHTML = '<div class="empty">fundamentals.json 待维护：填入各券 achieveRate（达成率）与 distYield（分派率）后自动标色</div>';
-    } else {
-      $("fundTable").innerHTML = '<table class="matrix"><thead><tr><th class="l">名称</th><th>达成率</th><th>分派率</th><th>状态</th><th class="l">备注</th></tr></thead><tbody>' +
-        funds.map(function (f) {
-          var r = D.reits.find(function (x) { return x.code === f.code; });
-          var a = f.achieveRate;
-          var st = a == null ? ["待更新", "var(--tx3)"] : a >= 95 ? ["正常", "var(--tilt-pos)"] : a >= 90 ? ["警戒", "var(--warn)"] : ["减持红线", "var(--risk)"];
-          return "<tr><td class='l'>" + (r ? r.name : f.code) + "</td>" +
-            '<td class="num">' + (a == null ? "—" : a + "%") + "</td>" +
-            '<td class="num">' + (f.distYield == null ? "—" : f.distYield + "%") + "</td>" +
-            '<td' + (st[1] === "var(--risk)" ? ' class="tone-risk"' : "") + ' style="color:' + st[1] + '">' + st[0] + "</td>" +
-            "<td class='l' style='color:var(--tx3);font-size:11px'>" + (f.note || "") + "</td></tr>";
-        }).join("") + "</tbody></table>";
-    }
-  });
+  // 赛道透视图表改由 research/track-analysis.js 在 switchView("track") 时按需加载，不再使用 fundamentals 自动标「减持红线」。
 
   // ---- 策略信号中心 ----
   LAZY.research.push(function () {

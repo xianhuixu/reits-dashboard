@@ -17,7 +17,7 @@ test("layout containers can shrink within the mobile viewport", () => {
 });
 
 test("wide financial matrices use local scrolling containers", () => {
-  ["matrix", "osMatrix", "usCoupleStats", "corrMatrix", "peerBars", "advicePerf", "fundTable", "backtestTable"].forEach((id) => {
+  ["matrix", "osMatrix", "usCoupleStats", "corrMatrix", "peerBars", "advicePerf", "trackQualityTable", "trackFixedTable", "trackValOperatingTable", "backtestTable"].forEach((id) => {
     assert.match(html, new RegExp(`class="table-scroll" id="${id}"`));
   });
   assert.match(html, /\.table-scroll\s*\{[^}]*overflow-x:\s*auto/s);
