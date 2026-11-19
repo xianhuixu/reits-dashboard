@@ -35,7 +35,7 @@ test("lazy CSS/JS for operating data, fund archive and allocation tools are not 
   assert.doesNotMatch(html, /<script[^>]+src="allocation-tools\.js/);
   assert.match(html, /<script src="ui-utils\.js\?v=20261119-perf" defer>/);
   assert.match(html, /<script src="workspace\.js\?v=20261119-perf" defer>/);
-  assert.match(html, /<script src="app\.js\?v=20261119-trackfix" defer>/);
+  assert.match(html, /<script src="app\.js\?v=20261119-layout" defer>/);
   assert.match(html, /<link rel="stylesheet" href="fonts\.css/);
   assert.match(html, /<link rel="stylesheet" href="styles\.css/);
   assert.match(html, /<link rel="stylesheet" href="workspace\.css/);
@@ -46,7 +46,7 @@ test("lazy CSS/JS for operating data, fund archive and allocation tools are not 
   assert.doesNotMatch(html, /<script[^>]+src="research\/track-analysis\.js/);
   assert.doesNotMatch(html, /track-analysis\.json/);
   assert.match(app, /ensureViewModule\("track"\)/);
-  assert.match(app, /VIEW_ASSETS[\s\S]*track:\s*\{[\s\S]*track-analysis\.js\?v=20261119-trackfix/);
+  assert.match(app, /VIEW_ASSETS[\s\S]*track:\s*\{[\s\S]*track-analysis\.js\?v=20261119-layout/);
 });
 
 test("research-layout.css and geography/map.css appear once each plus a noscript fallback", () => {
@@ -98,7 +98,8 @@ test("_headers caches fonts and versioned CSS/JS, but revalidates JSON immediate
     assert.match(block, /Cache-Control:\s*public, max-age=0, must-revalidate/);
     assert.doesNotMatch(block, /max-age=60/);
   });
-  assert.match(headers, /\/index\.html\n\s*Cache-Control:\s*public, max-age=60, must-revalidate/);
+  assert.match(headers, /\/index\.html\n\s*Cache-Control:\s*public, max-age=0, must-revalidate/);
+  assert.match(headers, /(?:^|\n)\/\n\s*Cache-Control:\s*public, max-age=0, must-revalidate/);
   assert.match(headers, /GitHub Pages 不读取本文件/);
 });
 

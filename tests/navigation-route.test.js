@@ -9,7 +9,7 @@ const end=source.indexOf('  // ---- 导航事件绑定',start);
 function fixture(hash='#/detail/180103.SZ/asset/a01'){
  const calls=[],entries=[hash];let index=0;
  const location={hash};const active={pano:'heatmap',research:'detail'};
- const allowed={pano:['heatmap','news','proj-ndrc'],research:['detail','review']};
+ const allowed={pano:['heatmap','news','proj-ndrc'],research:['detail','review','track']};
  const history={pushState(_s,_t,h){entries.splice(++index);entries.push(h);location.hash=h;}};
  const document={querySelector(q){let m=q.match(/^#(pano|research)Sub button\.on$/);if(m)return {dataset:{v:active[m[1]]}};
  m=q.match(/^#(pano|research)Sub button\[data-v="([\w-]+)"\]$/);if(m&&allowed[m[1]].includes(m[2]))return {dataset:{v:m[2]}};
@@ -62,5 +62,23 @@ test('router listens to back/forward and hash links; both navigation event paths
  assert.match(source,/addEventListener\("popstate", restoreNavigationRoute\)/);assert.match(source,/addEventListener\("hashchange", restoreNavigationRoute\)/);
  const binding=source.slice(source.indexOf('  function bindNavButton('),source.indexOf('  // 绑定所有导航按钮'));
  assert.equal((binding.match(/syncNavigationRoute\(btn\)/g)||[]).length,3);assert.match(binding,/btn.addEventListener\("touchend"/);
- assert.match(fs.readFileSync('index.html','utf8'),/app.js\?v=20261119-trackfix/);
+ assert.match(fs.readFileSync('index.html','utf8'),/app.js\?v=20261119-layout/);
+});
+
+test('sector route refresh is recognized without pushing history and passes the sector to the lazy module',()=>{
+ const f=fixture('#/page/research/track/xiaofei');
+ f.ctx.window.ReitsTrackAnalysis={applyRoute(sector){f.calls.push(['sector',sector]);},currentRoute(){return '#/page/research/track/xiaofei';}};
+ f.ctx.restoreNavigationRoute();
+ assert.deepEqual(f.calls,[['page','research'],['view','track'],['sector','xiaofei']]);assert.equal(f.entries.length,1);
+});
+test('track navigation restores remembered sector after a fund/asset visit; back and forward retain exact sector URLs',()=>{
+ const f=fixture('#/page/research/track/cangchu');f.active.research='track';
+ f.ctx.window.ReitsTrackAnalysis={currentRoute(){return '#/page/research/track/cangchu';},applyRoute(sector){f.calls.push(['sector',sector]);}};
+ f.ctx.writeRoute('#/detail/180103.SZ/asset/a01');f.active.research='detail';
+ f.go(-1);assert.equal(f.location.hash,'#/page/research/track/cangchu');assert.deepEqual(f.calls.slice(-3),[['page','research'],['view','track'],['sector','cangchu']]);
+ f.go(1);assert.equal(f.location.hash,'#/detail/180103.SZ/asset/a01');
+ f.ctx.syncNavigationRoute({dataset:{v:'track'}});assert.equal(f.location.hash,'#/page/research/track/cangchu');
+});
+test('sector suffix is scoped to research track rather than silently accepted on other destinations',()=>{
+ for(const hash of ['#/page/pano/heatmap/cangchu','#/page/research/review/xiaofei']){const f=fixture(hash);f.ctx.restoreNavigationRoute();assert.equal(f.calls.length,0);}
 });

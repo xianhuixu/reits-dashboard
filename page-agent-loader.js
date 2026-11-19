@@ -172,32 +172,40 @@
     var media = window.matchMedia('(max-width:640px)');
     var root = document.documentElement;
     var detailHost = document.getElementById('detailPanel');
-    var trackHost = document.getElementById('trackAiTools');
+    var topSlot = document.getElementById('rdAiTopSlot');
     var trackView = document.getElementById('v-track');
     var page = document.getElementById('pg-research');
     var view = document.getElementById('v-detail');
     function sync() {
-      var trackActive = !!(media.matches && trackHost && trackView && page && !page.hidden && !trackView.hidden &&
+      var trackActive = !!(media.matches && topSlot && trackView && page && !page.hidden && !trackView.hidden &&
         !page.classList.contains('hidden') && !trackView.classList.contains('hidden'));
-      var host = trackActive ? trackHost : detailHost;
-      var active = trackActive || !!(media.matches && host && page && view &&
+      var host = detailHost;
+      var archiveActive = !!(media.matches && host && page && view &&
         !page.hidden && !view.hidden && !page.classList.contains('hidden') &&
         !view.classList.contains('hidden') && host.querySelector('#fundArchive'));
-      root.classList.toggle('rd-ai-archive-mobile', active);
+      root.classList.toggle('rd-ai-archive-mobile', archiveActive);
+      root.classList.toggle('rd-ai-track-mobile', trackActive);
       var dock = document.getElementById('rdAiArchiveDock');
-      if (active) {
+      if (trackActive) {
+        wrap.classList.remove('rd-ai-archive-docked');
+        wrap.classList.add('rd-ai-top-docked');
+        if (wrap.parentNode !== topSlot) topSlot.appendChild(wrap);
+        if (dock) dock.remove();
+      } else if (archiveActive) {
+        wrap.classList.remove('rd-ai-top-docked');
+        wrap.classList.add('rd-ai-archive-docked');
         if (dock && dock.parentNode !== host) { dock.remove(); dock = null; }
         if (!dock || dock.parentNode !== host) {
           dock = document.createElement('div');
           dock.id = 'rdAiArchiveDock';
           dock.setAttribute('role', 'group');
-          dock.setAttribute('aria-label', trackActive ? '赛道辅助工具' : '档案辅助工具');
+          dock.setAttribute('aria-label', '档案辅助工具');
           host.insertBefore(dock, host.firstChild);
         }
         if (wrap.parentNode !== dock) dock.appendChild(wrap);
-        wrap.classList.add('rd-ai-archive-docked');
       } else {
         wrap.classList.remove('rd-ai-archive-docked');
+        wrap.classList.remove('rd-ai-top-docked');
         if (wrap.parentNode !== document.body) document.body.appendChild(wrap);
         if (dock) dock.remove();
       }
@@ -426,7 +434,7 @@
       '#rdAiWrap{position:fixed;z-index:2147483639;display:flex;flex-direction:row;align-items:center;gap:8px;' +
         'right:max(12px, env(safe-area-inset-right, 0px));' +
         'top:72px}' +
-      '@media (max-width:640px){#rdAiWrap{top:auto;bottom:max(16px, env(safe-area-inset-bottom, 0px));right:max(12px, env(safe-area-inset-right, 0px));flex-direction:row;gap:8px}}' +
+      '@media (max-width:640px){#rdAiWrap{top:auto;bottom:max(16px, env(safe-area-inset-bottom, 0px));right:max(12px, env(safe-area-inset-right, 0px));flex-direction:row;gap:8px}}#rdAiTopSlot:empty{display:none}@media (max-width:640px){html.rd-ai-track-mobile #rdAiTopSlot{display:flex;align-items:center;gap:6px;margin-left:8px;flex:0 0 auto}html.rd-ai-track-mobile #rdAiWrap.rd-ai-top-docked{position:static;inset:auto;top:auto;right:auto;z-index:auto;gap:6px;margin:0}html.rd-ai-track-mobile #rdAiLauncher{width:32px;height:32px;font-size:12px;box-shadow:none}html.rd-ai-track-mobile #rdAiGear{width:28px;height:28px;box-shadow:none}html.rd-ai-track-mobile #rdAiCard{top:max(56px, calc(8px + env(safe-area-inset-top, 0px)));max-height:calc(100dvh - 80px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}html.rd-ai-track-mobile.rd-ai-panel-open #rdAiTopSlot{visibility:hidden}}' +
       /* Archive-only mobile dock: takes real layout space above fund/asset content. */
       '@media (max-width:640px){' +
         'html.rd-ai-archive-mobile #rdAiArchiveDock{display:flex;justify-content:flex-end;align-items:center;box-sizing:border-box;min-width:0;min-height:56px;' +

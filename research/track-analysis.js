@@ -3,14 +3,33 @@
   "use strict";
   var DATA = null;
   var loading = false;
-  var metricId = "occupancy_rate";
   var sectorId = "产业园";
+  var periodId = null;
   var SECTOR_ORDER = ["产业园", "消费", "商业不动产", "仓储物流", "保租房", "高速公路", "能源", "数据中心", "市政环保", "供热"];
+  var SECTOR_SLUGS = {
+    "产业园": "chanyeyuan",
+    "消费": "xiaofei",
+    "商业不动产": "shangye",
+    "仓储物流": "cangchu",
+    "保租房": "baozufang",
+    "高速公路": "gaosu",
+    "能源": "nengyuan",
+    "数据中心": "shuju",
+    "市政环保": "huanbao",
+    "供热": "gongre"
+  };
+  var SLUG_TO_SECTOR = {};
+  Object.keys(SECTOR_SLUGS).forEach(function (name) { SLUG_TO_SECTOR[SECTOR_SLUGS[name]] = name; });
+  var DENSE_LIMIT = 8;
   var charts = {};
+  var pendingCharts = {};
+  var retryTimer = null;
+  var writingHash = false;
+  var renderedMobile = null;
 
   function $(id) { return document.getElementById(id); }
   function esc(s) {
-    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
   function fmt(v, digits) {
     if (v == null || typeof v !== "number" || !isFinite(v)) return "本期无匹配口径数据";
@@ -26,24 +45,23 @@
       tx3: cssVal("--tx3") || "#8a93a0",
       accent: cssVal("--accent") || "#3b82f6",
       grid: cssVal("--grid") || "#243044",
-      def: cssVal("--def") || "#60a5fa",
-      cyc: cssVal("--cyc") || "#f59e0b",
       gro: cssVal("--gro") || "#34d399",
-      warn: cssVal("--warn") || "#f59e0b",
       risk: cssVal("--risk") || "#e11d48"
     };
   }
-  function dispose() {
-    Object.keys(charts).forEach(function (id) {
-      try { if (charts[id] && !charts[id].isDisposed()) charts[id].dispose(); } catch (e) {}
-    });
-    charts = {};
+  function isMobile() {
+    return !!(root.matchMedia && root.matchMedia("(max-width:640px)").matches);
   }
-  var pendingCharts = {};
-  var retryTimer = null;
-
   function visible() {
     return $("v-track") && !$("v-track").hidden && $("pg-research") && !$("pg-research").hidden;
+  }
+  function clearCharts(prefix) {
+    Object.keys(charts).forEach(function (id) {
+      if (prefix && id.indexOf(prefix) !== 0) return;
+      try { if (charts[id] && !charts[id].isDisposed()) charts[id].dispose(); } catch (e) {}
+      delete charts[id];
+      delete pendingCharts[id];
+    });
   }
   function retryCharts() {
     if (retryTimer || !visible()) return;
@@ -60,7 +78,6 @@
     pendingCharts[id] = option;
     if (!visible() || el.offsetWidth === 0 || el.offsetHeight === 0) { retryCharts(); return; }
     var inst = charts[id];
-    // An earlier failed setOption must not poison later mounts (ECharts internal scheduler).
     try {
       if (!inst || inst.isDisposed() || root.echarts.getInstanceByDom(el) !== inst) {
         inst = root.echarts.getInstanceByDom(el) || root.echarts.init(el, null, { renderer: "canvas" });
@@ -69,7 +86,9 @@
       inst.setOption(option, true);
       inst.resize();
       inst.off("click");
-      inst.on("click", function (p) { if (p.data && p.data.fund && p.data.fund.code) root.location.hash = "#/detail/" + p.data.fund.code; });
+      inst.on("click", function (p) {
+        if (p.data && p.data.fund && p.data.fund.code) root.location.hash = "#/detail/" + p.data.fund.code;
+      });
       delete pendingCharts[id];
       return inst;
     } catch (e) {
@@ -96,18 +115,25 @@
     });
     return loading;
   }
-  function metricSpec() {
-    return (DATA.metrics || []).find(function (m) { return m.id === metricId; }) || DATA.metrics[0];
-  }
   function metricApplies(metric, sector) {
     var pack = DATA.latest[metric.id] || {};
     return (pack.sectors || []).some(function (s) { return s.sector === sector; }) ||
       (pack.excludedListing || []).some(function (f) { return f.sector === sector; });
   }
+  function applicableMetrics(sector) {
+    return (DATA.metrics || []).filter(function (m) { return metricApplies(m, sector); });
+  }
+  function sectorRow(metric, sector) {
+    var pack = (DATA.latest[metric.id] || {});
+    return (pack.sectors || []).find(function (s) { return s.sector === sector; }) || {
+      sector: sector, n: 0, universe: 0, undisclosed: 0, undisclosedCodes: [], funds: [],
+      median: null, medianDisplay: null, min: null, max: null, pointOnly: false
+    };
+  }
   function sectorNames() {
     var names = [];
     DATA.metrics.forEach(function (m) {
-      var pack = DATA.latest[m.id];
+      var pack = DATA.latest[m.id] || {};
       (pack.sectors || []).concat(pack.excludedListing || []).forEach(function (s) {
         if (names.indexOf(s.sector) < 0) names.push(s.sector);
       });
@@ -117,157 +143,54 @@
       return (ai < 0 ? 100 : ai) - (bi < 0 ? 100 : bi) || a.localeCompare(b);
     });
   }
-  function selectSector(id) {
-    if (!DATA || sectorNames().indexOf(id) < 0) return;
+  function toSlug(name) { return SECTOR_SLUGS[name] || "chanyeyuan"; }
+  function fromSlug(slug) {
+    if (!slug) return null;
+    var raw = slug;
+    try { raw = decodeURIComponent(slug); } catch (e) {}
+    if (Object.prototype.hasOwnProperty.call(SLUG_TO_SECTOR, raw)) return SLUG_TO_SECTOR[raw];
+    if (sectorNames().indexOf(raw) >= 0) return raw;
+    return null;
+  }
+  function parseHashSector() {
+    var hash = (root.location && root.location.hash) || "";
+    var m = hash.match(/^#\/page\/research\/track(?:\/([^/?#]+))?/);
+    return fromSlug(m && m[1]);
+  }
+  function trackHash(name) { return "#/page/research/track/" + toSlug(name); }
+  function writeSectorHash(name, replace) {
+    var hash = trackHash(name);
+    if (!root.location || root.location.hash === hash) return;
+    writingHash = true;
+    try {
+      if (replace && root.history && root.history.replaceState) root.history.replaceState(null, "", hash);
+      else if (root.history && root.history.pushState) root.history.pushState(null, "", hash);
+      else root.location.hash = hash;
+      if (root.location.hash !== hash) root.location.hash = hash;
+    } finally {
+      writingHash = false;
+    }
+  }
+  function selectSector(id, opts) {
+    opts = opts || {};
+    if (!DATA) return;
+    if (sectorNames().indexOf(id) < 0) return;
+    var changed = sectorId !== id;
     sectorId = id;
-    var current = metricSpec();
-    if (!metricApplies(current, sectorId)) metricId = DATA.metrics.find(function (m) { return metricApplies(m, sectorId); }).id;
+    if (!opts.fromRoute && (changed || opts.forceHash)) writeSectorHash(id, !!opts.replace);
+    if (opts.skipRender && !changed) return;
     render();
   }
-  function renderSwitch() {
-    var sectorHost = $("trackSectorSwitch");
-    if (sectorHost) {
-      sectorHost.innerHTML = sectorNames().map(function (name) {
-        return '<button type="button" data-sector="' + esc(name) + '" aria-pressed="' + (name === sectorId) + '"' +
-          (name === sectorId ? ' class="on"' : '') + '>' + esc(name) + '</button>';
-      }).join('');
-      sectorHost.onclick = function (e) {
-        var b = e.target.closest && e.target.closest('button[data-sector]');
-        if (b) selectSector(b.dataset.sector);
-      };
+  function applyRoute(slug, opts) {
+    opts = opts || {};
+    if (!DATA) {
+      var requestedHash = root.location.hash;
+      return loadPack().then(function () { if (root.location.hash === requestedHash) applyRoute(slug, opts); });
     }
-    var host = $("trackMetricSwitch");
-    if (!host || !DATA) return;
-    host.innerHTML = DATA.metrics.filter(function (m) { return metricApplies(m, sectorId); }).map(function (m) {
-      var sector = (DATA.latest[m.id].sectors || []).find(function (s) { return s.sector === sectorId; });
-      var n = sector ? sector.n : 0;
-      return '<button type="button" data-metric="' + esc(m.id) + '"' +
-        (m.id === metricId ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') +
-        '>' + esc(m.label) + ' · ' + n + '</button>';
-    }).join("");
-    host.onclick = function (e) {
-      var b = e.target && e.target.closest && e.target.closest("button[data-metric]");
-      if (!b) return;
-      metricId = b.dataset.metric;
-      render();
-    };
-  }
-  function baseAxis(th) {
-    return {
-      axisLabel: { color: th.tx3, fontSize: 11 },
-      axisLine: { lineStyle: { color: th.grid } },
-      splitLine: { lineStyle: { color: th.grid } }
-    };
-  }
-  function renderQuality() {
-    var spec = metricSpec();
-    var pack = DATA.latest[spec.id] || { sectors: [] };
-    var sectors = (pack.sectors || []).filter(function (s) { return s.sector === sectorId; });
-    var th = theme();
-    var meta = $("trackQualityMeta");
-    if (meta) {
-      meta.textContent = sectorId + " · 报告期 " + (pack.period || DATA.latestPeriod) +
-        " · 口径 " + spec.caliber + " · 单位 " + spec.unit_label +
-        " · 税标记 " + spec.tax_flag +
-        " · " + (spec.weighting_note || "") +
-        " · 来源：经营数据快照（chinareits 入库） · 每次仅展示当前赛道，切换指标不叠加异质单位";
-    }
-    var stats = $("trackStats");
-    if (stats) stats.innerHTML = sectors.map(function (s) {
-      return '<div><small>匹配口径 / 期末上市适用基金</small><strong>' + s.n + ' / ' + s.universe + '</strong></div>' +
-        '<div><small>本期无匹配口径数据</small><strong>' + s.undisclosed + ' 只</strong></div>' +
-        '<div><small>' + (s.n === 1 ? '单基金原值' : '中位数') + '（' + esc(spec.unit_label) + '）</small><strong>' + (s.pointOnly ? '不汇总' : fmt(s.medianDisplay)) + '</strong></div>' +
-        '<div><small>最低 — 最高（' + esc(spec.unit_label) + '）</small><strong>' + (s.pointOnly ? '不排名' : (fmt(displayMin(s)) + ' — ' + fmt(displayMax(s)))) + '</strong></div>';
-    }).join('');
-    var aggregated = sectors.filter(function (s) { return !s.pointOnly && s.n > 1; });
-    $("trackMedianChart").hidden = aggregated.length === 0;
-    var summary = $("trackSampleNote");
-    if (summary) summary.textContent = sectors.some(function (s) { return s.pointOnly; }) ? "能源子业态待核：仅列基金点，不计算全能源中位数、极值排名或趋势。" :
-      sectors.some(function (s) { return s.n === 1; }) ? "仅 1 只匹配基金，只列单基金原值，不硬造分布。" :
-      sectors.some(function (s) { return s.n === 0; }) ? "本期无匹配口径数据；不画空分布，不作 0。" : "当前赛道内基金等权分布，可点击散点进入档案；极值不等于经营优劣。";
-    $("trackDispersionChart").hidden = !sectors.some(function (s) { return s.n; });
-    var names = sectors.map(function (s) { return s.sector; }).reverse();
-    var medianNames = aggregated.map(function (s) { return s.sector; }).reverse();
-    var medians = aggregated.map(function (s) { return s.medianDisplay; }).reverse();
-    var ns = aggregated.map(function (s) { return s.n; }).reverse();
-    setChart("trackMedianChart", {
-      color: [th.accent],
-      tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-      grid: { left: 72, right: 56, top: 16, bottom: 28 },
-      xAxis: Object.assign({ type: "value", name: spec.unit_label, nameTextStyle: { color: th.tx3 } }, baseAxis(th)),
-      yAxis: Object.assign({ type: "category", data: medianNames }, baseAxis(th), { splitLine: { show: false } }),
-      series: [{
-        type: "bar", name: "中位数（基金等权）", data: medians, barMaxWidth: 18,
-        label: { show: true, position: "right", color: th.tx2, fontSize: 10,
-          formatter: function (p) { return fmt(p.value) + " · n=" + ns[p.dataIndex]; } }
-      }]
-    });
-    var scatter = [];
-    sectors.forEach(function (s) {
-      (s.funds || []).forEach(function (f) {
-        scatter.push({ value: [f.display, s.sector], fund: f });
-      });
-    });
-    var inst = setChart("trackDispersionChart", {
-      title: spec.id === "occupancy_rate" ? { text: "基金等权、非面积加权", left: 72, top: 0, textStyle: { color: th.tx3, fontSize: 11, fontWeight: 400 } } : undefined,
-      color: [th.accent],
-      tooltip: {
-        trigger: "item",
-        formatter: function (p) {
-          var f = p.data && p.data.fund;
-          if (!f) return "";
-          return esc(f.name) + "<br/>" + esc(f.code) + " · " + esc(f.sector) +
-            "<br/>" + esc(spec.label) + " " + fmt(f.display) + " " + esc(spec.unit_label) +
-            (f.expansionInPeriod ? "<br/>本期窗口内有扩募纳入" : "") +
-            "<br/>点击打开基金档案";
-        }
-      },
-      grid: { left: 72, right: 24, top: spec.id === "occupancy_rate" ? 28 : 16, bottom: 36 },
-      xAxis: Object.assign({ type: "value", name: spec.unit_label, nameTextStyle: { color: th.tx3 } }, baseAxis(th)),
-      yAxis: Object.assign({ type: "category", data: names }, baseAxis(th), { splitLine: { show: false } }),
-      series: [{
-        type: "scatter", symbolSize: 11,
-        data: scatter,
-        name: spec.label
-      }]
-    });
-    if (inst) {
-      inst.off("click");
-      inst.on("click", function (p) {
-        var f = p.data && p.data.fund;
-        if (f && f.code) root.location.hash = "#/detail/" + f.code;
-      });
-    }
-    var fundTable = $("trackFundTable");
-    if (fundTable) {
-      var funds = sectors.reduce(function (all, s) { return all.concat(s.funds || []); }, []);
-      fundTable.innerHTML = '<details><summary>查看当前赛道基金原值（' + funds.length + ' 只）</summary><div class="table-scroll"><table class="matrix"><thead><tr><th>基金</th><th>' + esc(spec.label) + '（' + esc(spec.unit_label) + '）</th><th>扩募提示</th></tr></thead><tbody>' +
-        funds.map(function (f) { return '<tr><td><a href="#/detail/' + esc(f.code) + '">' + esc(f.name) + ' · ' + esc(f.code) + '</a></td><td>' + fmt(f.display) + '</td><td>' + (f.expansionInPeriod ? '本期含扩募，非同店' : '资产范围待核') + '</td></tr>'; }).join('') + '</tbody></table></div></details>';
-    }
-    var table = $("trackQualityTable");
-    if (table) {
-      table.innerHTML = '<table class="matrix"><thead><tr><th class="l">赛道</th><th>披露</th><th>本期无匹配口径数据</th><th>中位数 / 单基金原值</th><th>最低</th><th>最高</th></tr></thead><tbody>' +
-        sectors.map(function (s) {
-          return "<tr><td class='l'>" + esc(s.sector) + "</td>" +
-            '<td class="num">' + s.n + " / " + s.universe + "</td>" +
-            '<td class="num">' + (s.undisclosed ? s.undisclosed : "0") + "</td>" +
-            '<td class="num">' + (s.pointOnly ? "不汇总" : fmt(s.medianDisplay)) + "</td>" +
-            '<td class="num">' + (s.pointOnly ? "不排名" : fmt(displayMin(s))) + "</td>" +
-            '<td class="num">' + (s.pointOnly ? "不排名" : fmt(displayMax(s))) + "</td></tr>";
-        }).join("") + "</tbody></table>";
-    }
-    var und = $("trackUndisclosed");
-    if (und) {
-      var bits = sectors.map(function (s) {
-        return s.sector + " " + s.n + "/" + s.universe + "；本期无匹配口径数据 " + s.undisclosed + " 只" + (s.undisclosedCodes.length ? "（" + s.undisclosedCodes.join("、") + "）" : "");
-      });
-      var exclusions = (pack.excludedListing || []).filter(function (f) { return f.sector === sectorId; }).map(function (f) {
-        return f.code + " " + f.reason + (f.listDate ? "（" + f.listDate + "）" : "");
-      });
-      und.textContent = "覆盖分母：截至 " + pack.periodEnd + " 已上市且适用指标的基金（经营库 list_date 核对，不以行情库存在与否判断）。" +
-        bits.join(" · ") + "。另列，不计缺数、不进入上市基金分布/趋势：" + (exclusions.join("；") || "无") +
-        (sectors.some(function (s) { return s.pointOnly; }) ? "。能源子业态待核，仅列基金点位，不计算全能源中位数/趋势/排名；绝对量不表示经营优劣。" : "");
-    }
+    if (!/^#\/page\/research\/track(?:\/|$)/.test(root.location.hash || "")) return;
+    var name = fromSlug(slug) || parseHashSector() || sectorNames()[0] || "产业园";
+    selectSector(name, { fromRoute: true });
+    if ((root.location.hash || "") !== trackHash(sectorId)) writeSectorHash(sectorId, true);
   }
   function displayMin(s) {
     if (!s.funds || !s.funds.length) return null;
@@ -277,116 +200,246 @@
     if (!s.funds || !s.funds.length) return null;
     return Math.max.apply(null, s.funds.map(function (f) { return f.display; }));
   }
-  function renderTrend() {
-    var spec = metricSpec();
-    var original = DATA.trend[spec.id] || { sectors: [] };
-    var pack = { sectors: original.sectors.filter(function (s) { return s.sector === sectorId; }) };
-    var th = theme();
-    var colors = [th.accent, th.cyc, th.gro, th.def, th.warn, "#a78bfa", "#fb7185"];
-    var periods = [];
-    (pack.sectors || []).forEach(function (s) {
-      (s.points || []).forEach(function (p) {
-        if (periods.indexOf(p.period) < 0) periods.push(p.period);
-      });
-    });
-    periods.sort();
-    var coverageTable = $("trackTrendTable");
-    if (coverageTable) coverageTable.innerHTML = '<table class="matrix"><caption>各期覆盖数 n（基金只数）</caption><thead><tr><th>赛道</th>' +
-      periods.map(function (p) { return '<th>' + esc(p) + '</th>'; }).join('') + '</tr></thead><tbody>' +
-      (pack.sectors || []).map(function (sector) {
-        var map = {}; sector.points.forEach(function (p) { map[p.period] = p.n; });
-        return '<tr><td>' + esc(sector.sector) + '</td>' + periods.map(function (p) { return '<td>' + (map[p] || '无匹配数据') + '</td>'; }).join('') + '</tr>';
-      }).join('') + '</tbody></table>';
-
-    var series = (pack.sectors || []).map(function (s, i) {
-      var map = {};
-      (s.points || []).forEach(function (p) { map[p.period] = p; });
-      return {
-        name: s.sector,
-        type: "line",
-        showSymbol: true,
-        symbolSize: 8,
-        data: periods.map(function (period) {
-          var p = map[period];
-          if (!p) return null;
-          return { value: p.medianDisplay, n: p.n, period: period };
-        }),
-        lineStyle: { width: 2 },
-        itemStyle: { color: colors[i % colors.length] },
-        label: {
-          show: !root.matchMedia || !root.matchMedia("(max-width:640px)").matches, fontSize: 9, color: th.tx3,
-          formatter: function (p) { return p.data && p.data.n != null ? "n=" + p.data.n : ""; }
-        }
+  function useScatter(row) {
+    return !isMobile() && !row.pointOnly && row.n >= 2 && row.n <= DENSE_LIMIT;
+  }
+  function renderSwitch() {
+    var names = sectorNames();
+    var tabs = $("trackSectorSwitch");
+    if (tabs) {
+      tabs.innerHTML = names.map(function (name) {
+        return '<button type="button" role="tab" data-sector="' + esc(name) + '" aria-selected="' + (name === sectorId) + '"' +
+          (name === sectorId ? ' class="on"' : "") + ">" + esc(name) + "</button>";
+      }).join("");
+      tabs.onclick = function (e) {
+        var b = e.target && e.target.closest && e.target.closest("button[data-sector]");
+        if (b) selectSector(b.dataset.sector);
       };
-    });
-    $("trackTrendChart").hidden = series.length === 0;
-    var trendNote = $("trackTrendNote");
-    if (trendNote) trendNote.textContent = series.length ? sectorId + " · " + spec.label + "（每期样本可能变动）" : sectorId + " · 当前指标无可展示的季度趋势；能源不汇总，单期/无样本不连线。";
-    setChart("trackTrendChart", {
-      color: colors,
-      legend: { top: 0, type: "scroll", textStyle: { color: th.tx2, fontSize: 11 } },
-      tooltip: {
-        trigger: "axis",
-        formatter: function (items) {
-          if (!items || !items.length) return "";
-          var lines = [items[0].axisValue + "（变动样本中位数，不代表经营改善或恶化）"];
-          items.forEach(function (it) {
-            if (it.data == null || it.data.value == null) return;
-            lines.push(it.marker + it.seriesName + "：" + fmt(it.data.value) + " " + spec.unit_label + " · 覆盖 " + it.data.n + " 只");
-          });
-          return lines.join("<br>");
-        }
-      },
-      grid: { left: 48, right: 16, top: 36, bottom: 28 },
-      xAxis: Object.assign({ type: "category", data: periods }, baseAxis(th)),
-      yAxis: Object.assign({ type: "value", scale: true, name: spec.unit_label, nameTextStyle: { color: th.tx3 } }, baseAxis(th)),
-      series: series
-    });
-  }
-  function latestPair(sectorPack) {
-    var pairs = (sectorPack && sectorPack.fixedPairs) || [];
-    return pairs.length ? pairs[pairs.length - 1] : null;
-  }
-  function renderFixed() {
-    var spec = metricSpec();
-    var original = DATA.trend[spec.id] || { sectors: [] };
-    var pack = { sectors: original.sectors.filter(function (s) { return s.sector === sectorId; }) };
-    var th = theme();
-    var rows = (pack.sectors || []).map(function (s) {
-      return { sector: s.sector, pair: latestPair(s) };
-    }).filter(function (r) { return r.pair && r.pair.n; });
-    $("trackFixedChart").hidden = rows.length === 0;
-    var fixedNote = $("trackFixedNote");
-    if (fixedNote) fixedNote.textContent = rows.length ? sectorId + " · 固定同口径样本，仅固定名单、指标、单位、期间与税标记，资产范围待核。" : sectorId + " · 当前指标无固定同口径样本变化；能源不汇总。";
-    var names = rows.map(function (r) { return r.sector; });
-    setChart("trackFixedChart", {
-      color: [th.gro, th.risk, th.tx3],
-      legend: { top: 0, textStyle: { color: th.tx2, fontSize: 11 } },
-      tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-      grid: { left: 72, right: 16, top: 36, bottom: 28 },
-      xAxis: Object.assign({ type: "value", name: "只", max: "dataMax", nameTextStyle: { color: th.tx3 } }, baseAxis(th)),
-      yAxis: Object.assign({ type: "category", data: names.slice().reverse() }, baseAxis(th), { splitLine: { show: false } }),
-      series: [
-        { name: "报告值上升", type: "bar", stack: "g", barMaxWidth: 16, data: rows.map(function (r) { return r.pair.nUp; }).reverse() },
-        { name: "报告值下降", type: "bar", stack: "g", barMaxWidth: 16, data: rows.map(function (r) { return r.pair.nDown; }).reverse() },
-        { name: "持平", type: "bar", stack: "g", barMaxWidth: 16, data: rows.map(function (r) { return r.pair.nFlat; }).reverse() }
-      ]
-    });
-    var table = $("trackFixedTable");
-    if (table) {
-      table.innerHTML = '<table class="matrix"><thead><tr><th class="l">赛道</th><th>比较期</th><th>固定同口径样本</th><th>上升</th><th>下降</th><th>持平</th><th>上升占比</th><th>剔除扩募</th></tr></thead><tbody>' +
-        rows.map(function (r) {
-          var p = r.pair;
-          return "<tr><td class='l'>" + esc(r.sector) + "</td><td>" + esc(p.from) + " → " + esc(p.to) + "</td>" +
-            '<td class="num">' + p.n + "</td>" +
-            '<td class="num">' + p.nUp + "</td>" +
-            '<td class="num">' + p.nDown + "</td>" +
-            '<td class="num">' + p.nFlat + "</td>" +
-            '<td class="num">' + (p.upShare == null ? "本期无匹配口径数据" : (p.upShare * 100).toFixed(1) + "%") + "</td>" +
-            '<td class="num">' + p.excludedExpansion + "</td></tr>";
-        }).join("") + "</tbody></table>";
+      tabs.onkeydown = function (e) {
+        if (["ArrowLeft", "ArrowRight", "Home", "End"].indexOf(e.key) < 0) return;
+        e.preventDefault();
+        var at = names.indexOf(sectorId);
+        var next = e.key === "Home" ? 0 : e.key === "End" ? names.length - 1 : (at + (e.key === "ArrowRight" ? 1 : -1) + names.length) % names.length;
+        selectSector(names[next]);
+        var active = tabs.querySelector && tabs.querySelector('button[data-sector="' + names[next] + '"]');
+        if (active && active.focus) active.focus();
+      };
+    }
+    var sel = $("trackSectorSelect");
+    if (sel) {
+      sel.innerHTML = names.map(function (name) {
+        return '<option value="' + esc(name) + '"' + (name === sectorId ? " selected" : "") + ">" + esc(name) + "</option>";
+      }).join("");
+      sel.onchange = function () { selectSector(sel.value); };
     }
   }
+  function renderOverview() {
+    var metrics = applicableMetrics(sectorId);
+    var period = periodId || DATA.latestPeriod;
+    var periodEnd = (DATA.latest[metrics[0] ? metrics[0].id : "occupancy_rate"] || {}).periodEnd;
+    var meta = $("trackQualityMeta");
+    if (meta) {
+      meta.textContent = sectorId + " · 报告期 " + period +
+        (periodEnd ? "（截至 " + periodEnd + "）" : "") +
+        " · 来源：经营数据快照（chinareits 入库） · 切换业态时保留当前报告期";
+    }
+    var stats = $("trackStats");
+    if (stats) {
+      stats.innerHTML = metrics.map(function (m) {
+        var s = sectorRow(m, sectorId);
+        var mid = s.pointOnly ? "不汇总" : !s.universe ? "本期无上市样本" : (s.n === 1 ? "单基金原值 " + fmt(s.medianDisplay) : fmt(s.medianDisplay));
+        var range = s.pointOnly || !s.n ? "不排名" : fmt(displayMin(s)) + " — " + fmt(displayMax(s));
+        return '<article class="track-stat-metric"><h3>' + esc(m.label) + '（' + esc(m.unit_label) + '）</h3>' +
+          '<div class="track-stat-grid">' +
+          "<div><small>匹配口径 / 期末上市适用基金</small><strong>" + s.n + " / " + s.universe + "</strong></div>" +
+          "<div><small>本期无匹配口径数据</small><strong>" + s.undisclosed + " 只</strong></div>" +
+          "<div><small>" + (s.n === 1 ? "单基金原值" : "中位数") + "</small><strong>" + mid + "</strong></div>" +
+          "<div><small>最低 — 最高</small><strong>" + range + "</strong></div></div></article>";
+      }).join("") || "<p class='track-meta'>当前业态暂无适用核心指标。</p>";
+    }
+    var und = $("trackUndisclosed");
+    if (und) {
+      var bits = [];
+      metrics.forEach(function (m) {
+        var s = sectorRow(m, sectorId);
+        if (s.undisclosed) bits.push(m.label + "本期无匹配口径数据 " + s.undisclosed + " 只" + (s.undisclosedCodes && s.undisclosedCodes.length ? "（" + s.undisclosedCodes.join("、") + "）" : ""));
+      });
+      var seen = {};
+      var exclusions = [];
+      metrics.forEach(function (m) {
+        ((DATA.latest[m.id] || {}).excludedListing || []).forEach(function (f) {
+          if (f.sector !== sectorId || seen[f.code]) return;
+          seen[f.code] = 1;
+          exclusions.push(f.code + " " + f.reason + (f.listDate ? "（" + f.listDate + "）" : ""));
+        });
+      });
+      und.textContent = (bits.length ? bits.join(" · ") + "。" : metrics.every(function (m) { return !sectorRow(m, sectorId).universe; }) ? "本期暂无已上市适用基金。" : "本期已上市适用基金中，已计入匹配口径样本。") +
+        "另列，不计缺数、不进入上市基金分布/趋势：" + (exclusions.join("；") || "无") +
+        (metrics.some(function (m) { return sectorRow(m, sectorId).pointOnly; }) ? "。能源子业态待核，仅列基金点位，不计算全能源中位数、趋势或排名。" : "");
+    }
+  }
+  function rankList(row, spec) {
+    var funds = (row.funds || []).slice().sort(function (a, b) {
+      if (row.pointOnly) return a.code.localeCompare(b.code);
+      return b.display - a.display || a.code.localeCompare(b.code);
+    });
+    if (!funds.length) return "<p class='track-meta'>" + (row.universe ? "本期无匹配口径数据，不画空分布。" : "截至报告期末暂无已上市适用基金；另列基金不计缺数。") + "</p>";
+    var title = row.pointOnly || funds.length === 1 ? "基金点位" : "可点排名";
+    return '<ol class="track-rank-list" aria-label="' + esc(spec.label + title) + '">' + funds.map(function (f, i) {
+      return '<li><a href="#/detail/' + esc(f.code) + '"><span class="rank">' + (row.pointOnly || funds.length === 1 ? "·" : (i + 1)) + "</span>" +
+        "<span class='name'>" + esc(f.name) + "</span><span class='code'>" + esc(f.code) + "</span>" +
+        "<span class='val'>" + fmt(f.display) + " " + esc(spec.unit_label) + "</span><span class='scope'>" + (f.expansionInPeriod ? "本期含扩募，非同店" : "资产范围待核") + "</span></a></li>";
+    }).join("") + "</ol>";
+  }
+  function renderCompare() {
+    var host = $("trackMetricPanels");
+    if (!host) return;
+    clearCharts("trackCompare-");
+    var metrics = applicableMetrics(sectorId);
+    host.innerHTML = metrics.map(function (m) {
+      var s = sectorRow(m, sectorId);
+      var scatter = useScatter(s);
+      var note = s.pointOnly ? "能源子业态待核：仅列基金点，不计算全能源中位数或排名。" :
+        s.n === 0 ? (s.universe ? "本期无匹配口径数据，不硬造分布。" : "本期暂无已上市适用基金，不绘制分布。") :
+        s.n === 1 ? "仅 1 只匹配基金，只列单基金原值，不硬造分布。" :
+        scatter ? "基金等权散点，点击进入档案。" : "样本较多或窄屏，改用按报告值排序的可点列表；顺序不代表经营优劣，避免标签重叠。";
+      return '<section class="track-metric-panel" data-metric="' + esc(m.id) + '"><h3>' + esc(m.label) + "</h3>" +
+        '<p class="track-meta">口径 ' + esc(m.caliber) + " · 单位 " + esc(m.unit_label) + " · 税标记 " + esc(m.tax_flag) +
+        " · " + esc(m.weighting_note || "基金等权") + " · 覆盖 " + s.n + "/" + s.universe + " · " + note + "</p>" +
+        (scatter ? '<div id="trackCompare-' + esc(m.id) + '" class="track-chart"></div>' : "") +
+        (scatter ? "" : rankList(s, m)) + "</section>";
+    }).join("") || "<p class='track-meta'>当前业态暂无适用核心指标。</p>";
+    var th = theme();
+    metrics.forEach(function (m) {
+      var s = sectorRow(m, sectorId);
+      if (!useScatter(s)) return;
+      setChart("trackCompare-" + m.id, {
+        title: { text: m.id === "occupancy_rate" ? "基金等权、非面积加权" : "", left: 8, top: 0, textStyle: { color: th.tx3, fontSize: 11, fontWeight: 400 } },
+        color: [th.accent],
+        tooltip: {
+          trigger: "item",
+          formatter: function (p) {
+            var f = p.data && p.data.fund;
+            if (!f) return "";
+            return esc(f.name) + "<br/>" + esc(f.code) + "<br/>" + esc(m.label) + " " + fmt(f.display) + " " + esc(m.unit_label) + (f.expansionInPeriod ? "<br/>本期含扩募，非同店" : "<br/>资产范围待核");
+          }
+        },
+        grid: { left: 28, right: 16, top: 28, bottom: 36 },
+        xAxis: { type: "value", name: m.unit_label, nameTextStyle: { color: th.tx3 }, axisLabel: { color: th.tx3 }, splitLine: { lineStyle: { color: th.grid } } },
+        yAxis: { type: "category", data: [s.sector], axisLabel: { show: false }, splitLine: { show: false } },
+        series: [{ type: "scatter", symbolSize: 11, data: (s.funds || []).map(function (f) { return { value: [f.display, s.sector], fund: f }; }) }]
+      });
+    });
+  }
+  function renderTrend() {
+    var host = $("trackTrendPanels");
+    if (!host) return;
+    clearCharts("trackTrend-");
+    clearCharts("trackFixed-");
+    var metrics = applicableMetrics(sectorId);
+    var hideN = isMobile();
+    host.innerHTML = metrics.map(function (m) {
+      var trend = ((DATA.trend[m.id] || {}).sectors || []).find(function (s) { return s.sector === sectorId; });
+      var row = sectorRow(m, sectorId);
+      var pairs = (trend && trend.fixedPairs) || [];
+      var latest = pairs.length ? pairs[pairs.length - 1] : null;
+      var canTrend = trend && trend.points && trend.points.length && !row.pointOnly;
+      var canFixed = latest && latest.n && !row.pointOnly;
+      var note = row.pointOnly ? "能源不汇总：不画全能源中位数趋势，也不做固定同口径样本排名。" :
+        canTrend ? sectorId + " · " + m.label + "（每期样本可能变动）" : sectorId + " · 当前指标无可展示的季度趋势。";
+      return '<section class="track-metric-panel" data-metric="' + esc(m.id) + '"><h3>' + esc(m.label) + "趋势</h3>" +
+        '<p class="track-meta">' + esc(note) + "</p>" +
+        (canTrend ? '<div id="trackTrend-' + esc(m.id) + '" class="track-chart-wide"></div>' : "") +
+        (canTrend ? '<details><summary>各期覆盖数 n</summary><div class="table-scroll"><table class="matrix"><thead><tr>' +
+          (trend.points.map(function (p) { return "<th>" + esc(p.period) + "</th>"; }).join("")) +
+          "</tr></thead><tbody><tr>" + trend.points.map(function (p) { return "<td>" + p.n + "</td>"; }).join("") +
+          "</tr></tbody></table></div></details>" : "") +
+        (canFixed ? '<p class="track-meta">固定同口径样本 ' + esc(latest.from) + " → " + esc(latest.to) +
+          "：样本 " + latest.n + "，上升 " + latest.nUp + "，下降 " + latest.nDown + "，持平 " + latest.nFlat +
+          "，上升占比 " + (latest.upShare == null ? "本期无匹配口径数据" : (latest.upShare * 100).toFixed(1) + "%") +
+          "，剔除扩募 " + latest.excludedExpansion + "。资产范围待核，不是同店改善。</p>" +
+          '<div id="trackFixed-' + esc(m.id) + '" class="track-chart"></div>' :
+          (row.pointOnly ? "" : '<p class="track-meta">当前指标无固定同口径样本变化。</p>')) +
+        "</section>";
+    }).join("") || "<p class='track-meta'>当前业态暂无趋势。</p>";
+    var th = theme();
+    metrics.forEach(function (m) {
+      var trend = ((DATA.trend[m.id] || {}).sectors || []).find(function (s) { return s.sector === sectorId; });
+      var row = sectorRow(m, sectorId);
+      if (trend && trend.points && trend.points.length && !row.pointOnly) {
+        setChart("trackTrend-" + m.id, {
+          color: [th.accent],
+          tooltip: {
+            trigger: "axis",
+            formatter: function (items) {
+              if (!items || !items.length || items[0].data == null) return "";
+              var d = items[0].data;
+              return d.period + "（变动样本中位数，不代表经营改善或恶化）<br/>" + m.label + " " + fmt(d.value) + " " + m.unit_label + " · 覆盖 " + d.n + " 只";
+            }
+          },
+          grid: { left: 48, right: 16, top: 16, bottom: 28 },
+          xAxis: { type: "category", data: trend.points.map(function (p) { return p.period; }), axisLabel: { color: th.tx3 } },
+          yAxis: { type: "value", scale: true, name: m.unit_label, nameTextStyle: { color: th.tx3 }, axisLabel: { color: th.tx3 }, splitLine: { lineStyle: { color: th.grid } } },
+          series: [{
+            name: sectorId,
+            type: "line",
+            showSymbol: true,
+            symbolSize: 8,
+            data: trend.points.map(function (p) { return { value: p.medianDisplay, n: p.n, period: p.period }; }),
+            label: { show: !hideN, fontSize: 9, color: th.tx3, formatter: function (p) { return p.data && p.data.n != null ? "n=" + p.data.n : ""; } }
+          }]
+        });
+      }
+      var latest = trend && trend.fixedPairs && trend.fixedPairs.length ? trend.fixedPairs[trend.fixedPairs.length - 1] : null;
+      if (latest && latest.n && !row.pointOnly) {
+        setChart("trackFixed-" + m.id, {
+          color: [th.gro, th.risk, th.tx3],
+          tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
+          grid: { left: 88, right: 16, top: 8, bottom: 24 },
+          xAxis: { type: "value", name: "只", nameTextStyle: { color: th.tx3 }, axisLabel: { color: th.tx3 } },
+          yAxis: { type: "category", data: ["报告值上升", "报告值下降", "持平"].reverse(), axisLabel: { color: th.tx3 }, splitLine: { show: false } },
+          series: [{
+            type: "bar", barMaxWidth: 16,
+            data: [
+              { value: latest.nFlat, itemStyle: { color: th.tx3 } },
+              { value: latest.nDown, itemStyle: { color: th.risk } },
+              { value: latest.nUp, itemStyle: { color: th.gro } }
+            ]
+          }]
+        });
+      }
+    });
+  }
+  function renderFunds() {
+    var host = $("trackFundList");
+    if (!host) return;
+    var metrics = applicableMetrics(sectorId);
+    var byCode = {};
+    metrics.forEach(function (m) {
+      var s = sectorRow(m, sectorId);
+      (s.funds || []).forEach(function (f) {
+        if (!byCode[f.code]) byCode[f.code] = { code: f.code, name: f.name, values: [] };
+        if (byCode[f.code].name === f.code) byCode[f.code].name = f.name;
+        byCode[f.code].values.push(m.label + " " + fmt(f.display) + " " + m.unit_label);
+        byCode[f.code].expansion = byCode[f.code].expansion || f.expansionInPeriod;
+      });
+      (s.undisclosedCodes || []).forEach(function (code) {
+        if (!byCode[code]) byCode[code] = { code: code, name: code, values: [] };
+        byCode[code].values.push(m.label + " 本期无匹配口径数据");
+      });
+    });
+    var funds = Object.keys(byCode).sort().map(function (c) { return byCode[c]; });
+    if (!funds.length) {
+      host.innerHTML = "<p class='track-meta'>当前赛道本期没有可展示的已上市匹配口径基金。未上市或期后上市基金见上方另列说明，不进入明细。</p>";
+      return;
+    }
+    host.innerHTML = '<ul class="track-fund-list" aria-label="当前赛道基金明细">' + funds.map(function (f) {
+      return '<li><a href="#/detail/' + esc(f.code) + '"><span class="name">' + esc(f.name) + "</span>" +
+        '<span class="code">' + esc(f.code) + "</span>" +
+        '<span class="vals">' + esc(f.values.join(" · ")) + "</span><span class='scope'>" + (f.expansion ? "本期含扩募，非同店" : "资产范围待核") + "</span></a></li>";
+    }).join("") + "</ul>";
+  }
+  function baseReady() { return DATA && $("v-track") && !$("v-track").hidden; }
   function withECharts(cb) {
     var load = root.__loadECharts;
     if (root.echarts) { cb(); return; }
@@ -394,17 +447,26 @@
     else cb();
   }
   function render() {
-    if (!DATA || !$("v-track") || $("v-track").hidden) return;
+    if (!baseReady()) return;
+    renderedMobile = isMobile();
     renderSwitch();
+    renderOverview();
+    renderFunds();
     withECharts(function () {
-      renderQuality();
+      renderCompare();
       renderTrend();
-      renderFixed();
+      retryCharts();
     });
   }
   function mount() {
     if (!$("v-track")) return Promise.resolve();
     return loadPack().then(function () {
+      if (!visible() || !/^#\/page\/research\/track(?:\/|$)/.test(root.location.hash || "")) return;
+      periodId = periodId || DATA.latestPeriod;
+      var fromHash = parseHashSector();
+      if (fromHash) sectorId = fromHash;
+      else if (sectorNames().indexOf(sectorId) < 0) sectorId = sectorNames()[0] || "产业园";
+      if ((root.location.hash || "") !== trackHash(sectorId)) writeSectorHash(sectorId, true);
       return new Promise(function (resolve) {
         root.requestAnimationFrame(function () { root.requestAnimationFrame(function () {
           try { render(); retryCharts(); } catch (e) { console.error("[track-render]", e); }
@@ -418,6 +480,7 @@
   }
   function resize() {
     if (!visible()) return;
+    if (DATA && renderedMobile !== isMobile()) { render(); return; }
     retryCharts();
     Object.keys(charts).forEach(function (id) {
       try { if (charts[id] && !charts[id].isDisposed()) charts[id].resize(); } catch (e) {}
@@ -425,9 +488,22 @@
   }
   if (root.addEventListener) root.addEventListener("resize", resize);
   if (root.MutationObserver && typeof document !== "undefined" && document.documentElement) {
-    new MutationObserver(function () { render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    new MutationObserver(function () { if (visible()) render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   }
-  var api = { mount: mount, render: render, load: loadPack, format: fmt, sector: function () { return sectorId; }, setSector: selectSector, metric: function () { return metricId; }, setMetric: function (id) { var m = DATA && DATA.metrics.find(function (m) { return m.id === id; }); if (m && metricApplies(m, sectorId)) { metricId = id; render(); } } };
+  var api = {
+    mount: mount,
+    render: render,
+    load: loadPack,
+    format: fmt,
+    slugs: SECTOR_SLUGS,
+    period: function () { return periodId; },
+    sector: function () { return sectorId; },
+    setSector: function (id) { selectSector(id); },
+    applyRoute: applyRoute,
+    parseHashSector: parseHashSector,
+    currentRoute: function () { return trackHash(sectorId); },
+    writingHash: function () { return writingHash; }
+  };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.ReitsTrackAnalysis = api;
   if (root.ResizeObserver && typeof document !== "undefined" && $("v-track")) {

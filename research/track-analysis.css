@@ -1,35 +1,39 @@
-/* On-demand styles for 赛道透视 operating/valuation charts. */
-.track-metric-switch{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px}
-.track-metric-switch button{font-size:12px}
-.track-meta{font-size:12px;color:var(--tx2);margin:0 0 8px}
-.track-chart{width:100%;min-width:0;height:320px}
-.track-chart-wide{height:380px}
-@media(max-width:767px){
-  .track-chart{height:280px}
-  .track-chart-wide{height:320px}
-}
-.track-legend-note{font-size:11.5px;color:var(--tx3);margin:6px 0 0;line-height:1.55}
-.track-undisclosed{font-size:12px;color:var(--tx3);margin:8px 0 0}
-
-/* Keep full headers readable inside a local scroller, never clip them to one glyph. */
-#v-track .table-scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
-#v-track .matrix{table-layout:auto;min-width:680px;width:100%}
-#v-track .matrix th,#v-track .matrix td{white-space:nowrap;overflow:visible;text-overflow:clip;max-width:none;min-width:64px}
-#v-track .track-chart-wide{width:100%;min-width:0}
-#trackAiTools:empty{display:none}
-@media(max-width:640px){
- #v-track .track-chart-wide{height:340px}
- #v-track .track-legend-note{overflow-wrap:anywhere}
-}
-
-.track-sector-switch{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 16px}
-.track-sector-switch button{border:1px solid var(--line2);border-radius:999px;padding:7px 13px;background:var(--panel2);color:var(--tx2);cursor:pointer}
+/* On-demand styles for 赛道透视. */
+.track-sector-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.track-sector-tabs button{border:1px solid var(--line2);border-radius:999px;padding:7px 13px;background:var(--panel2);color:var(--tx2);cursor:pointer}
 #v-track button.on{border-color:var(--accent);color:var(--accent);background:var(--panel2)}
+.track-sector-select-wrap{display:none;margin:10px 0;color:var(--tx2);font-size:13px}
+.track-sector-select-wrap select{display:block;width:100%;margin-top:6px;min-height:40px;padding:8px 10px;border:1px solid var(--line2);border-radius:8px;background:var(--panel);color:var(--tx);font-size:16px}
+.track-meta{font-size:12px;color:var(--tx2);margin:0 0 8px;line-height:1.55}
+.track-undisclosed{font-size:12px;color:var(--tx3);margin:8px 0 0;line-height:1.55;overflow-wrap:anywhere}
+.track-chart,.track-chart-wide{width:100%;min-width:0;height:280px}
+.track-chart-wide{height:320px}
+.track-stats{display:flex;flex-direction:column;gap:12px;margin:12px 0}
+.track-stat-metric{padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:8px;min-width:0}
+.track-stat-metric h3{margin:0 0 8px;font-size:13px;color:var(--tx)}
+.track-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.track-stat-grid small{display:block;color:var(--tx3);font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.track-stat-grid strong{display:block;color:var(--tx);font-size:16px;overflow-wrap:anywhere}
+.track-metric-panel{margin:0 0 22px;min-width:0}
+.track-metric-panel h3{margin:0 0 6px;font-size:15px}
+.track-rank-list,.track-fund-list{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.track-rank-list a,.track-fund-list a{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;padding:10px 12px;color:var(--tx);text-decoration:none;border-bottom:1px solid var(--line)}
+.track-rank-list li:last-child a,.track-fund-list li:last-child a{border-bottom:0}
+.track-rank-list a:hover,.track-fund-list a:hover{background:var(--panel2)}
+.track-rank-list .rank{color:var(--tx3);min-width:1.5em}
+.track-rank-list .name,.track-fund-list .name{flex:1;min-width:8em;overflow-wrap:anywhere}
+.track-rank-list .code,.track-fund-list .code{color:var(--tx3);font-size:12px}
+.track-rank-list .val,.track-fund-list .vals{margin-left:auto;color:var(--tx2);font-size:13px;overflow-wrap:anywhere}
+#v-track .table-scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+#v-track .matrix{table-layout:auto;min-width:480px;width:100%}
+#v-track .matrix th,#v-track .matrix td{white-space:nowrap;overflow:visible;text-overflow:clip;max-width:none;min-width:48px}
 #v-track [hidden]{display:none!important}
-@media(max-width:640px){.track-sector-switch{gap:6px}.track-sector-switch button{padding:6px 10px;font-size:12px}}
+@media(max-width:640px){
+  .track-sector-tabs{display:none}
+  .track-sector-select-wrap{display:block}
+  .track-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .track-chart,.track-chart-wide{height:240px}
+  .track-rank-list .val,.track-fund-list .vals{margin-left:0;width:100%}
+}
 
-.track-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
-.track-stats>div{min-width:0;padding:10px;background:var(--panel2);border:1px solid var(--line);border-radius:8px}
-.track-stats small{display:block;color:var(--tx3);font-size:11px;line-height:1.5;overflow-wrap:anywhere}
-.track-stats strong{display:block;color:var(--tx);font-size:16px;overflow-wrap:anywhere}
-@media(max-width:640px){.track-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.track-stats strong{font-size:15px}}
+.track-rank-list .scope,.track-fund-list .scope{width:100%;color:var(--tx3);font-size:11px}
