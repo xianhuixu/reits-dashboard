@@ -35,3 +35,5 @@ if __name__=='__main__':
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from split_payloads import split_operating_data
     print('split', split_operating_data(args.output, args.output.parent))
+    from build_track_analysis import main as build_track
+    print('track-analysis', build_track())

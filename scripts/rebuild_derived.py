@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""重建派生文件并校验一致性（market-series.json、首页 banner 预渲染）。
+"""重建派生文件并校验一致性（market-series.json、首页 banner 预渲染；若存在经营快照则重建赛道透视聚合）。
 
 用途：
 1) git post-merge hook 调用——合并/拉取远端每日更新后自动重建；
@@ -36,21 +36,35 @@ def rebuild() -> None:
         subprocess.run(step, cwd=ROOT, check=True)
 
 
+def refresh_track_analysis() -> None:
+    """经营快照存在时重建赛道透视聚合。日常行情更新不会重导经营库，此步可跳过。"""
+    ops = ROOT / "research" / "operating-data.json"
+    if not ops.exists():
+        print("[skip] 无 operating-data.json，跳过赛道透视聚合", flush=True)
+        return
+    subprocess.run(["python3", "scripts/build_track_analysis.py"], cwd=ROOT, check=True)
+
+
 def main() -> int:
     check_only = "--check" in sys.argv
-    if not market_series_stale():
+    stale = market_series_stale()
+    if check_only:
+        if stale:
+            print("[stale] market-series.json 与 data_research.json 不一致，"
+                  "请运行 python3 scripts/rebuild_derived.py", flush=True)
+            return 1
         print("[ok] 派生文件与源数据一致", flush=True)
         return 0
-    if check_only:
-        print("[stale] market-series.json 与 data_research.json 不一致，"
-              "请运行 python3 scripts/rebuild_derived.py", flush=True)
-        return 1
-    print("[rebuild] 派生文件过期，正在重建……", flush=True)
-    rebuild()
-    if market_series_stale():
-        print("[error] 重建后仍不一致", flush=True)
-        return 1
-    print("[done] 派生文件已重建（market-series.json + banner 预渲染）", flush=True)
+    if stale:
+        print("[rebuild] 派生文件过期，正在重建……", flush=True)
+        rebuild()
+        if market_series_stale():
+            print("[error] 重建后仍不一致", flush=True)
+            return 1
+        print("[done] 派生文件已重建（market-series.json + banner 预渲染）", flush=True)
+    else:
+        print("[ok] 派生文件与源数据一致", flush=True)
+    refresh_track_analysis()
     return 0
 
 

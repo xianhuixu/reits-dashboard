@@ -451,15 +451,40 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 
 <!-- ============ 赛道透视 ============ -->
 <section class="view" id="v-track" hidden>
-  <div class="card">
-    <h2>宏观 → 行业 → 个股：各赛道关注指标与红线</h2>
-    <p class="note">框架来源：《REITs投研框架》· 当前值来自 fundamentals.json（季度手动更新）· <span class="tone-risk-text">⚠ 品红</span>=触发红线 / <span class="tone-warn-text">橙</span>=接近 / <span class="tone-pos-text">蓝</span>=正常，灰=待更新</p>
-    <div id="trackGrid"></div>
+  <div class="card" id="trackQualityCard">
+    <h2>赛道经营质量 · 最新共同报告期</h2>
+    <p class="note" id="trackQualityNote">仅基金层面、同一报告期与同一口径。出租率分布为基金等权、非面积加权；缺失为尚未披露，不作 0。项目范围未核验，不绘制同比。框架红线不自动下达减持指令。</p>
+    <div class="track-metric-switch" id="trackMetricSwitch" role="tablist" aria-label="经营指标"></div>
+    <p class="track-meta" id="trackQualityMeta" role="status">打开本页后加载经营聚合。</p>
+    <div id="trackMedianChart" class="track-chart"></div>
+    <div id="trackDispersionChart" class="track-chart-wide"></div>
+    <div class="table-scroll" id="trackQualityTable"></div>
+    <p class="track-undisclosed" id="trackUndisclosed"></p>
   </div>
-  <div class="card">
-    <h2>分派达成与分红监测</h2>
-    <p class="note">达成率 &lt;95% 触发减持警戒，连续两期 &lt;90% 系统性减持（框架红线）</p>
-    <div class="table-scroll" id="fundTable"></div>
+  <div class="card" id="trackTrendCard">
+    <h2>季度中位数趋势（变动样本）</h2>
+    <p class="note">各期各自计算中位数，并在点上标注当期覆盖只数。连线可能只是样本更换，不代表经营改善或恶化；出租率中位数变化也不是同店改善。</p>
+    <div id="trackTrendChart" class="track-chart-wide"></div>
+  </div>
+  <div class="card" id="trackFixedCard">
+    <h2>固定样本报告值升降</h2>
+    <p class="note">统计相邻两期均有同口径披露、且窗口内无扩募纳入的基金，给出报告值上升/下降/持平家数。未核验资产范围，不能当成同店改善，也不把变动样本中位数的升降写成改善或恶化。</p>
+    <div id="trackFixedChart" class="track-chart"></div>
+    <div class="table-scroll" id="trackFixedTable"></div>
+  </div>
+  <div class="card" id="trackValPropertyCard">
+    <h2>产权：分派率与利差</h2>
+    <p class="note">产权用已有 TTM 分派率相对 10Y 国债的利差，与经营权披露 IRR 分图，不硬混。覆盖不足时只展示已有样本并标明限制。</p>
+    <p class="track-meta" id="trackValPropertyMeta"></p>
+    <div id="trackValPropertyChart" class="track-chart"></div>
+    <div id="trackValPropertyScatter" class="track-chart"></div>
+  </div>
+  <div class="card" id="trackValOperatingCard">
+    <h2>经营权：披露 IRR 与期限匹配利差</h2>
+    <p class="note">主口径为基金披露 IRR 减期限匹配国债；业态口径不统一，暂不汇总。暂无披露显示为尚未披露，不作 0。</p>
+    <p class="track-meta" id="trackValOperatingMeta"></p>
+    <div id="trackValOperatingChart" class="track-chart-wide"></div>
+    <div class="table-scroll" id="trackValOperatingTable"></div>
   </div>
 </section>
 
@@ -964,7 +989,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <!-- allocation-tools / 经营数据 / 基金档案 在进入对应视图时再加载，避免首屏下载 -->
 <script src="data-status.js?v=20261005-designr3" defer></script>
 <script src="workspace.js?v=20261119-perf" defer></script>
-<script src="app.js?v=20261119-perf" defer></script>
+<script src="app.js?v=20261119-track" defer></script>
 <!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
 <script>
 (function () {

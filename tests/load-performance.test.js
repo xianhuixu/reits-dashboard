@@ -35,13 +35,18 @@ test("lazy CSS/JS for operating data, fund archive and allocation tools are not 
   assert.doesNotMatch(html, /<script[^>]+src="allocation-tools\.js/);
   assert.match(html, /<script src="ui-utils\.js\?v=20261119-perf" defer>/);
   assert.match(html, /<script src="workspace\.js\?v=20261119-perf" defer>/);
-  assert.match(html, /<script src="app\.js\?v=20261119-perf" defer>/);
+  assert.match(html, /<script src="app\.js\?v=20261119-track" defer>/);
   assert.match(html, /<link rel="stylesheet" href="fonts\.css/);
   assert.match(html, /<link rel="stylesheet" href="styles\.css/);
   assert.match(html, /<link rel="stylesheet" href="workspace\.css/);
   assert.match(app, /ensureViewModule\("ops"\)/);
   assert.match(app, /ensureViewModule\("archive"\)/);
   assert.match(app, /ensureViewModule\("alloc"\)/);
+  assert.doesNotMatch(html, /<link[^>]+href="research\/track-analysis\.css/);
+  assert.doesNotMatch(html, /<script[^>]+src="research\/track-analysis\.js/);
+  assert.doesNotMatch(html, /track-analysis\.json/);
+  assert.match(app, /ensureViewModule\("track"\)/);
+  assert.match(app, /VIEW_ASSETS[\s\S]*track:\s*\{[\s\S]*track-analysis\.js\?v=20261119-track/);
 });
 
 test("research-layout.css and geography/map.css appear once each plus a noscript fallback", () => {
