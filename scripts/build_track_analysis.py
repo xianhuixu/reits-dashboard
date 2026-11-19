@@ -15,6 +15,7 @@ import argparse
 import hashlib
 import json
 from datetime import date
+import math
 from pathlib import Path
 from statistics import median
 
@@ -57,6 +58,8 @@ def sha256_file(path: Path) -> str:
 
 
 def display_sector(ops_sector: str, market_sector: str | None) -> str:
+    if ops_sector == "供热":
+        return "供热"
     if market_sector:
         return market_sector
     return SECTOR_ALIAS.get(ops_sector, ops_sector)
@@ -98,7 +101,7 @@ def fund_has_expansion(assets: list[dict], code: str, start: date, end: date) ->
         if a.get("code") != code or a.get("include_type") != "扩募":
             continue
         inc = parse_iso(a.get("include_date"))
-        if inc and start <= inc <= end:
+        if inc is None or start <= inc <= end:
             return True
     return False
 
@@ -120,7 +123,7 @@ def select_points(points: list[dict], metric: dict, period: str) -> list[dict]:
             continue
         if p.get("value") is None or not isinstance(p.get("value"), (int, float)):
             continue
-        if isinstance(p.get("value"), float) and p["value"] != p["value"]:
+        if isinstance(p["value"], bool) or not math.isfinite(p["value"]):
             continue
         out.append(p)
     return out
@@ -132,9 +135,39 @@ def display_value(raw, scale: float):
     return raw * scale if scale != 1 else raw
 
 
-def build(root: Path | None = None) -> dict:
+LEASE_SECTORS = {"产业园", "仓储物流", "保障性租赁住房", "消费"}
+
+def applicable(fund: dict, metric: dict) -> bool:
+    sector = fund.get("sector_l1")
+    mid = metric["id"]
+    if mid in ("occupancy_rate", "wale"):
+        return sector in LEASE_SECTORS
+    if mid == "rent_collection_rate":
+        return sector in LEASE_SECTORS | {"数据中心", "供热"}
+    if mid == "traffic_volume":
+        return sector == "交通"
+    if mid == "rack_utilization":
+        return sector == "数据中心"
+    return sector == "能源" or (sector == "水务环保" and fund.get("sector_l2") == "生物质发电")
+
+
+def listing_status(fund: dict, period: str) -> str:
+    bounds = quarter_start_end(period)
+    if not bounds:
+        return "上市日待核"
+    listed = parse_iso(fund.get("list_date"))
+    if listed:
+        return "期末已上市" if listed <= bounds[1] else "期后上市"
+    return "未上市" if "未上市" in (fund.get("status") or "") else "上市日待核"
+
+
+def quarter_number(period: str) -> int:
+    return int(period[:4]) * 4 + int(period[-1])
+
+
+def build(root: Path | None = None, ops_path: Path | None = None) -> dict:
     root = Path(root or ROOT)
-    ops_path = root / "research" / "operating-data.json"
+    ops_path = Path(ops_path or root / "research" / "operating-data.json")
     data_path = root / "data.json"
     ops = json.loads(ops_path.read_text(encoding="utf-8"))
     market = json.loads(data_path.read_text(encoding="utf-8"))
@@ -143,7 +176,8 @@ def build(root: Path | None = None) -> dict:
     funds = ops.get("funds") or []
     points = ops.get("points") or []
     latest = ops.get("latestPeriod")
-    quarters = [p for p in (ops.get("periods") or []) if period_kind(p) == "quarter"]
+    quarters = sorted([p for p in (ops.get("periods") or []) if period_kind(p) == "quarter"], reverse=True)
+    funds_by_code = {f["code"]: f for f in funds}
 
     def meta_for(code: str, ops_fund: dict) -> dict:
         m = market_by_code.get(code)
@@ -154,7 +188,9 @@ def build(root: Path | None = None) -> dict:
             "sector": sector,
             "opsSector": ops_fund.get("sector_l1"),
             "right": (m and m.get("right")) or None,
-            "listed": bool(m),
+            "listed": listing_status(ops_fund, latest) == "期末已上市",
+            "listDate": ops_fund.get("list_date"),
+            "listingStatus": listing_status(ops_fund, latest),
         }
 
     fund_meta = {f["code"]: meta_for(f["code"], f) for f in funds}
@@ -170,7 +206,11 @@ def build(root: Path | None = None) -> dict:
         mid = metric["id"]
         metrics_out.append({k: metric[k] for k in metric})
         # latest snapshot
-        latest_rows = select_points(points, metric, latest)
+        eligible = [f for f in funds if applicable(f, metric) and listing_status(f, latest) == "期末已上市"]
+        eligible_codes = {f["code"] for f in eligible}
+        excluded_listing = [dict(fund_meta[f["code"]], reason=listing_status(f, latest)) for f in funds
+                            if applicable(f, metric) and listing_status(f, latest) != "期末已上市"]
+        latest_rows = [p for p in select_points(points, metric, latest) if p["code"] in eligible_codes]
         by_sector: dict[str, list] = {}
         for p in latest_rows:
             meta = fund_meta[p["code"]]
@@ -180,9 +220,12 @@ def build(root: Path | None = None) -> dict:
             item["expansionInPeriod"] = bool(bounds and fund_has_expansion(assets, p["code"], *bounds))
             by_sector.setdefault(meta["sector"], []).append(item)
         sectors_latest = []
-        for sector, items in sorted(by_sector.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+        for f in eligible:
+            by_sector.setdefault(fund_meta[f["code"]]["sector"], [])
+        for sector, items in sorted(by_sector.items()):
             vals = [i["value"] for i in items]
-            universe = sector_universe.get(sector) or []
+            universe = [f["code"] for f in eligible if fund_meta[f["code"]]["sector"] == sector]
+            point_only = sector == "能源"
             disclosed = {i["code"] for i in items}
             undisclosed = [c for c in universe if c not in disclosed]
             sectors_latest.append({
@@ -191,16 +234,19 @@ def build(root: Path | None = None) -> dict:
                 "universe": len(universe),
                 "undisclosed": len(undisclosed),
                 "undisclosedCodes": undisclosed,
-                "median": median(vals) if vals else None,
-                "medianDisplay": display_value(median(vals), metric["scale"]) if vals else None,
-                "min": min(vals) if vals else None,
-                "max": max(vals) if vals else None,
+                "pointOnly": point_only,
+                "median": median(vals) if vals and not point_only else None,
+                "medianDisplay": display_value(median(vals), metric["scale"]) if vals and not point_only else None,
+                "min": min(vals) if vals and not point_only else None,
+                "max": max(vals) if vals and not point_only else None,
                 "expansionInPeriod": sum(1 for i in items if i["expansionInPeriod"]),
-                "funds": sorted(items, key=lambda i: (i["value"], i["code"])),
+                "funds": sorted(items, key=lambda i: (i["code"],) if point_only else (i["value"], i["code"])),
             })
         latest_out[mid] = {
             "period": latest,
             "periodKind": period_kind(latest),
+            "periodEnd": quarter_start_end(latest)[1].isoformat(),
+            "excludedListing": excluded_listing,
             "caliber": metric["caliber"],
             "unit": metric["source_unit"],
             "tax_flag": metric["tax_flag"],
@@ -212,7 +258,10 @@ def build(root: Path | None = None) -> dict:
         # collect per period
         period_map: dict[str, dict[str, list]] = {}
         for period in quarters:
-            rows = select_points(points, metric, period)
+            rows = [p for p in select_points(points, metric, period)
+                    if p["code"] in funds_by_code and applicable(funds_by_code[p["code"]], metric)
+                    and listing_status(funds_by_code[p["code"]], period) == "期末已上市"
+                    and fund_meta[p["code"]]["sector"] != "能源"]
             for p in rows:
                 sec = fund_meta[p["code"]]["sector"]
                 period_map.setdefault(period, {}).setdefault(sec, []).append(p)
@@ -235,19 +284,8 @@ def build(root: Path | None = None) -> dict:
             # adjacent quarter pairs (chronological)
             fixed = []
             for a, b in zip(pts, pts[1:]):
-                # only if periods are true neighbors in the quarter list
-                try:
-                    ia = quarters[::-1].index(a["period"])
-                    ib = quarters[::-1].index(b["period"])
-                except ValueError:
+                if quarter_number(b["period"]) - quarter_number(a["period"]) != 1:
                     continue
-                if ib != ia + 1:
-                    # still OK if we skipped empty periods in pts — then they are not adjacent in time
-                    chrono = list(reversed(quarters))
-                    if chrono.index(b["period"]) != chrono.index(a["period"]) + 1:
-                        # there were empty quarters in between; still compare these two disclosed periods?
-                        # Analyst asked for coverage on changing sample; for fixed sample, adjacent disclosed quarters is OK if we label the from/to.
-                        pass
                 set_a, set_b = set(a["codes"]), set(b["codes"])
                 common = sorted(set_a & set_b)
                 start, _ = quarter_start_end(a["period"]) or (None, None)
@@ -283,7 +321,7 @@ def build(root: Path | None = None) -> dict:
                     "upShare": (n_up / n) if n else None,
                     "downShare": (n_down / n) if n else None,
                     "excludedExpansion": len(excluded),
-                    "note": "固定基金样本的报告值升降家数，未核验资产范围，不是同店改善。",
+                    "note": "固定同口径样本的报告值升降家数，未核验资产范围，不是同店改善。",
                 })
             trend_sectors[sector] = {"sector": sector, "points": pts, "fixedPairs": fixed}
         trend_out[mid] = {
@@ -309,12 +347,14 @@ def build(root: Path | None = None) -> dict:
         "latestPeriod": latest,
         "periodsQuarterly": quarters,
         "sourceNotes": [
+            "覆盖分母按报告期末已上市且适用指标的基金，依据经营库 list_date，不以 data.json 存在与否代替。未上市、期后上市、上市日待核另列，不计缺数；发行前数据不进入分布或趋势。",
+            "能源子业态尚未核完，只列基金点位，不计算全能源中位数、排名或趋势。",
             "经营点位来自用户提供的爬取库快照（chinareits 经营数据入库），只读聚合。",
             "仅基金层面（scope=基金且 asset_id=ALL）；项目点位不替代基金值。",
-            "同一序列只保留单一报告期粒度、统计口径、单位与税标记；缺失为尚未披露，不作 0。",
+            "同一序列只保留单一报告期粒度、统计口径、单位与税标记；缺失为本期无匹配口径数据，不作 0。",
             "出租率分布为基金等权、非面积加权；出租率中位数环比不是同店改善。",
             "季度趋势为变动样本中位数，必须阅读每期覆盖数；不把中位数升降写成改善/恶化。",
-            "项目范围未复核，不绘制同比。产权与经营权估值由前端分图读取已有面板，不在此包硬混。",
+            "项目范围未复核，不绘制同比。赛道页不再展示产权或经营权估值卡，其他页面的估值数据不变。",
         ],
         "sectorAliases": SECTOR_ALIAS,
         "metrics": metrics_out,

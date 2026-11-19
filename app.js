@@ -1611,7 +1611,7 @@ LAZY.research.push(function () {
     ops: { css: "research/operating-data.css?v=20261117e", js: "research/operating-data.js?v=20261119-perf" },
     archive: { css: "research/fund-archive.css?v=20261117a", js: "research/fund-archive.js?v=20261119-perf" },
     alloc: { js: "allocation-tools.js?v=20261005-designr3" },
-    track: { css: "research/track-analysis.css?v=20261119-track", js: "research/track-analysis.js?v=20261119-track" }
+    track: { css: "research/track-analysis.css?v=20261119-trackfix", js: "research/track-analysis.js?v=20261119-trackfix" }
   };
   function ensureViewModule(name) {
     var spec = VIEW_ASSETS[name];
@@ -1779,6 +1779,9 @@ LAZY.research.push(function () {
         // 研究正文不等待远程研究数据，避免缓存观点覆盖已核验内容。
         ensureViewModule("alloc").then(function () { withECharts(ensureCharts); }, function () { withECharts(ensureCharts); });
       } else if (pg === "research") {
+        if ($("v-track") && !$("v-track").hidden) {
+          ensureViewModule("track").then(function () { if (window.ReitsTrackAnalysis) window.ReitsTrackAnalysis.mount(); });
+        }
         function startResearch() {
           withResearchData(function () {
             withScript("corp_actions.js", "REITS_ACTIONS", function () { withECharts(function () { runLazy("research"); ensureCharts(); }); });

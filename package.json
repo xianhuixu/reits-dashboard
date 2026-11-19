@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "node server.js",
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "build:charts": "esbuild scripts/echarts-custom-entry.js --bundle --minify --format=iife --outfile=lib/echarts-custom.min.js"
   },
   "dependencies": {},
   "devDependencies": {

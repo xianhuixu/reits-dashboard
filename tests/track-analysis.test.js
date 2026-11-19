@@ -37,7 +37,7 @@ test("track pack is fund-scope only and keeps 和达 fund occupancy isolated fro
       }
       assert.equal(s.n + s.undisclosed, s.universe);
       assert.equal(s.undisclosedCodes.length, s.undisclosed);
-      if (s.n === 0) {
+      if (s.n === 0 || s.pointOnly) {
         assert.equal(s.median, null);
         assert.equal(s.medianDisplay, null);
       } else {
@@ -48,13 +48,13 @@ test("track pack is fund-scope only and keeps 和达 fund occupancy isolated fro
   }
 });
 
-test("nulls stay 尚未披露 and zeros are not invented in the formatter", () => {
-  assert.equal(Track.format(null), "尚未披露");
-  assert.equal(Track.format(undefined), "尚未披露");
-  assert.equal(Track.format(NaN), "尚未披露");
+test("nulls stay 本期无匹配口径数据 and zeros are not invented in the formatter", () => {
+  assert.equal(Track.format(null), "本期无匹配口径数据");
+  assert.equal(Track.format(undefined), "本期无匹配口径数据");
+  assert.equal(Track.format(NaN), "本期无匹配口径数据");
   assert.equal(Track.format(0), "0");
   assert.equal(Track.format(75.51), "75.51");
-  assert.match(js, /if \(v == null \|\| typeof v !== "number" \|\| !isFinite\(v\)\) return "尚未披露"/);
+  assert.match(js, /if \(v == null \|\| typeof v !== "number" \|\| !isFinite\(v\)\) return "本期无匹配口径数据"/);
   assert.doesNotMatch(js, /value \|\| 0/);
 });
 
@@ -78,8 +78,8 @@ test("changing-sample medians carry per-period coverage and are not written as �
   const q2 = xiaofei.points.find((p) => p.period === "2026Q2");
   const q3 = xiaofei.points.find((p) => p.period === "2026Q3");
   assert.equal(q2.n, 12);
-  assert.equal(q3.n, 14);
-  assert.equal(q3.codes.length, 14);
+  assert.equal(q3.n, 13);
+  assert.equal(q3.codes.length, 13);
   for (const s of pack.trend.occupancy_rate.sectors) {
     for (const p of s.points) {
       assert.ok(p.n >= 1);
@@ -91,7 +91,7 @@ test("changing-sample medians carry per-period coverage and are not written as �
   assert.ok(!pack.metrics.some((m) => /yoy|同比/i.test(m.id + m.label)));
 });
 
-test("fixed comparable sample reports rise share separately and excludes in-window 扩募", () => {
+test("fixed same-caliber sample reports rise share separately and excludes in-window 扩募", () => {
   const xiaofei = pack.trend.occupancy_rate.sectors.find((s) => s.sector === "消费");
   const pair = xiaofei.fixedPairs.find((p) => p.from === "2026Q2" && p.to === "2026Q3");
   assert.equal(pair.n, 12);
@@ -103,7 +103,7 @@ test("fixed comparable sample reports rise share separately and excludes in-wind
   assert.ok(Math.abs(pair.upShare - 7 / 12) < 1e-12);
   assert.match(pair.note, /不是同店改善/);
   assert.match(js, /报告值上升/);
-  assert.match(html, /固定样本报告值升降/);
+  assert.match(html, /固定同口径样本变化/);
   assert.doesNotMatch(html, /减持红线/);
   assert.doesNotMatch(app, /\["减持红线"/);
   assert.doesNotMatch(app, /连续两期 <90% 系统性减持/);
@@ -114,7 +114,7 @@ test("track analysis assets are lazy-loaded only when 赛道透视 opens", () =>
   assert.doesNotMatch(html, /<link[^>]+href="research\/track-analysis\.css/);
   assert.doesNotMatch(html, /<script[^>]+src="research\/track-analysis\.js/);
   assert.doesNotMatch(html, /track-analysis\.json/);
-  assert.match(app, /track:\s*\{ css: "research\/track-analysis\.css\?v=20261119-track", js: "research\/track-analysis\.js\?v=20261119-track" \}/);
+  assert.match(app, /track:\s*\{ css: "research\/track-analysis\.css\?v=20261119-trackfix", js: "research\/track-analysis\.js\?v=20261119-trackfix" \}/);
   const switchStart = app.indexOf("  function switchView(v)");
   const switchEnd = app.indexOf("  function showPage(", switchStart);
   const slice = app.slice(switchStart, switchEnd);
@@ -129,17 +129,15 @@ test("track analysis assets are lazy-loaded only when 赛道透视 opens", () =>
   assert.match(html, /id="trackMedianChart"/);
   assert.match(html, /id="trackTrendChart"/);
   assert.match(css, /max-width:767px/);
-  assert.match(html, /<script src="app\.js\?v=20261119-track" defer>/);
+  assert.match(html, /<script src="app\.js\?v=20261119-trackfix" defer>/);
 });
 
-test("valuation stays in separate cards and is read from the already-loaded panel", () => {
-  assert.ok(!("propertySpread" in pack));
-  assert.ok(!("operatingDisclosedIrr" in pack));
-  assert.match(js, /REITS_DATA_PANEL/);
-  assert.match(js, /operatingDisclosedIrr/);
-  assert.match(js, /propertySpread/);
-  assert.match(html, /id="trackValPropertyCard"/);
-  assert.match(html, /id="trackValOperatingCard"/);
-  assert.match(html, /与经营权披露 IRR 分图，不硬混/);
-  assert.match(js, /尚未披露/);
+test("user-requested removal is limited to the two track valuation cards", () => {
+  assert.doesNotMatch(html, /id="trackVal(?:Property|Operating)/);
+  assert.doesNotMatch(js, /renderValuation|renderPropertyValuation|renderOperatingValuation|__PANEL_READY|REITS_DATA_PANEL/);
+  assert.doesNotMatch(js, /propertySpread|operatingDisclosedIrr/);
+  // Other pages keep the existing valuation source and functionality.
+  const panel = JSON.parse(read("data_panel_l1l7.json"));
+  assert.ok(panel.propertySpread && panel.operatingDisclosedIrr);
+  assert.match(read("allocation-tools.js"), /operatingDisclosedIrr/);
 });
