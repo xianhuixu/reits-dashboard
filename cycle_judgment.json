@@ -802,13 +802,13 @@
     },
     "spreadLeg": {
       "status": "lagged",
-      "pctileChangePP": 16.1,
+      "pctileChangePP": 9.9,
       "from": "2026-08-18",
       "to": "2026-11-18",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
       "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-      "note": "新浪/东财取数覆盖不足（价格 28/58，分派 10/58），沿用缓存"
+      "note": "新浪/东财取数覆盖不足（价格 58/58，分派 47/58），沿用缓存"
     },
     "asOf": "2026-11-18",
     "rentLeg": {
@@ -820,10 +820,10 @@
       "y10Now": 1.589,
       "y10YearAgo": 1.812,
       "pointToPointBp": -22.3,
-      "ttmYieldMcap": 4.71,
-      "distYoYMedianPct": 1.93,
-      "distDragBp": 9.1,
-      "netBp": 8.6,
+      "ttmYieldMcap": 4.58,
+      "distYoYMedianPct": 1.05,
+      "distDragBp": 4.8,
+      "netBp": 4.3,
       "dominant": "rate",
       "text": "利率顺风占优：利率下行快过分派回落",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
