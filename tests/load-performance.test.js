@@ -14,6 +14,19 @@ function stylesheetLinks(file) {
   return html.match(new RegExp(`<link[^>]+href="${file}[^"]*"[^>]*>`, "g")) || [];
 }
 
+test("data.json preload is discovered before the early fetch and matches credentials omit", () => {
+  const preload = html.match(/<link rel="preload" href="data\.json" as="fetch" crossorigin>/);
+  assert.ok(preload, "data.json preload link");
+  const preloadAt = html.indexOf(preload[0]);
+  const fetchAt = html.indexOf('window.__DATA_READY = fetch("data.json"');
+  const corsAt = html.indexOf('fetch("data.json", {mode: "cors", credentials: "omit"}');
+  const fontAt = html.indexOf('ibm-plex-sans-latin-wght-normal.woff2');
+  assert.ok(fetchAt > 0 && corsAt > 0, "__DATA_READY fetch");
+  assert.ok(preloadAt < fetchAt, "preload must precede __DATA_READY fetch");
+  assert.ok(preloadAt < fontAt, "data.json preload stays early in head");
+  assert.equal((html.match(/<link rel="preload" href="data\.json"/g) || []).length, 1);
+});
+
 test("lazy CSS/JS for operating data, fund archive and allocation tools are not on the critical path", () => {
   assert.doesNotMatch(html, /<link[^>]+href="research\/operating-data\.css/);
   assert.doesNotMatch(html, /<link[^>]+href="research\/fund-archive\.css/);
