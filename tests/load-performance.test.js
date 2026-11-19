@@ -54,7 +54,7 @@ test("a fund detail deep link loads the fund-archive module before render", () =
   assert.match(slice, /if \(location.hash === requestedHash\) openReitDetailInner/);
 });
 
-test("_headers caches fonts and versioned CSS/JS, but keeps HTML/JSON short-lived", () => {
+test("_headers caches fonts and versioned CSS/JS, but revalidates JSON immediately", () => {
   assert.match(headers, /\/fonts\/\*/);
   assert.match(headers, /max-age=31536000,\s*immutable/);
   assert.match(headers, /\/\*\.css/);
@@ -65,10 +65,22 @@ test("_headers caches fonts and versioned CSS/JS, but keeps HTML/JSON short-live
   const jsonRule = headers.lastIndexOf("/*.json");
   const jsRule = headers.indexOf("/*.js");
   const cssRule = headers.indexOf("/*.css");
-  assert.ok(jsonRule > jsRule && jsonRule > cssRule, "JSON short cache must override broader JS/CSS rules");
-  assert.match(headers, /\/research\/operating-data\/\*/);
-  assert.match(headers, /\/research\/fund-archives\/\*/);
-  assert.match(headers, /max-age=60,\s*must-revalidate/);
+  assert.ok(jsonRule > jsRule && jsonRule > cssRule, "JSON revalidation must override broader JS/CSS rules");
+  const jsonBlocks = [
+    "/*.json",
+    "/research/*.json",
+    "/research/operating-data/*",
+    "/research/fund-archives/*"
+  ].map((path) => {
+    const start = headers.indexOf(path + "\n");
+    assert.ok(start >= 0, path);
+    return headers.slice(start, start + 120);
+  });
+  jsonBlocks.forEach((block) => {
+    assert.match(block, /Cache-Control:\s*public, max-age=0, must-revalidate/);
+    assert.doesNotMatch(block, /max-age=60/);
+  });
+  assert.match(headers, /\/index\.html\n\s*Cache-Control:\s*public, max-age=60, must-revalidate/);
   assert.match(headers, /GitHub Pages 不读取本文件/);
 });
 

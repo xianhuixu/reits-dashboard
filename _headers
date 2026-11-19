@@ -1,5 +1,6 @@
 # Cloudflare Pages 缓存策略
-# 原则：HTML 与数据 JSON 短缓存，保证每日更新及时生效；
+# 原则：HTML 短缓存；数据 JSON 每次先条件再验证（max-age=0 + must-revalidate），
+#       日报/数据包上线后立即可见，未变更时仍走 ETag 304。
 #       带 ?v= 的 CSS/JS 与字体长缓存（内容变更时改版本号即可强刷）。
 # 注意：GitHub Pages 不读取本文件，长缓存主要对 Cloudflare 镜像生效。
 
@@ -37,15 +38,15 @@
   Cache-Control: public, max-age=604800, immutable
 
 # 数据文件：必须放在 CSS/JS 规则之后，避免被更宽规则覆盖
-# 1 分钟内直接命中缓存，过期后 ETag 条件请求
+# max-age=0 + must-revalidate：每次用 ETag 条件请求，部署后立即可见
 /*.json
-  Cache-Control: public, max-age=60, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 
 /research/*.json
-  Cache-Control: public, max-age=60, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 
 /research/operating-data/*
-  Cache-Control: public, max-age=60, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
 
 /research/fund-archives/*
-  Cache-Control: public, max-age=60, must-revalidate
+  Cache-Control: public, max-age=0, must-revalidate
