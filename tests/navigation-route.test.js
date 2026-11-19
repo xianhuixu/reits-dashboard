@@ -52,14 +52,15 @@ test('research tab keeps an existing fund/asset detail URL instead of discarding
 test('a delayed data load cannot reopen detail after the user has navigated away',()=>{
  const a=source.indexOf('  function openReitDetail(code, updateHash)');const b=source.indexOf('  function openReitDetailInner(',a);
  let ready,opened=0;const location={hash:'#/detail/180103.SZ'};
- const ctx={location,withResearchData(fn){ready=fn;},openReitDetailInner(){opened++;}};vm.createContext(ctx);vm.runInContext(source.slice(a,b),ctx);
+ const ctx={location,window:{ReitsFundArchive:{}},withResearchData(fn){ready=fn;},openReitDetailInner(){opened++;}};vm.createContext(ctx);vm.runInContext(source.slice(a,b),ctx);
  ctx.openReitDetail('180103.SZ',false);location.hash='#/page/pano/heatmap';ready();assert.equal(opened,0);
  ctx.openReitDetail('180203.SZ');ready();assert.equal(opened,1);
  assert.match(source,/if \(location.hash !== renderingHash\) return;/);
+ assert.match(source,/ensureViewModule\("archive"\)/);
 });
 test('router listens to back/forward and hash links; both navigation event paths share synchronization',()=>{
  assert.match(source,/addEventListener\("popstate", restoreNavigationRoute\)/);assert.match(source,/addEventListener\("hashchange", restoreNavigationRoute\)/);
  const binding=source.slice(source.indexOf('  function bindNavButton('),source.indexOf('  // 绑定所有导航按钮'));
  assert.equal((binding.match(/syncNavigationRoute\(btn\)/g)||[]).length,3);assert.match(binding,/btn.addEventListener\("touchend"/);
- assert.match(fs.readFileSync('index.html','utf8'),/app.js\?v=20261117-navigation/);
+ assert.match(fs.readFileSync('index.html','utf8'),/app.js\?v=20261119-perf/);
 });

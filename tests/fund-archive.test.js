@@ -48,7 +48,7 @@ test('zero financial distributions are flagged, never plotted as zero event paym
 });
 test('detail and asset routes validate, lazy cache reads once and never writes signals',async()=>{
  assert.deepEqual(A.parseRoute('#/detail/180103.SZ/asset/180103.SZ-A02'),{code:'180103.SZ',asset:'180103.SZ-A02'});assert.equal(A.parseRoute('#/detail/../../etc'),null);assert.equal(A.parseRoute('#/detail/180103.SZ/asset/%FF'),null);assert.equal(A.parseRoute('#/detail/180103.SZ/asset/x/other'),null);
- let calls=0;const payload={schemaVersion:1,code:'999999.SH',tables:{}};const fetcher=async url=>{calls++;assert.equal(url,'research/fund-archives/999999.SH.json');return {ok:true,json:async()=>payload};};const one=A.load('999999.SH',fetcher),two=A.load('999999.SH',fetcher);assert.equal(one,two);assert.equal(await one,payload);assert.equal(calls,1);
+ let calls=0;const payload={schemaVersion:1,code:'999999.SH',info:{},coverage:{},quality:{},tables:{}};const fetcher=async url=>{calls++;assert.equal(url,'research/fund-archives/999999.SH/index.json');return {ok:true,json:async()=>payload};};const one=A.load('999999.SH',fetcher),two=A.load('999999.SH',fetcher);assert.equal(one,two);assert.equal(await one,payload);assert.equal(calls,1);
  const js=fs.readFileSync(path.join(__dirname,'../research/fund-archive.js'),'utf8');assert.ok(!/REITS_DATA\s*[.=]|localStorage|POST|PUT|PATCH/.test(js));const app=fs.readFileSync(path.join(__dirname,'../app.js'),'utf8');assert.match(app,/ReitsFundArchive.mount\(archiveHost, r.code\)/);assert.match(app,/fa-legacy/);const ops=fs.readFileSync(path.join(__dirname,'../research/operating-data.js'),'utf8');assert.match(ops,/archiveLink.href='#\/detail\//);
 });
 test('responsive archive has local table scroll, nonsticky mobile identity and keyboard controls',()=>{
@@ -62,11 +62,26 @@ class Region {
  querySelector(s){if(s==='.fa-body')return this.body;if(s==='#fa-content')return this.content;return null;}
  querySelectorAll(s){return s==='[data-fa-tab]'?this.buttons:[];}
 }
+function archiveFetch(url, calls, seen){
+ const m=String(url).match(/fund-archives\/([^/]+)(?:\/([^/.]+))?\.json$/);
+ if(!m) throw new Error('unexpected url '+url);
+ const code=m[1], pack=m[2];
+ if(code!=='180103.SZ') throw new Error('preloaded another fund '+url);
+ calls.count++;
+ seen.add(pack||'complete');
+ const full=read(code);
+ if(!pack || pack==='complete') return {ok:true,json:async()=>full};
+ if(pack==='index') return {ok:true,json:async()=>({schemaVersion:full.schemaVersion,code:full.code,info:full.info,coverage:full.coverage,quality:full.quality,packs:['shell','quotes','finance','assets','holders','originals']})};
+ const packPath=path.join(base,code,pack+'.json');
+ return {ok:true,json:async()=>JSON.parse(fs.readFileSync(packPath,'utf8'))};
+}
 test('mount opens real fund panels and asset route, without preloading other funds',async()=>{
- const oldFetch=global.fetch,oldLocation=global.location;let calls=0;
- try{global.fetch=async url=>{calls++;return {ok:true,json:async()=>read(path.basename(url,'.json'))};};global.location={hash:'#/detail/180103.SZ'};const host=new Region();await A.mount(host,'180103.SZ');assert.match(host.innerHTML,/单只基金研究档案/);assert.match(host.body.content.innerHTML,/<svg/);const nav=host.body.buttons;assert.equal(nav.length,5);nav.find(b=>b.dataset.faTab==='finance').onclick();assert.match(host.body.content.innerHTML,/逐笔分红/);nav.find(b=>b.dataset.faTab==='assets').onclick();assert.match(host.body.content.innerHTML,/#\/detail\/180103.SZ\/asset\//);assert.equal(calls,1);
- global.location.hash='#/detail/180103.SZ/asset/180103.SZ-A02';const project=new Region();await A.mount(project,'180103.SZ');assert.match(project.body.innerHTML,/当前资产报告期/);assert.match(project.body.innerHTML,/返回.*基金档案/);assert.equal(calls,1);
+ const oldFetch=global.fetch,oldLocation=global.location;const calls={count:0};const seen=new Set();
+ try{global.fetch=async url=>archiveFetch(url,calls,seen);global.location={hash:'#/detail/180103.SZ'};const host=new Region();await A.mount(host,'180103.SZ');assert.match(host.innerHTML,/单只基金研究档案/);assert.match(host.body.content.innerHTML,/<svg/);const nav=host.body.buttons;assert.equal(nav.length,5);await nav.find(b=>b.dataset.faTab==='finance').onclick();assert.match(host.body.content.innerHTML,/逐笔分红/);await nav.find(b=>b.dataset.faTab==='assets').onclick();assert.match(host.body.content.innerHTML,/#\/detail\/180103.SZ\/asset\//);assert.ok(seen.has('index')&&seen.has('shell'));assert.ok(!seen.has('complete'),'must not download the full archive pack on first open');
+ const afterTabs=calls.count;
+ global.location.hash='#/detail/180103.SZ/asset/180103.SZ-A02';const project=new Region();await A.mount(project,'180103.SZ');assert.match(project.body.innerHTML,/当前资产报告期/);assert.match(project.body.innerHTML,/返回.*基金档案/);
  global.location.hash='#/detail/180103.SZ/asset/180203.SZ-A01';const wrong=new Region();await A.mount(wrong,'180103.SZ');assert.match(wrong.body.innerHTML,/资产ID不属于该基金/);
+ assert.ok(calls.count>=afterTabs);assert.ok(![...seen].some(x=>x.includes('180203')));
  }finally{global.fetch=oldFetch;global.location=oldLocation;}
 });
 

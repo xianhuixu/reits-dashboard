@@ -30,7 +30,7 @@ test('comparison never invents verified same-store / unknown tax is not comparab
 });
 test('new tab is accessible, lazy and mirrored through existing recursive asset copy',()=>{
  const html=fs.readFileSync('index.html','utf8'),js=fs.readFileSync('research/operating-data.js','utf8'),css=fs.readFileSync('research/operating-data.css','utf8');
- assert.match(html,/data-pg="ops"/);assert.match(html,/id="pg-ops" hidden/);assert.match(html,/aria-live="polite"/);assert.match(js,/MutationObserver/);assert.match(js,/fetch\('research\/operating-data.json'\)/);assert.doesNotMatch(js,/innerHTML|REITS_DATA\s*=|REITS_ADVICE\s*=/);
+ assert.match(html,/data-pg="ops"/);assert.match(html,/id="pg-ops" hidden/);assert.match(html,/aria-live="polite"/);assert.match(js,/MutationObserver/);assert.match(js,/fetchJson\('research\/operating-data-index.json'\)/);assert.match(js,/operating-data\/periods\//);assert.match(js,/operating-data\/funds\//);assert.doesNotMatch(js,/innerHTML|REITS_DATA\s*=|REITS_ADVICE\s*=/);
  assert.match(css,/overflow:auto/);assert.match(css,/max-width:767px/);assert.match(css,/grid-template-columns:1fr/);
  for(const p of ['deploy_cf.sh','.github/workflows/daily-update.yml','.github/workflows/tenders-mirror.yml'])assert.match(fs.readFileSync(p,'utf8'),/cp -r .*research/);
 });
