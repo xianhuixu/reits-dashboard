@@ -62,5 +62,5 @@ test('router listens to back/forward and hash links; both navigation event paths
  assert.match(source,/addEventListener\("popstate", restoreNavigationRoute\)/);assert.match(source,/addEventListener\("hashchange", restoreNavigationRoute\)/);
  const binding=source.slice(source.indexOf('  function bindNavButton('),source.indexOf('  // 绑定所有导航按钮'));
  assert.equal((binding.match(/syncNavigationRoute\(btn\)/g)||[]).length,3);assert.match(binding,/btn.addEventListener\("touchend"/);
- assert.match(fs.readFileSync('index.html','utf8'),/app.js\?v=20261119-track/);
+ assert.match(fs.readFileSync('index.html','utf8'),/app.js\?v=20261119-trackfix/);
 });

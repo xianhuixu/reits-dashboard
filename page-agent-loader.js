@@ -171,21 +171,27 @@
   function installArchiveDock(wrap) {
     var media = window.matchMedia('(max-width:640px)');
     var root = document.documentElement;
-    var host = document.getElementById('detailPanel');
+    var detailHost = document.getElementById('detailPanel');
+    var trackHost = document.getElementById('trackAiTools');
+    var trackView = document.getElementById('v-track');
     var page = document.getElementById('pg-research');
     var view = document.getElementById('v-detail');
     function sync() {
-      var active = !!(media.matches && host && page && view &&
+      var trackActive = !!(media.matches && trackHost && trackView && page && !page.hidden && !trackView.hidden &&
+        !page.classList.contains('hidden') && !trackView.classList.contains('hidden'));
+      var host = trackActive ? trackHost : detailHost;
+      var active = trackActive || !!(media.matches && host && page && view &&
         !page.hidden && !view.hidden && !page.classList.contains('hidden') &&
         !view.classList.contains('hidden') && host.querySelector('#fundArchive'));
       root.classList.toggle('rd-ai-archive-mobile', active);
       var dock = document.getElementById('rdAiArchiveDock');
       if (active) {
+        if (dock && dock.parentNode !== host) { dock.remove(); dock = null; }
         if (!dock || dock.parentNode !== host) {
           dock = document.createElement('div');
           dock.id = 'rdAiArchiveDock';
           dock.setAttribute('role', 'group');
-          dock.setAttribute('aria-label', '档案辅助工具');
+          dock.setAttribute('aria-label', trackActive ? '赛道辅助工具' : '档案辅助工具');
           host.insertBefore(dock, host.firstChild);
         }
         if (wrap.parentNode !== dock) dock.appendChild(wrap);
@@ -199,8 +205,8 @@
     // Existing navigation sometimes uses replaceState without hashchange; observe
     // the actual view/host instead. Do not watch table subtrees or horizontal scroll.
     var observer = new MutationObserver(sync);
-    if (host) observer.observe(host, { childList: true });
-    [page, view].forEach(function (el) {
+    if (detailHost) observer.observe(detailHost, { childList: true });
+    [page, view, trackView].forEach(function (el) {
       if (el) observer.observe(el, { attributes: true, attributeFilter: ['hidden', 'class'] });
     });
     if (media.addEventListener) media.addEventListener('change', sync);
