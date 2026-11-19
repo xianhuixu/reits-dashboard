@@ -70,7 +70,7 @@ test("changing-sample medians carry per-period coverage and are not written as �
   assert.match(html, /不是同店改善/);
   assert.match(html, /基金等权、非面积加权/);
   assert.match(js, /变动样本中位数，不代表经营改善或恶化/);
-  assert.match(js, /spec\.weighting_note/);
+  assert.match(js, /m\.weighting_note/);
   assert.match(html, /基金等权、非面积加权/);
   const occ = pack.metrics.find((m) => m.id === "occupancy_rate");
   assert.equal(occ.weighting_note, "基金等权、非面积加权");
@@ -114,7 +114,7 @@ test("track analysis assets are lazy-loaded only when 赛道透视 opens", () =>
   assert.doesNotMatch(html, /<link[^>]+href="research\/track-analysis\.css/);
   assert.doesNotMatch(html, /<script[^>]+src="research\/track-analysis\.js/);
   assert.doesNotMatch(html, /track-analysis\.json/);
-  assert.match(app, /track:\s*\{ css: "research\/track-analysis\.css\?v=20261119-trackfix", js: "research\/track-analysis\.js\?v=20261119-trackfix" \}/);
+  assert.match(app, /track:\s*\{ css: "research\/track-analysis\.css\?v=20261119-layout", js: "research\/track-analysis\.js\?v=20261119-layout" \}/);
   const switchStart = app.indexOf("  function switchView(v)");
   const switchEnd = app.indexOf("  function showPage(", switchStart);
   const slice = app.slice(switchStart, switchEnd);
@@ -126,10 +126,10 @@ test("track analysis assets are lazy-loaded only when 赛道透视 opens", () =>
   assert.doesNotMatch(js, /REITS_ADVICE\s*=/);
   assert.match(js, /fetch\("research\/track-analysis\.json"\)/);
   assert.match(html, /id="v-track"/);
-  assert.match(html, /id="trackMedianChart"/);
-  assert.match(html, /id="trackTrendChart"/);
-  assert.match(css, /max-width:767px/);
-  assert.match(html, /<script src="app\.js\?v=20261119-trackfix" defer>/);
+  assert.match(html, /id="trackMetricPanels"/);
+  assert.match(html, /id="trackTrendPanels"/);
+  assert.match(css, /max-width:640px/);
+  assert.match(html, /<script src="app\.js\?v=20261119-layout" defer>/);
 });
 
 test("user-requested removal is limited to the two track valuation cards", () => {

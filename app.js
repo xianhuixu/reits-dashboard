@@ -1611,7 +1611,7 @@ LAZY.research.push(function () {
     ops: { css: "research/operating-data.css?v=20261117e", js: "research/operating-data.js?v=20261119-perf" },
     archive: { css: "research/fund-archive.css?v=20261117a", js: "research/fund-archive.js?v=20261119-perf" },
     alloc: { js: "allocation-tools.js?v=20261005-designr3" },
-    track: { css: "research/track-analysis.css?v=20261119-trackfix", js: "research/track-analysis.js?v=20261119-trackfix" }
+    track: { css: "research/track-analysis.css?v=20261119-layout", js: "research/track-analysis.js?v=20261119-layout" }
   };
   function ensureViewModule(name) {
     var spec = VIEW_ASSETS[name];
@@ -1800,9 +1800,12 @@ LAZY.research.push(function () {
   }
   // Navigation routes own history; rendering a route must never write another entry.
   var lastDetailRoute = /^#\/?detail\//i.test(location.hash) ? location.hash : null;
+  var lastTrackRoute = /^#\/page\/research\/track(?:\/|$)/.test(location.hash) ? location.hash : null;
   function writeRoute(hash) {
+    if (/^#\/page\/research\/track(?:\/|$)/.test(location.hash)) lastTrackRoute = location.hash;
     if (/^#\/?detail\//i.test(location.hash)) lastDetailRoute = location.hash;
     if (/^#\/?detail\//i.test(hash)) lastDetailRoute = hash;
+    if (/^#\/page\/research\/track(?:\/|$)/.test(hash)) lastTrackRoute = hash;
     if (location.hash !== hash) history.pushState(null, "", hash);
   }
   function syncNavigationRoute(btn) {
@@ -1816,21 +1819,31 @@ LAZY.research.push(function () {
       return;
     }
     var section = btn.dataset.scroll || "";
+    if (view === "track") {
+      var track = window.ReitsTrackAnalysis;
+      writeRoute((track && track.currentRoute && track.currentRoute()) || lastTrackRoute || "#/page/research/track/chanyeyuan");
+      return;
+    }
     writeRoute("#/page/" + pg + (view ? "/" + view : section ? "/" + section : ""));
   }
   function restoreNavigationRoute() {
     var hash = location.hash || "";
     var detail = hash.match(/^#\/?detail\/([0-9A-Z.]+)/i);
     if (detail) { lastDetailRoute = hash; openReitDetail(detail[1], false); return; }
-    var m = hash.match(/^#\/page\/(pano|research|advice|ops|inst)(?:\/([a-zA-Z0-9-]+))?$/);
+    var m = hash.match(/^#\/page\/(pano|research|advice|ops|inst)(?:\/([a-zA-Z0-9-]+)(?:\/([A-Za-z0-9_-]+))?)?$/);
     if (!m && hash && hash !== "#") return; // Leave existing research anchors alone.
-    var pg = m ? m[1] : "pano", view = m ? m[2] : "heatmap";
+    var pg = m ? m[1] : "pano", view = m ? m[2] : "heatmap", sector = m && m[3];
+    if (sector && !(pg === "research" && view === "track")) return;
     var sub = pg === "pano" ? "#panoSub" : pg === "research" ? "#researchSub" : null;
     var button = sub && view && document.querySelector(sub + ' button[data-v="' + view + '"]');
     var section = pg === "advice" && view && document.querySelector('#subbar button[data-scroll="' + view + '"]');
     if (view && !button && !section) return;
+    if (view === "track") lastTrackRoute = "#/page/research/track/" + (sector || "chanyeyuan");
     showPage(pg);
     if (button) switchView(view);
+    if (view === "track" && window.ReitsTrackAnalysis && window.ReitsTrackAnalysis.applyRoute) {
+      window.ReitsTrackAnalysis.applyRoute(sector, { fromRoute: true });
+    }
     if (section) {
       setActiveNav(section.parentElement.querySelectorAll("button"), section);
       var target = document.getElementById(view);

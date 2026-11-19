@@ -131,6 +131,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
     <button class="icon-button mobile-menu" id="sidebarToggle" aria-label="打开导航" aria-controls="sidebar" aria-expanded="false"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#menu"></use></svg></button>
     <span class="workspace-context">公募REITs<span class="context-divider">/</span><span id="workspaceLocation">市场总览</span></span>
     <div class="tb-search"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#search"></use></svg><label for="gSearch" class="sr-only">搜索个券名称或代码</label><input id="gSearch" placeholder="搜索资产名称或代码" autocomplete="off"><kbd>⌘ K</kbd><div class="tb-drop" id="gSearchDrop" hidden></div></div>
+    <div id="rdAiTopSlot"></div>
     <span class="theme-sw" id="themeSw" role="group" aria-label="主题切换"><button data-t="light" title="白天模式" aria-label="白天模式"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#sun"></use></svg></button><button data-t="eye" title="护眼模式" aria-label="护眼模式"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#leaf"></use></svg></button><button data-t="dark" title="夜晚模式" aria-label="夜晚模式"><svg class="ui-icon " aria-hidden="true"><use href="icons/workspace/lucide.svg?v=1#moon"></use></svg></button></span>
   </div>
 </nav>
@@ -451,37 +452,37 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 
 <!-- ============ 赛道透视 ============ -->
 <section class="view" id="v-track" hidden>
-  <div id="trackAiTools"></div>
-  <div class="card" id="trackQualityCard">
-    <h2>赛道经营质量 · 按大类资产分页</h2>
-    <div class="track-sector-switch" id="trackSectorSwitch" role="group" aria-label="大类资产赛道"></div>
-    <p class="note" id="trackQualityNote">仅基金层面、同一报告期与同一口径。出租率分布为基金等权、非面积加权；缺数仅指期末已上市且适用指标的基金「本期无匹配口径数据」，不作 0。项目范围未核验，不绘制同比。框架红线不自动下达减持指令。</p>
-    <div class="track-metric-switch" id="trackMetricSwitch" role="group" aria-label="当前赛道适用指标"></div>
+  <div class="card" id="trackShellCard">
+    <h2>赛道透视</h2>
+    <div class="track-sector-tabs" id="trackSectorSwitch" role="tablist" aria-label="业态页签"></div>
+    <label class="track-sector-select-wrap" for="trackSectorSelect">业态
+      <select id="trackSectorSelect" aria-label="选择业态"></select>
+    </label>
+    <p class="note" id="trackQualityNote">仅基金层面、同一报告期与同一口径。覆盖分母为报告期末已上市且适用该指标的基金。出租率分布为基金等权、非面积加权；「本期无匹配口径数据」只计已上市适用基金中缺少该口径的只数，不作 0。未上市、期后上市另列，不计缺数。项目范围未核验，不绘制同比，也不把固定同口径样本写成同店。框架红线不自动下达减持指令。</p>
+  </div>
+  <div class="card" id="trackOverviewCard">
+    <h2>本期概况</h2>
     <p class="track-meta" id="trackQualityMeta" role="status">打开本页后加载经营聚合。</p>
-    <p class="track-meta" id="trackSampleNote"></p>
     <div class="track-stats" id="trackStats" aria-live="polite"></div>
-    <div id="trackMedianChart" class="track-chart"></div>
-    <div id="trackDispersionChart" class="track-chart-wide"></div>
-    <div class="table-scroll" id="trackQualityTable"></div>
-    <div id="trackFundTable"></div>
     <p class="track-undisclosed" id="trackUndisclosed"></p>
   </div>
+  <div class="card" id="trackCompareCard">
+    <h2>核心指标对比</h2>
+    <p class="note">当前业态的适用核心指标各自全宽成图，不在总图里切换指标，也不把异质单位放在同一轴。出租率为基金等权、非面积加权。样本较多或窄屏时改用可点排名列表，点击进入基金档案。</p>
+    <div id="trackMetricPanels"></div>
+  </div>
   <div class="card" id="trackTrendCard">
-    <h2>季度中位数趋势（变动样本）</h2>
-    <p class="note">各期各自计算中位数，并在点上标注当期覆盖只数。连线可能只是样本更换，不代表经营改善或恶化；出租率中位数变化也不是同店改善。</p>
-    <p class="track-legend-note">手机端隐藏重叠的 n 标签：点击趋势点查看当期覆盖只数，完整覆盖数可展开下表查看；变动样本不代表同店变化。</p><details><summary>各期覆盖数 n</summary><div class="table-scroll" id="trackTrendTable"></div></details>
-    <p class="track-meta" id="trackTrendNote"></p>
-    <div id="trackTrendChart" class="track-chart-wide"></div>
+    <h2>历史趋势</h2>
+    <p class="note">变动样本中位数与固定同口径样本变化只跟随当前赛道。各期中位数连线可能只是样本更换，不代表经营改善或恶化；固定同口径只固定基金名单和指标、单位、期间，资产范围待核，不是同店改善。</p>
+    <div id="trackTrendPanels"></div>
   </div>
-  <div class="card" id="trackFixedCard">
-    <h2>固定同口径样本变化</h2>
-    <p class="note">统计相邻两期均有同口径披露、且窗口内无扩募纳入的基金，给出报告值上升/下降/持平家数。未核验资产范围，不能当成同店改善，也不把变动样本中位数的升降写成改善或恶化。</p>
-    <p class="track-meta" id="trackFixedNote"></p>
-    <div id="trackFixedChart" class="track-chart"></div>
-    <div class="table-scroll" id="trackFixedTable"></div>
+  <div class="card" id="trackFundsCard">
+    <h2>基金明细</h2>
+    <p class="note">当前赛道已上市适用基金的可点列表，进入 <code>#/detail/代码</code>。浏览器后退回到当前赛道。</p>
+    <div id="trackFundList"></div>
   </div>
-
 </section>
+
 
 
 <!-- ============ 大类资产相关性 ============ -->
@@ -984,14 +985,14 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <!-- allocation-tools / 经营数据 / 基金档案 在进入对应视图时再加载，避免首屏下载 -->
 <script src="data-status.js?v=20261005-designr3" defer></script>
 <script src="workspace.js?v=20261119-perf" defer></script>
-<script src="app.js?v=20261119-trackfix" defer></script>
+<script src="app.js?v=20261119-layout" defer></script>
 <!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
 <script>
 (function () {
   var srcs = [
     "tender-feed.js?v=20261005-designr3",
     "geography/map.js?v=20261007-studio2",
-    "page-agent-loader.js?v=20261119-track-dock"
+    "page-agent-loader.js?v=20261119-topbar"
   ];
   function load(src) {
     var s = document.createElement("script");

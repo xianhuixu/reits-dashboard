@@ -25,7 +25,7 @@ function fixture({mobile=true,pageHidden=false,detailHidden=false,archive=true,t
  const make=(id,parent)=>{const n=new Node();n.id=id;parent.appendChild(n);return n;};
  const page=make('pg-research',body),view=make('v-detail',page),host=make('detailPanel',view);page.hidden=pageHidden;view.hidden=detailHidden;
  if(archive)make('fundArchive',host);
- const trackView=make('v-track',page),trackHost=make('trackAiTools',trackView);trackView.hidden=!track;
+ const trackView=make('v-track',page),topSlot=make('rdAiTopSlot',head);trackView.hidden=!track;
  const wrap=make('rdAiWrap',body),gear=make('rdAiGear',wrap),button=make('rdAiLauncher',wrap),panel=make('page-agent-runtime_agent-panel',body),card=make('rdAiCard',body);card.hidden=true;
  const events={},media={matches:mobile,addEventListener(k,fn){events.media=fn;}};const watched=[];let observerCallback;
  const window={matchMedia:q=>{assert.equal(q,'(max-width:640px)');return media;},addEventListener(k,fn){events[k]=fn;}};
@@ -34,7 +34,7 @@ function fixture({mobile=true,pageHidden=false,detailHidden=false,archive=true,t
  const install=vm.runInNewContext('('+sourceFunction('installArchiveDock','  function buildCard(')+')',ctx);
  const controller=install(wrap);
  const inject=vm.runInNewContext('('+sourceFunction('injectStyles','  var gearBtn =')+')',ctx);inject();
- return {root,document,body,page,view,host,trackView,trackHost,wrap,gear,button,panel,card,media,events,watched,controller,make,ctx,mutate:()=>observerCallback(),css:document.getElementById('rdAiStyles').textContent};
+ return {root,document,body,page,view,host,trackView,topSlot,wrap,gear,button,panel,card,media,events,watched,controller,make,ctx,mutate:()=>observerCallback(),css:document.getElementById('rdAiStyles').textContent};
 }
 
 test('mobile fund and asset details get an in-flow toolbar before the archive, including delayed loader start',()=>{
@@ -76,19 +76,22 @@ test('archive-only dock and settings respect phone safe areas without clipping h
 });
 test('other pages and detail views without an archive are not docked; idle loader cache is bumped',()=>{
  for(const options of [{mobile:false},{pageHidden:true},{detailHidden:true},{archive:false}]){const f=fixture(options);assert.equal(f.wrap.parentNode,f.body);assert.ok(!f.root.classList.contains('rd-ai-archive-mobile'));}
- const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');assert.match(html,/page-agent-loader\.js\?v=20261119-track-dock/);assert.match(source,/installArchiveDock\(\$\('rdAiWrap'\)\)/);
+ const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');assert.match(html,/page-agent-loader\.js\?v=20261119-topbar/);assert.match(source,/installArchiveDock\(\$\('rdAiWrap'\)\)/);
 });
 
-test('390px track uses the same in-flow controls, reattaches after archive return and never overlays reading area',()=>{
+test('390px track moves original controls into the topbar, and archive return restores that slot',()=>{
  const f=fixture({track:true});
  const button=f.button,gear=f.gear;
- assert.equal(f.wrap.parentNode.parentNode,f.trackHost);
- assert.equal(f.document.getElementById('rdAiArchiveDock').attributes['aria-label'],'赛道辅助工具');
+ assert.equal(f.wrap.parentNode,f.topSlot);
+ assert.ok(f.root.classList.contains('rd-ai-track-mobile'));
+ assert.ok(f.wrap.classList.contains('rd-ai-top-docked'));
+ assert.equal(f.document.getElementById('rdAiArchiveDock'),null);
  f.trackView.hidden=true;f.view.hidden=false;f.mutate();
  assert.equal(f.wrap.parentNode.parentNode,f.host);
  f.trackView.hidden=false;f.view.hidden=true;f.mutate();
- assert.equal(f.wrap.parentNode.parentNode,f.trackHost);
+ assert.equal(f.wrap.parentNode,f.topSlot);
  assert.equal(f.button,button);assert.equal(f.gear,gear);
- assert.equal(f.host.children.concat(f.trackHost.children).filter(n=>n.id==='rdAiArchiveDock').length,1);
+ assert.equal(f.host.children.filter(n=>n.id==='rdAiArchiveDock').length,0);
+ assert.match(f.css,/html\.rd-ai-track-mobile #rdAiWrap\.rd-ai-top-docked\{position:static;inset:auto/);
  assert.ok(f.watched.some(w=>w.el===f.trackView&&w.options.attributeFilter.includes('hidden')));
 });
