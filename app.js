@@ -1606,13 +1606,42 @@ LAZY.research.push(function () {
     apply(document.documentElement.dataset.theme || "light");
   })();
 
+  // 按需加载经营数据 / 基金档案 / 配置工具，避免首屏下载非必要 CSS/JS。
+  var VIEW_ASSETS = {
+    ops: { css: "research/operating-data.css?v=20261117e", js: "research/operating-data.js?v=20261119-perf" },
+    archive: { css: "research/fund-archive.css?v=20261117a", js: "research/fund-archive.js?v=20261119-perf" },
+    alloc: { js: "allocation-tools.js?v=20261005-designr3" }
+  };
+  function ensureViewModule(name) {
+    var spec = VIEW_ASSETS[name];
+    if (!spec) return Promise.resolve();
+    var loadCss = window.loadStylesheet;
+    var loadJs = window.loadScript;
+    var cssReady = spec.css ? (loadCss ? loadCss(spec.css) : Promise.resolve()) : Promise.resolve();
+    return cssReady.then(function () {
+      if (!spec.js) return;
+      if (loadJs) return loadJs(spec.js);
+      return new Promise(function (resolve, reject) {
+        var s = document.createElement("script");
+        s.src = spec.js;
+        s.onload = resolve;
+        s.onerror = reject;
+        document.body.appendChild(s);
+      });
+    }).catch(function (e) { console.error("[lazy-view:" + name + "]", e && e.message); });
+  }
+
   // ---- 个券透视直达（热力图个券下钻 / 全局搜索共用） ----
   function openReitDetail(code, updateHash) {
     // The SVG archive must remain usable if the legacy chart library fails.
     var requestedHash = location.hash;
-    withResearchData(function () {
-      if (location.hash === requestedHash) openReitDetailInner(code, updateHash);
-    });
+    function go() {
+      withResearchData(function () {
+        if (location.hash === requestedHash) openReitDetailInner(code, updateHash);
+      });
+    }
+    if (window.ReitsFundArchive) go();
+    else ensureViewModule("archive").then(go, go);
   }
   function openReitDetailInner(code, updateHash) {
     var r = null;
@@ -1738,13 +1767,18 @@ LAZY.research.push(function () {
       } else {
         $("kpis").style.display = "none";
       }
-      if (pg === "advice") {
+      if (pg === "ops") {
+        ensureViewModule("ops");
+      } else if (pg === "advice") {
         // 研究正文不等待远程研究数据，避免缓存观点覆盖已核验内容。
-        withECharts(ensureCharts);
+        ensureViewModule("alloc").then(function () { withECharts(ensureCharts); }, function () { withECharts(ensureCharts); });
       } else if (pg === "research") {
-        withResearchData(function () {
-          withScript("corp_actions.js", "REITS_ACTIONS", function () { withECharts(function () { runLazy("research"); ensureCharts(); }); });
-        });
+        function startResearch() {
+          withResearchData(function () {
+            withScript("corp_actions.js", "REITS_ACTIONS", function () { withECharts(function () { runLazy("research"); ensureCharts(); }); });
+          });
+        }
+        ensureViewModule("alloc").then(startResearch, startResearch);
       } else if (pg === "inst") {
         withECharts(function () { initInstPage(); ensureCharts(); });
       }

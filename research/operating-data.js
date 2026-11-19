@@ -36,7 +36,16 @@ function el(tag,text,cls){var n=doc.createElement(tag);if(text!=null)n.textConte
 function options(node,values,current){node.replaceChildren();values.forEach(function(x){var o=el('option',x.label);o.value=x.value;node.appendChild(o);});if(values.some(function(x){return x.value===current;}))node.value=current;}
 function state(){return {funds:new Map(data.funds.map(function(f){return [f.code,f];})),period:$('opsPeriod').value,sector:$('opsSector').value,metric:$('opsMetric').value,caliber:$('opsCaliber').value};}
 function pool(){var s=state();return data.points.filter(function(p){var f=s.funds.get(p.code);return f&&(!s.sector||f.sector_l1===s.sector)&&p.period===s.period&&p.scope==='基金';});}
-function controls(kind){if(kind==='sector'||kind==='period'||kind==='init'){
+function controls(kind){
+ if(kind==='period'&&data){
+  var period=$('opsPeriod').value;
+  if(period&&!periodCache[period]){
+   $('opsFilters').disabled=true;
+   loadPeriod(period).then(function(){$('opsFilters').disabled=false;controls('period');}).catch(function(e){$('opsFilters').disabled=false;$('opsLoad').textContent='经营数据暂不可用：'+e.message+'。';$('opsRetry').hidden=false;});
+   return;
+  }
+ }
+ if(kind==='sector'||kind==='period'||kind==='init'){
  var ms=Array.from(new Set(pool().map(function(p){return p.metric;}))).sort();var old=$('opsMetric').value;var sector=$('opsSector').value;
  var preferred=sector?coreMetric(sector):'__core__';
  var opts=ms.map(function(m){return {value:m,label:NAMES[m]||m};});
@@ -51,7 +60,8 @@ function controls(kind){if(kind==='sector'||kind==='period'||kind==='init'){
 }
 function cell(row,text,cls){var n=el('td',text);if(cls)n.className=cls;row.appendChild(n);return n;}
 function closeDetail(){if(!activeDetail)return;var previous=activeDetail;activeDetail=null;previous.row.remove();previous.buttons.forEach(function(b){b.setAttribute('aria-expanded','false');});}
-function detail(f,s,row,buttons,trigger){if(activeDetail&&activeDetail.anchor===row){closeDetail();return;}closeDetail();var view=rowView(data,s,f),metric=view.metric,caliber=view.point?view.point.caliber:preferredCaliber(metric);var box=el('div',null,'ops-detail');box.appendChild(el('h3',f.short_name+' · '+s.period+' · '+(NAMES[metric]||metric)));
+function detail(f,s,row,buttons,trigger){if(activeDetail&&activeDetail.anchor===row){closeDetail();return;}closeDetail();loadFundPoints(f.code).then(function(){paintDetail(f,s,row,buttons,trigger);}).catch(function(){paintDetail(f,s,row,buttons,trigger);});}
+function paintDetail(f,s,row,buttons,trigger){var view=rowView(data,s,f),metric=view.metric,caliber=view.point?view.point.caliber:preferredCaliber(metric);var box=el('div',null,'ops-detail');box.appendChild(el('h3',f.short_name+' · '+s.period+' · '+(NAMES[metric]||metric)));
  var project=data.points.filter(function(p){return p.code===f.code&&p.period===s.period&&p.scope==='项目'&&p.metric===metric;});
  var history=data.points.filter(function(p){return p.code===f.code&&p.metric===metric&&p.scope==='基金'&&p.caliber===caliber;}).sort(function(a,b){return data.periods.indexOf(a.period)-data.periods.indexOf(b.period);});
  var btn=el('button','关闭明细','secondary-button');btn.type='button';btn.onclick=function(){closeDetail();trigger.focus();};box.appendChild(btn);
@@ -78,7 +88,16 @@ function render(keepPage){if(keepPage!==true)pageNumber=1;closeDetail();var s=st
  $('opsPageStatus').textContent='第 '+page.page+' / '+page.pages+' 页';$('opsPrev').disabled=page.page<=1;$('opsNext').disabled=page.page>=page.pages;
 
 }
-function load(){if(data||loading)return;loading=true;$('opsLoad').textContent='正在读取经营数据快照…';fetch('research/operating-data.json').then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(function(d){if(d.schemaVersion!==1)throw new Error('数据版本不兼容');data=d;$('opsLoad').textContent='导入日期 '+d.importedAt.slice(0,10)+'（北京时间） · 经营报告期独立于行情日 · 来源：用户爬取库';options($('opsPeriod'),d.periods.map(function(x){return {value:x,label:x};}),d.latestPeriod);options($('opsSector'),[{value:'',label:'全部业态'}].concat(Array.from(new Set(d.funds.map(function(f){return f.sector_l1;}))).sort().map(function(x){return {value:x,label:x};})));controls('init');$('opsFilters').disabled=false;}).catch(function(e){loading=false;$('opsLoad').textContent='经营数据暂不可用：'+e.message+'。';$('opsRetry').hidden=false;});}
+
+var periodCache={};
+var fundCache={};
+function fetchJson(url){return fetch(url).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();});}
+function pointKey(p){return [p.code,p.asset_id,p.period,p.metric,p.caliber,p.scope,p.sourceTable].join('\t');}
+function mergePoints(rows){data.points=data.points||[];var seen={};data.points.forEach(function(p,i){seen[pointKey(p)]=i;});(rows||[]).forEach(function(p){if(seen[pointKey(p)]==null)data.points.push(p);});}
+function loadPeriod(period){if(!period)return Promise.resolve();if(periodCache[period])return periodCache[period];periodCache[period]=fetchJson('research/operating-data/periods/'+encodeURIComponent(period)+'.json').then(function(pack){mergePoints(pack.points||[]);return pack;}).catch(function(e){delete periodCache[period];throw e;});return periodCache[period];}
+function loadFundPoints(code){if(fundCache[code])return fundCache[code];fundCache[code]=fetchJson('research/operating-data/funds/'+encodeURIComponent(code)+'.json').then(function(pack){mergePoints(pack.points||[]);return pack;}).catch(function(e){if(String(e.message||'').indexOf('HTTP 404')>=0){fundCache[code]=Promise.resolve({code:code,points:[]});return fundCache[code];}delete fundCache[code];throw e;});return fundCache[code];}
+function load(){if(data||loading)return;loading=true;$('opsLoad').textContent='正在读取经营数据快照…';fetchJson('research/operating-data-index.json').then(function(d){if(d.schemaVersion!==1)throw new Error('数据版本不兼容');d.points=d.points||[];data=d;return loadPeriod(d.latestPeriod);}).then(function(){$('opsLoad').textContent='导入日期 '+data.importedAt.slice(0,10)+'（北京时间） · 经营报告期独立于行情日 · 来源：用户爬取库';options($('opsPeriod'),data.periods.map(function(x){return {value:x,label:x};}),data.latestPeriod);options($('opsSector'),[{value:'',label:'全部业态'}].concat(Array.from(new Set(data.funds.map(function(f){return f.sector_l1;}))).sort().map(function(x){return {value:x,label:x};})));controls('init');$('opsFilters').disabled=false;}).catch(function(e){data=null;loading=false;$('opsLoad').textContent='经营数据暂不可用：'+e.message+'。';$('opsRetry').hidden=false;});}
+
 var page=$('pg-ops');if(!page)return;
 $('opsPrev').onclick=function(){pageNumber--;render(true);};$('opsNext').onclick=function(){pageNumber++;render(true);};
 $('opsRetry').onclick=function(){this.hidden=true;load();};['Sector','Period','Metric'].forEach(function(k){$('ops'+k).onchange=function(){controls(k.toLowerCase());};});$('opsCaliber').onchange=render;$('opsSearch').oninput=function(){if(data)render();};

@@ -506,7 +506,36 @@
     var soft = function (p) { return p ? p.then(function (x) { return x; }, function () { return null; }) : Promise.resolve(null); };
     var advice = soft(root.__ADVICE_READY);
     var advTimed = Promise.race([advice, new Promise(function (r) { setTimeout(function () { r(null); }, 2500); })]);
-    function stanceOf(adv) { var api = root.ReitsAllocation; var st = adv && api && api.schoolStance ? api.schoolStance(adv) : null; return st && st.text || null; }
+    // 横幅学派立场：与 allocation-tools.schoolStance 同一规则，避免把配置工具打进首屏。
+    var ALLOC_LABEL = { "alloc-ow": "超配", "alloc-ow-lite": "偏超配", "alloc-n": "标配", "alloc-uw": "低配" };
+    function bannerAllocClass(action) {
+      var a = String(action || "");
+      if (/低配|减配|回避|谨慎|观望/.test(a)) return "alloc-uw";
+      if (/超配/.test(a)) return /标配|偏超配/.test(a) ? "alloc-ow-lite" : "alloc-ow";
+      return "alloc-n";
+    }
+    function bannerStance(adv) {
+      if (root.ReitsAllocation && root.ReitsAllocation.schoolStance) {
+        var st0 = root.ReitsAllocation.schoolStance(adv);
+        return st0 && st0.text || null;
+      }
+      if (!adv) return null;
+      var rv = adv.rightsViews || {};
+      var override = adv.stanceOverride ? String(adv.stanceOverride).trim() : null;
+      var p = override ? ALLOC_LABEL[bannerAllocClass(override)] : (rv["产权"] ? ALLOC_LABEL[bannerAllocClass(rv["产权"].view)] : null);
+      var o = rv["经营权"] ? ALLOC_LABEL[bannerAllocClass(rv["经营权"].view)] : null;
+      var rating = String(adv.rating || "").replace(/[（(].*$/, "").trim() || null;
+      var text;
+      if (override) text = override;
+      else {
+        var parts = [];
+        if (p) parts.push("产权" + p);
+        if (o) parts.push("经营权" + o);
+        text = (rating || "") + (rating && parts.length ? "：" : "") + parts.join(" · ");
+      }
+      return text || null;
+    }
+    function stanceOf(adv) { return bannerStance(adv); }
     root.__DATA_READY.then(function () {
       return Promise.all([soft(root.__PANEL_READY), advTimed]);
     }).then(function (res) {

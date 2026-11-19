@@ -6,6 +6,11 @@ import json
 import math
 import sqlite3
 from pathlib import Path
+import sys
+_SCRIPTS = Path(__file__).resolve().parent
+if str(_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS))
+from split_payloads import split_one_archive
 
 TABLES = "reit_info asset daily_quote distribution share_event ops_metric valuation forecast extension_offer issue_pricing financials reit_originator reit_fee reit_operator reit_project_company reit_originator_info reit_asset_ifind reit_offering_ifind appraisal_assumption revenue_breakdown ops_indicator_raw project_perf distcalc_item cost_breakdown project_fin project_bs fund_fee expansion_status holder_structure top_holders customer_conc concession_end".split()
 DEFERRED = {"market_valuation": "缺少估值方法、单位和来源，不接入估值信号", "macro_series": "宏观模块独立", "price_risk": "行情风险模块独立", "price_move": "行情异动模块独立"}
@@ -64,6 +69,7 @@ def export(db, out):
         coverage={t:len(rs) for t,rs in tables.items()}
         payload=dict(schemaVersion=1,code=code,info=info,tables=tables,coverage=coverage,quality=dict(distributionConflicts=flags,unassignedFinancials=sum(r['scope']=='归属待核' for r in tables['financials']),sourceReportLinks=0,notes=['原始库无逐期公告URL及页码，无法提供逐期原文跳转；交易所链接仅为项目入口','未注明单位的源表仅展示原值，不与标准化金额相加','原值趋势不是同店或已核验可比序列；未计算同比、IRR、LTV及预测达成率']))
         write(out/(code+'.json'),payload)
+        split_one_archive(payload, out)
         funds.append(dict(code=code,name=info['short_name'],periods=periods,coverage=coverage,distributionConflicts=len(flags)))
     audit=dict(schemaVersion=1,sourceSha256=hashlib.sha256(db.read_bytes()).hexdigest(),source='用户提供的爬取SQLite（只读）',feedsSignals=False,tables=schema,funds=funds,summary=dict(funds=len(funds),assets=len(all_data['asset']),ops=len(all_data['ops_metric']),financials=len(all_data['financials']),distributionEvents=len(all_data['distribution']),scopeLabelMismatches=mismatches,distributionConflictFields=total_flags),gaps=['leverage_ratio无可验证定义或公式，保留源单位且定义待核','收入/成本原表缺单位及分项不重叠依据，不生成构成图','源库无逐期报告URL/页码','forecast无单位字段，不与实际金额作数值对照','appraisal_assumption无日期/资产口径，单列假设不算达成率','部分financials项目公司记录无asset_id，不归入基金或任意项目','退出日期为空代表退出信息待核，不代表未退出'])
     write(out/'manifest.json',audit);c.close();return audit

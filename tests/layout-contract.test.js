@@ -85,5 +85,5 @@ test("navigation state and anchor offsets are accessible and header-aware", () =
 test("verified research is readable without the legacy advice feed", () => {
   assert.match(html, /id="advSources"/);
   assert.doesNotMatch(html, /withScript\("advice\.js"/);
-  assert.match(html, /src="allocation-tools.js\?v=/);
+  assert.match(html, /allocation-tools\.js\?v=/);
 });

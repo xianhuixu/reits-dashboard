@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """One-off, read-only export. No valuation, forecast, raw yoy or signal mutations."""
-import argparse, sqlite3, json, hashlib, math
+import argparse, sqlite3, json, hashlib, math, sys
 from pathlib import Path
 from datetime import datetime
 
@@ -32,3 +32,6 @@ def export(db):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('database',type=Path);p.add_argument('--output',type=Path,default=Path('research/operating-data.json'));args=p.parse_args()
     d=export(args.database);args.output.write_text(json.dumps(d,ensure_ascii=False,separators=(',',':'),allow_nan=False)+'\n');print('funds',len(d['funds']),'points',len(d['points']),'period',d['latestPeriod'],'bytes',args.output.stat().st_size,'quality',d['quality'])
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from split_payloads import split_operating_data
+    print('split', split_operating_data(args.output, args.output.parent))

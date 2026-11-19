@@ -12,7 +12,7 @@
 <!-- 首屏（结论横幅 + 4 张状态卡）为纯 HTML/CSS，不依赖 ECharts；ECharts 在首个图表进入视口时才按需加载（window.__loadECharts） -->
 <!-- 核心数据走 fetch + JSON：ETag 条件请求，数据未变时仅一次 304 往返；尽早发起与静态资源并行 -->
 <script>
-window.__DATA_READY = fetch("data.json").then(function (r) {
+window.__DATA_READY = fetch("data.json", {mode: "cors", credentials: "omit"}).then(function (r) {
   if (!r.ok) throw new Error("data.json HTTP " + r.status);
   return r.json();
 }).then(function (j) { window.REITS_DATA = j; });
@@ -97,6 +97,7 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 @media(max-width:380px){.ov-cards{grid-template-columns:1fr}}
 .market-lead{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px}.market-lead .ov-hero{min-height:332px;flex-direction:column;align-items:stretch;padding:27px 30px 22px;background:#162b49;color:#f2f6fc;border:1px solid #263c5e;border-radius:14px}.ov-hero .ov-rate-label{display:block;font-size:14px;color:#aabddb;margin-bottom:7px}.ov-hero .ov-headline{font-size:30px;min-height:0}.ov-hero .ov-arrow{display:none}.ov-hero .ov-headline .ov-stance{color:#fff;display:block}.lead-trend{min-height:332px}.ov-cards .ov-card{min-height:258px}@media(max-width:1023px){.market-lead{grid-template-columns:1fr}.market-lead .ov-hero{min-height:300px}}@media(max-width:767px){.market-lead .ov-hero{min-height:342px;padding:24px 21px 20px}.ov-cards{grid-template-columns:1fr}.ov-cards .ov-card{min-height:0}}
 </style>
+<link rel="preload" href="data.json" as="fetch" crossorigin>
 <link rel="preload" href="fonts/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css?v=20261005-designr3">
 <link rel="stylesheet" href="styles.css?v=20261009-l2-stack-sticky">
@@ -107,8 +108,6 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 <!-- 工作台样式在研究与地图组件之后，防止旧版页面布局覆盖导航和主题。 -->
 <link rel="stylesheet" href="workspace.css?v=20261009-operirr-overflow">
 
-<link rel="stylesheet" href="research/operating-data.css?v=20261117e">
-<link rel="stylesheet" href="research/fund-archive.css?v=20261117a">
 </head>
 <body>
 <a class="skip-link" href="#workspaceMain">跳到主要内容</a>
@@ -960,14 +959,12 @@ body{background:var(--bg);color:var(--tx);font:var(--fs-2)/1.7 var(--font-body);
 </footer>
 </div><!-- /workspace -->
 
-<script src="ui-utils.js" defer></script>
+<script src="ui-utils.js?v=20261119-perf" defer></script>
 <!-- 首屏结论所需的轻量脚本在前：数据就绪即渲染横幅与 4 张卡片，不等待 app.js（研究/图表逻辑） -->
+<!-- allocation-tools / 经营数据 / 基金档案 在进入对应视图时再加载，避免首屏下载 -->
 <script src="data-status.js?v=20261005-designr3" defer></script>
-<script src="allocation-tools.js?v=20261005-designr3" defer></script>
-<script src="workspace.js?v=20261117-ops" defer></script>
-<script src="research/operating-data.js?v=20261117g" defer></script>
-<script src="research/fund-archive.js?v=20261117a" defer></script>
-<script src="app.js?v=20261117-navigation" defer></script>
+<script src="workspace.js?v=20261119-perf" defer></script>
+<script src="app.js?v=20261119-perf" defer></script>
 <!-- design-r3: non-first-paint scripts after idle — tender feed / geography map / page-agent launcher -->
 <script>
 (function () {
