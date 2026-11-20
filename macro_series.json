@@ -3220,7 +3220,7 @@
   "asOf": "2026-04",
   "fetchedAt": "2026-11-20",
   "unit": "亿元",
-  "origin": "cache",
+  "origin": "live",
   "series": [
    {"month": "2015-01", "value": 20516.0},
    {"month": "2015-02", "value": 13609.0},
