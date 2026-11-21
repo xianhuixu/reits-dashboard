@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-21 01:52:52",
+ "updated": "2026-11-21 09:56:46",
  "lastTradeDate": "2026-11-20",
  "count": 88,
  "sectors": [
@@ -3460,7 +3460,7 @@
  },
  "cycle": {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
-  "updated": "2026-11-20",
+  "updated": "2026-11-21",
   "bond10y": 1.58,
   "pm": {
    "pmi": 49.2,
@@ -3563,7 +3563,7 @@
     "y10": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
     "pmi": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI 总指数（国家统计局；该接口无新订单分项）"
    },
-   "computedAt": "2026-11-20",
+   "computedAt": "2026-11-21",
    "status": "ok",
    "asOf": "2026-11-20",
    "y10": 1.5803,
@@ -4251,7 +4251,7 @@
     "downgradeTo": "partial"
    },
    "status": "not_triggered",
-   "dataStatus": "lagged",
+   "dataStatus": "complete",
    "rateLeg": {
     "status": "ok",
     "d10y60bp": -9.9,
@@ -4261,18 +4261,17 @@
     "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
    },
    "spreadLeg": {
-    "status": "lagged",
-    "pctileChangePP": 18.7,
+    "status": "ok",
+    "pctileChangePP": 13.6,
     "from": "2026-08-20",
     "to": "2026-11-20",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
     "met": false,
-    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-    "note": "新浪/东财取数覆盖不足（价格 35/58，分派 21/58），沿用缓存"
+    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
    },
    "asOf": "2026-11-20",
    "rentLeg": {
-    "status": "lagged",
+    "status": "ok",
     "asOf": "2026-11-20",
     "y10Avg1y": 1.751,
     "y10AvgPrev1y": 1.746,
@@ -4280,12 +4279,12 @@
     "y10Now": 1.58,
     "y10YearAgo": 1.813,
     "pointToPointBp": -23.3,
-    "ttmYieldMcap": 4.6,
-    "distYoYMedianPct": 1.93,
-    "distDragBp": 8.9,
-    "netBp": 8.4,
-    "dominant": "rate",
-    "text": "利率顺风占优：利率下行快过分派回落",
+    "ttmYieldMcap": 4.56,
+    "distYoYMedianPct": -0.8,
+    "distDragBp": -3.7,
+    "netBp": -4.2,
+    "dominant": "distribution",
+    "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
    }
   },
@@ -4301,7 +4300,7 @@
     "tsf": "live",
     "gdp": "live"
    },
-   "computedAt": "2026-11-20",
+   "computedAt": "2026-11-21",
    "status": "ok",
    "label": null,
    "asOf": "2026-04",
