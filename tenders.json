@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-22T18:49:36+08:00",
+  "checkedAt": "2026-11-23T02:05:48+08:00",
   "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -11,7 +11,7 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "failed",
       "count": 0,
-      "checkedAt": "2026-11-22T18:49:36+08:00",
+      "checkedAt": "2026-11-23T02:05:48+08:00",
       "lastSuccessAt": null,
       "latestBulletinDate": null
     },
@@ -730,16 +730,6 @@
       "media": "中国招标投标公共服务平台",
       "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E4%B8%8A%E6%B5%B7%E5%9C%B0%E4%BA%A7%E6%8A%95%E8%B5%84%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%E6%9C%BA%E6%9E%84%E9%97%B4REIT%E4%B8%93%E9%A1%B9%E8%AE%A1%E5%88%92%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA",
       "tag": "招投标"
-    },
-    {
-      "code": "bid_d0474a992dc21140a6e1",
-      "date": "2026-08-24",
-      "title": "山东发展新能源集团有限公司机构间REITs计划管理人选聘项目招标公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=d50ee2df4c344b778a4dc35073968f40&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
     }
   ]
 }
