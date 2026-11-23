@@ -1,7 +1,7 @@
 {
- "updated": "2026-11-23 18:57:15",
+ "updated": "2026-11-24 05:19:31",
  "lastTradeDate": "2026-11-23",
- "count": 88,
+ "count": 76,
  "sectors": [
   "产业园",
   "仓储物流",
@@ -48,13 +48,13 @@
    "volAnn": 14.4,
    "listDays": 500,
    "signals": {
-    "liquidity": 2,
+    "liquidity": 1,
     "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -165,13 +165,13 @@
    "volAnn": 16.8,
    "listDays": 500,
    "signals": {
-    "liquidity": -1,
+    "liquidity": -2,
     "sentiment": -1,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -360,13 +360,13 @@
    "volAnn": 13.5,
    "listDays": 500,
    "signals": {
-    "liquidity": 1,
+    "liquidity": 0,
     "sentiment": -2,
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -716,8 +716,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -755,8 +755,8 @@
     "moneyflow": 2,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -794,8 +794,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": -1,
+    "stockbond": 0,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -833,8 +833,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 2,
+    "stockbond": 0,
+    "total": 3,
     "label": "中性"
    }
   },
@@ -867,12 +867,12 @@
    "volAnn": 15.7,
    "listDays": 500,
    "signals": {
-    "liquidity": 1,
+    "liquidity": 0,
     "sentiment": 2,
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
+    "stockbond": 0,
     "total": 2,
     "label": "中性"
    }
@@ -911,8 +911,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": -1,
+    "stockbond": 0,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -950,8 +950,8 @@
     "moneyflow": 2,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -1028,8 +1028,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 0,
+    "stockbond": 0,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -1184,8 +1184,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 1,
+    "stockbond": 0,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -1257,13 +1257,13 @@
    "volAnn": 16.6,
    "listDays": 440,
    "signals": {
-    "liquidity": 0,
+    "liquidity": -1,
     "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -2193,13 +2193,13 @@
    "volAnn": 20.8,
    "listDays": 343,
    "signals": {
-    "liquidity": -1,
+    "liquidity": -2,
     "sentiment": -1,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -2349,12 +2349,12 @@
    "volAnn": 16.5,
    "listDays": 500,
    "signals": {
-    "liquidity": 2,
+    "liquidity": 1,
     "sentiment": 0,
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
+    "stockbond": 0,
     "total": 2,
     "label": "中性"
    }
@@ -2739,13 +2739,13 @@
    "volAnn": 15.8,
    "listDays": 144,
    "signals": {
-    "liquidity": 0,
+    "liquidity": -1,
     "sentiment": -1,
     "moneyflow": -2,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -3,
+    "total": -4,
     "label": "中性"
    }
   },
@@ -2895,13 +2895,13 @@
    "volAnn": 16.6,
    "listDays": 430,
    "signals": {
-    "liquidity": -1,
+    "liquidity": -2,
     "sentiment": 0,
     "moneyflow": -1,
     "performance": 0,
     "spread": 0,
     "stockbond": 0,
-    "total": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -2972,474 +2972,6 @@
    "sinceIPO": -21.83,
    "volAnn": 12.5,
    "listDays": 276,
-   "signals": {
-    "liquidity": 1,
-    "sentiment": -1,
-    "moneyflow": 0,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 0,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508092.SH",
-   "name": "华夏金隅智造工场REIT",
-   "sector": "产业园",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 2.656,
-   "pct": -1.01,
-   "volume": 744600,
-   "amount": 1977657.6,
-   "ret5": -1.56,
-   "ret20": -8.85,
-   "ret60": -10.66,
-   "macd": {
-    "dif": -0.0601,
-    "dea": -0.0524,
-    "hist": -0.0155,
-    "cross": null
-   },
-   "rsi14": 29.8,
-   "pctRank": 0.2,
-   "devMA250": -24.92,
-   "amt5": 4394796.0,
-   "amt20": 2369043.0,
-   "amtRatio": 0.77,
-   "sinceIPO": -28.04,
-   "volAnn": 15.9,
-   "listDays": 424,
-   "signals": {
-    "liquidity": -2,
-    "sentiment": -2,
-    "moneyflow": -1,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": -5,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508093.SH",
-   "name": "易方达广西北投高速REIT",
-   "sector": "高速公路",
-   "right": "经营权",
-   "strategy": "周期型",
-   "close": 8.435,
-   "pct": 0.61,
-   "volume": 39300,
-   "amount": 331495.5,
-   "ret5": 0.12,
-   "ret20": 1.88,
-   "ret60": 1.95,
-   "macd": {
-    "dif": 0.0315,
-    "dea": 0.0276,
-    "hist": 0.0078,
-    "cross": null
-   },
-   "rsi14": 62.3,
-   "pctRank": 73.2,
-   "devMA250": null,
-   "amt5": 4559394.0,
-   "amt20": 1983236.0,
-   "amtRatio": 1.64,
-   "sinceIPO": -0.26,
-   "volAnn": 9.4,
-   "listDays": 123,
-   "signals": {
-    "liquidity": -2,
-    "sentiment": 2,
-    "moneyflow": 2,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 2,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508097.SH",
-   "name": "华泰南京建邺REIT",
-   "sector": "产业园",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 1.989,
-   "pct": -0.35,
-   "volume": 177600,
-   "amount": 353246.4,
-   "ret5": 0.56,
-   "ret20": -9.67,
-   "ret60": -3.68,
-   "macd": {
-    "dif": -0.0358,
-    "dea": -0.0349,
-    "hist": -0.0017,
-    "cross": null
-   },
-   "rsi14": 42.2,
-   "pctRank": 5.6,
-   "devMA250": -19.87,
-   "amt5": 1578686.0,
-   "amt20": 2386911.0,
-   "amtRatio": 0.91,
-   "sinceIPO": -23.35,
-   "volAnn": 23.1,
-   "listDays": 478,
-   "signals": {
-    "liquidity": -2,
-    "sentiment": -1,
-    "moneyflow": 0,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": -3,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "180607.SZ",
-   "name": "华夏中海消费REIT",
-   "sector": "消费",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 5.031,
-   "pct": 1.66,
-   "volume": 177200,
-   "amount": 891493.2,
-   "ret5": 2.69,
-   "ret20": -1.04,
-   "ret60": -6.85,
-   "macd": {
-    "dif": -0.056,
-    "dea": -0.0619,
-    "hist": 0.0118,
-    "cross": "golden"
-   },
-   "rsi14": 52.4,
-   "pctRank": 7.0,
-   "devMA250": -8.99,
-   "amt5": 2403666.0,
-   "amt20": 1585667.0,
-   "amtRatio": 1.23,
-   "sinceIPO": -7.77,
-   "volAnn": 15.7,
-   "listDays": 258,
-   "signals": {
-    "liquidity": -2,
-    "sentiment": 0,
-    "moneyflow": 1,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": -1,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508012.SH",
-   "name": "招商科创孵化器REIT",
-   "sector": "产业园",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 1.799,
-   "pct": 1.52,
-   "volume": 1387100,
-   "amount": 2495392.9,
-   "ret5": 3.63,
-   "ret20": -2.23,
-   "ret60": -2.39,
-   "macd": {
-    "dif": -0.0164,
-    "dea": -0.0187,
-    "hist": 0.0047,
-    "cross": "golden"
-   },
-   "rsi14": 56.1,
-   "pctRank": 10.7,
-   "devMA250": -26.93,
-   "amt5": 2413811.0,
-   "amt20": 2415936.0,
-   "amtRatio": 1.0,
-   "sinceIPO": -44.18,
-   "volAnn": 16.2,
-   "listDays": 458,
-   "signals": {
-    "liquidity": -2,
-    "sentiment": 2,
-    "moneyflow": 0,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 0,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508084.SH",
-   "name": "汇添富九州通医药REIT",
-   "sector": "仓储物流",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 3.841,
-   "pct": 0.81,
-   "volume": 785100,
-   "amount": 3015569.1,
-   "ret5": 0.92,
-   "ret20": -2.86,
-   "ret60": 1.53,
-   "macd": {
-    "dif": -0.0049,
-    "dea": -0.0063,
-    "hist": 0.0026,
-    "cross": "golden"
-   },
-   "rsi14": 53.4,
-   "pctRank": 24.3,
-   "devMA250": -4.34,
-   "amt5": 2955338.0,
-   "amt20": 3527780.0,
-   "amtRatio": 1.17,
-   "sinceIPO": 3.48,
-   "volAnn": 13.8,
-   "listDays": 423,
-   "signals": {
-    "liquidity": -1,
-    "sentiment": 0,
-    "moneyflow": 1,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 0,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "180106.SZ",
-   "name": "广发成都高投产业园REIT",
-   "sector": "产业园",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 2.6,
-   "pct": 0.46,
-   "volume": 159700,
-   "amount": 415220.0,
-   "ret5": 3.13,
-   "ret20": 4.04,
-   "ret60": 4.97,
-   "macd": {
-    "dif": 0.0183,
-    "dea": 0.0147,
-    "hist": 0.0072,
-    "cross": null
-   },
-   "rsi14": 62.7,
-   "pctRank": 17.2,
-   "devMA250": -12.14,
-   "amt5": 4076966.0,
-   "amt20": 3587112.0,
-   "amtRatio": 1.17,
-   "sinceIPO": -23.51,
-   "volAnn": 16.6,
-   "listDays": 466,
-   "signals": {
-    "liquidity": 0,
-    "sentiment": 2,
-    "moneyflow": 1,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 3,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "180701.SZ",
-   "name": "银华绍兴原水水利REIT",
-   "sector": "市政环保",
-   "right": "经营权",
-   "strategy": "防御型",
-   "close": 3.889,
-   "pct": 1.07,
-   "volume": 1464300,
-   "amount": 5694662.7,
-   "ret5": 0.28,
-   "ret20": -1.67,
-   "ret60": 2.91,
-   "macd": {
-    "dif": -0.0108,
-    "dea": -0.0096,
-    "hist": -0.0023,
-    "cross": null
-   },
-   "rsi14": 51.6,
-   "pctRank": 24.0,
-   "devMA250": -1.87,
-   "amt5": 2589448.0,
-   "amt20": 3353858.0,
-   "amtRatio": 0.98,
-   "sinceIPO": 16.51,
-   "volAnn": 15.8,
-   "listDays": 495,
-   "signals": {
-    "liquidity": -1,
-    "sentiment": 0,
-    "moneyflow": 0,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": -1,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508600.SH",
-   "name": "汇添富上海地产商业REIT",
-   "sector": "商业不动产",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 3.189,
-   "pct": -0.03,
-   "volume": 2872000,
-   "amount": 9158808.0,
-   "ret5": -0.84,
-   "ret20": -7.11,
-   "ret60": -10.75,
-   "macd": {
-    "dif": -0.0741,
-    "dea": -0.0714,
-    "hist": -0.0053,
-    "cross": null
-   },
-   "rsi14": 21.8,
-   "pctRank": 2.8,
-   "devMA250": null,
-   "amt5": 10401425.0,
-   "amt20": 5459651.0,
-   "amtRatio": 1.82,
-   "sinceIPO": -22.09,
-   "volAnn": 10.6,
-   "listDays": 106,
-   "signals": {
-    "liquidity": 1,
-    "sentiment": -2,
-    "moneyflow": 2,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 1,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508601.SH",
-   "name": "中信建投首农商业REIT",
-   "sector": "商业不动产",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 2.676,
-   "pct": -0.41,
-   "volume": 2307400,
-   "amount": 6174602.4,
-   "ret5": -0.71,
-   "ret20": -7.18,
-   "ret60": -10.23,
-   "macd": {
-    "dif": -0.054,
-    "dea": -0.0599,
-    "hist": 0.0119,
-    "cross": null
-   },
-   "rsi14": 37.1,
-   "pctRank": 5.7,
-   "devMA250": null,
-   "amt5": 4217623.0,
-   "amt20": 6560076.0,
-   "amtRatio": 1.19,
-   "sinceIPO": -12.43,
-   "volAnn": 10.7,
-   "listDays": 106,
-   "signals": {
-    "liquidity": 1,
-    "sentiment": -1,
-    "moneyflow": 1,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 1,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508602.SH",
-   "name": "国泰海通砂之船商业REIT",
-   "sector": "商业不动产",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 6.303,
-   "pct": -0.41,
-   "volume": 694400,
-   "amount": 4376803.2,
-   "ret5": -0.03,
-   "ret20": -2.96,
-   "ret60": -1.85,
-   "macd": {
-    "dif": -0.0339,
-    "dea": -0.0268,
-    "hist": -0.0141,
-    "cross": null
-   },
-   "rsi14": 40.7,
-   "pctRank": 12.3,
-   "devMA250": null,
-   "amt5": 7980644.0,
-   "amt20": 4490503.0,
-   "amtRatio": 1.14,
-   "sinceIPO": 2.59,
-   "volAnn": 10.1,
-   "listDays": 106,
-   "signals": {
-    "liquidity": 0,
-    "sentiment": -1,
-    "moneyflow": 1,
-    "performance": 0,
-    "spread": 0,
-    "stockbond": 0,
-    "total": 0,
-    "label": "中性"
-   }
-  },
-  {
-   "code": "508603.SH",
-   "name": "中金唯品会商业REIT",
-   "sector": "商业不动产",
-   "right": "产权",
-   "strategy": "周期型",
-   "close": 3.76,
-   "pct": 0.13,
-   "volume": 2683900,
-   "amount": 10091464.0,
-   "ret5": -0.4,
-   "ret20": -3.59,
-   "ret60": -3.37,
-   "macd": {
-    "dif": -0.0284,
-    "dea": -0.0222,
-    "hist": -0.0125,
-    "cross": null
-   },
-   "rsi14": 34.6,
-   "pctRank": 2.8,
-   "devMA250": null,
-   "amt5": 5730090.0,
-   "amt20": 5045112.0,
-   "amtRatio": 1.01,
-   "sinceIPO": -3.29,
-   "volAnn": 7.2,
-   "listDays": 106,
    "signals": {
     "liquidity": 1,
     "sentiment": -1,
@@ -4251,7 +3783,7 @@
     "downgradeTo": "partial"
    },
    "status": "not_triggered",
-   "dataStatus": "lagged",
+   "dataStatus": "complete",
    "rateLeg": {
     "status": "ok",
     "d10y60bp": -9.5,
@@ -4261,18 +3793,17 @@
     "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
    },
    "spreadLeg": {
-    "status": "lagged",
+    "status": "ok",
     "pctileChangePP": 11.0,
     "from": "2026-08-21",
     "to": "2026-11-23",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
     "met": false,
-    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-    "note": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
+    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
    },
    "asOf": "2026-11-23",
    "rentLeg": {
-    "status": "lagged",
+    "status": "ok",
     "asOf": "2026-11-23",
     "y10Avg1y": 1.75,
     "y10AvgPrev1y": 1.744,
@@ -4280,10 +3811,10 @@
     "y10Now": 1.586,
     "y10YearAgo": 1.817,
     "pointToPointBp": -23.0,
-    "ttmYieldMcap": 4.56,
+    "ttmYieldMcap": 4.54,
     "distYoYMedianPct": -2.48,
     "distDragBp": -11.3,
-    "netBp": -12.0,
+    "netBp": -11.9,
     "dominant": "distribution",
     "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
@@ -4465,24 +3996,18 @@
   }
  },
  "revaluation": {
-  "score": 1,
-  "stage": "重估暂停",
+  "score": 0,
+  "stage": "重估缺席",
   "items": [
    {
-    "name": "利率下行趋势",
-    "value": "国债指数60日 +0.98%",
-    "ok": true,
-    "desc": "无风险利率下行是重估的核心驱动力"
-   },
-   {
     "name": "资金中枢抬升",
-    "value": "60/250日成交额比 0.78",
+    "value": "60/250日成交额比 0.80",
     "ok": false,
     "desc": "流动性过剩溢出至 REITs 市场的直接证据"
    },
    {
     "name": "市场宽度扩张",
-    "value": "20日上涨占比 36%",
+    "value": "20日上涨占比 35%",
     "ok": false,
     "desc": "重估应从防御型扩散至全市场"
    },
@@ -4496,11 +4021,11 @@
  },
  "stratSignals": {
   "防御型": {
-   "avg": 0.2,
+   "avg": 0.6,
    "label": "中性"
   },
   "周期型": {
-   "avg": -0.4,
+   "avg": -0.6,
    "label": "中性"
   },
   "扩张型": {

@@ -791,7 +791,7 @@
       "downgradeTo": "partial"
     },
     "status": "not_triggered",
-    "dataStatus": "lagged",
+    "dataStatus": "complete",
     "rateLeg": {
       "status": "ok",
       "d10y60bp": -9.5,
@@ -801,18 +801,17 @@
       "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
     },
     "spreadLeg": {
-      "status": "lagged",
+      "status": "ok",
       "pctileChangePP": 11.0,
       "from": "2026-08-21",
       "to": "2026-11-23",
       "basis": "滚动 3 年分位（市值加权），60 个交易日",
       "met": false,
-      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-      "note": "新浪/东财取数覆盖不足（价格 58/58，分派 52/58），沿用缓存"
+      "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
     },
     "asOf": "2026-11-23",
     "rentLeg": {
-      "status": "lagged",
+      "status": "ok",
       "asOf": "2026-11-23",
       "y10Avg1y": 1.75,
       "y10AvgPrev1y": 1.744,
@@ -820,10 +819,10 @@
       "y10Now": 1.586,
       "y10YearAgo": 1.817,
       "pointToPointBp": -23.0,
-      "ttmYieldMcap": 4.56,
+      "ttmYieldMcap": 4.54,
       "distYoYMedianPct": -2.48,
       "distDragBp": -11.3,
-      "netBp": -12.0,
+      "netBp": -11.9,
       "dominant": "distribution",
       "text": "分派拖累占优：租金（分派）回落快过利率下行",
       "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
