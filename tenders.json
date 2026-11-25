@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-24T19:41:07+08:00",
+  "checkedAt": "2026-11-25T09:49:37+08:00",
   "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -11,7 +11,7 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "failed",
       "count": 0,
-      "checkedAt": "2026-11-24T19:41:07+08:00",
+      "checkedAt": "2026-11-25T09:49:37+08:00",
       "lastSuccessAt": null,
       "latestBulletinDate": null
     },
@@ -701,16 +701,6 @@
       "media": "中国招标投标公共服务平台",
       "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E4%B8%AD%E8%88%AA%E5%8C%97%E4%BA%AC%E6%98%8C%E4%BF%9D%E7%A7%9F%E8%B5%81%E4%BD%8F%E6%88%BFREIT%E6%89%A9%E5%8B%9F%E9%A1%B9%E7%9B%AE%E5%AE%A1%E8%AE%A1%E6%9C%8D%E5%8A%A1%EF%BC%88%E4%BA%8C%E6%AC%A1%E6%8B%9B%E6%A0%87%EF%BC%89%E6%8B%9B%E6%A0%87",
       "tag": "招投标"
-    },
-    {
-      "code": "bid_7ad5c9385c91eede93bb",
-      "date": "2026-08-26",
-      "title": "郑州城发安居科技有限公司租赁住房REITs专项法律服务询比采购公告",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494759dbedf9101a03d48ff991923&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
     }
   ]
 }
