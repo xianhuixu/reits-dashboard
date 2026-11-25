@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-11-25T18:49:36+08:00",
+  "checkedAt": "2026-11-26T04:15:13+08:00",
   "lastSuccessAt": "2026-11-10T09:47:32+08:00",
   "status": "ok",
   "schedule": "本机每日09:47/18:47（Scrapling StealthyFetcher）",
@@ -11,7 +11,7 @@
       "name": "中国招标投标公共服务平台（新站，Scrapling本机抓取）",
       "status": "failed",
       "count": 0,
-      "checkedAt": "2026-11-25T18:49:36+08:00",
+      "checkedAt": "2026-11-26T04:15:13+08:00",
       "lastSuccessAt": null,
       "latestBulletinDate": null
     },
@@ -672,34 +672,6 @@
       "summary": "来源：中国招标投标公共服务平台（辽宁省 招标公告 按20号令规范发布 同类项目中标情况）",
       "media": "中国招标投标公共服务平台",
       "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E6%9C%AC%E9%92%A2%E6%9D%BF%E6%9D%90%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8CCPP%E5%8F%91%E7%94%B5%E6%9C%BA%E7%BB%84%E6%9C%BA%E6%9E%84%E9%97%B4REITs%E8%AE%A1%E5%88%92%E7%AE%A1%E7%90%86",
-      "tag": "招投标"
-    },
-    {
-      "code": "bid_7ba2fc0262ae6745a71c",
-      "date": "2026-08-27",
-      "title": "建信基金管理有限责任公司公募基金产品做市商流动性服务项目（第2包：公募REITs产品做市商流动性服务）入围候选人公示",
-      "url": "https://ctbpsp.com/#/bulletinDetail?uuid=8a9494859ff4f99401a0421b97c37fc4&inpvalue=&dataSource=0&tenderAgency=",
-      "source": "ceb",
-      "tag": "招投标",
-      "media": "中国招标投标公共服务平台（官方备用列表）",
-      "summary": "招投标公告线索；请以链接中的原始公告及后续更正为准。"
-    },
-    {
-      "code": "ctb_ef2fddf604f5",
-      "date": "2026-08-27",
-      "title": "中航北京昌保租赁住房REIT扩募项目财务顾问服务中标候选人公示",
-      "summary": "来源：中国招标投标公共服务平台（北京市 中标候选人公示 按10号令规范发布）",
-      "media": "中国招标投标公共服务平台",
-      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E4%B8%AD%E8%88%AA%E5%8C%97%E4%BA%AC%E6%98%8C%E4%BF%9D%E7%A7%9F%E8%B5%81%E4%BD%8F%E6%88%BFREIT%E6%89%A9%E5%8B%9F%E9%A1%B9%E7%9B%AE%E8%B4%A2%E5%8A%A1%E9%A1%BE%E9%97%AE%E6%9C%8D%E5%8A%A1%E4%B8%AD%E6%A0%87%E5%80%99%E9%80%89%E4%BA%BA%E5%85%AC",
-      "tag": "招投标"
-    },
-    {
-      "code": "ctb_39ac4a397a96",
-      "date": "2026-08-27",
-      "title": "中航北京昌保租赁住房REIT扩募项目审计服务（二次招标）招标公告",
-      "summary": "来源：中国招标投标公共服务平台（北京市 招标公告 按10号令规范发布 潜在投标人预测）",
-      "media": "中国招标投标公共服务平台",
-      "url": "https://ctbpsp.com/#/bulletinList?keyWords=%E4%B8%AD%E8%88%AA%E5%8C%97%E4%BA%AC%E6%98%8C%E4%BF%9D%E7%A7%9F%E8%B5%81%E4%BD%8F%E6%88%BFREIT%E6%89%A9%E5%8B%9F%E9%A1%B9%E7%9B%AE%E5%AE%A1%E8%AE%A1%E6%9C%8D%E5%8A%A1%EF%BC%88%E4%BA%8C%E6%AC%A1%E6%8B%9B%E6%A0%87%EF%BC%89%E6%8B%9B%E6%A0%87",
       "tag": "招投标"
     }
   ]
