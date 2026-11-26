@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-26 18:59:55",
+ "updated": "2026-11-27 03:02:54",
  "lastTradeDate": "2026-11-26",
  "count": 88,
  "sectors": [
@@ -716,8 +716,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 5,
+    "stockbond": -2,
+    "total": 3,
     "label": "中性"
    }
   },
@@ -755,9 +755,9 @@
     "moneyflow": 2,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 6,
-    "label": "偏强"
+    "stockbond": -1,
+    "total": 5,
+    "label": "中性"
    }
   },
   {
@@ -794,8 +794,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": -1,
+    "stockbond": -2,
+    "total": -3,
     "label": "中性"
    }
   },
@@ -833,8 +833,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 5,
+    "stockbond": -1,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -872,8 +872,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 2,
+    "stockbond": -1,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -911,8 +911,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 2,
+    "stockbond": -1,
+    "total": 1,
     "label": "中性"
    }
   },
@@ -950,9 +950,9 @@
     "moneyflow": 2,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 6,
-    "label": "偏强"
+    "stockbond": -1,
+    "total": 5,
+    "label": "中性"
    }
   },
   {
@@ -1028,8 +1028,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 0,
+    "stockbond": -1,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -1184,8 +1184,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 4,
+    "stockbond": -1,
+    "total": 3,
     "label": "中性"
    }
   },
@@ -2354,8 +2354,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": 0,
-    "total": 5,
+    "stockbond": -1,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -4251,7 +4251,7 @@
     "downgradeTo": "partial"
    },
    "status": "not_triggered",
-   "dataStatus": "lagged",
+   "dataStatus": "complete",
    "rateLeg": {
     "status": "ok",
     "d10y60bp": -10.4,
@@ -4261,18 +4261,17 @@
     "source": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）"
    },
    "spreadLeg": {
-    "status": "lagged",
-    "pctileChangePP": 5.7,
+    "status": "ok",
+    "pctileChangePP": 6.1,
     "from": "2026-08-26",
     "to": "2026-11-26",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
     "met": false,
-    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）",
-    "note": "新浪/东财取数覆盖不足（价格 23/58，分派 10/58），沿用缓存"
+    "source": "data_panel_l1l7.json.propertySpread（scripts/build_spread.py）"
    },
    "asOf": "2026-11-26",
    "rentLeg": {
-    "status": "lagged",
+    "status": "ok",
     "asOf": "2026-11-26",
     "y10Avg1y": 1.747,
     "y10AvgPrev1y": 1.742,
@@ -4281,9 +4280,9 @@
     "y10YearAgo": 1.846,
     "pointToPointBp": -25.5,
     "ttmYieldMcap": 4.85,
-    "distYoYMedianPct": -0.93,
-    "distDragBp": -4.5,
-    "netBp": -5.0,
+    "distYoYMedianPct": -2.55,
+    "distDragBp": -12.4,
+    "netBp": -12.9,
     "dominant": "distribution",
     "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
@@ -4496,11 +4495,11 @@
  },
  "stratSignals": {
   "防御型": {
-   "avg": 0.9,
+   "avg": 0.5,
    "label": "中性"
   },
   "周期型": {
-   "avg": -0.3,
+   "avg": -0.4,
    "label": "中性"
   },
   "扩张型": {
