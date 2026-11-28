@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-28 02:55:52",
+ "updated": "2026-11-28 09:56:54",
  "lastTradeDate": "2026-11-27",
  "count": 88,
  "sectors": [
@@ -716,8 +716,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 4,
+    "stockbond": 0,
+    "total": 5,
     "label": "中性"
    }
   },
@@ -755,8 +755,8 @@
     "moneyflow": 2,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -794,8 +794,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -2,
-    "total": -3,
+    "stockbond": 0,
+    "total": -1,
     "label": "中性"
    }
   },
@@ -833,8 +833,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 2,
+    "stockbond": 0,
+    "total": 3,
     "label": "中性"
    }
   },
@@ -872,8 +872,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 1,
+    "stockbond": 0,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -911,8 +911,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 1,
+    "stockbond": 0,
+    "total": 2,
     "label": "中性"
    }
   },
@@ -950,8 +950,8 @@
     "moneyflow": 2,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -1028,8 +1028,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": -1,
+    "stockbond": 0,
+    "total": 0,
     "label": "中性"
    }
   },
@@ -1184,8 +1184,8 @@
     "moneyflow": 0,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -2354,8 +2354,8 @@
     "moneyflow": 1,
     "performance": 0,
     "spread": 0,
-    "stockbond": -1,
-    "total": 3,
+    "stockbond": 0,
+    "total": 4,
     "label": "中性"
    }
   },
@@ -3460,7 +3460,7 @@
  },
  "cycle": {
   "_comment": "四大周期与美林时钟判定（月度手动更新）。bond10y 用于利差因子打分；cycles 各阶段可选：早期/中期/晚期/筑底/启动等；clock 为当前美林时钟象限",
-  "updated": "2026-11-27",
+  "updated": "2026-11-28",
   "bond10y": 1.6,
   "pm": {
    "pmi": 49.2,
@@ -3563,7 +3563,7 @@
     "y10": "东方财富数据中心 RPTA_WEB_TREASURYYIELD · EMM00166466 中国国债收益率10年（中债口径）",
     "pmi": "东方财富数据中心 RPT_ECONOMY_PMI · 制造业 PMI 总指数（国家统计局；该接口无新订单分项）"
    },
-   "computedAt": "2026-11-27",
+   "computedAt": "2026-11-28",
    "status": "ok",
    "asOf": "2026-11-27",
    "y10": 1.5972,
@@ -4262,7 +4262,7 @@
    },
    "spreadLeg": {
     "status": "ok",
-    "pctileChangePP": 7.7,
+    "pctileChangePP": 9.9,
     "from": "2026-08-27",
     "to": "2026-11-27",
     "basis": "滚动 3 年分位（市值加权），60 个交易日",
@@ -4279,10 +4279,10 @@
     "y10Now": 1.597,
     "y10YearAgo": 1.854,
     "pointToPointBp": -25.6,
-    "ttmYieldMcap": 4.95,
-    "distYoYMedianPct": -0.93,
-    "distDragBp": -4.6,
-    "netBp": -5.1,
+    "ttmYieldMcap": 4.78,
+    "distYoYMedianPct": -2.55,
+    "distDragBp": -12.2,
+    "netBp": -12.7,
     "dominant": "distribution",
     "text": "分派拖累占优：租金（分派）回落快过利率下行",
     "method": "利率顺风 = −(近 1 年 10Y 日均 − 前 1 年日均)，与 TTM 分派同窗口；点对点（t vs t−365）仅作次要参考。分派拖累 = 市值加权 TTM 分派率 × 分派同比中位数。"
@@ -4300,7 +4300,7 @@
     "tsf": "live",
     "gdp": "live"
    },
-   "computedAt": "2026-11-27",
+   "computedAt": "2026-11-28",
    "status": "ok",
    "label": null,
    "asOf": "2026-04",
@@ -4464,15 +4464,9 @@
   }
  },
  "revaluation": {
-  "score": 1,
-  "stage": "重估暂停",
+  "score": 0,
+  "stage": "重估缺席",
   "items": [
-   {
-    "name": "利率下行趋势",
-    "value": "国债指数60日 +0.84%",
-    "ok": true,
-    "desc": "无风险利率下行是重估的核心驱动力"
-   },
    {
     "name": "资金中枢抬升",
     "value": "60/250日成交额比 0.76",
@@ -4495,11 +4489,11 @@
  },
  "stratSignals": {
   "防御型": {
-   "avg": 0.4,
+   "avg": 0.8,
    "label": "中性"
   },
   "周期型": {
-   "avg": -0.3,
+   "avg": -0.2,
    "label": "中性"
   },
   "扩张型": {
